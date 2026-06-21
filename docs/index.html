@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Animals Desktop</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: #17201a;
+        background: #f5f7f2;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 48px 24px 64px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 5vw, 4.5rem);
+        line-height: 1;
+      }
+
+      h2 {
+        margin: 40px 0 14px;
+        font-size: 1.25rem;
+      }
+
+      p {
+        max-width: 720px;
+        line-height: 1.65;
+      }
+
+      a {
+        color: #245d47;
+      }
+
+      .preview {
+        display: block;
+        max-width: min(100%, 424px);
+        height: auto;
+        margin: 28px 0;
+        border: 1px solid #d5dbd0;
+      }
+
+      .downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 18px 0 28px;
+      }
+
+      .download {
+        border: 1px solid #aab6a5;
+        border-radius: 6px;
+        padding: 10px 14px;
+        background: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 8px 14px;
+        max-width: 520px;
+      }
+
+      dt {
+        color: #566458;
+      }
+
+      dd {
+        margin: 0;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Animals Desktop</h1>
+      <p>
+        A lightweight Windows taskbar pet app with degus, chinchillas, rabbits,
+        cats, dogs, geckos, hamsters, and more seed-stage animal sprites.
+      </p>
+
+      <img
+        class="preview"
+        src="assets/animalsdesktop-seed-preview.png"
+        alt="Animals Desktop seed animal sprite preview"
+        width="424"
+        height="152"
+      />
+
+      <h2>Downloads</h2>
+      <div class="downloads">
+        <a class="download" href="download/AnimalsDesktop-windows-amd64.zip">Windows amd64</a>
+        <a class="download" href="download/AnimalsDesktop-windows-386.zip">Windows 386</a>
+      </div>
+
+      <h2>Build</h2>
+      <dl>
+        <dt>Version</dt>
+        <dd><strong data-build-version>local</strong></dd>
+        <dt>Date</dt>
+        <dd><strong data-build-date>local</strong></dd>
+        <dt>Commit</dt>
+        <dd><strong data-build-commit>local</strong></dd>
+      </dl>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,184 @@
+[
+  {
+    "variant": "chinchilla_standard_gray",
+    "species": "chinchilla",
+    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "sprite_base": "chinchilla_standard_gray",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 134,
+      "y": 119,
+      "w": 1254,
+      "h": 732
+    },
+    "outputs": [
+      "assets/sprites/chinchilla_standard_gray_set00.png",
+      "assets/sprites/chinchilla_standard_gray_set01.png",
+      "assets/sprites/chinchilla_standard_gray_set02.png",
+      "assets/sprites/chinchilla_standard_gray_set03.png",
+      "assets/sprites/chinchilla_standard_gray_set04.png",
+      "assets/sprites/chinchilla_standard_gray_set05.png",
+      "assets/sprites/chinchilla_standard_gray_set06.png",
+      "assets/sprites/chinchilla_standard_gray_set07.png",
+      "assets/sprites/chinchilla_standard_gray_set08.png",
+      "assets/sprites/chinchilla_standard_gray_set09.png"
+    ]
+  },
+  {
+    "variant": "macaroni_mouse_tan",
+    "species": "macaroni_mouse",
+    "source": "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png",
+    "sprite_base": "macaroni_mouse_tan",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 58,
+      "y": 120,
+      "w": 419,
+      "h": 187
+    },
+    "outputs": [
+      "assets/sprites/macaroni_mouse_tan_set00.png",
+      "assets/sprites/macaroni_mouse_tan_set01.png",
+      "assets/sprites/macaroni_mouse_tan_set02.png",
+      "assets/sprites/macaroni_mouse_tan_set03.png",
+      "assets/sprites/macaroni_mouse_tan_set04.png",
+      "assets/sprites/macaroni_mouse_tan_set05.png",
+      "assets/sprites/macaroni_mouse_tan_set06.png",
+      "assets/sprites/macaroni_mouse_tan_set07.png",
+      "assets/sprites/macaroni_mouse_tan_set08.png",
+      "assets/sprites/macaroni_mouse_tan_set09.png"
+    ]
+  },
+  {
+    "variant": "rabbit_chestnut_agouti",
+    "species": "rabbit",
+    "source": "docs/source-truth/rabbit-source-truth.png",
+    "sprite_base": "rabbit_chestnut_agouti",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 189,
+      "y": 62,
+      "w": 1078,
+      "h": 859
+    },
+    "outputs": [
+      "assets/sprites/rabbit_chestnut_agouti_set00.png",
+      "assets/sprites/rabbit_chestnut_agouti_set01.png",
+      "assets/sprites/rabbit_chestnut_agouti_set02.png",
+      "assets/sprites/rabbit_chestnut_agouti_set03.png",
+      "assets/sprites/rabbit_chestnut_agouti_set04.png",
+      "assets/sprites/rabbit_chestnut_agouti_set05.png",
+      "assets/sprites/rabbit_chestnut_agouti_set06.png",
+      "assets/sprites/rabbit_chestnut_agouti_set07.png",
+      "assets/sprites/rabbit_chestnut_agouti_set08.png",
+      "assets/sprites/rabbit_chestnut_agouti_set09.png"
+    ]
+  },
+  {
+    "variant": "dog_cream_tan",
+    "species": "dog",
+    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "sprite_base": "dog_cream_tan",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 269,
+      "y": 91,
+      "w": 1228,
+      "h": 841
+    },
+    "outputs": [
+      "assets/sprites/dog_cream_tan_set00.png",
+      "assets/sprites/dog_cream_tan_set01.png",
+      "assets/sprites/dog_cream_tan_set02.png",
+      "assets/sprites/dog_cream_tan_set03.png",
+      "assets/sprites/dog_cream_tan_set04.png",
+      "assets/sprites/dog_cream_tan_set05.png",
+      "assets/sprites/dog_cream_tan_set06.png",
+      "assets/sprites/dog_cream_tan_set07.png",
+      "assets/sprites/dog_cream_tan_set08.png",
+      "assets/sprites/dog_cream_tan_set09.png"
+    ]
+  },
+  {
+    "variant": "cat_brown_tabby",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "sprite_base": "cat_brown_tabby",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_brown_tabby_set00.png",
+      "assets/sprites/cat_brown_tabby_set01.png",
+      "assets/sprites/cat_brown_tabby_set02.png",
+      "assets/sprites/cat_brown_tabby_set03.png",
+      "assets/sprites/cat_brown_tabby_set04.png",
+      "assets/sprites/cat_brown_tabby_set05.png",
+      "assets/sprites/cat_brown_tabby_set06.png",
+      "assets/sprites/cat_brown_tabby_set07.png",
+      "assets/sprites/cat_brown_tabby_set08.png",
+      "assets/sprites/cat_brown_tabby_set09.png"
+    ]
+  },
+  {
+    "variant": "gecko_gray_brown",
+    "species": "gecko",
+    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "sprite_base": "gecko_gray_brown",
+    "source_width": 1717,
+    "source_height": 916,
+    "content": {
+      "x": 55,
+      "y": 368,
+      "w": 1553,
+      "h": 283
+    },
+    "outputs": [
+      "assets/sprites/gecko_gray_brown_set00.png",
+      "assets/sprites/gecko_gray_brown_set01.png",
+      "assets/sprites/gecko_gray_brown_set02.png",
+      "assets/sprites/gecko_gray_brown_set03.png",
+      "assets/sprites/gecko_gray_brown_set04.png",
+      "assets/sprites/gecko_gray_brown_set05.png",
+      "assets/sprites/gecko_gray_brown_set06.png",
+      "assets/sprites/gecko_gray_brown_set07.png",
+      "assets/sprites/gecko_gray_brown_set08.png",
+      "assets/sprites/gecko_gray_brown_set09.png"
+    ]
+  },
+  {
+    "variant": "hamster_golden_syrian",
+    "species": "hamster",
+    "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "sprite_base": "hamster_golden_syrian",
+    "source_width": 1513,
+    "source_height": 1039,
+    "content": {
+      "x": 182,
+      "y": 156,
+      "w": 1227,
+      "h": 705
+    },
+    "outputs": [
+      "assets/sprites/hamster_golden_syrian_set00.png",
+      "assets/sprites/hamster_golden_syrian_set01.png",
+      "assets/sprites/hamster_golden_syrian_set02.png",
+      "assets/sprites/hamster_golden_syrian_set03.png",
+      "assets/sprites/hamster_golden_syrian_set04.png",
+      "assets/sprites/hamster_golden_syrian_set05.png",
+      "assets/sprites/hamster_golden_syrian_set06.png",
+      "assets/sprites/hamster_golden_syrian_set07.png",
+      "assets/sprites/hamster_golden_syrian_set08.png",
+      "assets/sprites/hamster_golden_syrian_set09.png"
+    ]
+  }
+]
