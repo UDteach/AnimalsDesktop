@@ -1,6 +1,6 @@
 # ImageGen Cohort Contract
 
-AnimalsDesktop uses 10 ImageGen cohorts with 10 selectable variants each. Each cohort owns only its own directory:
+AnimalsDesktop v0.1.0 started with 10 ImageGen cohorts with 10 selectable variants each. That broad split is useful for manifest coverage, but the next asset-production pass should use fewer variants per thread and many more images per variant. Each cohort owns only its own directory:
 
 `docs/art-source/cohorts/cohort-XX/`
 
@@ -19,6 +19,15 @@ For each cohort:
 
 - `cohort-report.md`: source prompts, acceptance notes, and known risks.
 - `known-risks.md`: cropping, anatomy, motion, alpha, scale, or species-identity risks that parent integration must review.
+
+## Next Batch Shape
+
+Use this for new ImageGen work so one thread produces enough alternatives to judge quality:
+
+- Source candidate pass: 4-6 variants per thread, 4 source-truth candidates per variant, plus light/dark 96x64 previews for the best 2 candidates.
+- Motion pass: 1 species family per thread, 1-3 accepted variants, 62 transparent motion frames per variant, plus light/dark previews and a contact sheet.
+- Do not ask one thread to finish 10 variants x 62 frames. That is 620 frames before review and tends to waste RAM and review attention.
+- Parent integration promotes only reviewed winners into `assets/sprites` and keeps rejected candidates inside the cohort report.
 
 ## Acceptance Rules
 
@@ -40,3 +49,10 @@ For each cohort:
 - `cohort-08`: remaining popular dog additions, first popular cat additions.
 - `cohort-09`: remaining popular cat additions, first popular rabbit additions.
 - `cohort-10`: remaining rabbit addition, small animals, reptile/amphibian additions.
+
+## Near-Term Source Candidate Queues
+
+- `priority-small-pets`: chinchilla, macaroni mouse / fat-tailed gerbil, hamster, gecko.
+- `momonga-family`: Japanese dwarf flying squirrel / momonga, sugar glider color variants.
+- `small-birds`: sakura buncho / Java sparrow, budgerigar, white buncho, cockatiel, lovebird, zebra finch.
+- `popular-companions`: top dog and cat additions already in the 100-variant manifest.
