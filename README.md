@@ -44,6 +44,7 @@ Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop
 
 ```powershell
 go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
+go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
 ```
 
 Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes for that set:

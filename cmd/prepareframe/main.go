@@ -48,6 +48,7 @@ func main() {
 	srcPath := flag.String("src", "", "source candidate PNG")
 	outPath := flag.String("out", "", "output 96x64 transparent PNG")
 	reportPath := flag.String("report", "", "optional JSON report path")
+	background := flag.String("background", "auto", "background handling: auto or chroma-green")
 	tolerance := flag.Float64("tolerance", 18, "RGB distance tolerance for uniform edge background removal")
 	flag.Parse()
 
@@ -58,7 +59,7 @@ func main() {
 		fatalf("-out is required")
 	}
 
-	report, err := prepareFrame(*srcPath, *outPath, *tolerance)
+	report, err := prepareFrameWithMode(*srcPath, *outPath, *background, *tolerance)
 	if err != nil {
 		fatalf("%v", err)
 	}
@@ -71,6 +72,10 @@ func main() {
 }
 
 func prepareFrame(srcPath string, outPath string, tolerance float64) (prepareReport, error) {
+	return prepareFrameWithMode(srcPath, outPath, "auto", tolerance)
+}
+
+func prepareFrameWithMode(srcPath string, outPath string, background string, tolerance float64) (prepareReport, error) {
 	src, err := openPNG(srcPath)
 	if err != nil {
 		return prepareReport{}, err
@@ -86,15 +91,31 @@ func prepareFrame(srcPath string, outPath string, tolerance float64) (prepareRep
 	}
 
 	cleaned := cloneRGBA(src)
-	if hasTransparentAlpha(cleaned) {
-		report.BackgroundMode = "source-alpha"
-	} else {
-		if err := removeUniformEdgeBackground(cleaned, tolerance); err != nil {
+	switch background {
+	case "auto":
+		if hasTransparentAlpha(cleaned) {
+			report.BackgroundMode = "source-alpha"
+		} else {
+			if err := removeUniformEdgeBackground(cleaned, tolerance); err != nil {
+				return prepareReport{}, err
+			}
+			report.BackgroundMode = "uniform-edge-rgb"
+			report.BackgroundRemoved = true
+		}
+	case "chroma-green":
+		if err := removeChromaGreenBackground(cleaned); err != nil {
 			return prepareReport{}, err
 		}
-		report.BackgroundMode = "uniform-edge-rgb"
+		despillGreen(cleaned)
+		report.BackgroundMode = "chroma-green"
 		report.BackgroundRemoved = true
+	default:
+		return prepareReport{}, fmt.Errorf("unknown -background %q", background)
 	}
+	if hasTransparentAlpha(cleaned) && report.BackgroundMode == "" {
+		report.BackgroundMode = "source-alpha"
+	}
+	clearTransparentRGB(cleaned)
 
 	content := alphaBounds(cleaned, cleaned.Bounds())
 	if content.Empty() {
@@ -205,7 +226,7 @@ func removeUniformEdgeBackground(img *image.RGBA, tolerance float64) error {
 		if colorDistance(c, bg) > tolerance {
 			continue
 		}
-		c.A = 0
+		c = color.RGBA{}
 		img.SetRGBA(p.X, p.Y, c)
 		removed++
 		add(p.X+1, p.Y)
@@ -217,6 +238,62 @@ func removeUniformEdgeBackground(img *image.RGBA, tolerance float64) error {
 		return fmt.Errorf("no edge background pixels matched")
 	}
 	return nil
+}
+
+func removeChromaGreenBackground(img *image.RGBA) error {
+	bounds := img.Bounds()
+	removed := 0
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			c := img.RGBAAt(x, y)
+			if isChromaGreen(c) {
+				c = color.RGBA{}
+				img.SetRGBA(x, y, c)
+				removed++
+			}
+		}
+	}
+	if removed == 0 {
+		return fmt.Errorf("no chroma-green background pixels matched")
+	}
+	return nil
+}
+
+func clearTransparentRGB(img *image.RGBA) {
+	bounds := img.Bounds()
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			c := img.RGBAAt(x, y)
+			if c.A == 0 && (c.R != 0 || c.G != 0 || c.B != 0) {
+				img.SetRGBA(x, y, color.RGBA{})
+			}
+		}
+	}
+}
+
+func isChromaGreen(c color.RGBA) bool {
+	if c.G < 90 {
+		return false
+	}
+	return int(c.G)-int(c.R) >= 25 && int(c.G)-int(c.B) >= 25
+}
+
+func despillGreen(img *image.RGBA) {
+	bounds := img.Bounds()
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			c := img.RGBAAt(x, y)
+			if c.A == 0 {
+				continue
+			}
+			maxRB := maxInt(int(c.R), int(c.B))
+			if int(c.G)-maxRB < 8 {
+				continue
+			}
+			c.G = byte(maxRB)
+			img.SetRGBA(x, y, c)
+		}
+	}
 }
 
 func averageColor(colors []color.RGBA) color.RGBA {

@@ -14,6 +14,7 @@ Single ImageGen candidates should first be staged outside this directory. If a c
 
 ```powershell
 go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png -report docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00-report.json
+go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png -report docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00-report.json
 ```
 
 Do not copy `prepareframe` output into this accepted-frame directory until it has passed visual review on light and dark backgrounds. The command rejects checker/noisy backgrounds instead of trying to clean them.
@@ -22,6 +23,10 @@ Expected set folders:
 
 - `set00/frame-00.png` through `set00/frame-61.png`
 - continue through `set09/frame-00.png` through `set09/frame-61.png`
+
+Current accepted progress:
+
+- `set00/frame-00.png`: accepted idle pose candidate prepared from a single green-background ImageGen output after chroma cleanup, despill, and light/dark visual review.
 
 After all 62 frames in a set pass visual review:
 

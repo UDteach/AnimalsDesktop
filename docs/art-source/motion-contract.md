@@ -77,7 +77,7 @@ Use this cycle repeatedly:
 2. Generate 4-6 source candidates for each target variant in that family.
 3. Accept only the best 1-3 variants for the first family pass.
 4. Generate 62 motion frames for those accepted variants using the slot table above.
-5. Prepare single ImageGen candidates with `go run ./cmd/prepareframe` only when raw true-alpha output is unavailable; reject checker/noisy backgrounds.
+5. Prepare single ImageGen candidates with `go run ./cmd/prepareframe` only when raw true-alpha output is unavailable; use `-background chroma-green` only for deliberate green-screen candidates and reject checker/noisy backgrounds.
 6. Audit the standalone frame folders with `go run ./cmd/auditframes`.
 7. Assemble each accepted 62-frame standalone PNG folder with `go run ./cmd/assemblemotion`.
 8. Import, validate, visually review, and update source status.

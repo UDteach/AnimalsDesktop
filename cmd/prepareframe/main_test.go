@@ -74,6 +74,40 @@ func TestPrepareFrameRemovesUniformOpaqueBackground(t *testing.T) {
 	}
 }
 
+func TestPrepareFrameRemovesChromaGreenBackground(t *testing.T) {
+	root := t.TempDir()
+	srcPath := filepath.Join(root, "chroma.png")
+	img := image.NewRGBA(image.Rect(0, 0, 180, 120))
+	for y := 0; y < 120; y++ {
+		for x := 0; x < 180; x++ {
+			g := byte(210 + (x+y)%35)
+			img.SetRGBA(x, y, color.RGBA{R: 8, G: g, B: 12, A: 255})
+		}
+	}
+	for y := 35; y < 95; y++ {
+		for x := 42; x < 150; x++ {
+			img.SetRGBA(x, y, color.RGBA{R: 130, G: 130, B: 128, A: 255})
+		}
+	}
+	writeTestPNG(t, srcPath, img)
+
+	outPath := filepath.Join(root, "frame.png")
+	report, err := prepareFrameWithMode(srcPath, outPath, "chroma-green", 18)
+	if err != nil {
+		t.Fatalf("prepareFrameWithMode() error = %v", err)
+	}
+	if report.BackgroundMode != "chroma-green" || !report.BackgroundRemoved {
+		t.Fatalf("background report = %s/%v", report.BackgroundMode, report.BackgroundRemoved)
+	}
+	out := openTestPNG(t, outPath)
+	if out.RGBAAt(0, 0).A != 0 {
+		t.Fatalf("output corner alpha = %d, want transparent", out.RGBAAt(0, 0).A)
+	}
+	if alphaBounds(out, out.Bounds()).Empty() {
+		t.Fatalf("output has no visible alpha")
+	}
+}
+
 func TestPrepareFrameRejectsCheckerBackground(t *testing.T) {
 	root := t.TempDir()
 	srcPath := filepath.Join(root, "checker.png")
@@ -100,6 +134,48 @@ func TestPrepareFrameRejectsCheckerBackground(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "checker") {
 		t.Fatalf("prepareFrame() error = %v, want checker/noisy failure", err)
+	}
+}
+
+func TestPrepareFrameRejectsUnknownBackgroundMode(t *testing.T) {
+	root := t.TempDir()
+	srcPath := filepath.Join(root, "transparent.png")
+	img := image.NewRGBA(image.Rect(0, 0, 120, 80))
+	img.SetRGBA(40, 40, color.RGBA{R: 130, G: 130, B: 128, A: 255})
+	writeTestPNG(t, srcPath, img)
+
+	_, err := prepareFrameWithMode(srcPath, filepath.Join(root, "frame.png"), "magic", 18)
+	if err == nil {
+		t.Fatalf("prepareFrameWithMode() succeeded for unknown mode")
+	}
+	if !strings.Contains(err.Error(), "unknown") {
+		t.Fatalf("prepareFrameWithMode() error = %v, want unknown-mode failure", err)
+	}
+}
+
+func TestDespillGreenNeutralizesRemainingGreenEdges(t *testing.T) {
+	img := image.NewRGBA(image.Rect(0, 0, 2, 1))
+	img.SetRGBA(0, 0, color.RGBA{R: 50, G: 120, B: 55, A: 255})
+	img.SetRGBA(1, 0, color.RGBA{R: 80, G: 82, B: 78, A: 255})
+
+	despillGreen(img)
+
+	if got := img.RGBAAt(0, 0); got.G != 55 {
+		t.Fatalf("green spill pixel = %#v, want green channel clamped to max red/blue", got)
+	}
+	if got := img.RGBAAt(1, 0); got.G != 82 {
+		t.Fatalf("neutral pixel changed to %#v", got)
+	}
+}
+
+func TestClearTransparentRGBRemovesHiddenChroma(t *testing.T) {
+	img := image.NewRGBA(image.Rect(0, 0, 1, 1))
+	img.SetRGBA(0, 0, color.RGBA{R: 0, G: 255, B: 0, A: 0})
+
+	clearTransparentRGB(img)
+
+	if got := img.RGBAAt(0, 0); got != (color.RGBA{}) {
+		t.Fatalf("transparent pixel = %#v, want zero RGB", got)
 	}
 }
 

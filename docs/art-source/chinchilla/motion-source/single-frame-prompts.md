@@ -24,6 +24,7 @@ Create one single side-view standard gray chinchilla desktop pet sprite pose, ri
 
 - 2026-06-21: parent-thread single-pose idle prompt produced a `1536x1024` opaque PNG with `AlphaMin=255`; rejected as reference-only and not copied into the repo.
 - 2026-06-21: pure green fallback prompt produced a visually useful single chinchilla candidate, but `cmd/prepareframe` rejected it because background cleanup left content touching the source canvas edge. It was kept in `.codex/tmp` only and not copied into accepted frames.
+- 2026-06-21: `cmd/prepareframe -background chroma-green` plus transparent-RGB cleanup and green despill produced a clean `96x64` frame from that pure green candidate. Light/dark visual review passed, and the output was promoted to `accepted-frames/set00/frame-00.png`.
 
 ## Fallback Candidate Prompt
 
