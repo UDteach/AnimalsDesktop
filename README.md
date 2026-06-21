@@ -32,11 +32,21 @@ Useful checks during local development:
 ```powershell
 go run ./cmd/importsheet
 go run ./cmd/importanimals
+go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames
 go run ./cmd/validatemotion -variant chinchilla_standard_gray
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/degu
 git diff --check
 ```
+
+Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes for that set:
+
+```powershell
+go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -strict
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png
+```
+
+In-progress sets are expected to fail strict mode until all 62 standalone transparent frames exist.
 
 Do not create a release tag until the current animal target is complete.

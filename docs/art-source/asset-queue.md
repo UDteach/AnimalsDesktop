@@ -18,6 +18,7 @@ One thread should produce more images, but for fewer animals:
 - Source candidate thread: 4-6 variants, 4 source candidates per variant, 2 preview backgrounds for the best candidates.
 - Motion thread: 1 species family, 1-3 accepted variants, 62 source frames per accepted variant.
 - Integration thread: parent only; verifies alpha bounds, 96x64 readability, deterministic import, catalog coverage, and runtime behavior.
+- Frame progress thread: one species family only; uses `cmd/auditframes` to track valid/missing/invalid standalone PNG frames without promoting unfinished or opaque ImageGen outputs.
 
 This gives each thread enough output to compare candidates without pushing 600+ unreviewed frames through one context.
 

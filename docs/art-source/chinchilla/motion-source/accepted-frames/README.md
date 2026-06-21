@@ -18,7 +18,14 @@ Expected set folders:
 After all 62 frames in a set pass visual review:
 
 ```powershell
+go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -strict
 go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-report.json
 ```
 
 The assembler is a gate, not an art fixer. If it rejects a frame, regenerate or manually curate the source PNG before assembling.
+
+For in-progress tracking across all 10 sets:
+
+```powershell
+go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames -report docs\art-source\chinchilla\motion-source\accepted-frames\audit-report.json
+```
