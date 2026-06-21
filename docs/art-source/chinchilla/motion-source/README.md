@@ -17,7 +17,7 @@ The accepted extraction source was generated with a checker background rather th
 - `frames/chinchilla-standard-gray-pose-00.png` through `pose-15.png`
 - `chinchilla-standard-gray-pose-frames-check.png`
 - `chinchilla-standard-gray-frame-map.csv`
-- `sheets/chinchilla-standard-gray-source-set00-draft.png`
+- `sheets/chinchilla-standard-gray-source-set00-draft.png` through `source-set09-draft.png`
 - `chinchilla-standard-gray-source-set00-draft-check.png`
 
 Each extracted pose frame is:
@@ -31,11 +31,13 @@ Each extracted pose frame is:
 
 These frames are source material for the chinchilla motion pass. They are not yet a release-ready motion family.
 
-The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. `cmd/importanimals` now reads this draft sheet for `chinchilla_standard_gray` and emits the 10 runtime sheets from it. It is intentionally marked draft because it still reuses key poses, duplicates one source sheet across the 10 runtime sets, and has not passed the accepted-motion bar.
+The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. `source-set01-draft` through `source-set09-draft` are deterministic draft variations that stay inside the same frame-slot contract. `cmd/importanimals` reads the complete draft set family for `chinchilla_standard_gray` and emits 10 runtime sheets from it.
+
+This family is intentionally marked draft because it still reuses key poses and has not passed the accepted-motion bar. The draft variations are an importer/runtime integration step, not a substitute for accepted ImageGen motion sources.
 
 Before release, this family still needs:
 
 - 62 accepted frames with enough real pose variation for the selected chinchilla variant
-- accepted `set00` through `set09` motion source variation
+- accepted ImageGen `set00` through `set09` motion source variation
 - visual QA on light and dark backgrounds
 - local Go tests, vet, Windows build, and GitHub Actions success

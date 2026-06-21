@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"animals-desktop/internal/catalog"
 	xdraw "golang.org/x/image/draw"
@@ -157,20 +158,55 @@ func importVariant(variant catalog.Variant, outDir string, generatedSourceDir st
 }
 
 func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, int, int, []string, error) {
-	sheet, err := loadMotionSourceSheet(variant.MotionSourcePath)
+	sourcePaths, err := motionSourceSheetPaths(variant.MotionSourcePath)
 	if err != nil {
 		return nil, 0, 0, nil, err
 	}
 	outputs := make([]string, 0, motionSets)
 	for set := 0; set < motionSets; set++ {
+		sourcePath := sourcePaths[0]
+		if len(sourcePaths) == motionSets {
+			sourcePath = sourcePaths[set]
+		}
+		sheet, err := loadMotionSourceSheet(sourcePath)
+		if err != nil {
+			return nil, 0, 0, nil, err
+		}
 		outPath := filepath.Join(outDir, fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
 		if err := writePNG(outPath, sheet); err != nil {
 			return nil, 0, 0, nil, err
 		}
 		outputs = append(outputs, filepath.ToSlash(outPath))
 	}
+	if len(sourcePaths) == motionSets {
+		return outputs, totalFrames, motionSets, nil, nil
+	}
 	warnings := []string{"single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"}
-	return outputs, totalFrames, 1, warnings, nil
+	return outputs, totalFrames, len(sourcePaths), warnings, nil
+}
+
+func motionSourceSheetPaths(set00Path string) ([]string, error) {
+	if set00Path == "" {
+		return nil, fmt.Errorf("motion source path is empty")
+	}
+	if !strings.Contains(set00Path, "set00") {
+		return []string{set00Path}, nil
+	}
+	paths := make([]string, 0, motionSets)
+	for set := 0; set < motionSets; set++ {
+		path := strings.Replace(set00Path, "set00", fmt.Sprintf("set%02d", set), 1)
+		if _, err := os.Stat(path); err != nil {
+			if os.IsNotExist(err) {
+				if set == 0 {
+					return nil, err
+				}
+				return []string{set00Path}, nil
+			}
+			return nil, err
+		}
+		paths = append(paths, path)
+	}
+	return paths, nil
 }
 
 func loadMotionSourceSheet(path string) (*image.RGBA, error) {

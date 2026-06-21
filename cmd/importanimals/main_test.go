@@ -110,6 +110,71 @@ func TestImportVariantUsesMotionSourceSheet(t *testing.T) {
 	}
 }
 
+func TestImportVariantUsesTenMotionSourceSheets(t *testing.T) {
+	root := t.TempDir()
+	sourcePath := filepath.Join(root, "source.png")
+	src := image.NewRGBA(image.Rect(0, 0, 120, 80))
+	for y := 20; y < 60; y++ {
+		for x := 20; x < 100; x++ {
+			src.SetRGBA(x, y, color.RGBA{R: 140, G: 140, B: 135, A: 255})
+		}
+	}
+	if err := writePNG(sourcePath, src); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+
+	motionSet00Path := filepath.Join(root, "chinchilla-source-set00-draft.png")
+	for set := 0; set < motionSets; set++ {
+		motion := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
+		for frame := 0; frame < totalFrames; frame++ {
+			xOffset := frame * frameW
+			motion.SetRGBA(xOffset+8, 8, color.RGBA{R: byte(set), G: byte(frame), B: 90, A: 255})
+			for y := 34; y < 54; y++ {
+				for x := 24; x < 72; x++ {
+					motion.SetRGBA(xOffset+x, y, color.RGBA{R: 160, G: 160, B: 150, A: 255})
+				}
+			}
+		}
+		path := filepath.Join(root, "chinchilla-source-set"+twoDigits(set)+"-draft.png")
+		if err := writePNG(path, motion); err != nil {
+			t.Fatalf("write motion source set %02d: %v", set, err)
+		}
+	}
+
+	variant := catalog.Variant{
+		ID:               "chinchilla_standard_gray",
+		SpeciesID:        "chinchilla",
+		BreedOrMorph:     "Chinchilla",
+		Color:            "standard gray",
+		PopularityTier:   1,
+		MotionProfile:    catalog.MotionProfileSmallRodentScurry,
+		SourceStatus:     catalog.SourceStatusMotionDraft,
+		SpriteBase:       "test_chinchilla",
+		SeedStage:        true,
+		SourcePath:       sourcePath,
+		MotionSourcePath: motionSet00Path,
+	}
+	outDir := filepath.Join(root, "sprites")
+	report, err := importVariant(variant, outDir, filepath.Join(root, "generated"))
+	if err != nil {
+		t.Fatalf("importVariant() error = %v", err)
+	}
+	if report.MotionFrames != totalFrames || report.MotionSets != motionSets || report.MotionSource == "" {
+		t.Fatalf("motion report = frames:%d sets:%d source:%q", report.MotionFrames, report.MotionSets, report.MotionSource)
+	}
+	if len(report.Warnings) != 0 {
+		t.Fatalf("warnings = %v, want none for complete set family", report.Warnings)
+	}
+	sheet, err := openPNG(filepath.Join(outDir, "test_chinchilla_set09.png"))
+	if err != nil {
+		t.Fatalf("open sheet: %v", err)
+	}
+	got := sheet.RGBAAt(12*frameW+8, 8)
+	if got.R != 9 || got.G != 12 || got.B != 90 || got.A != 255 {
+		t.Fatalf("set09 frame 12 marker = %#v, want imported set-specific motion source marker", got)
+	}
+}
+
 func TestProceduralSourceHasVisibleContent(t *testing.T) {
 	src := proceduralSource(catalog.Variant{
 		ID:        "ferret_sable",
