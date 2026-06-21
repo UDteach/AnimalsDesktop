@@ -7,27 +7,29 @@ type Species struct {
 }
 
 type Variant struct {
-	ID             string
-	SpeciesID      string
-	BreedOrMorph   string
-	Color          string
-	PopularityTier int
-	MotionProfile  string
-	SourceStatus   string
-	LabelEN        string
-	LabelJA        string
-	SpriteBase     string
-	SeedStage      bool
-	SourcePath     string
-	Shape          string
-	TintHex        string
-	AccentHex      string
+	ID               string
+	SpeciesID        string
+	BreedOrMorph     string
+	Color            string
+	PopularityTier   int
+	MotionProfile    string
+	SourceStatus     string
+	LabelEN          string
+	LabelJA          string
+	SpriteBase       string
+	SeedStage        bool
+	SourcePath       string
+	MotionSourcePath string
+	Shape            string
+	TintHex          string
+	AccentHex        string
 }
 
 const (
 	SourceStatusDeguMotion     = "degu_motion_source"
 	SourceStatusPrototypeOnly  = "prototype_only"
 	SourceStatusImageGenQueued = "imagegen_queued"
+	SourceStatusMotionDraft    = "motion_source_draft"
 
 	MotionProfileDegu               = "degu"
 	MotionProfileSmallRodentScurry  = "small-rodent-scurry"
@@ -81,13 +83,14 @@ var SpeciesList = []Species{
 }
 
 const (
-	srcChinchilla    = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
-	srcMacaroniMouse = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
-	srcRabbit        = "docs/source-truth/rabbit-source-truth.png"
-	srcDog           = "docs/art-intake/dog/dog-source-truth-transparent.png"
-	srcCat           = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
-	srcGecko         = "docs/art-source/gecko/gecko-source-truth.png"
-	srcHamster       = "docs/art-source/hamster/hamster-source-truth.png"
+	srcChinchilla            = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
+	srcChinchillaMotionDraft = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00-draft.png"
+	srcMacaroniMouse         = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
+	srcRabbit                = "docs/source-truth/rabbit-source-truth.png"
+	srcDog                   = "docs/art-intake/dog/dog-source-truth-transparent.png"
+	srcCat                   = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
+	srcGecko                 = "docs/art-source/gecko/gecko-source-truth.png"
+	srcHamster               = "docs/art-source/hamster/hamster-source-truth.png"
 )
 
 var Variants = []Variant{
@@ -103,7 +106,7 @@ var Variants = []Variant{
 	deguVariant("blue_pied", "blue pied (slate gray)", "degu_blue_pied"),
 	deguVariant("cream_pied", "cream pied", "degu_cream_pied"),
 
-	sourceVariant("chinchilla_standard_gray", "chinchilla", "Chinchilla - standard gray", "chinchilla_standard_gray", srcChinchilla, "", ""),
+	motionSourceVariant("chinchilla_standard_gray", "chinchilla", "Chinchilla - standard gray", "chinchilla_standard_gray", srcChinchilla, srcChinchillaMotionDraft, "", ""),
 	sourceVariant("chinchilla_beige", "chinchilla", "Chinchilla - beige", "chinchilla_beige", srcChinchilla, "c8b184", ""),
 	sourceVariant("chinchilla_ebony", "chinchilla", "Chinchilla - ebony", "chinchilla_ebony", srcChinchilla, "3e3d39", ""),
 	sourceVariant("chinchilla_white_mosaic", "chinchilla", "Chinchilla - white mosaic", "chinchilla_white_mosaic", srcChinchilla, "e6e1d3", "8f9690"),
@@ -261,6 +264,13 @@ func sourceVariant(id string, speciesID string, label string, spriteBase string,
 		TintHex:        tintHex,
 		AccentHex:      accentHex,
 	}
+}
+
+func motionSourceVariant(id string, speciesID string, label string, spriteBase string, sourcePath string, motionSourcePath string, tintHex string, accentHex string) Variant {
+	variant := sourceVariant(id, speciesID, label, spriteBase, sourcePath, tintHex, accentHex)
+	variant.SourceStatus = SourceStatusMotionDraft
+	variant.MotionSourcePath = motionSourcePath
+	return variant
 }
 
 func sourceVariantMeta(id string, speciesID string, label string, spriteBase string, sourcePath string, tintHex string, accentHex string, breedOrMorph string, color string, popularityTier int) Variant {

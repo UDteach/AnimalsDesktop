@@ -6,9 +6,12 @@
     "color": "Chinchilla - standard gray",
     "popularity_tier": 3,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
+    "source_status": "motion_source_draft",
     "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
     "generated_source": "assets/source/animals/generated/chinchilla_standard_gray-source.png",
+    "motion_source": "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00-draft.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "chinchilla_standard_gray",
     "source_width": 1536,
     "source_height": 1024,
@@ -29,6 +32,9 @@
       "assets/sprites/chinchilla_standard_gray_set07.png",
       "assets/sprites/chinchilla_standard_gray_set08.png",
       "assets/sprites/chinchilla_standard_gray_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {

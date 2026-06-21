@@ -47,8 +47,14 @@ func TestCatalogInvariants(t *testing.T) {
 		if variant.SeedStage && variant.SourcePath == "" && variant.Shape == "" {
 			t.Fatalf("seed variant %q has neither source path nor procedural shape", variant.ID)
 		}
-		if variant.SeedStage && variant.SourceStatus != SourceStatusPrototypeOnly && variant.SourceStatus != SourceStatusImageGenQueued {
-			t.Fatalf("seed variant %q source status = %q, want prototype/imagegen status", variant.ID, variant.SourceStatus)
+		if variant.SeedStage && variant.SourceStatus != SourceStatusPrototypeOnly && variant.SourceStatus != SourceStatusImageGenQueued && variant.SourceStatus != SourceStatusMotionDraft {
+			t.Fatalf("seed variant %q source status = %q, want prototype/imagegen/motion draft status", variant.ID, variant.SourceStatus)
+		}
+		if variant.SourceStatus == SourceStatusMotionDraft && variant.MotionSourcePath == "" {
+			t.Fatalf("motion draft variant %q has no motion source path", variant.ID)
+		}
+		if variant.MotionSourcePath != "" && variant.SourceStatus != SourceStatusMotionDraft {
+			t.Fatalf("variant %q has motion source path with source status %q", variant.ID, variant.SourceStatus)
 		}
 		if !variant.SeedStage && variant.SourceStatus != SourceStatusDeguMotion {
 			t.Fatalf("non-seed variant %q source status = %q, want degu motion source", variant.ID, variant.SourceStatus)

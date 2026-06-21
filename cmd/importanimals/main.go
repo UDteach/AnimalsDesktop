@@ -23,6 +23,8 @@ const (
 	frameH      = 64
 )
 
+var defaultGeneratedSourceDir = filepath.FromSlash("assets/source/animals/generated")
+
 type seedReport struct {
 	Variant         string     `json:"variant"`
 	Species         string     `json:"species"`
@@ -33,6 +35,9 @@ type seedReport struct {
 	SourceStatus    string     `json:"source_status"`
 	Source          string     `json:"source"`
 	GeneratedSource string     `json:"generated_source,omitempty"`
+	MotionSource    string     `json:"motion_source,omitempty"`
+	MotionFrames    int        `json:"motion_frames,omitempty"`
+	MotionSets      int        `json:"motion_sets,omitempty"`
 	SpriteBase      string     `json:"sprite_base"`
 	Shape           string     `json:"shape,omitempty"`
 	TintHex         string     `json:"tint_hex,omitempty"`
@@ -62,12 +67,13 @@ func main() {
 	outDir := flag.String("out", filepath.FromSlash("assets/sprites"), "output sprite directory")
 	reportPath := flag.String("report", filepath.FromSlash("assets/source/animals/seed-import-report.json"), "JSON report path")
 	previewPath := flag.String("preview", filepath.FromSlash("docs/assets/animalsdesktop-seed-preview.png"), "seed preview PNG path")
+	generatedSourceDir := flag.String("generated-source-dir", defaultGeneratedSourceDir, "directory for normalized/generated source PNGs")
 	flag.Parse()
 
 	seedVariants := catalog.SeedVariants()
 	reports := make([]seedReport, 0)
 	for _, variant := range seedVariants {
-		report, err := importVariant(variant, *outDir)
+		report, err := importVariant(variant, *outDir, *generatedSourceDir)
 		if err != nil {
 			log.Fatalf("import %s: %v", variant.ID, err)
 		}
@@ -80,8 +86,8 @@ func main() {
 	fmt.Printf("imported %d seed animal variants into %d-frame sheets\n", len(reports), totalFrames)
 }
 
-func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
-	src, sourceLabel, generatedSource, warnings, err := prepareVariantSource(variant)
+func importVariant(variant catalog.Variant, outDir string, generatedSourceDir string) (seedReport, error) {
+	src, sourceLabel, generatedSource, warnings, err := prepareVariantSource(variant, generatedSourceDir)
 	if err != nil {
 		return seedReport{}, err
 	}
@@ -120,6 +126,19 @@ func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
 	}
 
 	motionProfile := catalog.MotionProfileForVariant(variant)
+	if variant.MotionSourcePath != "" {
+		outputs, motionFrames, motionSetsUsed, motionWarnings, err := importMotionSourceSheet(variant, outDir)
+		if err != nil {
+			return seedReport{}, err
+		}
+		report.MotionSource = filepath.ToSlash(variant.MotionSourcePath)
+		report.MotionFrames = motionFrames
+		report.MotionSets = motionSetsUsed
+		report.Outputs = outputs
+		report.Warnings = append(report.Warnings, motionWarnings...)
+		return report, nil
+	}
+
 	normalized := normalizeSource(src, content, profileFor(motionProfile))
 	for set := 0; set < motionSets; set++ {
 		sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
@@ -137,7 +156,43 @@ func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
 	return report, nil
 }
 
-func prepareVariantSource(variant catalog.Variant) (*image.RGBA, string, string, []string, error) {
+func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, int, int, []string, error) {
+	sheet, err := loadMotionSourceSheet(variant.MotionSourcePath)
+	if err != nil {
+		return nil, 0, 0, nil, err
+	}
+	outputs := make([]string, 0, motionSets)
+	for set := 0; set < motionSets; set++ {
+		outPath := filepath.Join(outDir, fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
+		if err := writePNG(outPath, sheet); err != nil {
+			return nil, 0, 0, nil, err
+		}
+		outputs = append(outputs, filepath.ToSlash(outPath))
+	}
+	warnings := []string{"single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"}
+	return outputs, totalFrames, 1, warnings, nil
+}
+
+func loadMotionSourceSheet(path string) (*image.RGBA, error) {
+	sheet, err := openPNG(path)
+	if err != nil {
+		return nil, err
+	}
+	bounds := sheet.Bounds()
+	wantW := frameW * totalFrames
+	if bounds.Dx() != wantW || bounds.Dy() != frameH {
+		return nil, fmt.Errorf("motion source sheet %s bounds = %dx%d, want %dx%d", path, bounds.Dx(), bounds.Dy(), wantW, frameH)
+	}
+	for frame := 0; frame < totalFrames; frame++ {
+		frameRect := image.Rect(bounds.Min.X+frame*frameW, bounds.Min.Y, bounds.Min.X+(frame+1)*frameW, bounds.Min.Y+frameH)
+		if alphaBounds(sheet.SubImage(frameRect)).Empty() {
+			return nil, fmt.Errorf("motion source sheet %s has empty frame %02d", path, frame)
+		}
+	}
+	return sheet, nil
+}
+
+func prepareVariantSource(variant catalog.Variant, generatedSourceDir string) (*image.RGBA, string, string, []string, error) {
 	warnings := []string{}
 	var src *image.RGBA
 	var err error
@@ -172,7 +227,7 @@ func prepareVariantSource(variant catalog.Variant) (*image.RGBA, string, string,
 		src = tintSource(src, tint, accent)
 	}
 
-	generatedPath := filepath.Join("assets", "source", "animals", "generated", variant.SpriteBase+"-source.png")
+	generatedPath := filepath.Join(generatedSourceDir, variant.SpriteBase+"-source.png")
 	if err := writePNG(generatedPath, src); err != nil {
 		return nil, "", "", nil, err
 	}

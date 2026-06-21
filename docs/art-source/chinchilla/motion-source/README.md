@@ -29,14 +29,13 @@ Each extracted pose frame is:
 
 ## Current Use
 
-These frames are source material for the chinchilla motion pass. They are not yet a release-ready 62-frame runtime set.
+These frames are source material for the chinchilla motion pass. They are not yet a release-ready motion family.
 
-The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. It is intentionally marked draft because it still reuses key poses and has not passed the accepted-motion bar.
+The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. `cmd/importanimals` now reads this draft sheet for `chinchilla_standard_gray` and emits the 10 runtime sheets from it. It is intentionally marked draft because it still reuses key poses, duplicates one source sheet across the 10 runtime sets, and has not passed the accepted-motion bar.
 
 Before release, this family still needs:
 
 - 62 accepted frames with enough real pose variation for the selected chinchilla variant
-- generated `set00` through `set09` runtime sheets
-- importer integration
+- accepted `set00` through `set09` motion source variation
 - visual QA on light and dark backgrounds
 - local Go tests, vet, Windows build, and GitHub Actions success
