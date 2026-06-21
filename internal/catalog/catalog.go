@@ -7,17 +7,48 @@ type Species struct {
 }
 
 type Variant struct {
-	ID         string
-	SpeciesID  string
-	LabelEN    string
-	LabelJA    string
-	SpriteBase string
-	SeedStage  bool
-	SourcePath string
-	Shape      string
-	TintHex    string
-	AccentHex  string
+	ID             string
+	SpeciesID      string
+	BreedOrMorph   string
+	Color          string
+	PopularityTier int
+	MotionProfile  string
+	SourceStatus   string
+	LabelEN        string
+	LabelJA        string
+	SpriteBase     string
+	SeedStage      bool
+	SourcePath     string
+	Shape          string
+	TintHex        string
+	AccentHex      string
 }
+
+const (
+	SourceStatusDeguMotion     = "degu_motion_source"
+	SourceStatusPrototypeOnly  = "prototype_only"
+	SourceStatusImageGenQueued = "imagegen_queued"
+
+	MotionProfileDegu               = "degu"
+	MotionProfileSmallRodentScurry  = "small-rodent-scurry"
+	MotionProfileRabbitHop          = "rabbit-hop"
+	MotionProfileDogTrot            = "dog-trot"
+	MotionProfileCatStalk           = "cat-stalk"
+	MotionProfileGeckoCrawl         = "gecko-crawl"
+	MotionProfileTortoisePlod       = "tortoise-plod"
+	MotionProfileFerretSlink        = "ferret-slink"
+	MotionProfileGuineaPigWaddle    = "guinea-pig-waddle"
+	MotionProfileHedgehogShuffle    = "hedgehog-shuffle"
+	MotionProfileSquirrelBound      = "squirrel-bound"
+	MotionProfileFoxTrot            = "fox-trot"
+	MotionProfileRedPandaAmble      = "red-panda-amble"
+	MotionProfileOtterSlide         = "otter-slide"
+	MotionProfileSugarGliderSkitter = "sugar-glider-skitter"
+	MotionProfileCapybaraLumber     = "capybara-lumber"
+	MotionProfileSnakeSlither       = "snake-slither"
+	MotionProfileDragonPlod         = "dragon-plod"
+	MotionProfileFrogHop            = "frog-hop"
+)
 
 var SpeciesList = []Species{
 	{ID: "degu", Label: "Degu", Profile: "degu"},
@@ -38,6 +69,15 @@ var SpeciesList = []Species{
 	{ID: "sugar_glider", Label: "Sugar glider", Profile: "small-mammal"},
 	{ID: "capybara", Label: "Capybara", Profile: "large-mammal"},
 	{ID: "tortoise", Label: "Tortoise", Profile: "low-crawler"},
+	{ID: "rat", Label: "Fancy rat", Profile: "small-mammal"},
+	{ID: "mouse", Label: "Fancy mouse", Profile: "small-mammal"},
+	{ID: "gerbil", Label: "Mongolian gerbil", Profile: "small-mammal"},
+	{ID: "prairie_dog", Label: "Prairie dog", Profile: "small-mammal"},
+	{ID: "chipmunk", Label: "Chipmunk", Profile: "small-mammal"},
+	{ID: "bearded_dragon", Label: "Bearded dragon", Profile: "low-crawler"},
+	{ID: "crested_gecko", Label: "Crested gecko", Profile: "low-crawler"},
+	{ID: "corn_snake", Label: "Corn snake", Profile: "low-crawler"},
+	{ID: "whites_tree_frog", Label: "White's tree frog", Profile: "hopper"},
 }
 
 const (
@@ -123,44 +163,116 @@ var Variants = []Variant{
 	shapeVariant("capybara_sand", "capybara", "Capybara - sand", "capybara", "b98a58", "e2c69c"),
 	shapeVariant("tortoise_olive", "tortoise", "Tortoise - olive", "tortoise", "6f7146", "3f3d2a"),
 	shapeVariant("tortoise_dark_shell", "tortoise", "Tortoise - dark shell", "tortoise", "45452f", "8b8052"),
+
+	sourceVariantMeta("french_bulldog_fawn", "dog", "French Bulldog - fawn", "french_bulldog_fawn", srcDog, "c49a6c", "3a3026", "French Bulldog", "fawn", 1),
+	sourceVariantMeta("labrador_yellow", "dog", "Labrador Retriever - yellow", "labrador_yellow", srcDog, "d7b46f", "", "Labrador Retriever", "yellow", 1),
+	sourceVariantMeta("labrador_black", "dog", "Labrador Retriever - black", "labrador_black", srcDog, "2b2926", "", "Labrador Retriever", "black", 1),
+	sourceVariantMeta("golden_retriever_golden", "dog", "Golden Retriever - golden", "golden_retriever_golden", srcDog, "c8873d", "ead9ad", "Golden Retriever", "golden", 1),
+	sourceVariantMeta("german_shepherd_black_tan", "dog", "German Shepherd - black and tan", "german_shepherd_black_tan", srcDog, "3a3026", "b8874c", "German Shepherd Dog", "black and tan", 1),
+	sourceVariantMeta("dachshund_red", "dog", "Dachshund - red", "dachshund_red", srcDog, "a8572b", "", "Dachshund", "red", 1),
+	sourceVariantMeta("poodle_white", "dog", "Poodle - white", "poodle_white", srcDog, "eee7d8", "", "Poodle", "white", 1),
+	sourceVariantMeta("beagle_tricolor", "dog", "Beagle - tricolor", "beagle_tricolor", srcDog, "7b4d2e", "f1e6d0", "Beagle", "tricolor", 1),
+	sourceVariantMeta("bulldog_white_brindle", "dog", "Bulldog - white brindle", "bulldog_white_brindle", srcDog, "e7dfcf", "75513a", "Bulldog", "white brindle", 1),
+	sourceVariantMeta("shiba_inu_red", "dog", "Shiba Inu - red", "shiba_inu_red", srcDog, "b7612f", "efe0c5", "Shiba Inu", "red", 2),
+	sourceVariantMeta("pomeranian_orange", "dog", "Pomeranian - orange", "pomeranian_orange", srcDog, "d58233", "f2d4a2", "Pomeranian", "orange", 2),
+	sourceVariantMeta("corgi_sable", "dog", "Corgi - sable", "corgi_sable", srcDog, "9b6236", "ead6b0", "Pembroke Welsh Corgi", "sable", 2),
+
+	sourceVariantMeta("maine_coon_brown_tabby", "cat", "Maine Coon - brown tabby", "maine_coon_brown_tabby", srcCat, "6e5239", "a88457", "Maine Coon", "brown tabby", 1),
+	sourceVariantMeta("ragdoll_seal_bicolor", "cat", "Ragdoll - seal bicolor", "ragdoll_seal_bicolor", srcCat, "e7ddca", "594333", "Ragdoll", "seal bicolor", 1),
+	sourceVariantMeta("persian_white", "cat", "Persian - white", "persian_white", srcCat, "eee8dd", "", "Persian", "white", 1),
+	sourceVariantMeta("british_shorthair_blue", "cat", "British Shorthair - blue", "british_shorthair_blue", srcCat, "737d84", "", "British Shorthair", "blue", 1),
+	sourceVariantMeta("siamese_seal_point", "cat", "Siamese - seal point", "siamese_seal_point", srcCat, "d8c8aa", "4a3428", "Siamese", "seal point", 1),
+	sourceVariantMeta("sphynx_pink", "cat", "Sphynx - pink", "sphynx_pink", srcCat, "d7a894", "", "Sphynx", "pink", 2),
+	sourceVariantMeta("scottish_fold_silver_tabby", "cat", "Scottish Fold - silver tabby", "scottish_fold_silver_tabby", srcCat, "a7aaa5", "5e625f", "Scottish Fold", "silver tabby", 2),
+	sourceVariantMeta("bengal_rosetted", "cat", "Bengal - rosetted", "bengal_rosetted", srcCat, "c69048", "3f2b20", "Bengal", "rosetted", 2),
+	sourceVariantMeta("domestic_shorthair_calico", "cat", "Domestic Shorthair - calico", "domestic_shorthair_calico", srcCat, "e8dfcd", "bd6d2e", "Domestic Shorthair", "calico", 2),
+	sourceVariantMeta("domestic_shorthair_tuxedo", "cat", "Domestic Shorthair - tuxedo", "domestic_shorthair_tuxedo", srcCat, "242322", "eee8dd", "Domestic Shorthair", "tuxedo", 2),
+
+	sourceVariantMeta("holland_lop_broken_orange", "rabbit", "Holland Lop - broken orange", "holland_lop_broken_orange", srcRabbit, "e6d8c3", "c97833", "Holland Lop", "broken orange", 1),
+	sourceVariantMeta("netherland_dwarf_chestnut", "rabbit", "Netherland Dwarf - chestnut", "netherland_dwarf_chestnut", srcRabbit, "8c633d", "d3b17a", "Netherland Dwarf", "chestnut", 1),
+	sourceVariantMeta("mini_rex_black_otter", "rabbit", "Mini Rex - black otter", "mini_rex_black_otter", srcRabbit, "2f2c29", "b89865", "Mini Rex", "black otter", 1),
+	sourceVariantMeta("lionhead_tort", "rabbit", "Lionhead - tort", "lionhead_tort", srcRabbit, "a66a3a", "4f3326", "Lionhead", "tort", 2),
+	sourceVariantMeta("dutch_black_white", "rabbit", "Dutch - black and white", "dutch_black_white", srcRabbit, "2c2a28", "eee7dc", "Dutch", "black and white", 2),
+
+	shapeVariantMeta("fancy_rat_hooded", "rat", "Fancy rat - hooded", "small_rodent", "efe5d4", "3b332c", "Fancy rat", "hooded", 2),
+	shapeVariantMeta("fancy_mouse_white", "mouse", "Fancy mouse - white", "small_rodent", "eee7d8", "c99a8c", "Fancy mouse", "white", 2),
+	shapeVariantMeta("mongolian_gerbil_agouti", "gerbil", "Mongolian gerbil - agouti", "small_rodent", "9d7448", "e5c997", "Mongolian gerbil", "agouti", 2),
+	shapeVariantMeta("prairie_dog_tan", "prairie_dog", "Prairie dog - tan", "prairie_dog", "b98958", "e0c08e", "Prairie dog", "tan", 3),
+	shapeVariantMeta("chipmunk_striped", "chipmunk", "Chipmunk - striped", "chipmunk", "a06a3a", "2f241e", "Chipmunk", "striped", 3),
+
+	shapeVariantMeta("bearded_dragon_citrus", "bearded_dragon", "Bearded dragon - citrus", "dragon", "d99b37", "f0d268", "Bearded dragon", "citrus", 2),
+	sourceVariantMeta("crested_gecko_harlequin", "crested_gecko", "Crested gecko - harlequin", "crested_gecko_harlequin", srcGecko, "b77b3d", "eee0bd", "Crested gecko", "harlequin", 2),
+	shapeVariantMeta("corn_snake_amelanistic", "corn_snake", "Corn snake - amelanistic", "snake", "d66b36", "f0d096", "Corn snake", "amelanistic", 2),
+	shapeVariantMeta("whites_tree_frog_green", "whites_tree_frog", "White's tree frog - green", "frog", "77a95a", "d7e9b8", "White's tree frog", "green", 2),
 }
 
 func deguVariant(id string, label string, spriteBase string) Variant {
 	return Variant{
-		ID:         id,
-		SpeciesID:  "degu",
-		LabelEN:    "Degu - " + label,
-		LabelJA:    "Degu - " + label,
-		SpriteBase: spriteBase,
+		ID:             id,
+		SpeciesID:      "degu",
+		BreedOrMorph:   "Degu",
+		Color:          label,
+		PopularityTier: 1,
+		MotionProfile:  MotionProfileDegu,
+		SourceStatus:   SourceStatusDeguMotion,
+		LabelEN:        "Degu - " + label,
+		LabelJA:        "Degu - " + label,
+		SpriteBase:     spriteBase,
 	}
 }
 
 func sourceVariant(id string, speciesID string, label string, spriteBase string, sourcePath string, tintHex string, accentHex string) Variant {
 	return Variant{
-		ID:         id,
-		SpeciesID:  speciesID,
-		LabelEN:    label,
-		LabelJA:    label,
-		SpriteBase: spriteBase,
-		SeedStage:  true,
-		SourcePath: sourcePath,
-		TintHex:    tintHex,
-		AccentHex:  accentHex,
+		ID:             id,
+		SpeciesID:      speciesID,
+		BreedOrMorph:   label,
+		Color:          label,
+		PopularityTier: 3,
+		MotionProfile:  DefaultMotionProfileForSpecies(speciesID),
+		SourceStatus:   SourceStatusPrototypeOnly,
+		LabelEN:        label,
+		LabelJA:        label,
+		SpriteBase:     spriteBase,
+		SeedStage:      true,
+		SourcePath:     sourcePath,
+		TintHex:        tintHex,
+		AccentHex:      accentHex,
 	}
+}
+
+func sourceVariantMeta(id string, speciesID string, label string, spriteBase string, sourcePath string, tintHex string, accentHex string, breedOrMorph string, color string, popularityTier int) Variant {
+	variant := sourceVariant(id, speciesID, label, spriteBase, sourcePath, tintHex, accentHex)
+	variant.BreedOrMorph = breedOrMorph
+	variant.Color = color
+	variant.PopularityTier = popularityTier
+	return variant
 }
 
 func shapeVariant(id string, speciesID string, label string, shape string, tintHex string, accentHex string) Variant {
 	return Variant{
-		ID:         id,
-		SpeciesID:  speciesID,
-		LabelEN:    label,
-		LabelJA:    label,
-		SpriteBase: id,
-		SeedStage:  true,
-		Shape:      shape,
-		TintHex:    tintHex,
-		AccentHex:  accentHex,
+		ID:             id,
+		SpeciesID:      speciesID,
+		BreedOrMorph:   label,
+		Color:          label,
+		PopularityTier: 3,
+		MotionProfile:  DefaultMotionProfileForSpecies(speciesID),
+		SourceStatus:   SourceStatusPrototypeOnly,
+		LabelEN:        label,
+		LabelJA:        label,
+		SpriteBase:     id,
+		SeedStage:      true,
+		Shape:          shape,
+		TintHex:        tintHex,
+		AccentHex:      accentHex,
 	}
+}
+
+func shapeVariantMeta(id string, speciesID string, label string, shape string, tintHex string, accentHex string, breedOrMorph string, color string, popularityTier int) Variant {
+	variant := shapeVariant(id, speciesID, label, shape, tintHex, accentHex)
+	variant.BreedOrMorph = breedOrMorph
+	variant.Color = color
+	variant.PopularityTier = popularityTier
+	return variant
 }
 
 func DeguVariantIDs() []string {
@@ -199,9 +311,63 @@ func ProfileForSpecies(id string) string {
 	return ""
 }
 
+func DefaultMotionProfileForSpecies(speciesID string) string {
+	switch speciesID {
+	case "degu":
+		return MotionProfileDegu
+	case "rabbit":
+		return MotionProfileRabbitHop
+	case "dog":
+		return MotionProfileDogTrot
+	case "cat":
+		return MotionProfileCatStalk
+	case "gecko", "crested_gecko":
+		return MotionProfileGeckoCrawl
+	case "tortoise":
+		return MotionProfileTortoisePlod
+	case "ferret":
+		return MotionProfileFerretSlink
+	case "guinea_pig":
+		return MotionProfileGuineaPigWaddle
+	case "hedgehog":
+		return MotionProfileHedgehogShuffle
+	case "squirrel", "chipmunk":
+		return MotionProfileSquirrelBound
+	case "fox":
+		return MotionProfileFoxTrot
+	case "red_panda":
+		return MotionProfileRedPandaAmble
+	case "otter":
+		return MotionProfileOtterSlide
+	case "sugar_glider":
+		return MotionProfileSugarGliderSkitter
+	case "capybara":
+		return MotionProfileCapybaraLumber
+	case "corn_snake":
+		return MotionProfileSnakeSlither
+	case "bearded_dragon":
+		return MotionProfileDragonPlod
+	case "whites_tree_frog":
+		return MotionProfileFrogHop
+	default:
+		return MotionProfileSmallRodentScurry
+	}
+}
+
+func MotionProfileForVariant(variant Variant) string {
+	if variant.MotionProfile != "" {
+		return variant.MotionProfile
+	}
+	return DefaultMotionProfileForSpecies(variant.SpeciesID)
+}
+
 func WheelCapableSpecies(speciesID string) bool {
-	switch ProfileForSpecies(speciesID) {
-	case "degu", "small-mammal":
+	return WheelCapableMotionProfile(DefaultMotionProfileForSpecies(speciesID))
+}
+
+func WheelCapableMotionProfile(profile string) bool {
+	switch profile {
+	case MotionProfileDegu, MotionProfileSmallRodentScurry:
 		return true
 	default:
 		return false
@@ -209,5 +375,5 @@ func WheelCapableSpecies(speciesID string) bool {
 }
 
 func WheelCapableVariant(variant Variant) bool {
-	return WheelCapableSpecies(variant.SpeciesID)
+	return WheelCapableMotionProfile(MotionProfileForVariant(variant))
 }

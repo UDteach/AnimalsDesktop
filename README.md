@@ -6,13 +6,13 @@ Repository: <https://github.com/UDteach/AnimalsDesktop>
 
 ## Current Catalog
 
-The runtime catalog currently includes 64 selectable variants:
+The runtime catalog currently includes exactly 100 selectable variants:
 
 - 11 degu motion variants: wild agouti, black, blue/slate gray, gray, white/cream, sand/champagne, chocolate, and pied variants
-- 53 seed-stage variants across chinchilla, macaroni mouse / fat-tailed gerbil, rabbit, small dog, cat, gecko, hamster, ferret, guinea pig, hedgehog, squirrel, fox, red panda, otter, sugar glider, capybara, and tortoise
-- Multiple color variants for the seed species, including gray, beige, ebony, cream, black, white, fawn, orange, sable, tangerine, cinnamon, and other real-world-inspired coat/morph labels
+- 89 seed-stage variants across chinchilla, macaroni mouse / fat-tailed gerbil, rabbit, dog, cat, gecko, hamster, ferret, guinea pig, hedgehog, squirrel, fox, red panda, otter, sugar glider, capybara, tortoise, rat, mouse, gerbil, prairie dog, chipmunk, bearded dragon, crested gecko, corn snake, and White's tree frog
+- Popular breed/color additions such as French Bulldog fawn, Labrador yellow/black, Golden Retriever golden, Maine Coon brown tabby, Ragdoll seal bicolor, Holland Lop broken orange, Fancy rat hooded, Bearded dragon citrus, Corn snake amelanistic, and White's tree frog green
 
-Non-degu species are seed-stage assets generated from source-truth still images, tint-controlled variants, or deterministic shape sources. They are selectable in the app and have deterministic runtime sheets, but they are not yet full species-specific motion sets.
+Non-degu species are seed-stage assets generated from source-truth still images, tint-controlled variants, or deterministic shape sources. They are selectable in the app and have deterministic runtime sheets. Each variant is assigned an ecology-specific motion profile, including dog-trot, cat-stalk, rabbit-hop, gecko-crawl, snake-slither, dragon-plod, frog-hop, and other profile groups.
 
 ![Seed animal preview](docs/assets/animalsdesktop-seed-preview.png)
 
@@ -25,7 +25,7 @@ Non-degu species are seed-stage assets generated from source-truth still images,
 - Optional per-pet names with hover labels
 - Keyboard reaction and random stroll modes
 - Typing wheel behavior
-- Species behavior profiles: low-crawler, large, and companion profiles do not get forced into the typing wheel
+- Species behavior profiles: only wheel-capable profiles enter the typing wheel, so low-crawler, snake, frog, tortoise, large, and companion profiles do not get forced into degu-only actions
 - Foraging, carrying, eating, digging, gnawing, and grooming behavior
 - GitHub Release based update check and installer path
 
@@ -54,7 +54,7 @@ It reads source-truth images recorded under `docs/art-source`, `docs/art-intake`
 - `assets/source/animals/seed-import-report.json`
 - `docs/assets/animalsdesktop-seed-preview.png`
 
-The shared runtime registry is in `internal/catalog`. It also owns catalog QA helpers and behavior-profile decisions such as wheel-capable species. The Windows renderer uses a lazy sprite cache, so adding many variants does not expand every sprite sheet into RGBA frames at startup.
+The shared runtime registry is in `internal/catalog`. It owns the fixed 100-variant manifest, species metadata, breed/morph labels, color labels, popularity tiers, source status, motion-profile assignment, and wheel-capability decisions. The Windows renderer uses a lazy sprite cache, so adding many variants does not expand every sprite sheet into RGBA frames at startup.
 
 ## Development
 

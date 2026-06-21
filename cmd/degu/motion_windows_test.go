@@ -156,6 +156,34 @@ func variantIndexForTest(t *testing.T, id string) int {
 	return 0
 }
 
+func TestRuntimeCatalogHasExactly100Variants(t *testing.T) {
+	if got := len(variants); got != 100 {
+		t.Fatalf("runtime variants = %d, want 100", got)
+	}
+}
+
+func TestTypingSkipsWheelForLowCrawlerAndFrogProfiles(t *testing.T) {
+	a := &petApp{
+		mode:         modeKeyboard,
+		wheelEnabled: true,
+		wheelX:       400,
+		sceneW:       1200,
+		speed:        3,
+		pets: []deguPet{
+			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "corn_snake_amelanistic")},
+			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "whites_tree_frog_green")},
+			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "bearded_dragon_citrus")},
+		},
+	}
+
+	a.onTyping()
+	for i, pet := range a.pets {
+		if pet.state == stateWheel {
+			t.Fatalf("pet %d entered wheel for variant %s", i, variants[pet.variant].ID)
+		}
+	}
+}
+
 func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)

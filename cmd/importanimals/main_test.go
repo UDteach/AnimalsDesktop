@@ -21,7 +21,7 @@ func TestNormalizeSourceUsesFixedCanvas(t *testing.T) {
 	if content.Empty() {
 		t.Fatalf("alphaBounds returned empty content")
 	}
-	got := normalizeSource(src, content, profileFor("hamster"))
+	got := normalizeSource(src, content, profileFor(catalog.MotionProfileSmallRodentScurry))
 	if got.Bounds().Dx() != frameW || got.Bounds().Dy() != frameH {
 		t.Fatalf("normalized bounds = %v, want %dx%d", got.Bounds(), frameW, frameH)
 	}
@@ -38,7 +38,7 @@ func TestSeedFrameKeepsSpriteInCanvas(t *testing.T) {
 		}
 	}
 	for frame := 0; frame < totalFrames; frame++ {
-		got := seedFrame(src, frame, 3, "gecko")
+		got := seedFrame(src, frame, 3, catalog.MotionProfileGeckoCrawl)
 		if got.Bounds().Dx() != frameW || got.Bounds().Dy() != frameH {
 			t.Fatalf("frame %d bounds = %v", frame, got.Bounds())
 		}
@@ -92,7 +92,40 @@ func TestSeedVariantGeneratedAssetsExist(t *testing.T) {
 			if _, err := os.Stat(path); err != nil {
 				t.Fatalf("missing sprite sheet for %s set %02d: %v", variant.ID, set, err)
 			}
+			sheet, err := openPNG(path)
+			if err != nil {
+				t.Fatalf("open sprite sheet for %s set %02d: %v", variant.ID, set, err)
+			}
+			if got := sheet.Bounds(); got.Dx() != frameW*totalFrames || got.Dy() != frameH {
+				t.Fatalf("sheet bounds for %s set %02d = %v", variant.ID, set, got)
+			}
+			for frame := 0; frame < totalFrames; frame++ {
+				frameRect := image.Rect(frame*frameW, 0, (frame+1)*frameW, frameH)
+				if alphaBounds(sheet.SubImage(frameRect)).Empty() {
+					t.Fatalf("empty frame for %s set %02d frame %02d", variant.ID, set, frame)
+				}
+			}
 		}
+	}
+}
+
+func TestMotionProfilesHaveDistinctEcologyOffsets(t *testing.T) {
+	rabbitDx, rabbitDy := motionOffset(27, 0, catalog.MotionProfileRabbitHop)
+	_, snakeDy := motionOffset(27, 0, catalog.MotionProfileSnakeSlither)
+	_, tortoiseDy := motionOffset(14, 0, catalog.MotionProfileTortoisePlod)
+	dogDx, dogDy := motionOffset(13, 0, catalog.MotionProfileDogTrot)
+
+	if rabbitDy >= 0 || rabbitDx != 0 {
+		t.Fatalf("rabbit action offset = (%d,%d), want upward hop without horizontal drift", rabbitDx, rabbitDy)
+	}
+	if snakeDy != 0 {
+		t.Fatalf("snake action dy = %d, want low slither", snakeDy)
+	}
+	if tortoiseDy != 0 {
+		t.Fatalf("tortoise fast dy = %d, want no vertical bob", tortoiseDy)
+	}
+	if dogDy >= 0 || dogDx == 0 {
+		t.Fatalf("dog trot offset = (%d,%d), want horizontal trot with lift", dogDx, dogDy)
 	}
 }
 

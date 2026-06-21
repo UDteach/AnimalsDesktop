@@ -26,6 +26,11 @@ const (
 type seedReport struct {
 	Variant         string     `json:"variant"`
 	Species         string     `json:"species"`
+	BreedOrMorph    string     `json:"breed_or_morph"`
+	Color           string     `json:"color"`
+	PopularityTier  int        `json:"popularity_tier"`
+	MotionProfile   string     `json:"motion_profile"`
+	SourceStatus    string     `json:"source_status"`
 	Source          string     `json:"source"`
 	GeneratedSource string     `json:"generated_source,omitempty"`
 	SpriteBase      string     `json:"sprite_base"`
@@ -85,6 +90,11 @@ func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
 	report := seedReport{
 		Variant:         variant.ID,
 		Species:         variant.SpeciesID,
+		BreedOrMorph:    variant.BreedOrMorph,
+		Color:           variant.Color,
+		PopularityTier:  variant.PopularityTier,
+		MotionProfile:   catalog.MotionProfileForVariant(variant),
+		SourceStatus:    variant.SourceStatus,
 		Source:          sourceLabel,
 		GeneratedSource: generatedSource,
 		SpriteBase:      variant.SpriteBase,
@@ -109,11 +119,12 @@ func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
 		report.Warnings = append(report.Warnings, "source is fully opaque; verify transparent background before final animation import")
 	}
 
-	normalized := normalizeSource(src, content, profileFor(variant.SpeciesID))
+	motionProfile := catalog.MotionProfileForVariant(variant)
+	normalized := normalizeSource(src, content, profileFor(motionProfile))
 	for set := 0; set < motionSets; set++ {
 		sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
 		for frame := 0; frame < totalFrames; frame++ {
-			sprite := seedFrame(normalized, frame, set, variant.SpeciesID)
+			sprite := seedFrame(normalized, frame, set, motionProfile)
 			dst := image.Rect(frame*frameW, 0, (frame+1)*frameW, frameH)
 			draw.Draw(sheet, dst, sprite, image.Point{}, draw.Over)
 		}
@@ -337,6 +348,62 @@ func proceduralSource(variant catalog.Variant) *image.RGBA {
 		ellipse(img, 118, 228, 24, 14, dark)
 		legs(img, []int{160, 224, 286}, 260, dark)
 		eye(img, 336, 214)
+	case "small_rodent":
+		ellipse(img, 220, 216, 82, 44, base)
+		ellipse(img, 288, 196, 36, 32, base)
+		ellipse(img, 112, 223, 80, 9, dark)
+		ellipse(img, 285, 166, 13, 18, base)
+		ellipse(img, 202, 206, 30, 22, accent)
+		legs(img, []int{188, 248}, 252, dark)
+		eye(img, 301, 189)
+	case "prairie_dog":
+		ellipse(img, 226, 224, 70, 50, base)
+		ellipse(img, 244, 180, 42, 36, base)
+		ellipse(img, 238, 158, 12, 16, base)
+		ellipse(img, 262, 158, 12, 16, base)
+		ellipse(img, 256, 198, 26, 16, accent)
+		legs(img, []int{202, 250}, 262, dark)
+		eye(img, 258, 174)
+	case "chipmunk":
+		ellipse(img, 218, 216, 86, 42, base)
+		ellipse(img, 292, 194, 38, 32, base)
+		ellipse(img, 112, 170, 42, 82, accent)
+		ellipse(img, 126, 148, 30, 56, base)
+		for i := 0; i < 3; i++ {
+			ellipse(img, 204+i*17, 204, 4, 34, dark)
+		}
+		ellipse(img, 290, 164, 12, 17, base)
+		legs(img, []int{188, 246}, 250, dark)
+		eye(img, 308, 187)
+	case "dragon":
+		ellipse(img, 208, 222, 118, 34, base)
+		ellipse(img, 318, 205, 46, 26, base)
+		triangle(img, image.Pt(284, 188), image.Pt(300, 166), image.Pt(310, 196), accent)
+		triangle(img, image.Pt(246, 190), image.Pt(258, 171), image.Pt(270, 199), accent)
+		ellipse(img, 88, 232, 70, 11, dark)
+		legs(img, []int{174, 262}, 248, dark)
+		eye(img, 330, 198)
+	case "snake":
+		for i := 0; i < 9; i++ {
+			x := 104 + i*28
+			y := 224 + []int{0, -9, -13, -8, 2, 10, 12, 5, -2}[i]
+			ellipse(img, x, y, 32, 16, base)
+		}
+		ellipse(img, 340, 214, 36, 20, base)
+		triangle(img, image.Pt(370, 214), image.Pt(400, 205), image.Pt(395, 225), base)
+		for i := 1; i < 8; i += 2 {
+			ellipse(img, 104+i*28, 218, 4, 16, accent)
+		}
+		eye(img, 354, 207)
+	case "frog":
+		ellipse(img, 224, 224, 84, 42, base)
+		ellipse(img, 292, 196, 50, 34, base)
+		ellipse(img, 270, 166, 14, 15, accent)
+		ellipse(img, 306, 166, 14, 15, accent)
+		ellipse(img, 166, 246, 42, 12, dark)
+		ellipse(img, 286, 246, 46, 13, dark)
+		ellipse(img, 300, 210, 26, 12, accent)
+		eye(img, 305, 164)
 	default:
 		ellipse(img, 220, 216, 110, 50, base)
 		ellipse(img, 310, 198, 44, 36, base)
@@ -421,23 +488,25 @@ func edge(a, b, c image.Point) int {
 	return (c.X-a.X)*(b.Y-a.Y) - (c.Y-a.Y)*(b.X-a.X)
 }
 
-func profileFor(speciesID string) renderProfile {
-	switch speciesID {
-	case "gecko", "otter", "tortoise":
+func profileFor(profileOrSpecies string) renderProfile {
+	profile := profileOrSpecies
+	if _, ok := catalog.SpeciesByID(profileOrSpecies); ok {
+		profile = catalog.DefaultMotionProfileForSpecies(profileOrSpecies)
+	}
+	switch profile {
+	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileOtterSlide, catalog.MotionProfileTortoisePlod, catalog.MotionProfileSnakeSlither, catalog.MotionProfileDragonPlod:
 		return renderProfile{targetW: 90, targetH: 30, baseline: 59, low: true}
-	case "rabbit":
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop:
 		return renderProfile{targetW: 82, targetH: 56, baseline: 60}
-	case "dog", "cat", "fox", "red_panda":
+	case catalog.MotionProfileDogTrot, catalog.MotionProfileCatStalk, catalog.MotionProfileFoxTrot, catalog.MotionProfileRedPandaAmble:
 		return renderProfile{targetW: 84, targetH: 54, baseline: 59}
-	case "ferret":
+	case catalog.MotionProfileFerretSlink:
 		return renderProfile{targetW: 90, targetH: 42, baseline: 59}
-	case "hamster", "macaroni_mouse", "guinea_pig", "hedgehog", "sugar_glider":
+	case catalog.MotionProfileSmallRodentScurry, catalog.MotionProfileGuineaPigWaddle, catalog.MotionProfileHedgehogShuffle, catalog.MotionProfileSugarGliderSkitter:
 		return renderProfile{targetW: 76, targetH: 48, baseline: 59}
-	case "chinchilla":
-		return renderProfile{targetW: 82, targetH: 50, baseline: 59}
-	case "squirrel":
+	case catalog.MotionProfileSquirrelBound:
 		return renderProfile{targetW: 86, targetH: 58, baseline: 60}
-	case "capybara":
+	case catalog.MotionProfileCapybaraLumber:
 		return renderProfile{targetW: 88, targetH: 46, baseline: 60}
 	default:
 		return renderProfile{targetW: 84, targetH: 52, baseline: 59}
@@ -496,8 +565,8 @@ func withOutline(src *image.RGBA) *image.RGBA {
 	return out
 }
 
-func seedFrame(src *image.RGBA, frame int, set int, speciesID string) *image.RGBA {
-	dx, dy := motionOffset(frame, set, speciesID)
+func seedFrame(src *image.RGBA, frame int, set int, motionProfile string) *image.RGBA {
+	dx, dy := motionOffset(frame, set, motionProfile)
 	out := image.NewRGBA(image.Rect(0, 0, frameW, frameH))
 	dst := src.Bounds().Add(image.Pt(dx, dy)).Intersect(out.Bounds())
 	if dst.Empty() {
@@ -507,45 +576,158 @@ func seedFrame(src *image.RGBA, frame int, set int, speciesID string) *image.RGB
 	return out
 }
 
-func motionOffset(frame int, set int, speciesID string) (int, int) {
+func motionOffset(frame int, set int, motionProfile string) (int, int) {
 	local := frame
 	phase := set % 4
 	switch {
 	case frame < 4:
-		return 0, []int{0, -1, 0, 0}[(local+phase)%4]
+		return idleOffset(local, phase, motionProfile)
 	case frame < 12:
 		local = frame - 4
-		return []int{-2, -1, 0, 1, 2, 1, 0, -1}[(local+phase)%8], []int{0, -1, 0, 0}[(local+phase)%4]
+		return walkOffset(local, phase, motionProfile)
 	case frame < 20:
 		local = frame - 12
-		step := []int{-3, -1, 1, 3, 2, 0, -2, -3}[(local+phase)%8]
-		if speciesID == "gecko" {
-			return step, 0
-		}
-		return step, []int{0, -1, 0, -1}[(local+phase)%4]
+		return fastOffset(local, phase, motionProfile)
 	case frame < 26:
 		local = frame - 20
-		return 0, []int{0, 1, 0, 1, 0, 0}[(local+phase)%6]
+		return feedOffset(local, phase, motionProfile)
 	case frame < 32:
 		local = frame - 26
-		if speciesID == "gecko" {
-			return []int{-2, -1, 0, 1, 2, 1}[(local+phase)%6], 0
-		}
-		return 0, []int{0, -2, -5, -4, -1, 0}[(local+phase)%6]
+		return actionOffset(local, phase, motionProfile)
 	case frame < 40:
 		local = frame - 32
-		return []int{0, 1, 2, 1, 0, -1, -2, -1}[(local+phase)%8], 0
+		return groomOffset(local, phase, motionProfile)
 	case frame < 48:
 		local = frame - 40
-		return []int{0, 1, 0, 1, 0, -1, 0, -1}[(local+phase)%8], []int{0, 1, 0, 1, 0, 1, 0, 1}[(local+phase)%8]
+		return turnOffset(local, phase, motionProfile)
 	case frame < 56:
 		local = frame - 48
-		return 0, []int{0, -1, -1, 0, 0, 1, 1, 0}[(local+phase)%8]
+		return restOffset(local, phase, motionProfile)
 	default:
 		local = frame - 56
-		if speciesID == "gecko" {
-			return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], 0
-		}
+		return alertOffset(local, phase, motionProfile)
+	}
+}
+
+func idleOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod, catalog.MotionProfileOtterSlide:
+		return 0, 0
+	default:
+		return 0, []int{0, -1, 0, 0}[(local+phase)%4]
+	}
+}
+
+func walkOffset(local int, phase int, profile string) (int, int) {
+	step := []int{-2, -1, 0, 1, 2, 1, 0, -1}[(local+phase)%8]
+	switch profile {
+	case catalog.MotionProfileCatStalk:
+		return step, []int{0, 0, -1, 0}[(local+phase)%4]
+	case catalog.MotionProfileDogTrot, catalog.MotionProfileFoxTrot:
+		return step, []int{0, -2, 0, -1}[(local+phase)%4]
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+		return step, []int{0, -2, -3, -1}[(local+phase)%4]
+	case catalog.MotionProfileSnakeSlither:
+		return []int{-3, -1, 1, 3, 2, 0, -2, -3}[(local+phase)%8], 0
+	case catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return []int{-1, 0, 1, 1, 0, -1, -1, 0}[(local+phase)%8], 0
+	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileOtterSlide:
+		return step, 0
+	case catalog.MotionProfileCapybaraLumber:
+		return step / 2, []int{0, -1, 0, 0}[(local+phase)%4]
+	default:
+		return step, []int{0, -1, 0, 0}[(local+phase)%4]
+	}
+}
+
+func fastOffset(local int, phase int, profile string) (int, int) {
+	step := []int{-3, -1, 1, 3, 2, 0, -2, -3}[(local+phase)%8]
+	switch profile {
+	case catalog.MotionProfileSnakeSlither:
+		return []int{-4, -2, 1, 4, 3, 0, -2, -4}[(local+phase)%8], 0
+	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod, catalog.MotionProfileOtterSlide:
+		return step, 0
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+		return step, []int{0, -3, -6, -3}[(local+phase)%4]
+	case catalog.MotionProfileDogTrot, catalog.MotionProfileFoxTrot:
+		return step, []int{0, -2, 0, -2}[(local+phase)%4]
+	case catalog.MotionProfileCatStalk:
+		return step / 2, []int{0, 0, -1, 0}[(local+phase)%4]
+	case catalog.MotionProfileCapybaraLumber:
+		return step / 2, []int{0, -1, 0, -1}[(local+phase)%4]
+	default:
+		return step, []int{0, -1, 0, -1}[(local+phase)%4]
+	}
+}
+
+func feedOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return []int{0, 1, 1, 0, -1, 0}[(local+phase)%6], 0
+	case catalog.MotionProfileFrogHop:
+		return 0, []int{0, 2, 1, 2, 0, 0}[(local+phase)%6]
+	default:
+		return 0, []int{0, 1, 0, 1, 0, 0}[(local+phase)%6]
+	}
+}
+
+func actionOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+		return 0, []int{0, -2, -5, -4, -1, 0}[(local+phase)%6]
+	case catalog.MotionProfileSnakeSlither:
+		return []int{-2, -1, 1, 2, 1, -1}[(local+phase)%6], 0
+	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return []int{-2, -1, 0, 1, 2, 1}[(local+phase)%6], 0
+	case catalog.MotionProfileOtterSlide:
+		return []int{-3, -2, 0, 2, 3, 1}[(local+phase)%6], []int{0, 1, 0, 1, 0, 0}[(local+phase)%6]
+	case catalog.MotionProfileDogTrot, catalog.MotionProfileFoxTrot:
+		return []int{-1, 0, 1, 1, 0, -1}[(local+phase)%6], []int{0, -1, -2, -1, 0, 0}[(local+phase)%6]
+	case catalog.MotionProfileCatStalk:
+		return []int{-1, 0, 1, 0, -1, 0}[(local+phase)%6], []int{0, 0, -1, 0, 0, 0}[(local+phase)%6]
+	default:
+		return 0, []int{0, -2, -4, -3, -1, 0}[(local+phase)%6]
+	}
+}
+
+func groomOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither:
+		return []int{0, 1, 2, 1, 0, -1, -2, -1}[(local+phase)%8], 0
+	case catalog.MotionProfileTortoisePlod:
+		return []int{0, 0, 1, 0, 0, 0, -1, 0}[(local+phase)%8], 0
+	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileDragonPlod:
+		return []int{0, 1, 1, 0, 0, -1, -1, 0}[(local+phase)%8], 0
+	default:
+		return []int{0, 1, 2, 1, 0, -1, -2, -1}[(local+phase)%8], 0
+	}
+}
+
+func turnOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return []int{0, 1, 0, 1, 0, -1, 0, -1}[(local+phase)%8], 0
+	default:
+		return []int{0, 1, 0, 1, 0, -1, 0, -1}[(local+phase)%8], []int{0, 1, 0, 1, 0, 1, 0, 1}[(local+phase)%8]
+	}
+}
+
+func restOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return 0, 0
+	default:
+		return 0, []int{0, -1, -1, 0, 0, 1, 1, 0}[(local+phase)%8]
+	}
+}
+
+func alertOffset(local int, phase int, profile string) (int, int) {
+	switch profile {
+	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
+		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], 0
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop:
+		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], []int{0, -2, -1, 1, 0, -1}[(local+phase)%6]
+	default:
 		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], []int{0, -1, 0, 1, 0, -1}[(local+phase)%6]
 	}
 }
