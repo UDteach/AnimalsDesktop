@@ -20,6 +20,12 @@ The draft extraction source was generated with a checker background rather than 
 - `sheets/chinchilla-standard-gray-source-set00-draft.png`
 - `chinchilla-standard-gray-source-set00-draft-check.png`
 
+Future accepted single-frame work should be staged under:
+
+- `accepted-frames/set00/frame-00.png` through `frame-61.png`
+- `accepted-frames/set01/frame-00.png` through `frame-61.png`
+- continue through `accepted-frames/set09/`
+
 Each extracted pose frame is:
 
 - 96x64
@@ -36,6 +42,14 @@ The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slo
 This family is intentionally marked draft because it still reuses key poses and has not passed the accepted-motion bar. Mechanically shifted draft `set01` through `set09` sheets were rejected because they looked wrong and are not a substitute for accepted ImageGen motion sources.
 
 Accepted replacement work must be generated as one pose per PNG. Do not promote a multi-pose sheet, grid, contact sheet, or baked checker-background image as source art, even if it can be cut into 96x64 frames. A batch may contain up to four separate single-pose PNGs for review, but each accepted source frame must be a standalone transparent PNG before it is assembled into the 62-frame runtime sheet.
+
+Use `cmd/assemblemotion` only after all 62 standalone frames in a set are accepted:
+
+```powershell
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-report.json
+```
+
+The assembler rejects wrong-sized frames, empty alpha, and fully opaque/checker-style backgrounds before writing a sheet.
 
 Before release, this family still needs:
 

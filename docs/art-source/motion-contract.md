@@ -77,10 +77,11 @@ Use this cycle repeatedly:
 2. Generate 4-6 source candidates for each target variant in that family.
 3. Accept only the best 1-3 variants for the first family pass.
 4. Generate 62 motion frames for those accepted variants using the slot table above.
-5. Import, validate, visually review, and update source status.
-6. Reflect the animal in settings, tray labels, docs, and public pages.
-7. Run local QA and confirm GitHub Actions.
-8. Commit, then tag a release only when the animal family meets the release gate above.
+5. Assemble each accepted 62-frame standalone PNG folder with `go run ./cmd/assemblemotion`.
+6. Import, validate, visually review, and update source status.
+7. Reflect the animal in settings, tray labels, docs, and public pages.
+8. Run local QA and confirm GitHub Actions.
+9. Commit, then tag a release only when the animal family meets the release gate above.
 
 Near-term order is chinchilla, macaroni mouse / fat-tailed gerbil, hamster, gecko, momonga family, then small birds.
 

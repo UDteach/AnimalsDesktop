@@ -1,0 +1,24 @@
+# Chinchilla Accepted Frame Staging
+
+This directory is reserved for reviewed one-pose-per-PNG motion source frames.
+
+Do not place ImageGen sheets, grids, contact sheets, or opaque checker-background images here. Every accepted file must be:
+
+- `96x64`
+- a PNG with real transparent alpha around the animal
+- one complete standard gray chinchilla
+- no text, border, shadow, scenery, ground, props, costumes, or multiple animals
+- stable camera, scale, baseline, facing direction, and contact points within the set
+
+Expected set folders:
+
+- `set00/frame-00.png` through `set00/frame-61.png`
+- continue through `set09/frame-00.png` through `set09/frame-61.png`
+
+After all 62 frames in a set pass visual review:
+
+```powershell
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-report.json
+```
+
+The assembler is a gate, not an art fixer. If it rejects a frame, regenerate or manually curate the source PNG before assembling.
