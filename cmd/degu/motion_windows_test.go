@@ -416,3 +416,21 @@ func TestTickReactionsDropsExpiredAndInvalid(t *testing.T) {
 		t.Fatalf("remaining reactions = %d, want 0", len(a.reactions))
 	}
 }
+
+func TestSpriteCacheLoadsVariantOnDemand(t *testing.T) {
+	cache := newSpriteCache()
+	if got := len(cache.loaded); got != 0 {
+		t.Fatalf("new cache loaded variants = %d, want 0", got)
+	}
+	frame := cache.frame(variants[0], 0, 0)
+	if frame == nil || frame.Bounds().Dx() != frameW || frame.Bounds().Dy() != frameH {
+		t.Fatalf("loaded frame bounds = %v", frame.Bounds())
+	}
+	if got := len(cache.loaded); got != 1 {
+		t.Fatalf("cache loaded variants = %d, want 1", got)
+	}
+	_ = cache.frame(variants[0], motionSets+99, frameCount+99)
+	if got := len(cache.loaded); got != 1 {
+		t.Fatalf("cache reloaded same variant; loaded = %d", got)
+	}
+}

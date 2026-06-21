@@ -4,20 +4,15 @@ Animals Desktop is a Go desktop-pet app based on the DeguDesktop taskbar pet. It
 
 Repository: <https://github.com/UDteach/AnimalsDesktop>
 
-## Current Species
+## Current Catalog
 
-The runtime catalog currently includes:
+The runtime catalog currently includes 64 selectable variants:
 
-- Degu: wild agouti, black, blue/slate gray, gray, white/cream, sand/champagne, chocolate, black pied, agouti pied, blue pied, cream pied
-- Chinchilla: standard gray
-- Macaroni mouse / fat-tailed gerbil: tan
-- Rabbit: chestnut agouti
-- Small dog: cream and tan
-- Cat: brown tabby
-- Gecko: gray brown
-- Hamster: golden Syrian
+- 11 degu motion variants: wild agouti, black, blue/slate gray, gray, white/cream, sand/champagne, chocolate, and pied variants
+- 53 seed-stage variants across chinchilla, macaroni mouse / fat-tailed gerbil, rabbit, small dog, cat, gecko, hamster, ferret, guinea pig, hedgehog, squirrel, fox, red panda, otter, sugar glider, capybara, and tortoise
+- Multiple color variants for the seed species, including gray, beige, ebony, cream, black, white, fawn, orange, sable, tangerine, cinnamon, and other real-world-inspired coat/morph labels
 
-Non-degu species are seed-stage assets generated from source-truth still images. They are selectable in the app and have deterministic runtime sheets, but they are not yet full species-specific motion sets.
+Non-degu species are seed-stage assets generated from source-truth still images, tint-controlled variants, or deterministic shape sources. They are selectable in the app and have deterministic runtime sheets, but they are not yet full species-specific motion sets.
 
 ![Seed animal preview](docs/assets/animalsdesktop-seed-preview.png)
 
@@ -51,13 +46,14 @@ Seed animal assets use:
 go run ./cmd/importanimals
 ```
 
-It reads source-truth images recorded under `docs/art-source`, `docs/art-intake`, and `docs/source-truth`, then writes:
+It reads source-truth images recorded under `docs/art-source`, `docs/art-intake`, and `docs/source-truth`, applies catalog tint/shape settings, then writes:
 
 - `assets/sprites/<animal>_set00.png` through `set09.png`
+- `assets/source/animals/generated/<animal>-source.png`
 - `assets/source/animals/seed-import-report.json`
 - `docs/assets/animalsdesktop-seed-preview.png`
 
-The shared runtime registry is in `internal/catalog`.
+The shared runtime registry is in `internal/catalog`. The Windows renderer uses a lazy sprite cache, so adding many variants does not expand every sprite sheet into RGBA frames at startup.
 
 ## Development
 

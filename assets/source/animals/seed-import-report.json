@@ -3,6 +3,7 @@
     "variant": "chinchilla_standard_gray",
     "species": "chinchilla",
     "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/chinchilla_standard_gray-source.png",
     "sprite_base": "chinchilla_standard_gray",
     "source_width": 1536,
     "source_height": 1024,
@@ -26,9 +27,95 @@
     ]
   },
   {
+    "variant": "chinchilla_beige",
+    "species": "chinchilla",
+    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/chinchilla_beige-source.png",
+    "sprite_base": "chinchilla_beige",
+    "tint_hex": "c8b184",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 134,
+      "y": 119,
+      "w": 1254,
+      "h": 732
+    },
+    "outputs": [
+      "assets/sprites/chinchilla_beige_set00.png",
+      "assets/sprites/chinchilla_beige_set01.png",
+      "assets/sprites/chinchilla_beige_set02.png",
+      "assets/sprites/chinchilla_beige_set03.png",
+      "assets/sprites/chinchilla_beige_set04.png",
+      "assets/sprites/chinchilla_beige_set05.png",
+      "assets/sprites/chinchilla_beige_set06.png",
+      "assets/sprites/chinchilla_beige_set07.png",
+      "assets/sprites/chinchilla_beige_set08.png",
+      "assets/sprites/chinchilla_beige_set09.png"
+    ]
+  },
+  {
+    "variant": "chinchilla_ebony",
+    "species": "chinchilla",
+    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/chinchilla_ebony-source.png",
+    "sprite_base": "chinchilla_ebony",
+    "tint_hex": "3e3d39",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 134,
+      "y": 119,
+      "w": 1254,
+      "h": 732
+    },
+    "outputs": [
+      "assets/sprites/chinchilla_ebony_set00.png",
+      "assets/sprites/chinchilla_ebony_set01.png",
+      "assets/sprites/chinchilla_ebony_set02.png",
+      "assets/sprites/chinchilla_ebony_set03.png",
+      "assets/sprites/chinchilla_ebony_set04.png",
+      "assets/sprites/chinchilla_ebony_set05.png",
+      "assets/sprites/chinchilla_ebony_set06.png",
+      "assets/sprites/chinchilla_ebony_set07.png",
+      "assets/sprites/chinchilla_ebony_set08.png",
+      "assets/sprites/chinchilla_ebony_set09.png"
+    ]
+  },
+  {
+    "variant": "chinchilla_white_mosaic",
+    "species": "chinchilla",
+    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/chinchilla_white_mosaic-source.png",
+    "sprite_base": "chinchilla_white_mosaic",
+    "tint_hex": "e6e1d3",
+    "accent_hex": "8f9690",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 134,
+      "y": 119,
+      "w": 1254,
+      "h": 732
+    },
+    "outputs": [
+      "assets/sprites/chinchilla_white_mosaic_set00.png",
+      "assets/sprites/chinchilla_white_mosaic_set01.png",
+      "assets/sprites/chinchilla_white_mosaic_set02.png",
+      "assets/sprites/chinchilla_white_mosaic_set03.png",
+      "assets/sprites/chinchilla_white_mosaic_set04.png",
+      "assets/sprites/chinchilla_white_mosaic_set05.png",
+      "assets/sprites/chinchilla_white_mosaic_set06.png",
+      "assets/sprites/chinchilla_white_mosaic_set07.png",
+      "assets/sprites/chinchilla_white_mosaic_set08.png",
+      "assets/sprites/chinchilla_white_mosaic_set09.png"
+    ]
+  },
+  {
     "variant": "macaroni_mouse_tan",
     "species": "macaroni_mouse",
     "source": "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png",
+    "generated_source": "assets/source/animals/generated/macaroni_mouse_tan-source.png",
     "sprite_base": "macaroni_mouse_tan",
     "source_width": 512,
     "source_height": 384,
@@ -52,9 +139,66 @@
     ]
   },
   {
+    "variant": "macaroni_mouse_gray",
+    "species": "macaroni_mouse",
+    "source": "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png",
+    "generated_source": "assets/source/animals/generated/macaroni_mouse_gray-source.png",
+    "sprite_base": "macaroni_mouse_gray",
+    "tint_hex": "8f8f84",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 58,
+      "y": 120,
+      "w": 419,
+      "h": 187
+    },
+    "outputs": [
+      "assets/sprites/macaroni_mouse_gray_set00.png",
+      "assets/sprites/macaroni_mouse_gray_set01.png",
+      "assets/sprites/macaroni_mouse_gray_set02.png",
+      "assets/sprites/macaroni_mouse_gray_set03.png",
+      "assets/sprites/macaroni_mouse_gray_set04.png",
+      "assets/sprites/macaroni_mouse_gray_set05.png",
+      "assets/sprites/macaroni_mouse_gray_set06.png",
+      "assets/sprites/macaroni_mouse_gray_set07.png",
+      "assets/sprites/macaroni_mouse_gray_set08.png",
+      "assets/sprites/macaroni_mouse_gray_set09.png"
+    ]
+  },
+  {
+    "variant": "macaroni_mouse_cream",
+    "species": "macaroni_mouse",
+    "source": "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png",
+    "generated_source": "assets/source/animals/generated/macaroni_mouse_cream-source.png",
+    "sprite_base": "macaroni_mouse_cream",
+    "tint_hex": "dcc698",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 58,
+      "y": 120,
+      "w": 419,
+      "h": 187
+    },
+    "outputs": [
+      "assets/sprites/macaroni_mouse_cream_set00.png",
+      "assets/sprites/macaroni_mouse_cream_set01.png",
+      "assets/sprites/macaroni_mouse_cream_set02.png",
+      "assets/sprites/macaroni_mouse_cream_set03.png",
+      "assets/sprites/macaroni_mouse_cream_set04.png",
+      "assets/sprites/macaroni_mouse_cream_set05.png",
+      "assets/sprites/macaroni_mouse_cream_set06.png",
+      "assets/sprites/macaroni_mouse_cream_set07.png",
+      "assets/sprites/macaroni_mouse_cream_set08.png",
+      "assets/sprites/macaroni_mouse_cream_set09.png"
+    ]
+  },
+  {
     "variant": "rabbit_chestnut_agouti",
     "species": "rabbit",
     "source": "docs/source-truth/rabbit-source-truth.png",
+    "generated_source": "assets/source/animals/generated/rabbit_chestnut_agouti-source.png",
     "sprite_base": "rabbit_chestnut_agouti",
     "source_width": 1536,
     "source_height": 1024,
@@ -78,9 +222,122 @@
     ]
   },
   {
+    "variant": "rabbit_black",
+    "species": "rabbit",
+    "source": "docs/source-truth/rabbit-source-truth.png",
+    "generated_source": "assets/source/animals/generated/rabbit_black-source.png",
+    "sprite_base": "rabbit_black",
+    "tint_hex": "2f2c29",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 189,
+      "y": 62,
+      "w": 1078,
+      "h": 859
+    },
+    "outputs": [
+      "assets/sprites/rabbit_black_set00.png",
+      "assets/sprites/rabbit_black_set01.png",
+      "assets/sprites/rabbit_black_set02.png",
+      "assets/sprites/rabbit_black_set03.png",
+      "assets/sprites/rabbit_black_set04.png",
+      "assets/sprites/rabbit_black_set05.png",
+      "assets/sprites/rabbit_black_set06.png",
+      "assets/sprites/rabbit_black_set07.png",
+      "assets/sprites/rabbit_black_set08.png",
+      "assets/sprites/rabbit_black_set09.png"
+    ]
+  },
+  {
+    "variant": "rabbit_white",
+    "species": "rabbit",
+    "source": "docs/source-truth/rabbit-source-truth.png",
+    "generated_source": "assets/source/animals/generated/rabbit_white-source.png",
+    "sprite_base": "rabbit_white",
+    "tint_hex": "ebe7dc",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 189,
+      "y": 62,
+      "w": 1078,
+      "h": 859
+    },
+    "outputs": [
+      "assets/sprites/rabbit_white_set00.png",
+      "assets/sprites/rabbit_white_set01.png",
+      "assets/sprites/rabbit_white_set02.png",
+      "assets/sprites/rabbit_white_set03.png",
+      "assets/sprites/rabbit_white_set04.png",
+      "assets/sprites/rabbit_white_set05.png",
+      "assets/sprites/rabbit_white_set06.png",
+      "assets/sprites/rabbit_white_set07.png",
+      "assets/sprites/rabbit_white_set08.png",
+      "assets/sprites/rabbit_white_set09.png"
+    ]
+  },
+  {
+    "variant": "rabbit_blue_gray",
+    "species": "rabbit",
+    "source": "docs/source-truth/rabbit-source-truth.png",
+    "generated_source": "assets/source/animals/generated/rabbit_blue_gray-source.png",
+    "sprite_base": "rabbit_blue_gray",
+    "tint_hex": "777f86",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 189,
+      "y": 62,
+      "w": 1078,
+      "h": 859
+    },
+    "outputs": [
+      "assets/sprites/rabbit_blue_gray_set00.png",
+      "assets/sprites/rabbit_blue_gray_set01.png",
+      "assets/sprites/rabbit_blue_gray_set02.png",
+      "assets/sprites/rabbit_blue_gray_set03.png",
+      "assets/sprites/rabbit_blue_gray_set04.png",
+      "assets/sprites/rabbit_blue_gray_set05.png",
+      "assets/sprites/rabbit_blue_gray_set06.png",
+      "assets/sprites/rabbit_blue_gray_set07.png",
+      "assets/sprites/rabbit_blue_gray_set08.png",
+      "assets/sprites/rabbit_blue_gray_set09.png"
+    ]
+  },
+  {
+    "variant": "rabbit_fawn",
+    "species": "rabbit",
+    "source": "docs/source-truth/rabbit-source-truth.png",
+    "generated_source": "assets/source/animals/generated/rabbit_fawn-source.png",
+    "sprite_base": "rabbit_fawn",
+    "tint_hex": "bf8754",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 189,
+      "y": 62,
+      "w": 1078,
+      "h": 859
+    },
+    "outputs": [
+      "assets/sprites/rabbit_fawn_set00.png",
+      "assets/sprites/rabbit_fawn_set01.png",
+      "assets/sprites/rabbit_fawn_set02.png",
+      "assets/sprites/rabbit_fawn_set03.png",
+      "assets/sprites/rabbit_fawn_set04.png",
+      "assets/sprites/rabbit_fawn_set05.png",
+      "assets/sprites/rabbit_fawn_set06.png",
+      "assets/sprites/rabbit_fawn_set07.png",
+      "assets/sprites/rabbit_fawn_set08.png",
+      "assets/sprites/rabbit_fawn_set09.png"
+    ]
+  },
+  {
     "variant": "dog_cream_tan",
     "species": "dog",
     "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/dog_cream_tan-source.png",
     "sprite_base": "dog_cream_tan",
     "source_width": 1536,
     "source_height": 1024,
@@ -104,9 +361,123 @@
     ]
   },
   {
+    "variant": "dog_black_tan",
+    "species": "dog",
+    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/dog_black_tan-source.png",
+    "sprite_base": "dog_black_tan",
+    "tint_hex": "3a3026",
+    "accent_hex": "b8874c",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 269,
+      "y": 91,
+      "w": 1228,
+      "h": 841
+    },
+    "outputs": [
+      "assets/sprites/dog_black_tan_set00.png",
+      "assets/sprites/dog_black_tan_set01.png",
+      "assets/sprites/dog_black_tan_set02.png",
+      "assets/sprites/dog_black_tan_set03.png",
+      "assets/sprites/dog_black_tan_set04.png",
+      "assets/sprites/dog_black_tan_set05.png",
+      "assets/sprites/dog_black_tan_set06.png",
+      "assets/sprites/dog_black_tan_set07.png",
+      "assets/sprites/dog_black_tan_set08.png",
+      "assets/sprites/dog_black_tan_set09.png"
+    ]
+  },
+  {
+    "variant": "dog_white",
+    "species": "dog",
+    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/dog_white-source.png",
+    "sprite_base": "dog_white",
+    "tint_hex": "e8e1d0",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 269,
+      "y": 91,
+      "w": 1228,
+      "h": 841
+    },
+    "outputs": [
+      "assets/sprites/dog_white_set00.png",
+      "assets/sprites/dog_white_set01.png",
+      "assets/sprites/dog_white_set02.png",
+      "assets/sprites/dog_white_set03.png",
+      "assets/sprites/dog_white_set04.png",
+      "assets/sprites/dog_white_set05.png",
+      "assets/sprites/dog_white_set06.png",
+      "assets/sprites/dog_white_set07.png",
+      "assets/sprites/dog_white_set08.png",
+      "assets/sprites/dog_white_set09.png"
+    ]
+  },
+  {
+    "variant": "dog_sable",
+    "species": "dog",
+    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/dog_sable-source.png",
+    "sprite_base": "dog_sable",
+    "tint_hex": "9a6839",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 269,
+      "y": 91,
+      "w": 1228,
+      "h": 841
+    },
+    "outputs": [
+      "assets/sprites/dog_sable_set00.png",
+      "assets/sprites/dog_sable_set01.png",
+      "assets/sprites/dog_sable_set02.png",
+      "assets/sprites/dog_sable_set03.png",
+      "assets/sprites/dog_sable_set04.png",
+      "assets/sprites/dog_sable_set05.png",
+      "assets/sprites/dog_sable_set06.png",
+      "assets/sprites/dog_sable_set07.png",
+      "assets/sprites/dog_sable_set08.png",
+      "assets/sprites/dog_sable_set09.png"
+    ]
+  },
+  {
+    "variant": "dog_gray",
+    "species": "dog",
+    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/dog_gray-source.png",
+    "sprite_base": "dog_gray",
+    "tint_hex": "8d8d88",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 269,
+      "y": 91,
+      "w": 1228,
+      "h": 841
+    },
+    "outputs": [
+      "assets/sprites/dog_gray_set00.png",
+      "assets/sprites/dog_gray_set01.png",
+      "assets/sprites/dog_gray_set02.png",
+      "assets/sprites/dog_gray_set03.png",
+      "assets/sprites/dog_gray_set04.png",
+      "assets/sprites/dog_gray_set05.png",
+      "assets/sprites/dog_gray_set06.png",
+      "assets/sprites/dog_gray_set07.png",
+      "assets/sprites/dog_gray_set08.png",
+      "assets/sprites/dog_gray_set09.png"
+    ]
+  },
+  {
     "variant": "cat_brown_tabby",
     "species": "cat",
     "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_brown_tabby-source.png",
     "sprite_base": "cat_brown_tabby",
     "source_width": 1536,
     "source_height": 1024,
@@ -130,9 +501,150 @@
     ]
   },
   {
+    "variant": "cat_black",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_black-source.png",
+    "sprite_base": "cat_black",
+    "tint_hex": "252321",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_black_set00.png",
+      "assets/sprites/cat_black_set01.png",
+      "assets/sprites/cat_black_set02.png",
+      "assets/sprites/cat_black_set03.png",
+      "assets/sprites/cat_black_set04.png",
+      "assets/sprites/cat_black_set05.png",
+      "assets/sprites/cat_black_set06.png",
+      "assets/sprites/cat_black_set07.png",
+      "assets/sprites/cat_black_set08.png",
+      "assets/sprites/cat_black_set09.png"
+    ]
+  },
+  {
+    "variant": "cat_white",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_white-source.png",
+    "sprite_base": "cat_white",
+    "tint_hex": "eee8dd",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_white_set00.png",
+      "assets/sprites/cat_white_set01.png",
+      "assets/sprites/cat_white_set02.png",
+      "assets/sprites/cat_white_set03.png",
+      "assets/sprites/cat_white_set04.png",
+      "assets/sprites/cat_white_set05.png",
+      "assets/sprites/cat_white_set06.png",
+      "assets/sprites/cat_white_set07.png",
+      "assets/sprites/cat_white_set08.png",
+      "assets/sprites/cat_white_set09.png"
+    ]
+  },
+  {
+    "variant": "cat_orange_tabby",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_orange_tabby-source.png",
+    "sprite_base": "cat_orange_tabby",
+    "tint_hex": "c87830",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_orange_tabby_set00.png",
+      "assets/sprites/cat_orange_tabby_set01.png",
+      "assets/sprites/cat_orange_tabby_set02.png",
+      "assets/sprites/cat_orange_tabby_set03.png",
+      "assets/sprites/cat_orange_tabby_set04.png",
+      "assets/sprites/cat_orange_tabby_set05.png",
+      "assets/sprites/cat_orange_tabby_set06.png",
+      "assets/sprites/cat_orange_tabby_set07.png",
+      "assets/sprites/cat_orange_tabby_set08.png",
+      "assets/sprites/cat_orange_tabby_set09.png"
+    ]
+  },
+  {
+    "variant": "cat_gray",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_gray-source.png",
+    "sprite_base": "cat_gray",
+    "tint_hex": "818783",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_gray_set00.png",
+      "assets/sprites/cat_gray_set01.png",
+      "assets/sprites/cat_gray_set02.png",
+      "assets/sprites/cat_gray_set03.png",
+      "assets/sprites/cat_gray_set04.png",
+      "assets/sprites/cat_gray_set05.png",
+      "assets/sprites/cat_gray_set06.png",
+      "assets/sprites/cat_gray_set07.png",
+      "assets/sprites/cat_gray_set08.png",
+      "assets/sprites/cat_gray_set09.png"
+    ]
+  },
+  {
+    "variant": "cat_cream",
+    "species": "cat",
+    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "generated_source": "assets/source/animals/generated/cat_cream-source.png",
+    "sprite_base": "cat_cream",
+    "tint_hex": "d7b983",
+    "source_width": 1536,
+    "source_height": 1024,
+    "content": {
+      "x": 187,
+      "y": 111,
+      "w": 1138,
+      "h": 775
+    },
+    "outputs": [
+      "assets/sprites/cat_cream_set00.png",
+      "assets/sprites/cat_cream_set01.png",
+      "assets/sprites/cat_cream_set02.png",
+      "assets/sprites/cat_cream_set03.png",
+      "assets/sprites/cat_cream_set04.png",
+      "assets/sprites/cat_cream_set05.png",
+      "assets/sprites/cat_cream_set06.png",
+      "assets/sprites/cat_cream_set07.png",
+      "assets/sprites/cat_cream_set08.png",
+      "assets/sprites/cat_cream_set09.png"
+    ]
+  },
+  {
     "variant": "gecko_gray_brown",
     "species": "gecko",
     "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "generated_source": "assets/source/animals/generated/gecko_gray_brown-source.png",
     "sprite_base": "gecko_gray_brown",
     "source_width": 1717,
     "source_height": 916,
@@ -156,9 +668,123 @@
     ]
   },
   {
+    "variant": "gecko_leopard",
+    "species": "gecko",
+    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "generated_source": "assets/source/animals/generated/gecko_leopard-source.png",
+    "sprite_base": "gecko_leopard",
+    "tint_hex": "c99b4a",
+    "accent_hex": "4d3a22",
+    "source_width": 1717,
+    "source_height": 916,
+    "content": {
+      "x": 55,
+      "y": 368,
+      "w": 1553,
+      "h": 283
+    },
+    "outputs": [
+      "assets/sprites/gecko_leopard_set00.png",
+      "assets/sprites/gecko_leopard_set01.png",
+      "assets/sprites/gecko_leopard_set02.png",
+      "assets/sprites/gecko_leopard_set03.png",
+      "assets/sprites/gecko_leopard_set04.png",
+      "assets/sprites/gecko_leopard_set05.png",
+      "assets/sprites/gecko_leopard_set06.png",
+      "assets/sprites/gecko_leopard_set07.png",
+      "assets/sprites/gecko_leopard_set08.png",
+      "assets/sprites/gecko_leopard_set09.png"
+    ]
+  },
+  {
+    "variant": "gecko_tangerine",
+    "species": "gecko",
+    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "generated_source": "assets/source/animals/generated/gecko_tangerine-source.png",
+    "sprite_base": "gecko_tangerine",
+    "tint_hex": "de8a34",
+    "source_width": 1717,
+    "source_height": 916,
+    "content": {
+      "x": 55,
+      "y": 368,
+      "w": 1553,
+      "h": 283
+    },
+    "outputs": [
+      "assets/sprites/gecko_tangerine_set00.png",
+      "assets/sprites/gecko_tangerine_set01.png",
+      "assets/sprites/gecko_tangerine_set02.png",
+      "assets/sprites/gecko_tangerine_set03.png",
+      "assets/sprites/gecko_tangerine_set04.png",
+      "assets/sprites/gecko_tangerine_set05.png",
+      "assets/sprites/gecko_tangerine_set06.png",
+      "assets/sprites/gecko_tangerine_set07.png",
+      "assets/sprites/gecko_tangerine_set08.png",
+      "assets/sprites/gecko_tangerine_set09.png"
+    ]
+  },
+  {
+    "variant": "gecko_blizzard",
+    "species": "gecko",
+    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "generated_source": "assets/source/animals/generated/gecko_blizzard-source.png",
+    "sprite_base": "gecko_blizzard",
+    "tint_hex": "d8d2c5",
+    "source_width": 1717,
+    "source_height": 916,
+    "content": {
+      "x": 55,
+      "y": 368,
+      "w": 1553,
+      "h": 283
+    },
+    "outputs": [
+      "assets/sprites/gecko_blizzard_set00.png",
+      "assets/sprites/gecko_blizzard_set01.png",
+      "assets/sprites/gecko_blizzard_set02.png",
+      "assets/sprites/gecko_blizzard_set03.png",
+      "assets/sprites/gecko_blizzard_set04.png",
+      "assets/sprites/gecko_blizzard_set05.png",
+      "assets/sprites/gecko_blizzard_set06.png",
+      "assets/sprites/gecko_blizzard_set07.png",
+      "assets/sprites/gecko_blizzard_set08.png",
+      "assets/sprites/gecko_blizzard_set09.png"
+    ]
+  },
+  {
+    "variant": "gecko_albino",
+    "species": "gecko",
+    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "generated_source": "assets/source/animals/generated/gecko_albino-source.png",
+    "sprite_base": "gecko_albino",
+    "tint_hex": "e0cfa8",
+    "source_width": 1717,
+    "source_height": 916,
+    "content": {
+      "x": 55,
+      "y": 368,
+      "w": 1553,
+      "h": 283
+    },
+    "outputs": [
+      "assets/sprites/gecko_albino_set00.png",
+      "assets/sprites/gecko_albino_set01.png",
+      "assets/sprites/gecko_albino_set02.png",
+      "assets/sprites/gecko_albino_set03.png",
+      "assets/sprites/gecko_albino_set04.png",
+      "assets/sprites/gecko_albino_set05.png",
+      "assets/sprites/gecko_albino_set06.png",
+      "assets/sprites/gecko_albino_set07.png",
+      "assets/sprites/gecko_albino_set08.png",
+      "assets/sprites/gecko_albino_set09.png"
+    ]
+  },
+  {
     "variant": "hamster_golden_syrian",
     "species": "hamster",
     "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "generated_source": "assets/source/animals/generated/hamster_golden_syrian-source.png",
     "sprite_base": "hamster_golden_syrian",
     "source_width": 1513,
     "source_height": 1039,
@@ -179,6 +805,779 @@
       "assets/sprites/hamster_golden_syrian_set07.png",
       "assets/sprites/hamster_golden_syrian_set08.png",
       "assets/sprites/hamster_golden_syrian_set09.png"
+    ]
+  },
+  {
+    "variant": "hamster_cream",
+    "species": "hamster",
+    "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "generated_source": "assets/source/animals/generated/hamster_cream-source.png",
+    "sprite_base": "hamster_cream",
+    "tint_hex": "e2c18b",
+    "source_width": 1513,
+    "source_height": 1039,
+    "content": {
+      "x": 182,
+      "y": 156,
+      "w": 1227,
+      "h": 705
+    },
+    "outputs": [
+      "assets/sprites/hamster_cream_set00.png",
+      "assets/sprites/hamster_cream_set01.png",
+      "assets/sprites/hamster_cream_set02.png",
+      "assets/sprites/hamster_cream_set03.png",
+      "assets/sprites/hamster_cream_set04.png",
+      "assets/sprites/hamster_cream_set05.png",
+      "assets/sprites/hamster_cream_set06.png",
+      "assets/sprites/hamster_cream_set07.png",
+      "assets/sprites/hamster_cream_set08.png",
+      "assets/sprites/hamster_cream_set09.png"
+    ]
+  },
+  {
+    "variant": "hamster_black_banded",
+    "species": "hamster",
+    "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "generated_source": "assets/source/animals/generated/hamster_black_banded-source.png",
+    "sprite_base": "hamster_black_banded",
+    "tint_hex": "3f342d",
+    "accent_hex": "ddd2bd",
+    "source_width": 1513,
+    "source_height": 1039,
+    "content": {
+      "x": 182,
+      "y": 156,
+      "w": 1227,
+      "h": 705
+    },
+    "outputs": [
+      "assets/sprites/hamster_black_banded_set00.png",
+      "assets/sprites/hamster_black_banded_set01.png",
+      "assets/sprites/hamster_black_banded_set02.png",
+      "assets/sprites/hamster_black_banded_set03.png",
+      "assets/sprites/hamster_black_banded_set04.png",
+      "assets/sprites/hamster_black_banded_set05.png",
+      "assets/sprites/hamster_black_banded_set06.png",
+      "assets/sprites/hamster_black_banded_set07.png",
+      "assets/sprites/hamster_black_banded_set08.png",
+      "assets/sprites/hamster_black_banded_set09.png"
+    ]
+  },
+  {
+    "variant": "hamster_white",
+    "species": "hamster",
+    "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "generated_source": "assets/source/animals/generated/hamster_white-source.png",
+    "sprite_base": "hamster_white",
+    "tint_hex": "eee7d8",
+    "source_width": 1513,
+    "source_height": 1039,
+    "content": {
+      "x": 182,
+      "y": 156,
+      "w": 1227,
+      "h": 705
+    },
+    "outputs": [
+      "assets/sprites/hamster_white_set00.png",
+      "assets/sprites/hamster_white_set01.png",
+      "assets/sprites/hamster_white_set02.png",
+      "assets/sprites/hamster_white_set03.png",
+      "assets/sprites/hamster_white_set04.png",
+      "assets/sprites/hamster_white_set05.png",
+      "assets/sprites/hamster_white_set06.png",
+      "assets/sprites/hamster_white_set07.png",
+      "assets/sprites/hamster_white_set08.png",
+      "assets/sprites/hamster_white_set09.png"
+    ]
+  },
+  {
+    "variant": "hamster_cinnamon",
+    "species": "hamster",
+    "source": "docs/art-source/hamster/hamster-source-truth.png",
+    "generated_source": "assets/source/animals/generated/hamster_cinnamon-source.png",
+    "sprite_base": "hamster_cinnamon",
+    "tint_hex": "b56b38",
+    "source_width": 1513,
+    "source_height": 1039,
+    "content": {
+      "x": 182,
+      "y": 156,
+      "w": 1227,
+      "h": 705
+    },
+    "outputs": [
+      "assets/sprites/hamster_cinnamon_set00.png",
+      "assets/sprites/hamster_cinnamon_set01.png",
+      "assets/sprites/hamster_cinnamon_set02.png",
+      "assets/sprites/hamster_cinnamon_set03.png",
+      "assets/sprites/hamster_cinnamon_set04.png",
+      "assets/sprites/hamster_cinnamon_set05.png",
+      "assets/sprites/hamster_cinnamon_set06.png",
+      "assets/sprites/hamster_cinnamon_set07.png",
+      "assets/sprites/hamster_cinnamon_set08.png",
+      "assets/sprites/hamster_cinnamon_set09.png"
+    ]
+  },
+  {
+    "variant": "ferret_sable",
+    "species": "ferret",
+    "source": "procedural:ferret",
+    "generated_source": "assets/source/animals/generated/ferret_sable-source.png",
+    "sprite_base": "ferret_sable",
+    "shape": "ferret",
+    "tint_hex": "8b6746",
+    "accent_hex": "ece0c8",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 0,
+      "y": 147,
+      "w": 345,
+      "h": 109
+    },
+    "outputs": [
+      "assets/sprites/ferret_sable_set00.png",
+      "assets/sprites/ferret_sable_set01.png",
+      "assets/sprites/ferret_sable_set02.png",
+      "assets/sprites/ferret_sable_set03.png",
+      "assets/sprites/ferret_sable_set04.png",
+      "assets/sprites/ferret_sable_set05.png",
+      "assets/sprites/ferret_sable_set06.png",
+      "assets/sprites/ferret_sable_set07.png",
+      "assets/sprites/ferret_sable_set08.png",
+      "assets/sprites/ferret_sable_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "ferret_albino",
+    "species": "ferret",
+    "source": "procedural:ferret",
+    "generated_source": "assets/source/animals/generated/ferret_albino-source.png",
+    "sprite_base": "ferret_albino",
+    "shape": "ferret",
+    "tint_hex": "eadcc7",
+    "accent_hex": "c58b78",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 0,
+      "y": 147,
+      "w": 345,
+      "h": 109
+    },
+    "outputs": [
+      "assets/sprites/ferret_albino_set00.png",
+      "assets/sprites/ferret_albino_set01.png",
+      "assets/sprites/ferret_albino_set02.png",
+      "assets/sprites/ferret_albino_set03.png",
+      "assets/sprites/ferret_albino_set04.png",
+      "assets/sprites/ferret_albino_set05.png",
+      "assets/sprites/ferret_albino_set06.png",
+      "assets/sprites/ferret_albino_set07.png",
+      "assets/sprites/ferret_albino_set08.png",
+      "assets/sprites/ferret_albino_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "ferret_champagne",
+    "species": "ferret",
+    "source": "procedural:ferret",
+    "generated_source": "assets/source/animals/generated/ferret_champagne-source.png",
+    "sprite_base": "ferret_champagne",
+    "shape": "ferret",
+    "tint_hex": "c7a476",
+    "accent_hex": "f1e1c1",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 0,
+      "y": 147,
+      "w": 345,
+      "h": 109
+    },
+    "outputs": [
+      "assets/sprites/ferret_champagne_set00.png",
+      "assets/sprites/ferret_champagne_set01.png",
+      "assets/sprites/ferret_champagne_set02.png",
+      "assets/sprites/ferret_champagne_set03.png",
+      "assets/sprites/ferret_champagne_set04.png",
+      "assets/sprites/ferret_champagne_set05.png",
+      "assets/sprites/ferret_champagne_set06.png",
+      "assets/sprites/ferret_champagne_set07.png",
+      "assets/sprites/ferret_champagne_set08.png",
+      "assets/sprites/ferret_champagne_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "guinea_pig_tricolor",
+    "species": "guinea_pig",
+    "source": "procedural:guinea_pig",
+    "generated_source": "assets/source/animals/generated/guinea_pig_tricolor-source.png",
+    "sprite_base": "guinea_pig_tricolor",
+    "shape": "guinea_pig",
+    "tint_hex": "b46c32",
+    "accent_hex": "f0e6d2",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 100,
+      "y": 140,
+      "w": 259,
+      "h": 144
+    },
+    "outputs": [
+      "assets/sprites/guinea_pig_tricolor_set00.png",
+      "assets/sprites/guinea_pig_tricolor_set01.png",
+      "assets/sprites/guinea_pig_tricolor_set02.png",
+      "assets/sprites/guinea_pig_tricolor_set03.png",
+      "assets/sprites/guinea_pig_tricolor_set04.png",
+      "assets/sprites/guinea_pig_tricolor_set05.png",
+      "assets/sprites/guinea_pig_tricolor_set06.png",
+      "assets/sprites/guinea_pig_tricolor_set07.png",
+      "assets/sprites/guinea_pig_tricolor_set08.png",
+      "assets/sprites/guinea_pig_tricolor_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "guinea_pig_cream",
+    "species": "guinea_pig",
+    "source": "procedural:guinea_pig",
+    "generated_source": "assets/source/animals/generated/guinea_pig_cream-source.png",
+    "sprite_base": "guinea_pig_cream",
+    "shape": "guinea_pig",
+    "tint_hex": "d9b879",
+    "accent_hex": "f1dfb4",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 100,
+      "y": 140,
+      "w": 259,
+      "h": 144
+    },
+    "outputs": [
+      "assets/sprites/guinea_pig_cream_set00.png",
+      "assets/sprites/guinea_pig_cream_set01.png",
+      "assets/sprites/guinea_pig_cream_set02.png",
+      "assets/sprites/guinea_pig_cream_set03.png",
+      "assets/sprites/guinea_pig_cream_set04.png",
+      "assets/sprites/guinea_pig_cream_set05.png",
+      "assets/sprites/guinea_pig_cream_set06.png",
+      "assets/sprites/guinea_pig_cream_set07.png",
+      "assets/sprites/guinea_pig_cream_set08.png",
+      "assets/sprites/guinea_pig_cream_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "guinea_pig_black",
+    "species": "guinea_pig",
+    "source": "procedural:guinea_pig",
+    "generated_source": "assets/source/animals/generated/guinea_pig_black-source.png",
+    "sprite_base": "guinea_pig_black",
+    "shape": "guinea_pig",
+    "tint_hex": "2b2926",
+    "accent_hex": "d8cdb9",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 100,
+      "y": 140,
+      "w": 259,
+      "h": 144
+    },
+    "outputs": [
+      "assets/sprites/guinea_pig_black_set00.png",
+      "assets/sprites/guinea_pig_black_set01.png",
+      "assets/sprites/guinea_pig_black_set02.png",
+      "assets/sprites/guinea_pig_black_set03.png",
+      "assets/sprites/guinea_pig_black_set04.png",
+      "assets/sprites/guinea_pig_black_set05.png",
+      "assets/sprites/guinea_pig_black_set06.png",
+      "assets/sprites/guinea_pig_black_set07.png",
+      "assets/sprites/guinea_pig_black_set08.png",
+      "assets/sprites/guinea_pig_black_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "hedgehog_salt_pepper",
+    "species": "hedgehog",
+    "source": "procedural:hedgehog",
+    "generated_source": "assets/source/animals/generated/hedgehog_salt_pepper-source.png",
+    "sprite_base": "hedgehog_salt_pepper",
+    "shape": "hedgehog",
+    "tint_hex": "81786a",
+    "accent_hex": "e6dcc6",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 114,
+      "y": 160,
+      "w": 245,
+      "h": 124
+    },
+    "outputs": [
+      "assets/sprites/hedgehog_salt_pepper_set00.png",
+      "assets/sprites/hedgehog_salt_pepper_set01.png",
+      "assets/sprites/hedgehog_salt_pepper_set02.png",
+      "assets/sprites/hedgehog_salt_pepper_set03.png",
+      "assets/sprites/hedgehog_salt_pepper_set04.png",
+      "assets/sprites/hedgehog_salt_pepper_set05.png",
+      "assets/sprites/hedgehog_salt_pepper_set06.png",
+      "assets/sprites/hedgehog_salt_pepper_set07.png",
+      "assets/sprites/hedgehog_salt_pepper_set08.png",
+      "assets/sprites/hedgehog_salt_pepper_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "hedgehog_cinnamon",
+    "species": "hedgehog",
+    "source": "procedural:hedgehog",
+    "generated_source": "assets/source/animals/generated/hedgehog_cinnamon-source.png",
+    "sprite_base": "hedgehog_cinnamon",
+    "shape": "hedgehog",
+    "tint_hex": "b06e3e",
+    "accent_hex": "ebdcc2",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 114,
+      "y": 160,
+      "w": 245,
+      "h": 124
+    },
+    "outputs": [
+      "assets/sprites/hedgehog_cinnamon_set00.png",
+      "assets/sprites/hedgehog_cinnamon_set01.png",
+      "assets/sprites/hedgehog_cinnamon_set02.png",
+      "assets/sprites/hedgehog_cinnamon_set03.png",
+      "assets/sprites/hedgehog_cinnamon_set04.png",
+      "assets/sprites/hedgehog_cinnamon_set05.png",
+      "assets/sprites/hedgehog_cinnamon_set06.png",
+      "assets/sprites/hedgehog_cinnamon_set07.png",
+      "assets/sprites/hedgehog_cinnamon_set08.png",
+      "assets/sprites/hedgehog_cinnamon_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "squirrel_red",
+    "species": "squirrel",
+    "source": "procedural:squirrel",
+    "generated_source": "assets/source/animals/generated/squirrel_red-source.png",
+    "sprite_base": "squirrel_red",
+    "shape": "squirrel",
+    "tint_hex": "b45f2f",
+    "accent_hex": "e9c193",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 60,
+      "y": 76,
+      "w": 281,
+      "h": 200
+    },
+    "outputs": [
+      "assets/sprites/squirrel_red_set00.png",
+      "assets/sprites/squirrel_red_set01.png",
+      "assets/sprites/squirrel_red_set02.png",
+      "assets/sprites/squirrel_red_set03.png",
+      "assets/sprites/squirrel_red_set04.png",
+      "assets/sprites/squirrel_red_set05.png",
+      "assets/sprites/squirrel_red_set06.png",
+      "assets/sprites/squirrel_red_set07.png",
+      "assets/sprites/squirrel_red_set08.png",
+      "assets/sprites/squirrel_red_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "squirrel_gray",
+    "species": "squirrel",
+    "source": "procedural:squirrel",
+    "generated_source": "assets/source/animals/generated/squirrel_gray-source.png",
+    "sprite_base": "squirrel_gray",
+    "shape": "squirrel",
+    "tint_hex": "85857c",
+    "accent_hex": "d8d4c8",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 60,
+      "y": 76,
+      "w": 281,
+      "h": 200
+    },
+    "outputs": [
+      "assets/sprites/squirrel_gray_set00.png",
+      "assets/sprites/squirrel_gray_set01.png",
+      "assets/sprites/squirrel_gray_set02.png",
+      "assets/sprites/squirrel_gray_set03.png",
+      "assets/sprites/squirrel_gray_set04.png",
+      "assets/sprites/squirrel_gray_set05.png",
+      "assets/sprites/squirrel_gray_set06.png",
+      "assets/sprites/squirrel_gray_set07.png",
+      "assets/sprites/squirrel_gray_set08.png",
+      "assets/sprites/squirrel_gray_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "fox_red",
+    "species": "fox",
+    "source": "procedural:fox",
+    "generated_source": "assets/source/animals/generated/fox_red-source.png",
+    "sprite_base": "fox_red",
+    "shape": "fox",
+    "tint_hex": "c46832",
+    "accent_hex": "eee2c9",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 22,
+      "y": 124,
+      "w": 361,
+      "h": 152
+    },
+    "outputs": [
+      "assets/sprites/fox_red_set00.png",
+      "assets/sprites/fox_red_set01.png",
+      "assets/sprites/fox_red_set02.png",
+      "assets/sprites/fox_red_set03.png",
+      "assets/sprites/fox_red_set04.png",
+      "assets/sprites/fox_red_set05.png",
+      "assets/sprites/fox_red_set06.png",
+      "assets/sprites/fox_red_set07.png",
+      "assets/sprites/fox_red_set08.png",
+      "assets/sprites/fox_red_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "fox_silver",
+    "species": "fox",
+    "source": "procedural:fox",
+    "generated_source": "assets/source/animals/generated/fox_silver-source.png",
+    "sprite_base": "fox_silver",
+    "shape": "fox",
+    "tint_hex": "4b4d4c",
+    "accent_hex": "d6d3c9",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 22,
+      "y": 124,
+      "w": 361,
+      "h": 152
+    },
+    "outputs": [
+      "assets/sprites/fox_silver_set00.png",
+      "assets/sprites/fox_silver_set01.png",
+      "assets/sprites/fox_silver_set02.png",
+      "assets/sprites/fox_silver_set03.png",
+      "assets/sprites/fox_silver_set04.png",
+      "assets/sprites/fox_silver_set05.png",
+      "assets/sprites/fox_silver_set06.png",
+      "assets/sprites/fox_silver_set07.png",
+      "assets/sprites/fox_silver_set08.png",
+      "assets/sprites/fox_silver_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "red_panda_classic",
+    "species": "red_panda",
+    "source": "procedural:red_panda",
+    "generated_source": "assets/source/animals/generated/red_panda_classic-source.png",
+    "sprite_base": "red_panda_classic",
+    "shape": "red_panda",
+    "tint_hex": "b85f31",
+    "accent_hex": "efe1c5",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 17,
+      "y": 148,
+      "w": 336,
+      "h": 132
+    },
+    "outputs": [
+      "assets/sprites/red_panda_classic_set00.png",
+      "assets/sprites/red_panda_classic_set01.png",
+      "assets/sprites/red_panda_classic_set02.png",
+      "assets/sprites/red_panda_classic_set03.png",
+      "assets/sprites/red_panda_classic_set04.png",
+      "assets/sprites/red_panda_classic_set05.png",
+      "assets/sprites/red_panda_classic_set06.png",
+      "assets/sprites/red_panda_classic_set07.png",
+      "assets/sprites/red_panda_classic_set08.png",
+      "assets/sprites/red_panda_classic_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "red_panda_dark",
+    "species": "red_panda",
+    "source": "procedural:red_panda",
+    "generated_source": "assets/source/animals/generated/red_panda_dark-source.png",
+    "sprite_base": "red_panda_dark",
+    "shape": "red_panda",
+    "tint_hex": "6f3f2f",
+    "accent_hex": "e9d9bc",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 17,
+      "y": 148,
+      "w": 336,
+      "h": 132
+    },
+    "outputs": [
+      "assets/sprites/red_panda_dark_set00.png",
+      "assets/sprites/red_panda_dark_set01.png",
+      "assets/sprites/red_panda_dark_set02.png",
+      "assets/sprites/red_panda_dark_set03.png",
+      "assets/sprites/red_panda_dark_set04.png",
+      "assets/sprites/red_panda_dark_set05.png",
+      "assets/sprites/red_panda_dark_set06.png",
+      "assets/sprites/red_panda_dark_set07.png",
+      "assets/sprites/red_panda_dark_set08.png",
+      "assets/sprites/red_panda_dark_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "otter_brown",
+    "species": "otter",
+    "source": "procedural:otter",
+    "generated_source": "assets/source/animals/generated/otter_brown-source.png",
+    "sprite_base": "otter_brown",
+    "shape": "otter",
+    "tint_hex": "6b4a31",
+    "accent_hex": "d4bb91",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 17,
+      "y": 171,
+      "w": 348,
+      "h": 105
+    },
+    "outputs": [
+      "assets/sprites/otter_brown_set00.png",
+      "assets/sprites/otter_brown_set01.png",
+      "assets/sprites/otter_brown_set02.png",
+      "assets/sprites/otter_brown_set03.png",
+      "assets/sprites/otter_brown_set04.png",
+      "assets/sprites/otter_brown_set05.png",
+      "assets/sprites/otter_brown_set06.png",
+      "assets/sprites/otter_brown_set07.png",
+      "assets/sprites/otter_brown_set08.png",
+      "assets/sprites/otter_brown_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "sugar_glider_gray",
+    "species": "sugar_glider",
+    "source": "procedural:sugar_glider",
+    "generated_source": "assets/source/animals/generated/sugar_glider_gray-source.png",
+    "sprite_base": "sugar_glider_gray",
+    "shape": "sugar_glider",
+    "tint_hex": "8c8d88",
+    "accent_hex": "f1eee4",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 36,
+      "y": 142,
+      "w": 291,
+      "h": 109
+    },
+    "outputs": [
+      "assets/sprites/sugar_glider_gray_set00.png",
+      "assets/sprites/sugar_glider_gray_set01.png",
+      "assets/sprites/sugar_glider_gray_set02.png",
+      "assets/sprites/sugar_glider_gray_set03.png",
+      "assets/sprites/sugar_glider_gray_set04.png",
+      "assets/sprites/sugar_glider_gray_set05.png",
+      "assets/sprites/sugar_glider_gray_set06.png",
+      "assets/sprites/sugar_glider_gray_set07.png",
+      "assets/sprites/sugar_glider_gray_set08.png",
+      "assets/sprites/sugar_glider_gray_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "capybara_brown",
+    "species": "capybara",
+    "source": "procedural:capybara",
+    "generated_source": "assets/source/animals/generated/capybara_brown-source.png",
+    "sprite_base": "capybara_brown",
+    "shape": "capybara",
+    "tint_hex": "8a603d",
+    "accent_hex": "c79d6a",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 82,
+      "y": 164,
+      "w": 293,
+      "h": 124
+    },
+    "outputs": [
+      "assets/sprites/capybara_brown_set00.png",
+      "assets/sprites/capybara_brown_set01.png",
+      "assets/sprites/capybara_brown_set02.png",
+      "assets/sprites/capybara_brown_set03.png",
+      "assets/sprites/capybara_brown_set04.png",
+      "assets/sprites/capybara_brown_set05.png",
+      "assets/sprites/capybara_brown_set06.png",
+      "assets/sprites/capybara_brown_set07.png",
+      "assets/sprites/capybara_brown_set08.png",
+      "assets/sprites/capybara_brown_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "capybara_sand",
+    "species": "capybara",
+    "source": "procedural:capybara",
+    "generated_source": "assets/source/animals/generated/capybara_sand-source.png",
+    "sprite_base": "capybara_sand",
+    "shape": "capybara",
+    "tint_hex": "b98a58",
+    "accent_hex": "e2c69c",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 82,
+      "y": 164,
+      "w": 293,
+      "h": 124
+    },
+    "outputs": [
+      "assets/sprites/capybara_sand_set00.png",
+      "assets/sprites/capybara_sand_set01.png",
+      "assets/sprites/capybara_sand_set02.png",
+      "assets/sprites/capybara_sand_set03.png",
+      "assets/sprites/capybara_sand_set04.png",
+      "assets/sprites/capybara_sand_set05.png",
+      "assets/sprites/capybara_sand_set06.png",
+      "assets/sprites/capybara_sand_set07.png",
+      "assets/sprites/capybara_sand_set08.png",
+      "assets/sprites/capybara_sand_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "tortoise_olive",
+    "species": "tortoise",
+    "source": "procedural:tortoise",
+    "generated_source": "assets/source/animals/generated/tortoise_olive-source.png",
+    "sprite_base": "tortoise_olive",
+    "shape": "tortoise",
+    "tint_hex": "6f7146",
+    "accent_hex": "3f3d2a",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 94,
+      "y": 164,
+      "w": 265,
+      "h": 122
+    },
+    "outputs": [
+      "assets/sprites/tortoise_olive_set00.png",
+      "assets/sprites/tortoise_olive_set01.png",
+      "assets/sprites/tortoise_olive_set02.png",
+      "assets/sprites/tortoise_olive_set03.png",
+      "assets/sprites/tortoise_olive_set04.png",
+      "assets/sprites/tortoise_olive_set05.png",
+      "assets/sprites/tortoise_olive_set06.png",
+      "assets/sprites/tortoise_olive_set07.png",
+      "assets/sprites/tortoise_olive_set08.png",
+      "assets/sprites/tortoise_olive_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "tortoise_dark_shell",
+    "species": "tortoise",
+    "source": "procedural:tortoise",
+    "generated_source": "assets/source/animals/generated/tortoise_dark_shell-source.png",
+    "sprite_base": "tortoise_dark_shell",
+    "shape": "tortoise",
+    "tint_hex": "45452f",
+    "accent_hex": "8b8052",
+    "source_width": 512,
+    "source_height": 384,
+    "content": {
+      "x": 94,
+      "y": 164,
+      "w": 265,
+      "h": 122
+    },
+    "outputs": [
+      "assets/sprites/tortoise_dark_shell_set00.png",
+      "assets/sprites/tortoise_dark_shell_set01.png",
+      "assets/sprites/tortoise_dark_shell_set02.png",
+      "assets/sprites/tortoise_dark_shell_set03.png",
+      "assets/sprites/tortoise_dark_shell_set04.png",
+      "assets/sprites/tortoise_dark_shell_set05.png",
+      "assets/sprites/tortoise_dark_shell_set06.png",
+      "assets/sprites/tortoise_dark_shell_set07.png",
+      "assets/sprites/tortoise_dark_shell_set08.png",
+      "assets/sprites/tortoise_dark_shell_set09.png"
+    ],
+    "warnings": [
+      "procedural source seed; replace with ImageGen source-truth before final animation import"
     ]
   }
 ]

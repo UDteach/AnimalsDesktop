@@ -24,15 +24,19 @@ const (
 )
 
 type seedReport struct {
-	Variant      string     `json:"variant"`
-	Species      string     `json:"species"`
-	Source       string     `json:"source"`
-	SpriteBase   string     `json:"sprite_base"`
-	SourceWidth  int        `json:"source_width"`
-	SourceHeight int        `json:"source_height"`
-	Content      rectReport `json:"content"`
-	Outputs      []string   `json:"outputs"`
-	Warnings     []string   `json:"warnings,omitempty"`
+	Variant         string     `json:"variant"`
+	Species         string     `json:"species"`
+	Source          string     `json:"source"`
+	GeneratedSource string     `json:"generated_source,omitempty"`
+	SpriteBase      string     `json:"sprite_base"`
+	Shape           string     `json:"shape,omitempty"`
+	TintHex         string     `json:"tint_hex,omitempty"`
+	AccentHex       string     `json:"accent_hex,omitempty"`
+	SourceWidth     int        `json:"source_width"`
+	SourceHeight    int        `json:"source_height"`
+	Content         rectReport `json:"content"`
+	Outputs         []string   `json:"outputs"`
+	Warnings        []string   `json:"warnings,omitempty"`
 }
 
 type rectReport struct {
@@ -72,29 +76,34 @@ func main() {
 }
 
 func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
-	src, err := openPNG(variant.SourcePath)
+	src, sourceLabel, generatedSource, warnings, err := prepareVariantSource(variant)
 	if err != nil {
 		return seedReport{}, err
 	}
 	bounds := src.Bounds()
 	content := alphaBounds(src)
 	report := seedReport{
-		Variant:      variant.ID,
-		Species:      variant.SpeciesID,
-		Source:       filepath.ToSlash(variant.SourcePath),
-		SpriteBase:   variant.SpriteBase,
-		SourceWidth:  bounds.Dx(),
-		SourceHeight: bounds.Dy(),
+		Variant:         variant.ID,
+		Species:         variant.SpeciesID,
+		Source:          sourceLabel,
+		GeneratedSource: generatedSource,
+		SpriteBase:      variant.SpriteBase,
+		Shape:           variant.Shape,
+		TintHex:         variant.TintHex,
+		AccentHex:       variant.AccentHex,
+		SourceWidth:     bounds.Dx(),
+		SourceHeight:    bounds.Dy(),
 		Content: rectReport{
 			X: content.Min.X,
 			Y: content.Min.Y,
 			W: content.Dx(),
 			H: content.Dy(),
 		},
-		Outputs: make([]string, 0, motionSets),
+		Outputs:  make([]string, 0, motionSets),
+		Warnings: warnings,
 	}
 	if content.Empty() {
-		return seedReport{}, fmt.Errorf("source has no visible alpha: %s", variant.SourcePath)
+		return seedReport{}, fmt.Errorf("source has no visible alpha: %s", sourceLabel)
 	}
 	if content == bounds {
 		report.Warnings = append(report.Warnings, "source is fully opaque; verify transparent background before final animation import")
@@ -117,18 +126,319 @@ func importVariant(variant catalog.Variant, outDir string) (seedReport, error) {
 	return report, nil
 }
 
+func prepareVariantSource(variant catalog.Variant) (*image.RGBA, string, string, []string, error) {
+	warnings := []string{}
+	var src *image.RGBA
+	var err error
+	sourceLabel := filepath.ToSlash(variant.SourcePath)
+	switch {
+	case variant.SourcePath != "":
+		src, err = openPNG(variant.SourcePath)
+		if err != nil {
+			return nil, "", "", nil, err
+		}
+	case variant.Shape != "":
+		src = proceduralSource(variant)
+		sourceLabel = "procedural:" + variant.Shape
+		warnings = append(warnings, "procedural source seed; replace with ImageGen source-truth before final animation import")
+	default:
+		return nil, "", "", nil, fmt.Errorf("variant has neither SourcePath nor Shape")
+	}
+
+	if variant.TintHex != "" {
+		tint, err := parseHexColor(variant.TintHex)
+		if err != nil {
+			return nil, "", "", nil, err
+		}
+		var accent *color.RGBA
+		if variant.AccentHex != "" {
+			accentColor, err := parseHexColor(variant.AccentHex)
+			if err != nil {
+				return nil, "", "", nil, err
+			}
+			accent = &accentColor
+		}
+		src = tintSource(src, tint, accent)
+	}
+
+	generatedPath := filepath.Join("assets", "source", "animals", "generated", variant.SpriteBase+"-source.png")
+	if err := writePNG(generatedPath, src); err != nil {
+		return nil, "", "", nil, err
+	}
+	return src, sourceLabel, filepath.ToSlash(generatedPath), warnings, nil
+}
+
+func tintSource(src *image.RGBA, tint color.RGBA, accent *color.RGBA) *image.RGBA {
+	out := image.NewRGBA(src.Bounds())
+	b := src.Bounds()
+	for y := b.Min.Y; y < b.Max.Y; y++ {
+		for x := b.Min.X; x < b.Max.X; x++ {
+			c := src.RGBAAt(x, y)
+			if c.A == 0 {
+				continue
+			}
+			target := tint
+			if accent != nil && accentMask(x-b.Min.X, y-b.Min.Y, b.Dx(), b.Dy()) {
+				target = *accent
+			}
+			lum := int(c.R)*30 + int(c.G)*59 + int(c.B)*11
+			lum /= 100
+			shade := 0.52 + float64(lum)/255.0*0.66
+			out.SetRGBA(x, y, color.RGBA{
+				R: clampByte(float64(target.R) * shade),
+				G: clampByte(float64(target.G) * shade),
+				B: clampByte(float64(target.B) * shade),
+				A: c.A,
+			})
+		}
+	}
+	return out
+}
+
+func accentMask(x, y, w, h int) bool {
+	if w <= 0 || h <= 0 {
+		return false
+	}
+	leftPatch := x > w/8 && x < w/3 && y > h/4 && y < h*3/4
+	backPatch := x > w/2 && x < w*7/8 && y > h/6 && y < h/2
+	return leftPatch || backPatch
+}
+
+func parseHexColor(hex string) (color.RGBA, error) {
+	if len(hex) != 6 {
+		return color.RGBA{}, fmt.Errorf("hex color %q must be 6 characters", hex)
+	}
+	val := func(i int) (byte, error) {
+		var out byte
+		for _, ch := range hex[i : i+2] {
+			out <<= 4
+			switch {
+			case ch >= '0' && ch <= '9':
+				out += byte(ch - '0')
+			case ch >= 'a' && ch <= 'f':
+				out += byte(ch-'a') + 10
+			case ch >= 'A' && ch <= 'F':
+				out += byte(ch-'A') + 10
+			default:
+				return 0, fmt.Errorf("invalid hex color %q", hex)
+			}
+		}
+		return out, nil
+	}
+	r, err := val(0)
+	if err != nil {
+		return color.RGBA{}, err
+	}
+	g, err := val(2)
+	if err != nil {
+		return color.RGBA{}, err
+	}
+	b, err := val(4)
+	if err != nil {
+		return color.RGBA{}, err
+	}
+	return color.RGBA{R: r, G: g, B: b, A: 255}, nil
+}
+
+func clampByte(v float64) byte {
+	if v < 0 {
+		return 0
+	}
+	if v > 255 {
+		return 255
+	}
+	return byte(v + 0.5)
+}
+
+func proceduralSource(variant catalog.Variant) *image.RGBA {
+	base, _ := parseHexColor(defaultHex(variant.TintHex, "8a6748"))
+	accent, _ := parseHexColor(defaultHex(variant.AccentHex, "eadbc0"))
+	dark := darken(base, 0.45)
+	img := image.NewRGBA(image.Rect(0, 0, 512, 384))
+	switch variant.Shape {
+	case "ferret":
+		ellipse(img, 138, 198, 146, 42, base)
+		ellipse(img, 276, 181, 50, 34, base)
+		ellipse(img, 318, 174, 26, 24, accent)
+		ellipse(img, 70, 205, 46, 18, dark)
+		legs(img, []int{172, 248}, 230, dark)
+		eye(img, 318, 166)
+	case "guinea_pig":
+		ellipse(img, 218, 210, 118, 64, base)
+		ellipse(img, 310, 196, 48, 46, base)
+		ellipse(img, 180, 190, 42, 30, accent)
+		ellipse(img, 262, 225, 54, 34, accent)
+		ellipse(img, 305, 158, 15, 18, base)
+		legs(img, []int{174, 258, 316}, 258, dark)
+		eye(img, 326, 187)
+	case "hedgehog":
+		ellipse(img, 226, 216, 112, 56, base)
+		ellipse(img, 314, 202, 44, 34, accent)
+		for i := 0; i < 18; i++ {
+			x := 128 + i*10
+			triangle(img, image.Pt(x, 162+(i%3)*4), image.Pt(x+16, 190), image.Pt(x-8, 190), dark)
+		}
+		legs(img, []int{182, 262}, 258, dark)
+		eye(img, 327, 194)
+	case "squirrel":
+		ellipse(img, 220, 216, 92, 46, base)
+		ellipse(img, 298, 194, 42, 36, base)
+		ellipse(img, 108, 168, 48, 92, accent)
+		ellipse(img, 124, 146, 34, 62, base)
+		ellipse(img, 296, 156, 13, 18, base)
+		legs(img, []int{188, 250}, 250, dark)
+		eye(img, 314, 188)
+	case "fox":
+		ellipse(img, 210, 214, 110, 44, base)
+		ellipse(img, 306, 190, 48, 34, base)
+		triangle(img, image.Pt(335, 188), image.Pt(382, 199), image.Pt(337, 214), base)
+		triangle(img, image.Pt(294, 154), image.Pt(306, 124), image.Pt(318, 158), base)
+		ellipse(img, 92, 198, 70, 32, base)
+		ellipse(img, 55, 198, 25, 18, accent)
+		ellipse(img, 314, 205, 24, 16, accent)
+		legs(img, []int{176, 248}, 250, dark)
+		eye(img, 322, 183)
+	case "red_panda":
+		ellipse(img, 206, 216, 106, 48, base)
+		ellipse(img, 302, 190, 50, 42, base)
+		ellipse(img, 95, 198, 78, 28, base)
+		for i := 0; i < 4; i++ {
+			ellipse(img, 52+i*26, 198, 9, 24, accent)
+		}
+		ellipse(img, 302, 194, 24, 18, accent)
+		ellipse(img, 330, 196, 14, 16, accent)
+		legs(img, []int{174, 252}, 254, dark)
+		eye(img, 318, 184)
+	case "otter":
+		ellipse(img, 208, 220, 132, 38, base)
+		ellipse(img, 318, 203, 46, 32, base)
+		ellipse(img, 89, 232, 72, 15, dark)
+		ellipse(img, 332, 214, 28, 14, accent)
+		legs(img, []int{188, 270}, 250, dark)
+		eye(img, 330, 194)
+	case "sugar_glider":
+		ellipse(img, 220, 210, 72, 40, base)
+		ellipse(img, 286, 190, 36, 34, base)
+		triangle(img, image.Pt(164, 200), image.Pt(234, 220), image.Pt(178, 242), accent)
+		triangle(img, image.Pt(250, 216), image.Pt(326, 196), image.Pt(314, 238), accent)
+		ellipse(img, 112, 218, 76, 10, dark)
+		ellipse(img, 282, 160, 12, 18, base)
+		eye(img, 298, 184)
+	case "capybara":
+		ellipse(img, 214, 222, 132, 56, base)
+		ellipse(img, 322, 202, 52, 38, base)
+		ellipse(img, 328, 216, 32, 16, accent)
+		legs(img, []int{168, 232, 300}, 262, dark)
+		eye(img, 334, 194)
+	case "tortoise":
+		ellipse(img, 220, 218, 112, 52, dark)
+		ellipse(img, 220, 206, 92, 42, base)
+		ellipse(img, 326, 218, 32, 22, accent)
+		ellipse(img, 118, 228, 24, 14, dark)
+		legs(img, []int{160, 224, 286}, 260, dark)
+		eye(img, 336, 214)
+	default:
+		ellipse(img, 220, 216, 110, 50, base)
+		ellipse(img, 310, 198, 44, 36, base)
+		legs(img, []int{180, 260}, 254, dark)
+		eye(img, 326, 190)
+	}
+	return img
+}
+
+func defaultHex(value string, fallback string) string {
+	if value != "" {
+		return value
+	}
+	return fallback
+}
+
+func darken(c color.RGBA, amount float64) color.RGBA {
+	return color.RGBA{
+		R: clampByte(float64(c.R) * amount),
+		G: clampByte(float64(c.G) * amount),
+		B: clampByte(float64(c.B) * amount),
+		A: c.A,
+	}
+}
+
+func legs(img *image.RGBA, xs []int, y int, c color.RGBA) {
+	for _, x := range xs {
+		ellipse(img, x, y, 9, 25, c)
+		ellipse(img, x+20, y, 9, 25, c)
+	}
+}
+
+func eye(img *image.RGBA, x, y int) {
+	ellipse(img, x, y, 5, 5, color.RGBA{R: 18, G: 15, B: 12, A: 255})
+	ellipse(img, x+2, y-2, 1, 1, color.RGBA{R: 240, G: 240, B: 230, A: 255})
+}
+
+func ellipse(img *image.RGBA, cx, cy, rx, ry int, c color.RGBA) {
+	if rx <= 0 || ry <= 0 {
+		return
+	}
+	for y := cy - ry; y <= cy+ry; y++ {
+		for x := cx - rx; x <= cx+rx; x++ {
+			if !image.Pt(x, y).In(img.Bounds()) {
+				continue
+			}
+			dx := float64(x-cx) / float64(rx)
+			dy := float64(y-cy) / float64(ry)
+			if dx*dx+dy*dy <= 1 {
+				img.SetRGBA(x, y, c)
+			}
+		}
+	}
+}
+
+func triangle(img *image.RGBA, a, b, c image.Point, fill color.RGBA) {
+	minX := minInt(a.X, minInt(b.X, c.X))
+	maxX := maxInt(a.X, maxInt(b.X, c.X))
+	minY := minInt(a.Y, minInt(b.Y, c.Y))
+	maxY := maxInt(a.Y, maxInt(b.Y, c.Y))
+	area := edge(a, b, c)
+	if area == 0 {
+		return
+	}
+	for y := minY; y <= maxY; y++ {
+		for x := minX; x <= maxX; x++ {
+			p := image.Pt(x, y)
+			if !p.In(img.Bounds()) {
+				continue
+			}
+			w0 := edge(b, c, p)
+			w1 := edge(c, a, p)
+			w2 := edge(a, b, p)
+			if (w0 >= 0 && w1 >= 0 && w2 >= 0) || (w0 <= 0 && w1 <= 0 && w2 <= 0) {
+				img.SetRGBA(x, y, fill)
+			}
+		}
+	}
+}
+
+func edge(a, b, c image.Point) int {
+	return (c.X-a.X)*(b.Y-a.Y) - (c.Y-a.Y)*(b.X-a.X)
+}
+
 func profileFor(speciesID string) renderProfile {
 	switch speciesID {
-	case "gecko":
+	case "gecko", "otter", "tortoise":
 		return renderProfile{targetW: 90, targetH: 30, baseline: 59, low: true}
 	case "rabbit":
 		return renderProfile{targetW: 82, targetH: 56, baseline: 60}
-	case "dog", "cat":
+	case "dog", "cat", "fox", "red_panda":
 		return renderProfile{targetW: 84, targetH: 54, baseline: 59}
-	case "hamster", "macaroni_mouse":
+	case "ferret":
+		return renderProfile{targetW: 90, targetH: 42, baseline: 59}
+	case "hamster", "macaroni_mouse", "guinea_pig", "hedgehog", "sugar_glider":
 		return renderProfile{targetW: 76, targetH: 48, baseline: 59}
 	case "chinchilla":
 		return renderProfile{targetW: 82, targetH: 50, baseline: 59}
+	case "squirrel":
+		return renderProfile{targetW: 86, targetH: 58, baseline: 60}
+	case "capybara":
+		return renderProfile{targetW: 88, targetH: 46, baseline: 60}
 	default:
 		return renderProfile{targetW: 84, targetH: 52, baseline: 59}
 	}

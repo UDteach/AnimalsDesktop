@@ -285,7 +285,7 @@ type petApp struct {
 	mouseHook          uintptr
 	keyHookFailed      bool
 	mouseHookFailed    bool
-	frames             map[string][][]*image.RGBA
+	frames             *spriteCache
 	forageSprites      []*image.RGBA
 	wheel              *image.RGBA
 	pets               []deguPet
@@ -369,7 +369,7 @@ func main() {
 	hinst := win.GetModuleHandle(nil)
 	app = &petApp{
 		hinst:         hinst,
-		frames:        loadSprites(),
+		frames:        newSpriteCache(),
 		forageSprites: loadForageSprites(),
 		wheel:         loadWheelSprite(),
 		variant:       0,
@@ -824,7 +824,7 @@ func (a *petApp) render() {
 			continue
 		}
 		frame := currentFrame(p.state, p.frame)
-		src := a.frames[variants[a.petVariant(p)].ID][p.motionSet][frame]
+		src := a.frames.frame(variants[a.petVariant(p)], p.motionSet, frame)
 		y := sceneH - spriteH - p.laneOffset
 		drawPetSprite(canvas, src, p, p.x, y)
 		if p.state == stateCarry && p.carryKind != noItem {
@@ -849,7 +849,7 @@ func (a *petApp) render() {
 				continue
 			}
 			frame := currentFrame(p.state, p.frame)
-			src := a.frames[variants[a.petVariant(p)].ID][p.motionSet][frame]
+			src := a.frames.frame(variants[a.petVariant(p)], p.motionSet, frame)
 			drawWheelRunner(canvas, wheelX, wheelY, src, p.frame)
 		}
 		drawWheelFront(canvas, wheelX, wheelY, a.tickCount)
@@ -2147,6 +2147,12 @@ func variantSwatch(index int) (settingsRGB, settingsRGB, bool) {
 	if index < 0 || index >= len(variants) {
 		return rgb(128, 120, 105), rgb(240, 235, 220), false
 	}
+	if base, ok := swatchHex(variants[index].TintHex); ok {
+		if patch, patchOK := swatchHex(variants[index].AccentHex); patchOK {
+			return base, patch, true
+		}
+		return base, rgb(240, 235, 220), false
+	}
 	switch variants[index].ID {
 	case "black":
 		return rgb(42, 37, 33), rgb(240, 235, 220), false
@@ -2185,6 +2191,42 @@ func variantSwatch(index int) (settingsRGB, settingsRGB, bool) {
 	default:
 		return rgb(118, 96, 67), rgb(240, 235, 220), false
 	}
+}
+
+func swatchHex(hex string) (settingsRGB, bool) {
+	if len(hex) != 6 {
+		return settingsRGB{}, false
+	}
+	val := func(i int) (byte, bool) {
+		var out byte
+		for _, ch := range hex[i : i+2] {
+			out <<= 4
+			switch {
+			case ch >= '0' && ch <= '9':
+				out += byte(ch - '0')
+			case ch >= 'a' && ch <= 'f':
+				out += byte(ch-'a') + 10
+			case ch >= 'A' && ch <= 'F':
+				out += byte(ch-'A') + 10
+			default:
+				return 0, false
+			}
+		}
+		return out, true
+	}
+	r, ok := val(0)
+	if !ok {
+		return settingsRGB{}, false
+	}
+	g, ok := val(2)
+	if !ok {
+		return settingsRGB{}, false
+	}
+	b, ok := val(4)
+	if !ok {
+		return settingsRGB{}, false
+	}
+	return rgb(r, g, b), true
 }
 
 func (a *petApp) setControlFont(hwnd win.HWND, font win.HFONT) {
@@ -2815,35 +2857,58 @@ func (a *petApp) leaveWheel(p *deguPet) {
 	p.x = clamp(a.wheelX+wheelSize/2-20, 0, max(0, a.sceneW-spriteW))
 }
 
-func loadSprites() map[string][][]*image.RGBA {
-	out := make(map[string][][]*image.RGBA)
-	for _, v := range variants {
-		sets := make([][]*image.RGBA, 0, motionSets)
-		for set := 0; set < motionSets; set++ {
-			name := fmt.Sprintf("sprites/%s_set%02d.png", v.SpriteBase, set)
-			data, err := fs.ReadFile(appassets.FS, name)
-			if err != nil {
-				panic(err)
-			}
-			img, err := png.Decode(bytes.NewReader(data))
-			if err != nil {
-				panic(err)
-			}
-			if img.Bounds().Dx() != frameW*frameCount || img.Bounds().Dy() != frameH {
-				panic(fmt.Sprintf("%s must be %dx%d; run cmd/importsheet and cmd/importanimals", name, frameW*frameCount, frameH))
-			}
-			frames := make([]*image.RGBA, 0, frameCount)
-			for i := 0; i < frameCount; i++ {
-				r := image.Rect(i*frameW, 0, (i+1)*frameW, frameH)
-				frame := image.NewRGBA(image.Rect(0, 0, frameW, frameH))
-				draw.Draw(frame, frame.Bounds(), img, r.Min, draw.Src)
-				frames = append(frames, frame)
-			}
-			sets = append(sets, frames)
-		}
-		out[v.ID] = sets
+type spriteCache struct {
+	mu     sync.Mutex
+	loaded map[string][][]*image.RGBA
+}
+
+func newSpriteCache() *spriteCache {
+	return &spriteCache{loaded: make(map[string][][]*image.RGBA)}
+}
+
+func (c *spriteCache) frame(variant coatVariant, set int, frame int) *image.RGBA {
+	sets := c.variantSets(variant)
+	set = clamp(set, 0, len(sets)-1)
+	frame = clamp(frame, 0, len(sets[set])-1)
+	return sets[set][frame]
+}
+
+func (c *spriteCache) variantSets(variant coatVariant) [][]*image.RGBA {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if sets := c.loaded[variant.ID]; sets != nil {
+		return sets
 	}
-	return out
+	sets := loadSpriteVariant(variant)
+	c.loaded[variant.ID] = sets
+	return sets
+}
+
+func loadSpriteVariant(variant coatVariant) [][]*image.RGBA {
+	sets := make([][]*image.RGBA, 0, motionSets)
+	for set := 0; set < motionSets; set++ {
+		name := fmt.Sprintf("sprites/%s_set%02d.png", variant.SpriteBase, set)
+		data, err := fs.ReadFile(appassets.FS, name)
+		if err != nil {
+			panic(err)
+		}
+		img, err := png.Decode(bytes.NewReader(data))
+		if err != nil {
+			panic(err)
+		}
+		if img.Bounds().Dx() != frameW*frameCount || img.Bounds().Dy() != frameH {
+			panic(fmt.Sprintf("%s must be %dx%d; run cmd/importsheet and cmd/importanimals", name, frameW*frameCount, frameH))
+		}
+		frames := make([]*image.RGBA, 0, frameCount)
+		for i := 0; i < frameCount; i++ {
+			r := image.Rect(i*frameW, 0, (i+1)*frameW, frameH)
+			frame := image.NewRGBA(image.Rect(0, 0, frameW, frameH))
+			draw.Draw(frame, frame.Bounds(), img, r.Min, draw.Src)
+			frames = append(frames, frame)
+		}
+		sets = append(sets, frames)
+	}
+	return sets
 }
 
 func loadWheelSprite() *image.RGBA {
