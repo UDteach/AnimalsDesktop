@@ -25,6 +25,7 @@ Non-degu species are seed-stage assets generated from source-truth still images,
 - Optional per-pet names with hover labels
 - Keyboard reaction and random stroll modes
 - Typing wheel behavior
+- Species behavior profiles: low-crawler, large, and companion profiles do not get forced into the typing wheel
 - Foraging, carrying, eating, digging, gnawing, and grooming behavior
 - GitHub Release based update check and installer path
 
@@ -53,7 +54,7 @@ It reads source-truth images recorded under `docs/art-source`, `docs/art-intake`
 - `assets/source/animals/seed-import-report.json`
 - `docs/assets/animalsdesktop-seed-preview.png`
 
-The shared runtime registry is in `internal/catalog`. The Windows renderer uses a lazy sprite cache, so adding many variants does not expand every sprite sheet into RGBA frames at startup.
+The shared runtime registry is in `internal/catalog`. It also owns catalog QA helpers and behavior-profile decisions such as wheel-capable species. The Windows renderer uses a lazy sprite cache, so adding many variants does not expand every sprite sheet into RGBA frames at startup.
 
 ## Development
 

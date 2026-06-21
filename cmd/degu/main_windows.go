@@ -916,10 +916,12 @@ func (a *petApp) onTyping() {
 	if a.mode != modeKeyboard {
 		return
 	}
+	wheelStarted := false
 	for i := range a.pets {
 		p := &a.pets[i]
-		if a.wheelEnabled && i == 0 && p.item == noItem {
+		if a.wheelEnabled && !wheelStarted && p.item == noItem && a.petWheelCapable(p) {
 			a.enterWheelFromTyping(p)
+			wheelStarted = true
 			continue
 		}
 		p.state = stateScurry
@@ -1169,6 +1171,13 @@ func (a *petApp) petVariant(p *deguPet) int {
 		return 0
 	}
 	return clamp(p.variant, 0, len(variants)-1)
+}
+
+func (a *petApp) petWheelCapable(p *deguPet) bool {
+	if len(variants) == 0 {
+		return false
+	}
+	return catalog.WheelCapableVariant(variants[a.petVariant(p)])
 }
 
 func (a *petApp) newPet(index int) deguPet {

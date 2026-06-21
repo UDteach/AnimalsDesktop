@@ -36,7 +36,7 @@ var SpeciesList = []Species{
 	{ID: "red_panda", Label: "Red panda", Profile: "companion"},
 	{ID: "otter", Label: "Otter", Profile: "low-crawler"},
 	{ID: "sugar_glider", Label: "Sugar glider", Profile: "small-mammal"},
-	{ID: "capybara", Label: "Capybara", Profile: "small-mammal"},
+	{ID: "capybara", Label: "Capybara", Profile: "large-mammal"},
 	{ID: "tortoise", Label: "Tortoise", Profile: "low-crawler"},
 }
 
@@ -181,4 +181,33 @@ func SeedVariants() []Variant {
 		}
 	}
 	return out
+}
+
+func SpeciesByID(id string) (Species, bool) {
+	for _, species := range SpeciesList {
+		if species.ID == id {
+			return species, true
+		}
+	}
+	return Species{}, false
+}
+
+func ProfileForSpecies(id string) string {
+	if species, ok := SpeciesByID(id); ok {
+		return species.Profile
+	}
+	return ""
+}
+
+func WheelCapableSpecies(speciesID string) bool {
+	switch ProfileForSpecies(speciesID) {
+	case "degu", "small-mammal":
+		return true
+	default:
+		return false
+	}
+}
+
+func WheelCapableVariant(variant Variant) bool {
+	return WheelCapableSpecies(variant.SpeciesID)
 }

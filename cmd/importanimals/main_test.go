@@ -3,6 +3,8 @@ package main
 import (
 	"image"
 	"image/color"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"animals-desktop/internal/catalog"
@@ -77,4 +79,23 @@ func TestTintSourcePreservesAlpha(t *testing.T) {
 	if got.RGBAAt(0, 0).A != 0 {
 		t.Fatalf("transparent pixel alpha = %d, want 0", got.RGBAAt(0, 0).A)
 	}
+}
+
+func TestSeedVariantGeneratedAssetsExist(t *testing.T) {
+	for _, variant := range catalog.SeedVariants() {
+		source := filepath.Join("..", "..", "assets", "source", "animals", "generated", variant.SpriteBase+"-source.png")
+		if _, err := os.Stat(source); err != nil {
+			t.Fatalf("missing generated source for %s: %v", variant.ID, err)
+		}
+		for set := 0; set < motionSets; set++ {
+			path := filepath.Join("..", "..", "assets", "sprites", variant.SpriteBase+"_set"+twoDigits(set)+".png")
+			if _, err := os.Stat(path); err != nil {
+				t.Fatalf("missing sprite sheet for %s set %02d: %v", variant.ID, set, err)
+			}
+		}
+	}
+}
+
+func twoDigits(v int) string {
+	return string([]byte{'0' + byte(v/10), '0' + byte(v%10)})
 }

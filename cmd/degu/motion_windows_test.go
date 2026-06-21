@@ -123,6 +123,39 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 	}
 }
 
+func TestTypingSkipsWheelForNonWheelCapableVariant(t *testing.T) {
+	a := &petApp{
+		mode:         modeKeyboard,
+		wheelEnabled: true,
+		wheelX:       400,
+		sceneW:       1200,
+		speed:        3,
+		pets: []deguPet{
+			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "dog_cream_tan")},
+			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "hamster_golden_syrian")},
+		},
+	}
+
+	a.onTyping()
+	if got := a.pets[0].state; got == stateWheel {
+		t.Fatalf("non-wheel-capable pet state = stateWheel")
+	}
+	if got := a.pets[1].state; got != stateWheel {
+		t.Fatalf("wheel-capable pet state = %v, want stateWheel", got)
+	}
+}
+
+func variantIndexForTest(t *testing.T, id string) int {
+	t.Helper()
+	for i, variant := range variants {
+		if variant.ID == id {
+			return i
+		}
+	}
+	t.Fatalf("missing variant %q", id)
+	return 0
+}
+
 func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
