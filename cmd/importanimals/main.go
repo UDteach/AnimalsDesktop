@@ -221,8 +221,12 @@ func loadMotionSourceSheet(path string) (*image.RGBA, error) {
 	}
 	for frame := 0; frame < totalFrames; frame++ {
 		frameRect := image.Rect(bounds.Min.X+frame*frameW, bounds.Min.Y, bounds.Min.X+(frame+1)*frameW, bounds.Min.Y+frameH)
-		if alphaBounds(sheet.SubImage(frameRect)).Empty() {
+		content := alphaBounds(sheet.SubImage(frameRect))
+		if content.Empty() {
 			return nil, fmt.Errorf("motion source sheet %s has empty frame %02d", path, frame)
+		}
+		if content == frameRect {
+			return nil, fmt.Errorf("motion source sheet %s frame %02d has no transparent background", path, frame)
 		}
 	}
 	return sheet, nil

@@ -16,6 +16,7 @@ Every selectable variant must keep the DeguDesktop sprite-sheet shape:
 - Camera, scale, body volume, baseline, contact points, and facing direction stay stable inside a set.
 - Ears, feet, whiskers, tail, shell, wings, or toes must not be cropped.
 - No text, borders, scenery, shadows, costumes, props, multiple animals, or human-like poses.
+- Source motion art is generated one pose per PNG. Multi-pose sheets, grids, contact sheets, and baked checker-background images are review references only and cannot be promoted as accepted source frames.
 
 The app may still use mirrored drawing for left/right movement. Source frames should be clean right-facing side-view frames unless a profile explicitly documents another direction.
 
@@ -44,7 +45,7 @@ Wheel-capable profiles are currently `degu` and `small-rodent-scurry`. Other pro
 Promote one animal family at a time. A family is complete for a version bump only when all target variants in that family have:
 
 - source-truth PNGs reviewed at 96x64 on light and dark backgrounds;
-- 62 transparent motion frames for every accepted variant;
+- 62 standalone transparent motion-frame PNGs for every accepted variant;
 - generated `set00` through `set09` runtime sheets;
 - non-empty alpha-bounded frames with stable baseline and no cropped anatomy;
 - a contact sheet or preview proving the full motion set is visually reviewable;

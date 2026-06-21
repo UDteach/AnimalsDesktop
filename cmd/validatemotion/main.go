@@ -92,9 +92,6 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 	if err != nil {
 		return variantReport{}, err
 	}
-	if len(paths) != motionSets {
-		return variantReport{}, fmt.Errorf("motion source set count = %d, want %d", len(paths), motionSets)
-	}
 
 	hashes := map[string]bool{}
 	for _, path := range paths {
@@ -114,12 +111,15 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 		FramesPerSet:     totalFrames,
 		RuntimeSets:      len(paths),
 		UniqueSetHashes:  len(hashes),
-		ReleaseReady:     variant.SourceStatus == catalog.SourceStatusMotionAccepted,
+		ReleaseReady:     variant.SourceStatus == catalog.SourceStatusMotionAccepted && len(paths) == motionSets,
 	}
 	if variant.SourceStatus == catalog.SourceStatusMotionDraft {
 		report.Warnings = append(report.Warnings, "motion source is draft and must not be released")
 	}
-	if len(hashes) < motionSets {
+	if len(paths) < motionSets {
+		report.Warnings = append(report.Warnings, fmt.Sprintf("motion source has %d source set(s), accepted release requires %d", len(paths), motionSets))
+	}
+	if len(paths) == motionSets && len(hashes) < motionSets {
 		report.Warnings = append(report.Warnings, "one or more motion source sheets are byte-identical")
 	}
 	return report, nil
@@ -139,6 +139,9 @@ func motionSourceSheetPaths(set00Path string) ([]string, error) {
 	for set := 0; set < motionSets; set++ {
 		path := strings.Replace(set00Path, "set00", fmt.Sprintf("set%02d", set), 1)
 		if _, err := os.Stat(path); err != nil {
+			if os.IsNotExist(err) && set > 0 {
+				return []string{set00Path}, nil
+			}
 			return nil, err
 		}
 		paths = append(paths, path)
@@ -162,8 +165,12 @@ func validateSheet(path string) (string, error) {
 	}
 	for frame := 0; frame < totalFrames; frame++ {
 		frameRect := image.Rect(bounds.Min.X+frame*frameW, bounds.Min.Y, bounds.Min.X+(frame+1)*frameW, bounds.Min.Y+frameH)
-		if alphaBounds(img, frameRect).Empty() {
+		content := alphaBounds(img, frameRect)
+		if content.Empty() {
 			return "", fmt.Errorf("%s frame %02d has no visible alpha", path, frame)
+		}
+		if content == frameRect {
+			return "", fmt.Errorf("%s frame %02d has no transparent background", path, frame)
 		}
 	}
 	sum := sha256.Sum256(data)

@@ -15,6 +15,8 @@ For each variant:
 - `preview/<variant-id>-96x64-light.png`: 96x64 readability preview on light background.
 - `preview/<variant-id>-96x64-dark.png`: 96x64 readability preview on dark background.
 
+Motion sources must be generated as one pose per PNG. Do not create accepted source art by cutting a multi-pose sheet, grid, contact sheet, or checkerboard-background image. If a generator can only return grouped results, keep those files as `review-only` and regenerate the selected poses as separate transparent PNGs before parent integration.
+
 For each cohort:
 
 - `cohort-report.md`: source prompts, acceptance notes, and known risks.
@@ -26,12 +28,14 @@ Use this for new ImageGen work so one thread produces enough alternatives to jud
 
 - Source candidate pass: 4-6 variants per thread, 4 source-truth candidates per variant, plus light/dark 96x64 previews for the best 2 candidates.
 - Motion pass: 1 species family per thread, 1-3 accepted variants, 62 transparent motion frames per variant, plus light/dark previews and a contact sheet.
+- ImageGen call shape: prefer one pose per request; at most request four related poses only when the tool returns them as four separate PNG files.
 - Do not ask one thread to finish 10 variants x 62 frames. That is 620 frames before review and tends to waste RAM and review attention.
 - Parent integration promotes only reviewed winners into `assets/sprites` and keeps rejected candidates inside the cohort report.
 
 ## Acceptance Rules
 
 - Each source frame contains exactly one animal, no text, no borders, no scenery, no shadows, no costume, and no human-like pose.
+- Each accepted source frame has true transparent alpha around the animal. Baked checkerboard, white, gray, or noisy backgrounds are rejected even when the pose is useful as reference.
 - Do not make chinchillas, macaroni mice, rabbits, cats, dogs, reptiles, or other species by recoloring degu sprites.
 - Coat variants may share a species source family only after the species silhouette and motion set are stable.
 - Low-crawler, snake, frog, and tortoise profiles must not use degu wheel or upright hopping actions.

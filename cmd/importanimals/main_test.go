@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"animals-desktop/internal/catalog"
@@ -172,6 +173,28 @@ func TestImportVariantUsesTenMotionSourceSheets(t *testing.T) {
 	got := sheet.RGBAAt(12*frameW+8, 8)
 	if got.R != 9 || got.G != 12 || got.B != 90 || got.A != 255 {
 		t.Fatalf("set09 frame 12 marker = %#v, want imported set-specific motion source marker", got)
+	}
+}
+
+func TestLoadMotionSourceSheetRejectsOpaqueFrameBackground(t *testing.T) {
+	root := t.TempDir()
+	motionPath := filepath.Join(root, "motion-source.png")
+	motion := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
+	for y := 0; y < frameH; y++ {
+		for x := 0; x < frameW*totalFrames; x++ {
+			motion.SetRGBA(x, y, color.RGBA{R: 238, G: 238, B: 238, A: 255})
+		}
+	}
+	if err := writePNG(motionPath, motion); err != nil {
+		t.Fatalf("write motion source: %v", err)
+	}
+
+	_, err := loadMotionSourceSheet(motionPath)
+	if err == nil {
+		t.Fatalf("loadMotionSourceSheet() succeeded for opaque motion source")
+	}
+	if !strings.Contains(err.Error(), "transparent background") {
+		t.Fatalf("loadMotionSourceSheet() error = %v, want transparent-background failure", err)
 	}
 }
 
