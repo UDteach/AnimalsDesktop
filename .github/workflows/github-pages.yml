@@ -25,7 +25,8 @@ jobs:
         run: |
           grep -q "Coming Soon" docs/index.html
           ! grep -q "download/" docs/index.html
-          ! grep -q "Degu" docs/index.html
+          ! grep -Eiq "degu|デグー" docs/index.html
+          ! grep -Eq "<img|art-source|source-truth|preview|pet-card|animal-list" docs/index.html
           mkdir -p public-site
           cp docs/index.html public-site/index.html
       - uses: actions/configure-pages@v5
