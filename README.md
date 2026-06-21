@@ -23,13 +23,19 @@ A pet is release-ready only when it has:
 - settings and runtime selection
 - local tests and build checks
 - updated public page
+- `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
 ## Development
 
 Useful checks during local development:
 
 ```powershell
+go run ./cmd/importsheet
+go run ./cmd/importanimals
+go run ./cmd/validatemotion -variant chinchilla_standard_gray
 go test -buildvcs=false ./...
+go vet -buildvcs=false ./...
+go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/degu
 git diff --check
 ```
 

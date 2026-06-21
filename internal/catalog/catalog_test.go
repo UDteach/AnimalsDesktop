@@ -47,13 +47,13 @@ func TestCatalogInvariants(t *testing.T) {
 		if variant.SeedStage && variant.SourcePath == "" && variant.Shape == "" {
 			t.Fatalf("seed variant %q has neither source path nor procedural shape", variant.ID)
 		}
-		if variant.SeedStage && variant.SourceStatus != SourceStatusPrototypeOnly && variant.SourceStatus != SourceStatusImageGenQueued && variant.SourceStatus != SourceStatusMotionDraft {
-			t.Fatalf("seed variant %q source status = %q, want prototype/imagegen/motion draft status", variant.ID, variant.SourceStatus)
+		if variant.SeedStage && variant.SourceStatus != SourceStatusPrototypeOnly && variant.SourceStatus != SourceStatusImageGenQueued && variant.SourceStatus != SourceStatusMotionDraft && variant.SourceStatus != SourceStatusMotionAccepted {
+			t.Fatalf("seed variant %q source status = %q, want prototype/imagegen/motion status", variant.ID, variant.SourceStatus)
 		}
-		if variant.SourceStatus == SourceStatusMotionDraft && variant.MotionSourcePath == "" {
-			t.Fatalf("motion draft variant %q has no motion source path", variant.ID)
+		if (variant.SourceStatus == SourceStatusMotionDraft || variant.SourceStatus == SourceStatusMotionAccepted) && variant.MotionSourcePath == "" {
+			t.Fatalf("motion source variant %q has no motion source path", variant.ID)
 		}
-		if variant.MotionSourcePath != "" && variant.SourceStatus != SourceStatusMotionDraft {
+		if variant.MotionSourcePath != "" && variant.SourceStatus != SourceStatusMotionDraft && variant.SourceStatus != SourceStatusMotionAccepted {
 			t.Fatalf("variant %q has motion source path with source status %q", variant.ID, variant.SourceStatus)
 		}
 		if !variant.SeedStage && variant.SourceStatus != SourceStatusDeguMotion {

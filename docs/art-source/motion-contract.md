@@ -50,7 +50,7 @@ Promote one animal family at a time. A family is complete for a version bump onl
 - a contact sheet or preview proving the full motion set is visually reviewable;
 - catalog entries with species, breed/morph, color, popularity tier, source status, motion profile, and sprite base;
 - runtime behavior review confirming wheel, hop, crawl, slither, perch, and low-body constraints are respected;
-- `go run ./cmd/importsheet`, `go run ./cmd/importanimals`, `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, Windows build, and `git diff --check` passing.
+- `go run ./cmd/importsheet`, `go run ./cmd/importanimals`, `go run ./cmd/validatemotion -runtime-only -require-accepted`, `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, Windows build, and `git diff --check` passing.
 
 If only source images exist, the family remains `prototype_only` or seed-stage even if it is selectable.
 
@@ -63,6 +63,7 @@ After `v0.1.2`, do not tag a new release just for planning, queue, page, or seed
 - frame slots include real pose changes, not only recolor, bob, or duplicated walk frames;
 - the family has species-appropriate motion for idle, walk, scurry/fast travel, forage/feed, action, turn, rest/stand, groom/preen/adjust, and alert/wheel-safe reaction;
 - QA passes locally and in GitHub Actions;
+- `cmd/validatemotion` reports `release_ready: true` for every runtime variant;
 - the GitHub Pages page and `kdevelopk.pages.dev` works page describe the newly completed animal accurately.
 
 This means the next content release should finish a concrete slice such as `chinchilla_standard_gray` or the first accepted chinchilla family set before bumping from `v0.1.2`.

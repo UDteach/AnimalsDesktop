@@ -30,6 +30,7 @@ const (
 	SourceStatusPrototypeOnly  = "prototype_only"
 	SourceStatusImageGenQueued = "imagegen_queued"
 	SourceStatusMotionDraft    = "motion_source_draft"
+	SourceStatusMotionAccepted = "motion_source_accepted"
 
 	MotionProfileDegu               = "degu"
 	MotionProfileSmallRodentScurry  = "small-rodent-scurry"
