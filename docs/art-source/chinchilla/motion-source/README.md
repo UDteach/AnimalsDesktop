@@ -16,6 +16,9 @@ The accepted extraction source was generated with a checker background rather th
 
 - `frames/chinchilla-standard-gray-pose-00.png` through `pose-15.png`
 - `chinchilla-standard-gray-pose-frames-check.png`
+- `chinchilla-standard-gray-frame-map.csv`
+- `sheets/chinchilla-standard-gray-source-set00-draft.png`
+- `chinchilla-standard-gray-source-set00-draft-check.png`
 
 Each extracted pose frame is:
 
@@ -28,9 +31,11 @@ Each extracted pose frame is:
 
 These frames are source material for the chinchilla motion pass. They are not yet a release-ready 62-frame runtime set.
 
+The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. It is intentionally marked draft because it still reuses key poses and has not passed the accepted-motion bar.
+
 Before release, this family still needs:
 
-- 62 accepted frames for the selected chinchilla variant
+- 62 accepted frames with enough real pose variation for the selected chinchilla variant
 - generated `set00` through `set09` runtime sheets
 - importer integration
 - visual QA on light and dark backgrounds
