@@ -206,6 +206,29 @@ var Variants = []Variant{
 	shapeVariantMeta("whites_tree_frog_green", "whites_tree_frog", "White's tree frog - green", "frog", "77a95a", "d7e9b8", "White's tree frog", "green", 2),
 }
 
+var runtimeVariantIDs = []string{
+	"chinchilla_standard_gray",
+}
+
+func RuntimeVariants() []Variant {
+	out := make([]Variant, 0, len(runtimeVariantIDs))
+	for _, id := range runtimeVariantIDs {
+		if variant, ok := VariantByID(id); ok {
+			out = append(out, variant)
+		}
+	}
+	return out
+}
+
+func VariantByID(id string) (Variant, bool) {
+	for _, variant := range Variants {
+		if variant.ID == id {
+			return variant, true
+		}
+	}
+	return Variant{}, false
+}
+
 func deguVariant(id string, label string, spriteBase string) Variant {
 	return Variant{
 		ID:             id,

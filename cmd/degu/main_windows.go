@@ -195,7 +195,7 @@ const (
 
 type coatVariant = catalog.Variant
 
-var variants = catalog.Variants
+var variants = catalog.RuntimeVariants()
 
 type language int
 
@@ -563,6 +563,9 @@ func (a *petApp) saveSettings() error {
 	}
 	coats := make([]int, len(a.selectedCoats))
 	copy(coats, a.selectedCoats[:])
+	for i := range coats {
+		coats[i] = clamp(coats[i], 0, len(variants)-1)
+	}
 	names := make([]string, len(a.petNames))
 	for i := range a.petNames {
 		names[i] = sanitizePetName(a.petNames[i])
@@ -2050,7 +2053,7 @@ func (a *petApp) petDisplayName(index int) string {
 	if name := sanitizePetName(a.petNames[index]); name != "" {
 		return name
 	}
-	return a.localText(fmt.Sprintf("デグー%d", index+1), fmt.Sprintf("Pet %d", index+1))
+	return a.localText(fmt.Sprintf("ペット%d", index+1), fmt.Sprintf("Pet %d", index+1))
 }
 
 func (a *petApp) petNameSectionLabel() string {
@@ -2713,15 +2716,15 @@ func (a *petApp) txt(key string) string {
 	}
 	switch key {
 	case "settingsTitle":
-		return "デグーデスクトップ設定"
+		return "AnimalsDesktop設定"
 	case "settingsHeader":
-		return "デグーデスクトップ"
+		return "AnimalsDesktop"
 	case "settingsLead":
 		return "タスクバーで遊ぶペットの設定"
 	case "animalPageTitle":
-		return "デグーの数と毛色"
+		return "ペットの数と種類"
 	case "animalPageLead":
-		return "デグーの数と、毛色の選び方を調整します。"
+		return "ペットの数と、種類の選び方を調整します。"
 	case "motionPageTitle":
 		return "動きかた"
 	case "motionPageLead":
@@ -2731,13 +2734,13 @@ func (a *petApp) txt(key string) string {
 	case "tabMotion":
 		return "動き"
 	case "animalSection":
-		return "デグー"
+		return "ペット"
 	case "deguCount":
 		return "出現数"
 	case "coatColor":
-		return "決まった毛色"
+		return "決まったペット"
 	case "coatMode":
-		return "色の決め方"
+		return "ペットの選び方"
 	case "coatFixed":
 		return "固定"
 	case "coatSelected":
@@ -2745,9 +2748,9 @@ func (a *petApp) txt(key string) string {
 	case "coatRandom":
 		return "ランダム"
 	case "selectedCoats":
-		return "それぞれの毛色"
+		return "それぞれのペット"
 	case "coatNote":
-		return "「ランダム」では、1匹ごとに異なる毛色で現れます。パイドは自然なぶち模様です。"
+		return "「ランダム」では、完成済みのペットから1匹ごとに選ばれます。正式リリースまでは完成したペットだけを表示します。"
 	case "language":
 		return "表示言語"
 	case "mode":

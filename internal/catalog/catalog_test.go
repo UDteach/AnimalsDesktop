@@ -56,6 +56,21 @@ func TestCatalogInvariants(t *testing.T) {
 	}
 }
 
+func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
+	runtime := RuntimeVariants()
+	if got := len(runtime); got != 1 {
+		t.Fatalf("runtime variants = %d, want 1 release-scoped variant", got)
+	}
+	if got := runtime[0].ID; got != "chinchilla_standard_gray" {
+		t.Fatalf("runtime variant = %q, want chinchilla_standard_gray", got)
+	}
+	for _, variant := range runtime {
+		if variant.SpeciesID == "degu" {
+			t.Fatalf("runtime variants must not include degu: %+v", variant)
+		}
+	}
+}
+
 func TestWheelCapabilityByProfile(t *testing.T) {
 	tests := []struct {
 		species string

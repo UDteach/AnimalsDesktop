@@ -134,63 +134,16 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 	}
 }
 
-func TestTypingSkipsWheelForNonWheelCapableVariant(t *testing.T) {
-	a := &petApp{
-		mode:         modeKeyboard,
-		wheelEnabled: true,
-		wheelX:       400,
-		sceneW:       1200,
-		speed:        3,
-		pets: []deguPet{
-			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "dog_cream_tan")},
-			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "hamster_golden_syrian")},
-		},
+func TestRuntimeCatalogIsReleaseScopedToChinchilla(t *testing.T) {
+	if got := len(variants); got != 1 {
+		t.Fatalf("runtime variants = %d, want 1", got)
 	}
-
-	a.onTyping()
-	if got := a.pets[0].state; got == stateWheel {
-		t.Fatalf("non-wheel-capable pet state = stateWheel")
+	if got := variants[0].ID; got != "chinchilla_standard_gray" {
+		t.Fatalf("runtime variant = %q, want chinchilla_standard_gray", got)
 	}
-	if got := a.pets[1].state; got != stateWheel {
-		t.Fatalf("wheel-capable pet state = %v, want stateWheel", got)
-	}
-}
-
-func variantIndexForTest(t *testing.T, id string) int {
-	t.Helper()
-	for i, variant := range variants {
-		if variant.ID == id {
-			return i
-		}
-	}
-	t.Fatalf("missing variant %q", id)
-	return 0
-}
-
-func TestRuntimeCatalogHasExactly100Variants(t *testing.T) {
-	if got := len(variants); got != 100 {
-		t.Fatalf("runtime variants = %d, want 100", got)
-	}
-}
-
-func TestTypingSkipsWheelForLowCrawlerAndFrogProfiles(t *testing.T) {
-	a := &petApp{
-		mode:         modeKeyboard,
-		wheelEnabled: true,
-		wheelX:       400,
-		sceneW:       1200,
-		speed:        3,
-		pets: []deguPet{
-			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "corn_snake_amelanistic")},
-			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "whites_tree_frog_green")},
-			{state: stateWalk, stateTicks: 12, item: noItem, variant: variantIndexForTest(t, "bearded_dragon_citrus")},
-		},
-	}
-
-	a.onTyping()
-	for i, pet := range a.pets {
-		if pet.state == stateWheel {
-			t.Fatalf("pet %d entered wheel for variant %s", i, variants[pet.variant].ID)
+	for _, variant := range variants {
+		if variant.SpeciesID == "degu" {
+			t.Fatalf("runtime variants include degu: %+v", variant)
 		}
 	}
 }
@@ -256,7 +209,7 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if err := b.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	if b.variant != a.variant || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != a.mode || b.petCount != a.petCount {
+	if b.variant != 0 || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != a.mode || b.petCount != a.petCount {
 		t.Fatalf("loaded scalar settings = variant:%d coat:%d speed:%d mode:%d count:%d", b.variant, b.coatMode, b.speed, b.mode, b.petCount)
 	}
 	if b.wheelEnabled != a.wheelEnabled || b.bidirectional != a.bidirectional || b.lang != a.lang {
@@ -266,8 +219,8 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 		t.Fatalf("loaded nameLabels = %v, want %v", b.nameLabels, a.nameLabels)
 	}
 	for i := 0; i < maxPetCount; i++ {
-		if b.selectedCoats[i] != a.selectedCoats[i] {
-			t.Fatalf("selectedCoats[%d] = %d, want %d", i, b.selectedCoats[i], a.selectedCoats[i])
+		if b.selectedCoats[i] != 0 {
+			t.Fatalf("selectedCoats[%d] = %d, want 0", i, b.selectedCoats[i])
 		}
 	}
 	if b.petNames[0] != "モカ" || b.petNames[1] != "Sora" || b.petNames[2] != "Nagi" {
@@ -389,19 +342,19 @@ func TestSetBidirectionalOffNormalizesPets(t *testing.T) {
 
 func TestFixedCoatModeRefreshesAllPets(t *testing.T) {
 	a := &petApp{
-		variant: 2,
+		variant: 99,
 		pets: []deguPet{
 			{variant: 0},
-			{variant: 1},
-			{variant: 3},
+			{variant: 0},
+			{variant: 0},
 		},
 	}
 
 	a.setCoatMode(coatFixed)
 
 	for i, pet := range a.pets {
-		if pet.variant != 2 {
-			t.Fatalf("pet %d variant = %d, want fixed variant 2", i, pet.variant)
+		if pet.variant != 0 {
+			t.Fatalf("pet %d variant = %d, want fixed variant 0", i, pet.variant)
 		}
 	}
 }
@@ -418,14 +371,14 @@ func TestSelectedCoatModeUsesPerPetChoices(t *testing.T) {
 
 	a.setCoatMode(coatSelected)
 
-	for i, want := range []int{0, 3, 5} {
-		if got := a.pets[i].variant; got != want {
-			t.Fatalf("pet %d variant = %d, want %d", i, got, want)
+	for i := range []int{0, 1, 2} {
+		if got := a.pets[i].variant; got != 0 {
+			t.Fatalf("pet %d variant = %d, want 0", i, got)
 		}
 	}
 	a.setSelectedVariant(1, 8)
-	if got := a.pets[1].variant; got != 8 {
-		t.Fatalf("selected variant update = %d, want 8", got)
+	if got := a.pets[1].variant; got != 0 {
+		t.Fatalf("selected variant update = %d, want 0", got)
 	}
 }
 
