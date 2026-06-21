@@ -20,3 +20,5 @@
 - Added `cmd/assemblemotion` to assemble exactly 62 standalone 96x64 transparent PNGs into one 5952x64 motion source sheet, blocking wrong dimensions, empty frames, and opaque/checker backgrounds.
 - Tried a parent-thread one-pose ImageGen idle prompt; the result was `1536x1024` with `AlphaMin=255`, so it was rejected and kept out of the repo. Added single-frame prompt and accepted-frame staging docs for the next clean generation pass.
 - Added `cmd/auditframes` so partial one-pose PNG progress can be measured without promoting bad ImageGen output: valid, missing, invalid, and edge-warning counts are reported per set.
+- Added `cmd/prepareframe` for one-pose ImageGen candidates: true-alpha input is fitted to 96x64, uniform edge backgrounds can be removed, and checker/noisy backgrounds are rejected before any visual-review promotion.
+- Tested a pure green single-pose ImageGen fallback. The first prepared output visibly retained green background, so `cmd/prepareframe` was tightened to fail when cleaned content still touches the source canvas edge; the candidate remains rejected.

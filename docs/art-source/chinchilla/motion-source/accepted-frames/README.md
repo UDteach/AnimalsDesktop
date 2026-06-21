@@ -10,6 +10,14 @@ Do not place ImageGen sheets, grids, contact sheets, or opaque checker-backgroun
 - no text, border, shadow, scenery, ground, props, costumes, or multiple animals
 - stable camera, scale, baseline, facing direction, and contact points within the set
 
+Single ImageGen candidates should first be staged outside this directory. If a candidate has a simple uniform background, prepare a review frame with:
+
+```powershell
+go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png -report docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00-report.json
+```
+
+Do not copy `prepareframe` output into this accepted-frame directory until it has passed visual review on light and dark backgrounds. The command rejects checker/noisy backgrounds instead of trying to clean them.
+
 Expected set folders:
 
 - `set00/frame-00.png` through `set00/frame-61.png`

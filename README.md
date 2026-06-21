@@ -40,6 +40,12 @@ go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./c
 git diff --check
 ```
 
+Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop. It rejects checker/noisy backgrounds; prepared output still needs visual review before it counts as accepted art:
+
+```powershell
+go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
+```
+
 Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes for that set:
 
 ```powershell

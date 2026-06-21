@@ -23,3 +23,10 @@ Create one single side-view standard gray chinchilla desktop pet sprite pose, ri
 ## Current Attempt Log
 
 - 2026-06-21: parent-thread single-pose idle prompt produced a `1536x1024` opaque PNG with `AlphaMin=255`; rejected as reference-only and not copied into the repo.
+- 2026-06-21: pure green fallback prompt produced a visually useful single chinchilla candidate, but `cmd/prepareframe` rejected it because background cleanup left content touching the source canvas edge. It was kept in `.codex/tmp` only and not copied into accepted frames.
+
+## Fallback Candidate Prompt
+
+Use this only when true transparent output keeps failing. The result must go through `cmd/prepareframe` and visual review before any accepted-frame promotion:
+
+Create one single side-view standard gray chinchilla desktop pet sprite pose, right-facing, `{pose_description}`. One complete animal only, realistic cute chinchilla anatomy, rounded ears, fluffy tail visible, tiny feet visible, whiskers visible, consistent 2D sprite style for a 96x64 desktop pet. Place it on a perfectly flat pure green chroma background `#00ff00`, no gradient, no checkerboard, no texture, no shadow, no ground, no scenery, no text, no border, no props, no costume. Center the animal with safe margins so ears, feet, whiskers, and tail are not cropped.
