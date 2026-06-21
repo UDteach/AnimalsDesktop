@@ -88,4 +88,4 @@ macOS packaging scripts are still present from the baseline and have been rename
 
 ## Cloudflare Pages
 
-`wrangler.jsonc` points at `docs/` for a static Pages output directory. Pages automation is optional and separate from local app validation.
+`wrangler.jsonc` points at `docs/` for a static Pages output directory. The default GitHub workflow builds a `docs/` artifact but does not enable or deploy GitHub Pages automatically. Pages or Cloudflare deployment should be enabled separately when the repository visibility and hosting target are settled.
