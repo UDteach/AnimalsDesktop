@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Animals Desktopは、Windowsのタスクバー上を動物たちが歩き回るデスクトップペットアプリです。"
+      content="AnimalsDesktop は、Windows のタスクバー上で小さな動物を飼えるデスクトップペットアプリです。現在リリース準備中です。"
     />
-    <title>Animals Desktop</title>
+    <title>AnimalsDesktop - Coming Soon</title>
     <style>
       :root {
         color-scheme: light;
@@ -16,8 +16,8 @@
           system-ui,
           -apple-system,
           sans-serif;
-        color: #182019;
-        background: #f6f7f3;
+        color: #1b211c;
+        background: #f6f4ed;
       }
 
       * {
@@ -25,145 +25,159 @@
       }
 
       body {
+        min-height: 100vh;
         margin: 0;
+        overflow-x: hidden;
       }
 
       a {
-        color: #225b44;
+        color: #2d6750;
       }
 
       main {
-        max-width: 1040px;
+        display: grid;
+        align-content: center;
+        min-height: 100vh;
+        width: min(880px, 100%);
+        max-width: 100vw;
         margin: 0 auto;
-        padding: 34px 24px 64px;
+        padding: 32px 22px;
+        overflow-wrap: anywhere;
       }
 
-      nav {
+      .brand {
         display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
         justify-content: space-between;
+        gap: 16px;
+        align-items: center;
         margin-bottom: 44px;
-        color: #566257;
-        font-size: 0.94rem;
+        color: #596258;
+        font-weight: 700;
       }
 
-      nav div {
+      .links {
         display: flex;
         flex-wrap: wrap;
         gap: 14px;
       }
 
+      .mark {
+        position: relative;
+        width: 76px;
+        height: 54px;
+        margin-bottom: 26px;
+      }
+
+      .mark::before,
+      .mark::after,
+      .mark span::before,
+      .mark span::after {
+        position: absolute;
+        content: "";
+        display: block;
+      }
+
+      .mark::before {
+        left: 9px;
+        bottom: 5px;
+        width: 48px;
+        height: 31px;
+        border-radius: 46% 52% 48% 45%;
+        background: #a7aaa1;
+        box-shadow: inset -9px -7px 0 #858a82;
+      }
+
+      .mark::after {
+        right: 10px;
+        bottom: 16px;
+        width: 24px;
+        height: 21px;
+        border-radius: 50%;
+        background: #b7bab0;
+        box-shadow: inset -5px -4px 0 #8b9188;
+      }
+
+      .mark span::before {
+        right: 25px;
+        top: 2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #8f948d;
+      }
+
+      .mark span::after {
+        left: 0;
+        bottom: 12px;
+        width: 29px;
+        height: 18px;
+        border: 5px solid #9b9f97;
+        border-right: 0;
+        border-bottom: 0;
+        border-radius: 22px 0 0 0;
+      }
+
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(2.4rem, 6vw, 5rem);
-        line-height: 0.98;
+        margin: 0 0 14px;
+        font-size: clamp(2.7rem, 8vw, 6rem);
+        line-height: 0.95;
         letter-spacing: 0;
       }
 
-      h2 {
-        margin: 42px 0 14px;
-        font-size: 1.25rem;
+      .lead {
+        width: 100%;
+        max-width: 720px;
+        margin: 0;
+        color: #2d342f;
+        font-size: 1.08rem;
+        line-height: 1.75;
       }
 
-      h3 {
-        margin: 0 0 8px;
-        font-size: 1rem;
-      }
-
-      p {
-        max-width: 760px;
+      .note {
+        width: 100%;
+        max-width: 720px;
+        margin: 26px 0 0;
+        border: 1px solid #d8d6cd;
+        border-radius: 8px;
+        padding: 16px;
+        background: #fffdf8;
+        color: #596258;
         line-height: 1.72;
       }
 
-      ul {
-        max-width: 820px;
-        line-height: 1.7;
-        padding-left: 1.2rem;
-      }
-
-      .lead {
-        max-width: 780px;
-        font-size: 1.08rem;
-      }
-
-      .preview {
-        display: block;
-        width: min(100%, 424px);
-        height: auto;
-        margin: 30px 0 8px;
-        border: 1px solid #d4dbd0;
-        background: #fff;
-      }
-
-      .actions,
-      .downloads {
+      .actions {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin: 20px 0 28px;
+        margin-top: 24px;
       }
 
       .button {
         display: inline-flex;
         align-items: center;
         min-height: 42px;
-        border: 1px solid #9baaa1;
+        border: 1px solid #9aa99e;
         border-radius: 6px;
         padding: 10px 14px;
-        background: #ffffff;
+        background: #fff;
+        color: #1f382d;
         text-decoration: none;
         font-weight: 700;
       }
 
       .button.primary {
-        border-color: #225b44;
-        background: #225b44;
+        border-color: #2f6b51;
+        background: #2f6b51;
         color: #fff;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 16px;
-        margin: 18px 0 28px;
-      }
-
-      .item {
-        border: 1px solid #d5dbd0;
-        border-radius: 8px;
-        padding: 16px;
-        background: #fff;
-      }
-
-      dl {
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        gap: 8px 14px;
-        max-width: 560px;
-      }
-
-      dt {
-        color: #566458;
-      }
-
-      dd {
-        margin: 0;
-        font-weight: 700;
-      }
-
-      .note {
-        color: #566257;
-        font-size: 0.94rem;
       }
 
       @media (max-width: 620px) {
         main {
-          padding: 26px 18px 48px;
+          align-content: start;
+          padding: 26px 16px 44px;
         }
 
-        nav {
+        .brand {
           align-items: flex-start;
           flex-direction: column;
           margin-bottom: 34px;
@@ -173,108 +187,29 @@
   </head>
   <body>
     <main>
-      <nav aria-label="ページ内リンク">
-        <strong>Animals Desktop</strong>
-        <div>
-          <a href="#download">ダウンロード</a>
-          <a href="#animals">動物リスト</a>
-          <a href="#next">今後の追加予定</a>
+      <nav class="brand" aria-label="ページリンク">
+        <strong>AnimalsDesktop</strong>
+        <div class="links">
           <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+          <a href="https://kdevelopk.pages.dev/">kdevelopk</a>
         </div>
       </nav>
 
-      <h1>Animals Desktop</h1>
-      <p class="lead">
-        Windowsのタスクバー上を、いろいろな小動物が歩き回るデスクトップペットアプリです。
-        DeguDesktopの軽いWin32オーバーレイ、トレイ操作、キーボード反応、散歩、ホイール、採餌、グルーミングを保ちながら、
-        100種類の選択可能な動物バリアントへ拡張しています。
-      </p>
-
-      <div class="actions">
-        <a class="button primary" href="#download">Windows版をダウンロード</a>
-        <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/latest">最新リリース</a>
-        <a class="button" href="https://udteach.github.io/DeguDesktop/">DeguDesktop</a>
-      </div>
-
-      <img
-        class="preview"
-        src="assets/animalsdesktop-seed-preview.png"
-        alt="Animals Desktopで選べる動物スプライトのプレビュー"
-        width="424"
-        height="1664"
-      />
-      <p class="note">画像は現在の100バリアント一覧から作ったプレビューです。順次、ImageGenのsource-truth素材へ置き換えています。</p>
-
-      <section id="focus">
-        <h2>今回の重点</h2>
-        <p>
-          最初のAnimalsDesktopリリースでは、デスクトップペットとして見た目と動きが映える
-          チンチラ、マカロニマウス、ハムスター、ヤモリを優先しています。
-          既存のデグーに加えて、うさぎ、猫、犬、小動物、爬虫類、両生類まで選べるようになりました。
+      <section>
+        <span class="mark" aria-hidden="true"><span></span></span>
+        <h1>Coming Soon</h1>
+        <p class="lead">
+          AnimalsDesktop は現在リリース準備中です。最初の正式ペットはチンチラとして制作しています。
+          完成した動物だけを、正式リリースと公開ページに掲載します。
         </p>
-      </section>
-
-      <section id="animals">
-        <h2>いま選べる動物</h2>
-        <div class="grid">
-          <article class="item">
-            <h3>小動物</h3>
-            <p>デグー、チンチラ、マカロニマウス、ハムスター、フェレット、モルモット、ハリネズミ、リス、フクロモモンガ、ラット、マウス、スナネズミなど。</p>
-          </article>
-          <article class="item">
-            <h3>人気の犬・猫</h3>
-            <p>フレンチブルドッグ、ラブラドール、ゴールデンレトリバー、柴犬、ポメラニアン、メインクーン、ラグドール、ペルシャ、ベンガルなど。</p>
-          </article>
-          <article class="item">
-            <h3>うさぎ・野生動物</h3>
-            <p>ホーランドロップ、ネザーランドドワーフ、ミニレッキス、ライオンヘッド、キツネ、レッサーパンダ、カワウソ、カピバラなど。</p>
-          </article>
-          <article class="item">
-            <h3>爬虫類・両生類</h3>
-            <p>ヤモリ、クレステッドゲッコー、フトアゴヒゲトカゲ、リクガメ、コーンスネーク、イエアメガエルなど。</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="next">
-        <h2>今後の追加予定</h2>
-        <ul>
-          <li>チンチラ、マカロニマウス、ハムスター、ヤモリのsource-truth素材とモーションを優先して増やします。</li>
-          <li>モモンガ系は、フクロモモンガ、ニホンモモンガ、アメリカモモンガを候補にしています。</li>
-          <li>小鳥系は、桜文鳥、白文鳥、セキセイインコ、オカメインコ、コザクラインコ、キンカチョウをキューに入れています。</li>
-          <li>100種類の選択数を保ちつつ、仮素材は順次、種ごとの専用シルエットと生態別モーションへ置き換えます。</li>
-          <li>次のリリースは、1動物がDeguDesktop相当の枚数、ポーズ、設定反映、QA完了まで進んだ時点で出します。</li>
-        </ul>
-      </section>
-
-      <section id="download">
-        <h2>ダウンロード</h2>
-        <div class="downloads">
-          <a class="button primary" href="download/AnimalsDesktop-windows-amd64.zip">Windows amd64</a>
-          <a class="button" href="download/AnimalsDesktop-windows-386.zip">Windows 386</a>
-        </div>
-        <p class="note">通常のWindows 10/11 PCではamd64版を使ってください。アプリはタスクバー上に透明なペットレイヤーを表示します。</p>
-      </section>
-
-      <section id="build">
-        <h2>ビルド情報</h2>
-        <dl>
-          <dt>バージョン</dt>
-          <dd><strong data-build-version>local</strong></dd>
-          <dt>日付</dt>
-          <dd><strong data-build-date>local</strong></dd>
-          <dt>コミット</dt>
-          <dd><strong data-build-commit>local</strong></dd>
-        </dl>
-      </section>
-
-      <section id="english">
-        <h2>English</h2>
-        <p>
-          Animals Desktop is a Windows taskbar pet app based on DeguDesktop. It keeps the lightweight
-          Win32 overlay and tray controls while expanding the selectable catalog to 100 animal variants.
-          Current priorities are chinchillas, macaroni mice, hamsters, geckos, flying squirrels, and small birds.
+        <p class="note">
+          未完成の動物、仮素材、作業中の候補はここには載せません。
+          チンチラがフルモーション、設定反映、ローカル QA、GitHub Pages 更新まで完了した時点で公開します。
         </p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+          <a class="button" href="https://kdevelopk.pages.dev/">Works</a>
+        </div>
       </section>
     </main>
   </body>

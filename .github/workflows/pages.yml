@@ -14,55 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.25.x"
-      - name: Generate preview assets
+      - name: Verify Coming Soon page
         shell: bash
         run: |
-          go run ./cmd/importsheet
-          go run ./cmd/importanimals
-      - name: Build download zip
-        shell: bash
-        run: |
-          mkdir -p docs/download dist
-          APP_VERSION="pages-${GITHUB_SHA::7}"
-          GOOS=windows GOARCH=amd64 go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=${APP_VERSION}" -o dist/AnimalsDesktop.exe ./cmd/degu
-          cp README.md dist/README.md
-          (cd dist && zip -q AnimalsDesktop-windows-amd64.zip AnimalsDesktop.exe README.md)
-          cp dist/AnimalsDesktop-windows-amd64.zip docs/download/AnimalsDesktop-windows-amd64.zip
-          rm -f dist/AnimalsDesktop.exe
-          GOOS=windows GOARCH=386 go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=${APP_VERSION}" -o dist/AnimalsDesktop.exe ./cmd/degu
-          (cd dist && zip -q AnimalsDesktop-windows-386.zip AnimalsDesktop.exe README.md)
-          cp dist/AnimalsDesktop-windows-386.zip docs/download/AnimalsDesktop-windows-386.zip
-      - name: Stamp page build metadata
-        shell: bash
-        run: |
-          python - <<'PY'
-          from datetime import datetime, timedelta, timezone
-          from pathlib import Path
-          import os
-          import re
-
-          sha = os.environ["GITHUB_SHA"]
-          values = {
-              "data-build-version": f"pages-{sha[:7]}",
-              "data-build-date": datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d"),
-              "data-build-commit": sha[:7],
-          }
-          path = Path("docs/index.html")
-          text = path.read_text(encoding="utf-8")
-          for attr, value in values.items():
-              text, count = re.subn(
-                  rf"(<strong {attr}>).*?(</strong>)",
-                  rf"\g<1>{value}\2",
-                  text,
-                  count=1,
-              )
-              if count != 1:
-                  raise SystemExit(f"Missing {attr} in docs/index.html")
-          path.write_text(text, encoding="utf-8")
-          PY
+          grep -q "Coming Soon" docs/index.html
+          ! grep -q "download/" docs/index.html
+          ! grep -q "Degu" docs/index.html
       - uses: actions/upload-artifact@v4
         with:
           name: animalsdesktop-site
