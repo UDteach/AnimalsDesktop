@@ -4,7 +4,8 @@ This queue tracks future art families without changing the fixed 100-variant run
 
 ## Current Released State
 
-- Version: `v0.1.1`
+- Latest infrastructure/page release: `v0.1.2`
+- Next animal-content release: hold until one animal family reaches DeguDesktop-level asset coverage
 - Selectable variants: exactly 100
 - Accepted full degu motion sets: 11 variants
 - Seed-stage non-degu variants: 89 variants
@@ -22,9 +23,9 @@ This gives each thread enough output to compare candidates without pushing 600+ 
 
 ## Completion Contract
 
-Use `docs/art-source/motion-contract.md` as the promotion gate. The runtime target stays DeguDesktop-compatible: 10 motion sets, 62 frames per set, 96x64 transparent frames, and the DeguDesktop frame slots preserved. A family is not complete just because it is selectable; it is complete for a version bump only when its source-truth art, 62-frame motion set, importer output, visual review, and QA pass.
+Use `docs/art-source/motion-contract.md` as the promotion and release gate. The runtime target stays DeguDesktop-compatible: 10 motion sets, 62 frames per set, 96x64 transparent frames, and the DeguDesktop frame slots preserved. A family is not complete just because it is selectable; it is complete for a version bump only when its source-truth art, 62-frame motion set, importer output, settings/tray reflection, visual review, and QA pass.
 
-Work one family at a time. The next accepted-art version should finish a small first slice such as `chinchilla_standard_gray`, then bump the version, then continue to the next chinchilla or macaroni mouse variant.
+Work one family at a time. The next accepted-art version should finish a small first slice such as `chinchilla_standard_gray`; only then bump the release version and continue to the next chinchilla or macaroni mouse variant.
 
 ## Priority Queue
 

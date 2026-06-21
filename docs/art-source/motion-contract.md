@@ -54,6 +54,19 @@ Promote one animal family at a time. A family is complete for a version bump onl
 
 If only source images exist, the family remains `prototype_only` or seed-stage even if it is selectable.
 
+## Release Gate
+
+After `v0.1.2`, do not tag a new release just for planning, queue, page, or seed-art changes. The next release tag should ship one animal family that has reached DeguDesktop-level asset coverage:
+
+- the family is selectable in settings and tray UI;
+- every accepted variant in the family has the full 10 set x 62 frame runtime output;
+- frame slots include real pose changes, not only recolor, bob, or duplicated walk frames;
+- the family has species-appropriate motion for idle, walk, scurry/fast travel, forage/feed, action, turn, rest/stand, groom/preen/adjust, and alert/wheel-safe reaction;
+- QA passes locally and in GitHub Actions;
+- the GitHub Pages page and `kdevelopk.pages.dev` works page describe the newly completed animal accurately.
+
+This means the next content release should finish a concrete slice such as `chinchilla_standard_gray` or the first accepted chinchilla family set before bumping from `v0.1.2`.
+
 ## One-Animal Version Routine
 
 Use this cycle repeatedly:
@@ -63,8 +76,9 @@ Use this cycle repeatedly:
 3. Accept only the best 1-3 variants for the first family pass.
 4. Generate 62 motion frames for those accepted variants using the slot table above.
 5. Import, validate, visually review, and update source status.
-6. Commit and tag a small version bump.
-7. Update the public GitHub Pages page and `kdevelopk.pages.dev` works card when the visible catalog changes.
+6. Reflect the animal in settings, tray labels, docs, and public pages.
+7. Run local QA and confirm GitHub Actions.
+8. Commit, then tag a release only when the animal family meets the release gate above.
 
 Near-term order is chinchilla, macaroni mouse / fat-tailed gerbil, hamster, gecko, momonga family, then small birds.
 

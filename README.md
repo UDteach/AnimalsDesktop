@@ -25,6 +25,8 @@ The first 100-variant release prioritizes the small desktop-pet families that be
 
 Next art passes should replace prototype seed art with accepted source-truth motion sets in this order: chinchilla, macaroni mouse, hamster, gecko, momonga / flying squirrel family, small birds, popular dogs, popular cats, rabbits, small animals, reptiles, and amphibians.
 
+After `v0.1.2`, release tags should be animal-content milestones: one animal family must reach DeguDesktop-level asset coverage, settings/tray reflection, local QA, and GitHub Actions success before the next version bump.
+
 ImageGen batching should now favor fewer animals per thread with more candidates per animal: 4-6 variants x 4 source candidates for source review, then 1 species family x 1-3 variants x 62 frames for motion.
 
 ## Windows Features
