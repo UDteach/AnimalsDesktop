@@ -16,6 +16,12 @@ Non-degu species are seed-stage assets generated from source-truth still images,
 
 ![Seed animal preview](docs/assets/animalsdesktop-seed-preview.png)
 
+## Release Focus
+
+The first 100-variant release prioritizes the small desktop-pet families that best fit the original taskbar-pet feel: chinchillas, macaroni mice / fat-tailed gerbils, hamsters, and geckos. The public site now lists the added animals and the next ImageGen pass order.
+
+Next art passes should replace prototype seed art with accepted source-truth motion sets in this order: chinchilla, macaroni mouse, hamster, gecko, popular dogs, popular cats, rabbits, small animals, reptiles, and amphibians.
+
 ## Windows Features
 
 - Transparent always-on-top pet layer above the Windows taskbar
