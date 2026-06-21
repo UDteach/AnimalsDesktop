@@ -99,6 +99,7 @@ const (
 var (
 	idleFrameSeq     = []int{idleStart, idleStart + 1, idleStart + 3, idleStart + 1}
 	walkFrameSeq     = []int{walkStart, walkStart + 1, walkStart + 3, walkStart + 1}
+	scurryFrameSeq   = []int{scurryStart, scurryStart + 1, scurryStart + 2, scurryStart + 3, scurryStart + 4, scurryStart + 5, scurryStart + 6, scurryStart + 7}
 	nibbleFrameSeq   = []int{nibbleStart, nibbleStart + 1, nibbleStart + 2, nibbleStart + 1}
 	hopFrameSeq      = []int{hopStart, hopStart + 1, hopStart + 2, hopStart + 3}
 	turnFrameSeq     = []int{turnStart, turnStart + 1, turnStart + 2, turnStart + 3, turnStart + 4, turnStart + 5, turnStart + 6, turnStart + 7}
@@ -865,7 +866,7 @@ func currentFrame(state behaviorState, frame int) int {
 	case stateWalk, stateForage, stateCarry:
 		return frameFromSeq(walkFrameSeq, frame, 2)
 	case stateScurry:
-		return frameFromSeq(walkFrameSeq, frame, 1)
+		return frameFromSeq(scurryFrameSeq, frame, 1)
 	case stateWheel:
 		return frameFromSeq(wheelRunFrameSeq, frame, 1)
 	case stateNibble:

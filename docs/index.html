@@ -1,8 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Animals Desktopは、Windowsのタスクバー上を動物たちが歩き回るデスクトップペットアプリです。"
+    />
     <title>Animals Desktop</title>
     <style>
       :root {
@@ -12,75 +16,132 @@
           system-ui,
           -apple-system,
           sans-serif;
-        color: #17201a;
-        background: #f5f7f2;
+        color: #182019;
+        background: #f6f7f3;
+      }
+
+      * {
+        box-sizing: border-box;
       }
 
       body {
         margin: 0;
       }
 
+      a {
+        color: #225b44;
+      }
+
       main {
-        max-width: 980px;
+        max-width: 1040px;
         margin: 0 auto;
-        padding: 48px 24px 64px;
+        padding: 34px 24px 64px;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 44px;
+        color: #566257;
+        font-size: 0.94rem;
+      }
+
+      nav div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
       }
 
       h1 {
         margin: 0 0 12px;
-        font-size: clamp(2rem, 5vw, 4.5rem);
-        line-height: 1;
+        font-size: clamp(2.4rem, 6vw, 5rem);
+        line-height: 0.98;
+        letter-spacing: 0;
       }
 
       h2 {
-        margin: 40px 0 14px;
+        margin: 42px 0 14px;
         font-size: 1.25rem;
       }
 
+      h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
       p {
-        max-width: 720px;
-        line-height: 1.65;
+        max-width: 760px;
+        line-height: 1.72;
       }
 
       ul {
-        max-width: 760px;
-        line-height: 1.65;
+        max-width: 820px;
+        line-height: 1.7;
         padding-left: 1.2rem;
       }
 
-      a {
-        color: #245d47;
+      .lead {
+        max-width: 780px;
+        font-size: 1.08rem;
       }
 
       .preview {
         display: block;
-        max-width: min(100%, 424px);
+        width: min(100%, 424px);
         height: auto;
-        margin: 28px 0;
-        border: 1px solid #d5dbd0;
+        margin: 30px 0 8px;
+        border: 1px solid #d4dbd0;
+        background: #fff;
       }
 
+      .actions,
       .downloads {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin: 18px 0 28px;
+        margin: 20px 0 28px;
       }
 
-      .download {
-        border: 1px solid #aab6a5;
+      .button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 42px;
+        border: 1px solid #9baaa1;
         border-radius: 6px;
         padding: 10px 14px;
         background: #ffffff;
         text-decoration: none;
-        font-weight: 600;
+        font-weight: 700;
+      }
+
+      .button.primary {
+        border-color: #225b44;
+        background: #225b44;
+        color: #fff;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 16px;
+        margin: 18px 0 28px;
+      }
+
+      .item {
+        border: 1px solid #d5dbd0;
+        border-radius: 8px;
+        padding: 16px;
+        background: #fff;
       }
 
       dl {
         display: grid;
         grid-template-columns: max-content 1fr;
         gap: 8px 14px;
-        max-width: 520px;
+        max-width: 560px;
       }
 
       dt {
@@ -89,73 +150,131 @@
 
       dd {
         margin: 0;
-        font-weight: 600;
+        font-weight: 700;
       }
 
-      .focus {
-        font-weight: 700;
+      .note {
+        color: #566257;
+        font-size: 0.94rem;
+      }
+
+      @media (max-width: 620px) {
+        main {
+          padding: 26px 18px 48px;
+        }
+
+        nav {
+          align-items: flex-start;
+          flex-direction: column;
+          margin-bottom: 34px;
+        }
       }
     </style>
   </head>
   <body>
     <main>
+      <nav aria-label="ページ内リンク">
+        <strong>Animals Desktop</strong>
+        <div>
+          <a href="#download">ダウンロード</a>
+          <a href="#animals">動物リスト</a>
+          <a href="#next">今後の追加予定</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+        </div>
+      </nav>
+
       <h1>Animals Desktop</h1>
-      <p>
-        A lightweight Windows taskbar pet app with exactly 100 selectable
-        variants across degus, popular dogs and cats, rabbits, rodents,
-        reptiles, amphibians, and other seed-stage animal sprites with
-        ecology-specific motion profiles.
+      <p class="lead">
+        Windowsのタスクバー上を、いろいろな小動物が歩き回るデスクトップペットアプリです。
+        DeguDesktopの軽いWin32オーバーレイ、トレイ操作、キーボード反応、散歩、ホイール、採餌、グルーミングを保ちながら、
+        100種類の選択可能な動物バリアントへ拡張しています。
       </p>
+
+      <div class="actions">
+        <a class="button primary" href="#download">Windows版をダウンロード</a>
+        <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/latest">最新リリース</a>
+        <a class="button" href="https://udteach.github.io/DeguDesktop/">DeguDesktop</a>
+      </div>
 
       <img
         class="preview"
         src="assets/animalsdesktop-seed-preview.png"
-        alt="Animals Desktop seed animal sprite preview"
+        alt="Animals Desktopで選べる動物スプライトのプレビュー"
         width="424"
         height="1664"
       />
+      <p class="note">画像は現在の100バリアント一覧から作ったプレビューです。順次、ImageGenのsource-truth素材へ置き換えています。</p>
 
-      <h2>Release Focus</h2>
-      <p>
-        This release prioritizes the small desktop-pet animals that best match
-        the original taskbar-pet feel: chinchillas, macaroni mice / fat-tailed
-        gerbils, hamsters, and geckos. They are available now alongside the
-        degu coats and the expanded 100-variant catalog.
-      </p>
+      <section id="focus">
+        <h2>今回の重点</h2>
+        <p>
+          最初のAnimalsDesktopリリースでは、デスクトップペットとして見た目と動きが映える
+          チンチラ、マカロニマウス、ハムスター、ヤモリを優先しています。
+          既存のデグーに加えて、うさぎ、猫、犬、小動物、爬虫類、両生類まで選べるようになりました。
+        </p>
+      </section>
 
-      <h2>Available Now</h2>
-      <ul>
-        <li><span class="focus">Core pets:</span> degus, chinchillas, macaroni mice / fat-tailed gerbils, rabbits, hamsters, geckos, cats, and dogs.</li>
-        <li><span class="focus">More small animals:</span> ferrets, guinea pigs, hedgehogs, squirrels, sugar gliders, fancy rats, fancy mice, gerbils, prairie dogs, chipmunks, and capybaras.</li>
-        <li><span class="focus">Wild and low-crawler profiles:</span> foxes, red pandas, otters, tortoises, bearded dragons, crested geckos, corn snakes, and White's tree frogs.</li>
-        <li><span class="focus">Popular breed/color additions:</span> French Bulldog fawn, Labrador yellow/black, Golden Retriever golden, Maine Coon brown tabby, Ragdoll seal bicolor, Holland Lop broken orange, and more.</li>
-      </ul>
+      <section id="animals">
+        <h2>いま選べる動物</h2>
+        <div class="grid">
+          <article class="item">
+            <h3>小動物</h3>
+            <p>デグー、チンチラ、マカロニマウス、ハムスター、フェレット、モルモット、ハリネズミ、リス、フクロモモンガ、ラット、マウス、スナネズミなど。</p>
+          </article>
+          <article class="item">
+            <h3>人気の犬・猫</h3>
+            <p>フレンチブルドッグ、ラブラドール、ゴールデンレトリバー、柴犬、ポメラニアン、メインクーン、ラグドール、ペルシャ、ベンガルなど。</p>
+          </article>
+          <article class="item">
+            <h3>うさぎ・野生動物</h3>
+            <p>ホーランドロップ、ネザーランドドワーフ、ミニレッキス、ライオンヘッド、キツネ、レッサーパンダ、カワウソ、カピバラなど。</p>
+          </article>
+          <article class="item">
+            <h3>爬虫類・両生類</h3>
+            <p>ヤモリ、クレステッドゲッコー、フトアゴヒゲトカゲ、リクガメ、コーンスネーク、イエアメガエルなど。</p>
+          </article>
+        </div>
+      </section>
 
-      <h2>Coming Next</h2>
-      <p>
-        Upcoming ImageGen passes will replace prototype seed art with accepted
-        source-truth motion sets, starting with chinchilla, macaroni mouse,
-        hamster, and gecko families. Momonga / flying squirrel variants and
-        small birds such as sakura buncho, budgerigars, white buncho,
-        cockatiels, lovebirds, and zebra finches are now queued before the
-        broader dog, cat, rabbit, reptile, amphibian, and small-animal passes.
-      </p>
+      <section id="next">
+        <h2>今後の追加予定</h2>
+        <ul>
+          <li>チンチラ、マカロニマウス、ハムスター、ヤモリのsource-truth素材とモーションを優先して増やします。</li>
+          <li>モモンガ系は、フクロモモンガ、ニホンモモンガ、アメリカモモンガを候補にしています。</li>
+          <li>小鳥系は、桜文鳥、白文鳥、セキセイインコ、オカメインコ、コザクラインコ、キンカチョウをキューに入れています。</li>
+          <li>100種類の選択数を保ちつつ、仮素材は順次、種ごとの専用シルエットと生態別モーションへ置き換えます。</li>
+        </ul>
+      </section>
 
-      <h2>Downloads</h2>
-      <div class="downloads">
-        <a class="download" href="download/AnimalsDesktop-windows-amd64.zip">Windows amd64</a>
-        <a class="download" href="download/AnimalsDesktop-windows-386.zip">Windows 386</a>
-      </div>
+      <section id="download">
+        <h2>ダウンロード</h2>
+        <div class="downloads">
+          <a class="button primary" href="download/AnimalsDesktop-windows-amd64.zip">Windows amd64</a>
+          <a class="button" href="download/AnimalsDesktop-windows-386.zip">Windows 386</a>
+        </div>
+        <p class="note">通常のWindows 10/11 PCではamd64版を使ってください。アプリはタスクバー上に透明なペットレイヤーを表示します。</p>
+      </section>
 
-      <h2>Build</h2>
-      <dl>
-        <dt>Version</dt>
-        <dd><strong data-build-version>local</strong></dd>
-        <dt>Date</dt>
-        <dd><strong data-build-date>local</strong></dd>
-        <dt>Commit</dt>
-        <dd><strong data-build-commit>local</strong></dd>
-      </dl>
+      <section id="build">
+        <h2>ビルド情報</h2>
+        <dl>
+          <dt>バージョン</dt>
+          <dd><strong data-build-version>local</strong></dd>
+          <dt>日付</dt>
+          <dd><strong data-build-date>local</strong></dd>
+          <dt>コミット</dt>
+          <dd><strong data-build-commit>local</strong></dd>
+        </dl>
+      </section>
+
+      <section id="english">
+        <h2>English</h2>
+        <p>
+          Animals Desktop is a Windows taskbar pet app based on DeguDesktop. It keeps the lightweight
+          Win32 overlay and tray controls while expanding the selectable catalog to 100 animal variants.
+          Current priorities are chinchillas, macaroni mice, hamsters, geckos, flying squirrels, and small birds.
+        </p>
+      </section>
     </main>
   </body>
 </html>

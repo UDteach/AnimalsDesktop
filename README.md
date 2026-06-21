@@ -1,8 +1,11 @@
 # Animals Desktop
 
-Animals Desktop is a Go desktop-pet app based on the DeguDesktop taskbar pet. It keeps the lightweight Win32 overlay, tray menu, keyboard reaction, random stroll, wheel, names, and foraging behavior, then expands the selectable art from degu coats into multiple real animal species.
+Animals Desktopは、DeguDesktopをベースにしたWindowsデスクトップペットアプリです。軽量なWin32タスクバーオーバーレイ、トレイ操作、キーボード反応、ランダム散歩、ホイール、名前表示、採餌、グルーミングを保ちながら、選べる動物を100バリアントまで広げています。
+
+This is a Go desktop-pet app based on the DeguDesktop taskbar pet. It keeps the lightweight Win32 overlay, tray menu, keyboard reaction, random stroll, wheel, names, and foraging behavior, then expands the selectable art from degu coats into multiple real animal species.
 
 Repository: <https://github.com/UDteach/AnimalsDesktop>
+GitHub Pages: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Catalog
 
@@ -18,7 +21,7 @@ Non-degu species are seed-stage assets generated from source-truth still images,
 
 ## Release Focus
 
-The first 100-variant release prioritizes the small desktop-pet families that best fit the original taskbar-pet feel: chinchillas, macaroni mice / fat-tailed gerbils, hamsters, and geckos. The public site now lists the added animals and the next ImageGen pass order.
+The first 100-variant release prioritizes the small desktop-pet families that best fit the original taskbar-pet feel: chinchillas, macaroni mice / fat-tailed gerbils, hamsters, and geckos. The public site now lists the added animals and the next ImageGen pass order. 次の重点キューには、モモンガ系と小鳥系（桜文鳥、白文鳥、セキセイインコ、オカメインコ、コザクラインコ、キンカチョウ）も入れています。
 
 Next art passes should replace prototype seed art with accepted source-truth motion sets in this order: chinchilla, macaroni mouse, hamster, gecko, momonga / flying squirrel family, small birds, popular dogs, popular cats, rabbits, small animals, reptiles, and amphibians.
 
@@ -93,4 +96,4 @@ macOS packaging scripts are still present from the baseline and have been rename
 
 ## Cloudflare Pages
 
-`wrangler.jsonc` points at `docs/` for a static Pages output directory. The default GitHub workflow builds a `docs/` artifact but does not enable or deploy GitHub Pages automatically. Pages or Cloudflare deployment should be enabled separately when the repository visibility and hosting target are settled.
+`wrangler.jsonc` points at `docs/` for the AnimalsDesktop static output directory. GitHub Pages deploys from the `GitHub Pages` workflow. The `sites/kdevelopk/` folder is a lightweight source for the personal `kdevelopk.pages.dev` works page when that Cloudflare Pages project needs to be refreshed.

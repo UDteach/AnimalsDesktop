@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestHorizontalMotionFramesUseStableRightFacingSequence(t *testing.T) {
+func TestHorizontalMotionFramesUseStableRightFacingWalkSequence(t *testing.T) {
 	allowed := map[int]bool{
 		walkStart:     true,
 		walkStart + 1: true,
@@ -17,7 +17,6 @@ func TestHorizontalMotionFramesUseStableRightFacingSequence(t *testing.T) {
 	}
 	states := []behaviorState{
 		stateWalk,
-		stateScurry,
 		stateForage,
 		stateCarry,
 	}
@@ -29,6 +28,18 @@ func TestHorizontalMotionFramesUseStableRightFacingSequence(t *testing.T) {
 				t.Fatalf("currentFrame(%v, %d) = %d, want stable right-facing walk frame", state, frame, got)
 			}
 		}
+	}
+}
+
+func TestScurryUsesDedicatedFastMotionFrames(t *testing.T) {
+	for frame := 0; frame < scurryFrames*2; frame++ {
+		got := currentFrame(stateScurry, frame)
+		if got < scurryStart || got >= scurryStart+scurryFrames {
+			t.Fatalf("currentFrame(stateScurry, %d) = %d, want dedicated scurry frame", frame, got)
+		}
+	}
+	if got := currentFrame(stateScurry, scurryFrames); got != scurryStart {
+		t.Fatalf("scurry loop frame = %d, want %d", got, scurryStart)
 	}
 }
 

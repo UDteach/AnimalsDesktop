@@ -1,0 +1,78 @@
+# AnimalsDesktop Motion Contract
+
+Last updated: 2026-06-21
+
+This file is the acceptance standard for promoting one animal family from seed/prototype art to accepted AnimalsDesktop motion art. The goal is to keep DeguDesktop compatibility while letting each species move like itself.
+
+## Runtime Contract
+
+Every selectable variant must keep the DeguDesktop sprite-sheet shape:
+
+- 10 runtime motion sets per variant: `set00` through `set09`.
+- 62 frames per set.
+- 96x64 transparent canvas per frame.
+- One complete animal per frame.
+- The final sheet size for one set is 5952x64.
+- Camera, scale, body volume, baseline, contact points, and facing direction stay stable inside a set.
+- Ears, feet, whiskers, tail, shell, wings, or toes must not be cropped.
+- No text, borders, scenery, shadows, costumes, props, multiple animals, or human-like poses.
+
+The app may still use mirrored drawing for left/right movement. Source frames should be clean right-facing side-view frames unless a profile explicitly documents another direction.
+
+## Frame Slots
+
+The frame numbers stay DeguDesktop-compatible. The meaning can be interpreted per motion profile:
+
+| Frames | Count | DeguDesktop slot | Species interpretation |
+| --- | ---: | --- | --- |
+| 00-03 | 4 | idle | breathing, ear/head/tail micro motion, perch settle |
+| 04-11 | 8 | walk | walk, trot, stalk, crawl, hop-walk, plod, slither travel |
+| 12-19 | 8 | scurry | faster travel: scurry, bound, trot burst, crawl burst, slither wave |
+| 20-25 | 6 | nibble | forage, sniff, nibble, peck, tongue flick, feed |
+| 26-31 | 6 | hop | species action: hop, paw lift, play bow, pounce prep, low crawl shift, flutter |
+| 32-39 | 8 | turn | body turn or turn-prep that stays readable when direction changes |
+| 40-43 | 4 | eat | eat, chew, peck, lick, tongue feed, head-down feed |
+| 44-47 | 4 | dig | dig, paw scratch, ground check, substrate push, shell/leg adjustment |
+| 48-51 | 4 | stand | stand, sit, crouch, stretch, perch lift, alert posture |
+| 52-55 | 4 | groom face | face groom, preen, whisker clean, paw clean, body adjustment |
+| 56-61 | 6 | wheel run | wheel run only for wheel-capable profiles; otherwise alert or species-safe reaction |
+
+Wheel-capable profiles are currently `degu` and `small-rodent-scurry`. Other profiles must never use wheel-only body poses in accepted art.
+
+## Per-Animal Promotion Rule
+
+Promote one animal family at a time. A family is complete for a version bump only when all target variants in that family have:
+
+- source-truth PNGs reviewed at 96x64 on light and dark backgrounds;
+- 62 transparent motion frames for every accepted variant;
+- generated `set00` through `set09` runtime sheets;
+- non-empty alpha-bounded frames with stable baseline and no cropped anatomy;
+- a contact sheet or preview proving the full motion set is visually reviewable;
+- catalog entries with species, breed/morph, color, popularity tier, source status, motion profile, and sprite base;
+- runtime behavior review confirming wheel, hop, crawl, slither, perch, and low-body constraints are respected;
+- `go run ./cmd/importsheet`, `go run ./cmd/importanimals`, `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, Windows build, and `git diff --check` passing.
+
+If only source images exist, the family remains `prototype_only` or seed-stage even if it is selectable.
+
+## One-Animal Version Routine
+
+Use this cycle repeatedly:
+
+1. Pick the highest-priority family from `docs/art-source/asset-queue.md`.
+2. Generate 4-6 source candidates for each target variant in that family.
+3. Accept only the best 1-3 variants for the first family pass.
+4. Generate 62 motion frames for those accepted variants using the slot table above.
+5. Import, validate, visually review, and update source status.
+6. Commit and tag a small version bump.
+7. Update the public GitHub Pages page and `kdevelopk.pages.dev` works card when the visible catalog changes.
+
+Near-term order is chinchilla, macaroni mouse / fat-tailed gerbil, hamster, gecko, momonga family, then small birds.
+
+## Profile-Specific Notes
+
+- Chinchilla: heavy soft body, rounded ears, fluffy tail, gentle scurry, no degu recolor.
+- Macaroni mouse / fat-tailed gerbil: compact small body, thick tail, tiny feet, low fast scurry.
+- Hamster: round cheek-forward body, very short tail, cheek/groom actions, wheel capable.
+- Gecko: low body, splayed feet, toe pads if readable, crawl and tongue/alert actions, no wheel.
+- Momonga / sugar glider: membrane silhouette, low skitter, brief stretch/glide-like action inside 96x64, no long airborne scene.
+- Small birds: perch/ground hop, peck, preen, head turn, short flutter; no cage, branch, scenery, or floating flight loop.
