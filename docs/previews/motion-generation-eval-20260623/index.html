@@ -695,6 +695,42 @@
               </article>
               <article class="comparison-card">
                 <h3>
+                  <span>Run 06 H/I: 4-frame 2x2</span>
+                  <span class="tag warn">3/4 best diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run06-contact.png" alt="Chinchilla ImageGen run 06 four-frame 2x2 comparison" />
+                </div>
+                <div class="comparison-copy">
+                  <p>After ChatGPT and Gemini text-only prompt review, the batch was reduced to four frames. H1/H2 both produced exactly four chinchillas and parsed 3/4 after green normalization; raw parse stayed 0/4 because the generated green was not parser-pure. H-next made the sprites smaller, but parse dropped to 2/4 from extra 1px pinholes.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 06 component check</span>
+                  <span class="tag ok">4 components each</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run06-components.png" alt="Chinchilla ImageGen run 06 component overlay" />
+                </div>
+                <div class="comparison-copy">
+                  <p>All three run06 samples have four primary animal components with no large detached component. The current blocker is matte quality: one or two tiny chroma pinholes per sheet, plus a still-illustrative style that is not yet DeguDesktop-equivalent.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 06 recentered diagnostic</span>
+                  <span class="tag warn">review-only</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run06-recentered.png" alt="Chinchilla ImageGen run 06 recentered diagnostic" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Local recentering did not fix pinholes: H1/H2 stayed 3/4 and H-next stayed 2/4. Use 4-frame sheets only for review of layout, family, and rough pose direction; accepted assets still need the one-frame PNG gate.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
                   <span>Pose blueprint draft</span>
                   <span class="tag ok">species profile</span>
                 </h3>
