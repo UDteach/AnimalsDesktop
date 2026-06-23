@@ -731,6 +731,42 @@
               </article>
               <article class="comparison-card">
                 <h3>
+                  <span>Run 07 K: solid blob prompt</span>
+                  <span class="tag ok">4/4 x4 diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run07-recentered.png" alt="Chinchilla ImageGen run 07 K recentered diagnostic comparison" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Gemini suggested changing the render variable, not the layout: remove thin details and make the animal a chunky closed mass. Four ImageGen K samples all reached 4/4 after green normalization and after local recentering, with no parser-reported pinholes.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 07 component check</span>
+                  <span class="tag ok">4 components each</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run07-components.png" alt="Chinchilla ImageGen run 07 K component overlay" />
+                </div>
+                <div class="comparison-copy">
+                  <p>K1-K4 all detected exactly four primary animal components. The important gain is matte stability: no body holes, foot pinholes, or detached fragments in the diagnostic parser. Raw fixed-cell parse still fails 0/4 because ImageGen outputs 1254px sheets with non-parser-pure green and boundary content.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 07 K sample</span>
+                  <span class="tag warn">style simplified</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-4-run07-k-sample.png" alt="Chinchilla ImageGen run 07 K raw sample" />
+                </div>
+                <div class="comparison-copy">
+                  <p>The tradeoff is visible: the K prompt is stable because it removes whiskers, fur texture, separated feet, and small gaps. It is useful as a grid-stability baseline, but it is not yet DeguDesktop-equivalent final art without a later style-restoration pass.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
                   <span>Pose blueprint draft</span>
                   <span class="tag ok">species profile</span>
                 </h3>
