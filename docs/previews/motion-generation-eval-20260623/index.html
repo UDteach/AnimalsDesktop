@@ -549,6 +549,42 @@
                   <p>512px実グリッドに合わせ、緑優勢ピクセルを純緑化した後の候補01。残Rejectは disconnected components と chroma pinholes。accepted-frame gateは未通過。</p>
                 </div>
               </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Flow Pro Variant A</span>
+                  <span class="tag bad">rejected</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/flow-nanobanana-pro-variant-a-cache-contact.png" alt="Flow Nano Banana Pro Variant A cache outputs" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Variant A used explicit per-cell limb deltas. Pose variation improved, but the visible grid seed was still drawn into the output. This is GUIDE_INK, so the sheet is not usable as accepted source.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Variant A parse QA 141219</span>
+                  <span class="tag warn">3 / 16 diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/flow-nanobanana-pro-variant-a-141219-qa-contact.png" alt="Flow Nano Banana Pro Variant A parse QA 141219" />
+                </div>
+                <div class="comparison-copy">
+                  <p>After green-only diagnostic normalization, only 3 of 16 cells parsed. Most rejects were chroma pinholes or detached alpha. This confirms MAT_PINHOLE remains a blocker.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Variant A parse QA 141429</span>
+                  <span class="tag bad">0 / 16 diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/flow-nanobanana-pro-variant-a-141429-qa-contact.png" alt="Flow Nano Banana Pro Variant A parse QA 141429" />
+                </div>
+                <div class="comparison-copy">
+                  <p>The second recovered output has better low-scurry variation, but fixed-cell parsing still rejects every cell because boundary residue remains. Next attempt should remove the visible grid guide or downgrade to smaller/independent output.</p>
+                </div>
+              </article>
             </div>
           </div>
         </div>

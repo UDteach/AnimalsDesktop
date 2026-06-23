@@ -36,7 +36,33 @@ Date: 2026-06-23
 
 Remaining failures are mainly disconnected components and chroma pinholes. The generated sheets are visually consistent, but most cells duplicate the same pose, so this is not accepted as a motion-production workflow.
 
+## Variant A: Explicit Limb Delta Prompt
+
+Follow-up date: 2026-06-23
+
+- Prompt file: `prompt-variant-a-short.txt`
+- Prompt notes and next variants: `prompt-variants.md`
+- Consultation packet: `failure-consultation-variant-a.md`
+- Cache-recovered outputs:
+  - `flow-nanobanana-pro-variant-a-cache-141219.jpeg`
+  - `flow-nanobanana-pro-variant-a-cache-141429.jpeg`
+
+Result:
+
+- Pose variation improved versus the first Nano Banana Pro prompt.
+- The visible `grid-seed.png` guide was still reproduced as cell lines, so raw output is rejected as `GUIDE_INK`.
+- Diagnostic green normalization was used only to inspect animal content; it is not an acceptance cleanup path.
+- `141219` green-normalized parse: `3/16`, mostly rejected for `MAT_PINHOLE` or detached alpha.
+- `141429` green-normalized parse: `0/16`, rejected for boundary/grid residue.
+
+Current conclusion:
+
+Do not retry the same visible grid seed with only pose wording changes. The next prompt experiment should change the guide strategy: style-anchor-only invisible grid, a smaller 4-frame strip, or independent images.
+
 ## Review Images
 
 - `flow-nanobanana-pro-2ref-contact.png`: four Flow outputs.
 - `parsed-pro-01-greenfixed-contact.png`: best parsed candidate preview.
+- `flow-nanobanana-pro-variant-a-cache-contact.png`: Variant A recovered outputs.
+- `flow-nanobanana-pro-variant-a-141219-qa-contact.png`: Variant A diagnostic parse view.
+- `flow-nanobanana-pro-variant-a-141429-qa-contact.png`: Variant A diagnostic parse view.

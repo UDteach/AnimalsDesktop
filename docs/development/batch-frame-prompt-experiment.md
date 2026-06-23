@@ -55,12 +55,13 @@ Current quarantine: `chinchilla set00/frame-00..43`, `frame-45`, and `frame-51` 
 - OS-level virtual key input did activate the prompt field and allowed generation.
 - Nano Banana Pro was tested with `style-anchors.png` and `grid-seed.png`, square output, `x4`, 2K downloads. Outputs are archived in `docs/art-source/review/flow-grid-experiments/chinchilla-set00-16-anchor-frame50-clean/`.
 - Result: visual style and face quality were stable, but all four 16-cell sheets mostly duplicated the same pose. Original guide manifest parsed `0/16`. After using an actual `512x512` grid and snapping green-dominant pixels to pure chroma green, the best candidate parsed `11/16`; remaining rejects were disconnected components and chroma pinholes. The workflow is not accepted.
+- A follow-up Nano Banana Pro prompt variant with explicit per-cell limb deltas improved pose variation, but still reproduced visible guide lines and introduced many matte pinholes. Two 1024px cache outputs were recovered for diagnostics: one parsed `3/16` only after green normalization, the other parsed `0/16`. This is classified as `GUIDE_INK` plus `MAT_PINHOLE`, not a usable workflow.
 
 Current interpretation:
 
 - Do not use browser copy/paste as the Flow automation path. Use focused OS virtual key input, or ask the parent to type one short activation key sequence before automation continues.
 - `Nano Banana 2` remains untested visually and is still the first Flow candidate for fast motion-idea batches: `walk`, `scurry`, and `turn`, starting at `16` cells.
-- `Nano Banana Pro` is not good enough for this 16-cell motion batch prompt. Keep it as a hard single-frame comparison candidate: eat, ground check, groom, reaction, and clean golden anchors.
+- `Nano Banana Pro` is not good enough for this visible-grid 16-cell motion batch prompt. Keep it as a hard single-frame comparison candidate: eat, ground check, groom, reaction, and clean golden anchors. If grid batching is retried, change the guide strategy first: no visible grid seed, a smaller 4-frame strip, or independent images.
 - Any future Flow output must be copied into a review directory, parsed or prepared as a standalone PNG, and compared against ImageGen through the same pinhole, face, source-family, baseline, and parent visual gates.
 
 ## Candidate Prompt A: Separate Images
