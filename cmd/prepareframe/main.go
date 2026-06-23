@@ -129,6 +129,9 @@ func prepareFrameWithMode(srcPath string, outPath string, background string, tol
 	if len(report.Warnings) > 0 {
 		return prepareReport{}, fmt.Errorf("%s content touches source canvas edge after preparation; background removal or source crop is not clean", srcPath)
 	}
+	if holeCount, holeArea, largestHole := transparentHoleStats(cleaned, content); holeCount > 0 {
+		return prepareReport{}, fmt.Errorf("%s has transparent pinholes after background preparation: holes=%d area=%d largest=%d", srcPath, holeCount, holeArea, largestHole)
+	}
 
 	out := fitContent(cleaned, content)
 	outContent := alphaBounds(out, out.Bounds())
@@ -376,6 +379,69 @@ func frameWarnings(content image.Rectangle, bounds image.Rectangle) []string {
 		warnings = append(warnings, "alpha touches vertical canvas edge")
 	}
 	return warnings
+}
+
+func transparentHoleStats(img image.Image, content image.Rectangle) (holeCount int, holeArea int, largestHole int) {
+	content = content.Intersect(img.Bounds())
+	if content.Empty() {
+		return 0, 0, 0
+	}
+	width := content.Dx()
+	height := content.Dy()
+	visited := make([]bool, width*height)
+	for y := content.Min.Y; y < content.Max.Y; y++ {
+		for x := content.Min.X; x < content.Max.X; x++ {
+			idx := (y-content.Min.Y)*width + (x - content.Min.X)
+			if visited[idx] || alphaVisible(img, x, y) {
+				continue
+			}
+			area, touchesBoundary := floodTransparentComponent(img, content, x, y, visited)
+			if touchesBoundary {
+				continue
+			}
+			holeCount++
+			holeArea += area
+			if area > largestHole {
+				largestHole = area
+			}
+		}
+	}
+	return holeCount, holeArea, largestHole
+}
+
+func floodTransparentComponent(img image.Image, content image.Rectangle, startX int, startY int, visited []bool) (area int, touchesBoundary bool) {
+	width := content.Dx()
+	stack := []image.Point{{X: startX, Y: startY}}
+	for len(stack) > 0 {
+		point := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if !point.In(content) {
+			continue
+		}
+		idx := (point.Y-content.Min.Y)*width + (point.X - content.Min.X)
+		if visited[idx] || alphaVisible(img, point.X, point.Y) {
+			continue
+		}
+		visited[idx] = true
+		area++
+		if point.X == content.Min.X || point.X == content.Max.X-1 || point.Y == content.Min.Y || point.Y == content.Max.Y-1 {
+			touchesBoundary = true
+		}
+		for dy := -1; dy <= 1; dy++ {
+			for dx := -1; dx <= 1; dx++ {
+				if dx == 0 && dy == 0 {
+					continue
+				}
+				stack = append(stack, image.Point{X: point.X + dx, Y: point.Y + dy})
+			}
+		}
+	}
+	return area, touchesBoundary
+}
+
+func alphaVisible(img image.Image, x int, y int) bool {
+	_, _, _, a := img.At(x, y).RGBA()
+	return a > 0x0800
 }
 
 func rectToJSON(rect image.Rectangle) rectJSON {

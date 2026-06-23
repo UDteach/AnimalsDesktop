@@ -108,6 +108,36 @@ func TestPrepareFrameRemovesChromaGreenBackground(t *testing.T) {
 	}
 }
 
+func TestPrepareFrameRejectsChromaGreenPinholes(t *testing.T) {
+	root := t.TempDir()
+	srcPath := filepath.Join(root, "chroma-pinholes.png")
+	img := image.NewRGBA(image.Rect(0, 0, 180, 120))
+	for y := 0; y < 120; y++ {
+		for x := 0; x < 180; x++ {
+			img.SetRGBA(x, y, color.RGBA{G: 255, A: 255})
+		}
+	}
+	for y := 35; y < 95; y++ {
+		for x := 42; x < 150; x++ {
+			img.SetRGBA(x, y, color.RGBA{R: 130, G: 130, B: 128, A: 255})
+		}
+	}
+	for y := 58; y < 60; y++ {
+		for x := 86; x < 88; x++ {
+			img.SetRGBA(x, y, color.RGBA{G: 255, A: 255})
+		}
+	}
+	writeTestPNG(t, srcPath, img)
+
+	_, err := prepareFrameWithMode(srcPath, filepath.Join(root, "frame.png"), "chroma-green", 18)
+	if err == nil {
+		t.Fatalf("prepareFrameWithMode() succeeded for chroma pinholes")
+	}
+	if !strings.Contains(err.Error(), "transparent pinholes") {
+		t.Fatalf("prepareFrameWithMode() error = %v, want transparent pinholes failure", err)
+	}
+}
+
 func TestPrepareFrameRejectsCheckerBackground(t *testing.T) {
 	root := t.TempDir()
 	srcPath := filepath.Join(root, "checker.png")
