@@ -185,3 +185,60 @@ Frame order:
 
 No duplicate poses, no cropped ears, feet, whiskers, tail, or toes, no floor, no shadow, no scenery, no props, no text, no labels, no borders, no white fringe, no green halo, no green dots inside the animal, no transparent pinholes, no detached specks.
 ```
+
+## Variant G Test Result
+
+Date: 2026-06-23
+
+Flow / Nano Banana Pro:
+
+- Uploaded `style-anchors.png` only. `grid-seed.png` was intentionally not uploaded.
+- Prompt file: `prompt-variant-g-eight-frame-short.txt`.
+- Result image: `flow-nanobanana-pro-variant-g-eight-cache-145924.png`.
+- Visual result: ignored the requested 8-frame invisible `2x4` layout and produced a visible-line `4x4` sheet with 16 animals.
+- Fixed top-two-row diagnostic parse: `0/8`, rejected for boundary/grid residue.
+- Component diagnostic: 16 animal components.
+- Classification: `LAY_COUNT`, `GUIDE_INK`, and not accepted.
+
+ChatGPT ImageGen text-only:
+
+- Prompted through Codex ImageGen with the same 8-frame intent, no uploaded visual reference.
+- Result image: `imagegen-variant-g-eight-textonly.png`.
+- Visual result: produced 8 separated animals in a clean `2x4` arrangement with no visible grid lines.
+- Fixed-cell diagnostic parse: `0/8`, because the animals were not aligned to exact equal-width crop cells.
+- Component diagnostic: 8 animal components.
+- Classification: layout idea is promising, but this text-only sheet is not accepted because fixed-cell parsing fails and source-family continuity is unverified.
+
+Current conclusion:
+
+For 8-frame batching, ChatGPT ImageGen is a better layout candidate than Flow Pro. The next useful attempt is either reference-guided ImageGen with stricter equal-cell placement, or eight independent ImageGen frames. Flow Pro should not be retried for this 8-frame visible/invisible grid path unless a different layout control is available.
+
+## Variant I: Layout Correction Pass
+
+Goal: test the user's two-stage correction idea: first get a sheet whose art is coherent, then run a stricter correction pass whose main job is to put each animal inside fixed extraction cells.
+
+Prompt file: `prompt-variant-i-layout-correction.txt`
+
+Inputs:
+
+- Text-only Codex ImageGen prompt.
+- No uploaded local reference image.
+- Explicit `2048 by 1024`, invisible `2 row by 4 column`, `512 by 512` per cell.
+- Required at least `80px` pure-green padding from every cell edge.
+- Repeated `no green holes`, `no transparent pinholes`, and `fixed-cell extraction` wording.
+
+Result:
+
+- Image: `imagegen-variant-i-eight-layout-correction.png`
+- Diagnostic green-normalized image: `imagegen-variant-i-eight-layout-correction-greenfixed.png`
+- Preview: `imagegen-variant-i-eight-layout-correction-preview.png`
+- Raw fixed-cell parse: `0/8`, due non-pure green boundary pixels.
+- Green-normalized fixed-cell parse: `5/8`.
+- Remaining rejects: three `MAT_PINHOLE` cells, with holes `1px`, `1px`, and `25px`.
+
+Interpretation:
+
+- Two-stage layout correction works for the main layout problem. It improves the ImageGen 8-frame path from `0/8` raw fixed-cell parse to `5/8` after green normalization.
+- Remaining failure is no longer cell placement; it is matte/pinhole quality.
+- This is still not accepted for production because local green normalization and geometry fixes are diagnostics, not an accepted-frame cleanup path.
+- The next high-value experiment is reference-guided ImageGen layout correction using the previous 8-frame sheet as input, with a stronger instruction to keep art unchanged but repair green holes and center every animal inside exact cells.

@@ -284,10 +284,11 @@ Immediate reject rules for parsed outputs:
 Next worthwhile experiment, if any:
 
 1. Try an 8-frame walk-only experiment before returning to 16 cells: no visible grid seed, `style-anchors.png` only, invisible `2x4` layout text prompt.
-2. If the 8-frame sheet still shows guide ink, boundary residue, pinholes, or layout drift, try eight independent reference-guided PNGs instead of a sheet.
-3. Parse under `review/`, never directly under `accepted-frames`.
-4. Compare against the current single-frame acceptance rate and parent review time.
-5. Adopt only if quality stays equal and accepted-frame time falls materially; otherwise keep single-frame production.
+2. If a sheet is visually coherent but not extractable, run a second layout-correction pass: exact `2048x1024`, invisible `2x4`, `512x512` per cell, at least `80px` padding, and no green holes. This is promising with ChatGPT ImageGen; the 2026-06-23 correction pass improved the diagnostic parse to `5/8`.
+3. If the 8-frame sheet still shows guide ink, boundary residue, pinholes, or layout drift, try eight independent reference-guided PNGs instead of a sheet.
+4. Parse under `review/`, never directly under `accepted-frames`.
+5. Compare against the current single-frame acceptance rate and parent review time.
+6. Adopt only if quality stays equal and accepted-frame time falls materially; otherwise keep single-frame production.
 
 ## Trial Results
 

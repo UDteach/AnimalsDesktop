@@ -585,6 +585,30 @@
                   <p>The second recovered output has better low-scurry variation, but fixed-cell parsing still rejects every cell because boundary residue remains. Next attempt should remove the visible grid guide or downgrade to smaller/independent output.</p>
                 </div>
               </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>8-frame Flow vs ImageGen</span>
+                  <span class="tag warn">ImageGen better layout</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/variant-g-eight-flow-vs-imagegen-contact.png" alt="Eight-frame Flow versus ChatGPT ImageGen comparison" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Flow Pro ignored the 8-frame request and returned a visible-line 4x4 sheet. ChatGPT ImageGen produced 8 separated animals in a clean 2x4 arrangement, but text-only output still failed fixed-cell parsing.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Two-stage correction</span>
+                  <span class="tag warn">5 / 8 diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-eight-two-stage-correction-contact.png" alt="ImageGen eight-frame two-stage correction comparison" />
+                </div>
+                <div class="comparison-copy">
+                  <p>After the user-proposed layout correction pass, diagnostic fixed-cell parse improved to 5/8. Remaining failures are matte pinholes, not cell placement. Promising, but still review-only.</p>
+                </div>
+              </article>
             </div>
           </div>
         </div>

@@ -59,6 +59,36 @@ Current conclusion:
 
 Do not retry the same visible grid seed with only pose wording changes. The next prompt experiment should change the guide strategy: style-anchor-only invisible grid, a smaller 4-frame strip, or independent images.
 
+## Variant G/I: 8-frame and two-stage layout correction
+
+Follow-up date: 2026-06-23
+
+Flow / Nano Banana Pro:
+
+- Prompt file: `prompt-variant-g-eight-frame-short.txt`
+- Input: `style-anchors.png` only, no `grid-seed.png`
+- Result: `flow-nanobanana-pro-variant-g-eight-cache-145924.png`
+- Outcome: ignored the requested 8-frame invisible `2x4` layout and returned a visible-line 4x4 sheet with 16 animals.
+- Diagnostic parse: `0/8`
+
+ChatGPT ImageGen:
+
+- Result: `imagegen-variant-g-eight-textonly.png`
+- Outcome: produced 8 separated animals in a clean 2x4 arrangement without visible grid lines.
+- Fixed-cell parse: `0/8`, because the generated positions did not align to exact equal cells.
+- Component diagnostic: 8 animal components.
+
+Two-stage layout correction:
+
+- Prompt file: `prompt-variant-i-layout-correction.txt`
+- Result: `imagegen-variant-i-eight-layout-correction.png`
+- Diagnostic green-normalized parse: `5/8`
+- Remaining failure: three `MAT_PINHOLE` cells.
+
+Conclusion:
+
+The user's two-stage correction idea is promising. ImageGen can draw a coherent 8-frame sheet, and a strict layout-correction pass improves extraction. The remaining blocker is matte/pinhole quality and source-family verification, not the basic ability to produce eight frames.
+
 ## Review Images
 
 - `flow-nanobanana-pro-2ref-contact.png`: four Flow outputs.
@@ -66,3 +96,5 @@ Do not retry the same visible grid seed with only pose wording changes. The next
 - `flow-nanobanana-pro-variant-a-cache-contact.png`: Variant A recovered outputs.
 - `flow-nanobanana-pro-variant-a-141219-qa-contact.png`: Variant A diagnostic parse view.
 - `flow-nanobanana-pro-variant-a-141429-qa-contact.png`: Variant A diagnostic parse view.
+- `variant-g-eight-flow-vs-imagegen-contact.png`: Flow Pro versus ChatGPT ImageGen 8-frame comparison.
+- `imagegen-eight-two-stage-correction-contact.png`: ImageGen 8-frame two-stage correction comparison.
