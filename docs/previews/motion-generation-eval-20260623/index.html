@@ -636,6 +636,10 @@
                 <span>Flow / Nano Banana 2 は walk / scurry / turn のような連続動作の案出しに限定。まず 16セル、成功後に 31セル。62セルは探索扱い。</span>
               </li>
               <li>
+                <strong>Next batch size</strong>
+                <span>16セルで guide ink / pinhole が残ったため、次は8フレームの歩行ループだけを試す。可視グリッドは使わず、style anchor only の不可視2x4配置か、8枚独立出力を優先。</span>
+              </li>
+              <li>
                 <strong>Do not reuse</strong>
                 <span>`transparent pinholes` が出た既存 frame は style anchor から除外。生成済みの frame-00 anchor grid pack は archive 済み。</span>
               </li>

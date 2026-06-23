@@ -135,3 +135,53 @@ The four images are consecutive motion frames: stretch, contact, compress, and p
 
 No text, labels, borders, grid lines, floor, shadow, scenery, props, duplicate animals, cropped anatomy, white fringe, green halo, green dots inside the animal, missing pixels, transparent pinholes, or detached specks.
 ```
+
+## Variant G: Eight-Frame Invisible Walk Grid
+
+Goal: test the practical middle ground after 16-cell failure. Eight frames are enough for one walk loop while cutting the layout and matte risk in half.
+
+Use this without uploading `grid-seed.png`; upload `style-anchors.png` only. If the model cannot keep the layout, downgrade to Variant H instead of adding visible grid lines.
+
+```text
+Create one square or wide 8-frame sprite sheet on pure flat chroma green. The layout is invisible: 2 rows by 4 columns, no visible grid lines, no dividers, no borders, no labels, no numbers, no text.
+
+Use the attached chinchilla image only for identity, face, coat, outline, shading, camera size, and source family. Keep one complete right-facing standard gray chinchilla in each invisible cell, centered with green padding around ears, whiskers, feet, toes, tail, and body. No animal may touch or cross its invisible cell edge.
+
+All 8 cells are one grounded walk cycle. Every cell must be a distinct gait phase. Change front paw position, rear paw position, shoulder height, hip height, tail curve, or slight body compression in every neighboring frame. Do not repeat the same pose.
+
+Frame order:
+1 front right paw forward, rear right paw back, body centered.
+2 front paw under chest, rear paw lifting, body slightly lower.
+3 front left paw forward, rear left paw back, tail counterbalanced.
+4 paws pass under body, body slightly higher.
+5 opposite contact, not a duplicate of frame 1.
+6 one front paw lifted and one rear paw pushing.
+7 low contact step, head slightly forward.
+8 recovery step, tail slightly curled upward.
+
+Keep face stable and calm. Keep scale, baseline, body size, head size, coat, outline, and soft shaded sprite style stable. Clean antialiased edges. No white fringe, no green halo, no green dots inside the animal, no transparent pinholes, no detached specks, no cropped anatomy, no floor, no shadow, no scenery, and no props.
+```
+
+## Variant H: Eight Independent Walk Frames
+
+Goal: avoid fixed-cell boundary failures entirely. This is preferable if Flow or another generator can return multiple images separately.
+
+```text
+Generate exactly eight separate images, not a sheet, grid, strip, collage, or comparison panel.
+
+Each image contains one complete right-facing standard gray chinchilla on pure flat chroma green. Use the attached chinchilla image only for identity, face, coat, outline, shading, camera size, and source family.
+
+The eight images are one grounded walk cycle. Every image must be a distinct gait phase. Keep the same scale, baseline, body size, head size, face, coat, outline, and soft shaded sprite style across all eight images. Only paws, shoulders, hips, tail curve, and slight body compression should change.
+
+Frame order:
+1 front right paw forward, rear right paw back.
+2 front paw under chest, rear paw lifting.
+3 front left paw forward, rear left paw back.
+4 paws pass under body.
+5 opposite contact.
+6 front paw lifted, rear paw pushing.
+7 low contact step.
+8 recovery step.
+
+No duplicate poses, no cropped ears, feet, whiskers, tail, or toes, no floor, no shadow, no scenery, no props, no text, no labels, no borders, no white fringe, no green halo, no green dots inside the animal, no transparent pinholes, no detached specks.
+```

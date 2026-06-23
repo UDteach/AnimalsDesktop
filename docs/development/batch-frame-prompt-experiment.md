@@ -61,7 +61,7 @@ Current interpretation:
 
 - Do not use browser copy/paste as the Flow automation path. Use focused OS virtual key input, or ask the parent to type one short activation key sequence before automation continues.
 - `Nano Banana 2` remains untested visually and is still the first Flow candidate for fast motion-idea batches: `walk`, `scurry`, and `turn`, starting at `16` cells.
-- `Nano Banana Pro` is not good enough for this visible-grid 16-cell motion batch prompt. Keep it as a hard single-frame comparison candidate: eat, ground check, groom, reaction, and clean golden anchors. If grid batching is retried, change the guide strategy first: no visible grid seed, a smaller 4-frame strip, or independent images.
+- `Nano Banana Pro` is not good enough for this visible-grid 16-cell motion batch prompt. Keep it as a hard single-frame comparison candidate: eat, ground check, groom, reaction, and clean golden anchors. If grid batching is retried, change the guide strategy first: no visible grid seed, an 8-frame invisible walk grid, a smaller 4-frame strip, or independent images.
 - Any future Flow output must be copied into a review directory, parsed or prepared as a standalone PNG, and compared against ImageGen through the same pinhole, face, source-family, baseline, and parent visual gates.
 
 ## Candidate Prompt A: Separate Images
@@ -283,10 +283,11 @@ Immediate reject rules for parsed outputs:
 
 Next worthwhile experiment, if any:
 
-1. Ask ChatGPT Pro for exactly two independent reference-guided PNGs using accepted neighbor frames as visual context, not a strip.
-2. Parse as `independent` under `review/`.
-3. Compare against the current single-frame acceptance rate and parent review time.
-4. Adopt only if quality stays equal and accepted-frame time falls materially; otherwise keep single-frame production.
+1. Try an 8-frame walk-only experiment before returning to 16 cells: no visible grid seed, `style-anchors.png` only, invisible `2x4` layout text prompt.
+2. If the 8-frame sheet still shows guide ink, boundary residue, pinholes, or layout drift, try eight independent reference-guided PNGs instead of a sheet.
+3. Parse under `review/`, never directly under `accepted-frames`.
+4. Compare against the current single-frame acceptance rate and parent review time.
+5. Adopt only if quality stays equal and accepted-frame time falls materially; otherwise keep single-frame production.
 
 ## Trial Results
 
