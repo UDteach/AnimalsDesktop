@@ -51,13 +51,16 @@ Current quarantine: `chinchilla set00/frame-00..43`, `frame-45`, and `frame-51` 
 - Image generation mode exposed both `Nano Banana 2` and `Nano Banana Pro`.
 - Square `1:1` / `1x` settings were available.
 - Flow displayed `0 credits will be used` for generation in the selected image mode.
-- Actual image generation was not completed because automated prompt entry did not activate Flow's internal prompt state; the create button stayed `aria-disabled=true`.
+- Browser-level paste/type did not activate Flow's internal prompt state; the create button stayed `aria-disabled=true`.
+- OS-level virtual key input did activate the prompt field and allowed generation.
+- Nano Banana Pro was tested with `style-anchors.png` and `grid-seed.png`, square output, `x4`, 2K downloads. Outputs are archived in `docs/art-source/review/flow-grid-experiments/chinchilla-set00-16-anchor-frame50-clean/`.
+- Result: visual style and face quality were stable, but all four 16-cell sheets mostly duplicated the same pose. Original guide manifest parsed `0/16`. After using an actual `512x512` grid and snapping green-dominant pixels to pure chroma green, the best candidate parsed `11/16`; remaining rejects were disconnected components and chroma pinholes. The workflow is not accepted.
 
 Current interpretation:
 
-- Do not treat this as a visual failure of either Nano Banana model. It is a Flow UI automation blocker.
-- `Nano Banana 2` remains the first Flow candidate for fast motion-idea batches: `walk`, `scurry`, and `turn`, starting at `16` cells.
-- `Nano Banana Pro` remains the first Flow candidate for hard single-frame comparison: eat, ground check, groom, reaction, and clean golden anchors.
+- Do not use browser copy/paste as the Flow automation path. Use focused OS virtual key input, or ask the parent to type one short activation key sequence before automation continues.
+- `Nano Banana 2` remains untested visually and is still the first Flow candidate for fast motion-idea batches: `walk`, `scurry`, and `turn`, starting at `16` cells.
+- `Nano Banana Pro` is not good enough for this 16-cell motion batch prompt. Keep it as a hard single-frame comparison candidate: eat, ground check, groom, reaction, and clean golden anchors.
 - Any future Flow output must be copied into a review directory, parsed or prepared as a standalone PNG, and compared against ImageGen through the same pinhole, face, source-family, baseline, and parent visual gates.
 
 ## Candidate Prompt A: Separate Images

@@ -476,7 +476,7 @@
               </div>
               <div class="metric">
                 <b>Nano Banana Pro</b>
-                <span>Flow上で選択肢を確認。hard frame / clean anchor 作成候補。実画像は未取得です。</span>
+                <span>Flow 2K x4を実生成。style anchor + grid seedでは絵柄は安定したが、best parseは緑補正後11/16で、動きの差分が不足。</span>
               </div>
               <div class="metric">
                 <b>Nano Banana 2</b>
@@ -528,13 +528,25 @@
               <article class="comparison-card">
                 <h3>
                   <span>Flow Nano Banana Pro</span>
-                  <span class="tag warn">not generated</span>
+                  <span class="tag bad">rejected</span>
                 </h3>
                 <div class="comparison-image">
-                  <div class="comparison-placeholder">Flow UIで Nano Banana Pro は確認済み。Nano Banana 2 と同じく生成ボタンが disabled のため画像未取得。</div>
+                  <img src="assets/flow-nanobanana-pro-2ref-contact.png" alt="Flow Nano Banana Pro 2K four-output contact sheet" />
                 </div>
                 <div class="comparison-copy">
-                  <p>想定用途は hard frame と clean anchor 作成。顔、手足、輪郭、透明抜けの改善がImageGenより良ければ単枚生成の比較候補にする。</p>
+                  <p>Google Flow / Nano Banana Pro / 1:1 square / 2K x4。`style-anchors.png` と `grid-seed.png` を参照。顔と絵柄は安定したが、16セルのほとんどが同じポーズで、元manifest parseは0/16。</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Flow Pro parsed check</span>
+                  <span class="tag warn">11 / 16 best</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/flow-nanobanana-pro-2ref-parsed-contact.png" alt="Flow Nano Banana Pro parsed candidate 01 contact sheet" />
+                </div>
+                <div class="comparison-copy">
+                  <p>512px実グリッドに合わせ、緑優勢ピクセルを純緑化した後の候補01。残Rejectは disconnected components と chroma pinholes。accepted-frame gateは未通過。</p>
                 </div>
               </article>
             </div>
@@ -544,7 +556,7 @@
         <div class="box">
           <div class="box-head">
             <h2>Nano Banana Pro / Nano Banana 2</h2>
-            <span class="pill">Flow verified, image pending</span>
+            <span class="pill warning">Flow Pro generated, rejected</span>
           </div>
           <div class="box-body">
             <ul class="decision-list">
@@ -562,7 +574,7 @@
               </li>
               <li>
                 <strong>Current limit</strong>
-                <span>Flowはログイン済みPRO表示で、モデル選択と 1:1 / 1x 設定までは確認済み。ただし自動入力がFlowの内部prompt stateに入らず、生成ボタンが `aria-disabled=true` のまま。実画像比較は未完了。</span>
+                <span>Browser copy/pasteではFlowの内部prompt stateが動かないが、OS仮想キー入力なら生成ボタンが有効化した。Nano Banana Proの2K x4は取得済み。ただし16セル一括は同一ポーズ化し、緑補正後でもbest parse 11/16のため不採用。</span>
               </li>
               <li>
                 <strong>A/B test set</strong>
