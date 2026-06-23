@@ -14,15 +14,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify Coming Soon page
+      - name: Verify unlisted preview page
         shell: bash
         run: |
-          grep -q "Coming Soon" docs/index.html
+          HIDDEN_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
+          grep -q "unlisted direct links" docs/index.html
+          grep -q "AnimalsDesktop Asset Review" "docs/$HIDDEN_PREVIEW/index.html"
+          grep -q "noindex,nofollow,noarchive" "docs/$HIDDEN_PREVIEW/index.html"
           ! grep -q "download/" docs/index.html
-          ! grep -Eiq "degu|デグー" docs/index.html
-          ! grep -Eq "<img|art-source|source-truth|preview|pet-card|animal-list" docs/index.html
-          mkdir -p public-site
+          ! grep -q "$HIDDEN_PREVIEW" docs/index.html
+          ! grep -q "Open Sprite Review" docs/index.html
+          ! grep -q 'href="review/' docs/index.html
+          ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$HIDDEN_PREVIEW/index.html"
+          test -f docs/assets/animalsdesktop-seed-preview.png
+          test -f docs/robots.txt
+          for asset in \
+            chinchilla_standard_gray_set00.png \
+            sugar_glider_gray_set00.png \
+            hamster_golden_syrian_set00.png \
+            rabbit_chestnut_agouti_set00.png \
+            gecko_gray_brown_set00.png
+          do
+            test -f "docs/$HIDDEN_PREVIEW/assets/$asset"
+          done
+          mkdir -p "public-site/assets" "public-site/$HIDDEN_PREVIEW"
           cp docs/index.html public-site/index.html
+          cp docs/robots.txt public-site/robots.txt
+          cp docs/assets/animalsdesktop-seed-preview.png public-site/assets/animalsdesktop-seed-preview.png
+          cp "docs/$HIDDEN_PREVIEW/index.html" "public-site/$HIDDEN_PREVIEW/index.html"
+          cp -R "docs/$HIDDEN_PREVIEW/assets" "public-site/$HIDDEN_PREVIEW/assets"
       - uses: actions/upload-artifact@v4
         with:
           name: animalsdesktop-site

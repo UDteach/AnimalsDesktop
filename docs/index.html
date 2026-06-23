@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="AnimalsDesktop は現在リリース準備中です。完成した正式版だけを公開します。"
+      content="AnimalsDesktop is a Windows taskbar pet app. Sprite previews are shared through unlisted review links while the app is still in production."
     />
-    <title>AnimalsDesktop - Coming Soon</title>
+    <title>AnimalsDesktop</title>
     <style>
       :root {
         color-scheme: light;
@@ -15,9 +15,17 @@
           "Segoe UI",
           system-ui,
           -apple-system,
+          BlinkMacSystemFont,
           sans-serif;
-        color: #1b211c;
-        background: #f6f4ed;
+        color: #24292f;
+        background: #f6f8fa;
+        --border: #d0d7de;
+        --muted: #57606a;
+        --panel: #ffffff;
+        --panel-soft: #f6f8fa;
+        --accent: #0969da;
+        --success: #1a7f37;
+        --warning: #9a6700;
       }
 
       * {
@@ -25,191 +33,282 @@
       }
 
       body {
-        min-height: 100vh;
         margin: 0;
-        overflow-x: hidden;
       }
 
       a {
-        color: #2d6750;
+        color: var(--accent);
+        text-decoration: none;
       }
 
+      a:hover {
+        text-decoration: underline;
+      }
+
+      header {
+        border-bottom: 1px solid var(--border);
+        background: var(--panel);
+      }
+
+      .topbar,
       main {
-        display: grid;
-        align-content: center;
-        min-height: 100vh;
-        width: min(880px, 100%);
-        max-width: 100vw;
+        width: min(1180px, 100%);
         margin: 0 auto;
-        padding: 32px 22px;
-        overflow-wrap: anywhere;
+        padding-inline: 24px;
       }
 
-      .brand {
+      .topbar {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         gap: 16px;
-        align-items: center;
-        margin-bottom: 44px;
-        color: #596258;
-        font-weight: 700;
+        min-height: 64px;
       }
 
-      .links {
+      .repo {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .repo strong {
+        font-size: 1.05rem;
+      }
+
+      .slash,
+      .muted {
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0 8px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .pill.success {
+        border-color: #aceebb;
+        color: var(--success);
+        background: #dafbe1;
+      }
+
+      .pill.warning {
+        border-color: #f0d98c;
+        color: var(--warning);
+        background: #fff8c5;
+      }
+
+      .navlinks {
         display: flex;
         flex-wrap: wrap;
         gap: 14px;
+        color: var(--muted);
+        font-size: 0.92rem;
       }
 
-      .mark {
-        position: relative;
-        width: 76px;
-        height: 54px;
-        margin-bottom: 26px;
+      main {
+        padding-top: 30px;
+        padding-bottom: 64px;
       }
 
-      .mark::before,
-      .mark::after,
-      .mark span::before,
-      .mark span::after {
-        position: absolute;
-        content: "";
-        display: block;
-      }
-
-      .mark::before {
-        left: 9px;
-        bottom: 5px;
-        width: 48px;
-        height: 31px;
-        border-radius: 46% 52% 48% 45%;
-        background: #a7aaa1;
-        box-shadow: inset -9px -7px 0 #858a82;
-      }
-
-      .mark::after {
-        right: 10px;
-        bottom: 16px;
-        width: 24px;
-        height: 21px;
-        border-radius: 50%;
-        background: #b7bab0;
-        box-shadow: inset -5px -4px 0 #8b9188;
-      }
-
-      .mark span::before {
-        right: 25px;
-        top: 2px;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: #8f948d;
-      }
-
-      .mark span::after {
-        left: 0;
-        bottom: 12px;
-        width: 29px;
-        height: 18px;
-        border: 5px solid #9b9f97;
-        border-right: 0;
-        border-bottom: 0;
-        border-radius: 22px 0 0 0;
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1.15fr);
+        gap: 22px;
+        align-items: start;
       }
 
       h1 {
-        margin: 0 0 14px;
-        font-size: clamp(2.7rem, 8vw, 6rem);
-        line-height: 0.95;
+        margin: 0 0 12px;
+        font-size: clamp(2.4rem, 6vw, 4.8rem);
+        line-height: 1;
         letter-spacing: 0;
       }
 
       .lead {
-        width: 100%;
-        max-width: 720px;
         margin: 0;
-        color: #2d342f;
-        font-size: 1.08rem;
+        max-width: 680px;
+        color: #30363d;
+        font-size: 1.03rem;
         line-height: 1.75;
-      }
-
-      .note {
-        width: 100%;
-        max-width: 720px;
-        margin: 26px 0 0;
-        border: 1px solid #d8d6cd;
-        border-radius: 8px;
-        padding: 16px;
-        background: #fffdf8;
-        color: #596258;
-        line-height: 1.72;
       }
 
       .actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 24px;
+        gap: 10px;
+        margin-top: 20px;
       }
 
       .button {
         display: inline-flex;
         align-items: center;
-        min-height: 42px;
-        border: 1px solid #9aa99e;
+        justify-content: center;
+        min-height: 38px;
+        border: 1px solid var(--border);
         border-radius: 6px;
-        padding: 10px 14px;
+        padding: 8px 12px;
         background: #fff;
-        color: #1f382d;
-        text-decoration: none;
+        color: #24292f;
         font-weight: 700;
       }
 
       .button.primary {
-        border-color: #2f6b51;
-        background: #2f6b51;
+        border-color: #1f883d;
+        background: #1f883d;
         color: #fff;
       }
 
-      @media (max-width: 620px) {
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel);
+        overflow: hidden;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--border);
+        padding: 12px 14px;
+        background: var(--panel-soft);
+      }
+
+      .panel-head h2 {
+        margin: 0;
+        font-size: 0.98rem;
+      }
+
+      .preview {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .panel-body {
+        padding: 14px;
+      }
+
+      .note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.65;
+      }
+
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .metric {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 13px 14px;
+        background: var(--panel);
+      }
+
+      .metric b {
+        display: block;
+        font-size: 1.34rem;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      @media (max-width: 860px) {
+        .topbar,
         main {
-          align-content: start;
-          padding: 26px 16px 44px;
+          padding-inline: 16px;
         }
 
-        .brand {
+        .topbar,
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
           align-items: flex-start;
           flex-direction: column;
-          margin-bottom: 34px;
+          padding-block: 14px;
+        }
+
+        .status-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <main>
-      <nav class="brand" aria-label="Page links">
-        <strong>AnimalsDesktop</strong>
-        <div class="links">
+    <header>
+      <div class="topbar">
+        <div class="repo">
+          <span>UDteach</span>
+          <span class="slash">/</span>
+          <strong>AnimalsDesktop</strong>
+          <span class="pill success">sprite preview</span>
+          <span class="pill warning">work in progress</span>
+        </div>
+        <nav class="navlinks" aria-label="Page links">
           <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
-          <a href="https://kdevelopk.pages.dev/">kdevelopk</a>
-        </div>
-      </nav>
+          <a href="https://kdevelopk.pages.dev/">Works</a>
+        </nav>
+      </div>
+    </header>
 
-      <section>
-        <span class="mark" aria-hidden="true"><span></span></span>
-        <h1>Coming Soon</h1>
-        <p class="lead">
-          AnimalsDesktop は現在リリース準備中です。
-          完成した正式版だけを公開します。
-        </p>
-        <p class="note">
-          未完成の動物、仮素材、作業中の候補はここには載せません。
-          公開準備が整うまで、このページは Coming Soon のみです。
-        </p>
-        <div class="actions">
-          <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
-          <a class="button" href="https://kdevelopk.pages.dev/">Works</a>
+    <main>
+      <section class="hero">
+        <div>
+          <h1>AnimalsDesktop</h1>
+          <p class="lead">
+            Windows taskbar pet app with transparent 2D sprites. The app is still in production, and sprite review pages are shared only as unlisted direct links.
+          </p>
+          <div class="actions">
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+          </div>
+          <div class="status-grid" aria-label="Current asset status">
+            <div class="metric">
+              <b>5 / 5</b>
+              <span>active animals have complete set00 previews</span>
+            </div>
+            <div class="metric">
+              <b>62</b>
+              <span>frames per public preview set</span>
+            </div>
+            <div class="metric">
+              <b>draft</b>
+              <span>not a release download yet</span>
+            </div>
+          </div>
         </div>
+
+        <aside class="panel" aria-label="AnimalsDesktop preview">
+          <div class="panel-head">
+            <h2>Current Preview</h2>
+            <span class="pill">generated asset</span>
+          </div>
+          <img class="preview" src="assets/animalsdesktop-seed-preview.png" alt="AnimalsDesktop sprite preview on a Windows-style taskbar" />
+          <div class="panel-body">
+            <p class="note">
+              This public preview shows current runtime sprite assets. Frame-by-frame light and dark background checks are kept on an unlisted review page.
+            </p>
+          </div>
+        </aside>
       </section>
     </main>
   </body>
