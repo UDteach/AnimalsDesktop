@@ -609,6 +609,30 @@
                   <p>After the user-proposed layout correction pass, diagnostic fixed-cell parse improved to 5/8. Remaining failures are matte pinholes, not cell placement. Promising, but still review-only.</p>
                 </div>
               </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>8-frame workflow run 01</span>
+                  <span class="tag warn">7 / 8 diagnostic</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-8-workflow-run01-contact.png" alt="Chinchilla ImageGen 8-frame workflow run 01" />
+                </div>
+                <div class="comparison-copy">
+                  <p>A fresh chinchilla run produced 8 separated components. The stricter layout pass reached 7/8 after green normalization; the only remaining parse reject is a 1px pinhole. Layout is close, but art style and motion deltas still need another loop.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 01 component check</span>
+                  <span class="tag warn">8 components</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-8-workflow-run01-components.png" alt="Chinchilla ImageGen 8-frame workflow run 01 component check" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Component detection found exactly 8 large animal components with no large external debris. The blocker is no longer cell count; it is pure-green matte quality, one pinhole, sprite style, and stronger walk-pose separation.</p>
+                </div>
+              </article>
             </div>
           </div>
         </div>

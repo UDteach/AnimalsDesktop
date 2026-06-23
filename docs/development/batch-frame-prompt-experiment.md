@@ -284,11 +284,32 @@ Immediate reject rules for parsed outputs:
 Next worthwhile experiment, if any:
 
 1. Try an 8-frame walk-only experiment before returning to 16 cells: no visible grid seed, `style-anchors.png` only, invisible `2x4` layout text prompt.
-2. If a sheet is visually coherent but not extractable, run a second layout-correction pass: exact `2048x1024`, invisible `2x4`, `512x512` per cell, at least `80px` padding, and no green holes. This is promising with ChatGPT ImageGen; the 2026-06-23 correction pass improved the diagnostic parse to `5/8`.
+2. If a sheet is visually coherent but not extractable, run a second layout-correction pass: exact `2048x1024`, invisible `2x4`, `512x512` per cell, at least `80px` padding, and no green holes. This is promising with ChatGPT ImageGen; the first 2026-06-23 correction pass improved diagnostic parse to `5/8`, and a fresh stricter chinchilla workflow run improved to `7/8` after green normalization.
 3. If the 8-frame sheet still shows guide ink, boundary residue, pinholes, or layout drift, try eight independent reference-guided PNGs instead of a sheet.
 4. Parse under `review/`, never directly under `accepted-frames`.
 5. Compare against the current single-frame acceptance rate and parent review time.
 6. Adopt only if quality stays equal and accepted-frame time falls materially; otherwise keep single-frame production.
+
+### 2026-06-23: Chinchilla 8-frame ImageGen workflow run 01
+
+Artifact directory:
+
+```text
+docs/art-source/review/flow-grid-experiments/chinchilla-set00-8-imagegen-workflow-20260623-run01/
+```
+
+Result:
+
+- Stage 1 text-only ImageGen produced a clean 8-component `2x4` sheet.
+- Stage 2 stricter layout-correction prompt also produced a clean 8-component `2x4` sheet with better centering.
+- Raw parse stayed `0/8` for both sheets because the green background was not parser-pure.
+- Diagnostic green normalization improved stage 1 to `6/8` and stage 2 to `7/8`.
+- Local cell recentering preserved the same counts: stage 1 `6/8`, stage 2 `7/8`.
+- The remaining stage 2 reject was `frame-04`, a single `1px` `MAT_PINHOLE`.
+
+Interpretation:
+
+The 8-frame ImageGen workflow is close mechanically: layout and component separation are now good enough to inspect. It is not production-ready because the art is still too realistic for the accepted sprite family, pose deltas are weak, and green normalization/pinhole repair remain diagnostic-only. The next useful loop should keep the same 8-cell scale, make the style flatter and more sprite-like, and use a true reference-upload layout-correction pass when the browser lane is available and parent approval covers the upload.
 
 ## Trial Results
 
