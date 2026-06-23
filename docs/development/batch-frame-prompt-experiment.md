@@ -311,6 +311,37 @@ Interpretation:
 
 The 8-frame ImageGen workflow is close mechanically: layout and component separation are now good enough to inspect. It is not production-ready because the art is still too realistic for the accepted sprite family, pose deltas are weak, and green normalization/pinhole repair remain diagnostic-only. The next useful loop should keep the same 8-cell scale, make the style flatter and more sprite-like, and use a true reference-upload layout-correction pass when the browser lane is available and parent approval covers the upload.
 
+### 2026-06-23: ChatGPT Pro prompt consultation and reproducibility run 02
+
+Artifact directory:
+
+```text
+docs/art-source/review/flow-grid-experiments/chinchilla-set00-8-imagegen-repro-20260623-run02/
+```
+
+Setup:
+
+- Consulted ChatGPT Pro with the prior `7/8` result, pinhole failure, realistic-style drift, and weak gait delta notes.
+- Tested four prompt strategies twice each with Codex ImageGen:
+  - `A`: flatter 2D sprite style.
+  - `B`: stronger gait deltas.
+  - `C`: extraction/matte cleanliness first.
+  - `D`: local hybrid of `A` and `C`.
+
+Result:
+
+- All eight samples produced 8 detected animal components.
+- Raw fixed-cell parse stayed `0/8` for every sample because the green background was still not parser-pure.
+- Diagnostic green-normalized parse:
+  - `A`: `6/8`, `7/8`
+  - `B`: `8/8`, `7/8`
+  - `C`: `8/8`, `8/8`
+  - `D`: `4/8`, `6/8`
+
+Interpretation:
+
+`C` is the first prompt with reproducible `8/8` diagnostic extraction. `B` is useful for walk-cycle readability, but less stable. `A` improves sprite style but not extraction. `D` visually looks closer to the target mascot style but currently hurts pinhole/parse stability. The next prompt should use `C` as the base and add only modest `B` gait wording; do not adopt the `D` hybrid until extraction stays stable.
+
 ## Trial Results
 
 ### 2026-06-22: ChatGPT Pro `2x1` Gecko Trial
