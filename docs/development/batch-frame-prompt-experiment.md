@@ -342,6 +342,39 @@ Interpretation:
 
 `C` is the first prompt with reproducible `8/8` diagnostic extraction. `B` is useful for walk-cycle readability, but less stable. `A` improves sprite style but not extraction. `D` visually looks closer to the target mascot style but currently hurts pinhole/parse stability. The next prompt should use `C` as the base and add only modest `B` gait wording; do not adopt the `D` hybrid until extraction stays stable.
 
+### 2026-06-23: ImageGen 8-frame run 03-05 follow-up
+
+Artifact directories:
+
+```text
+docs/art-source/review/flow-grid-experiments/chinchilla-set00-8-imagegen-repro-20260623-run03/
+docs/art-source/review/flow-grid-experiments/chinchilla-set00-8-imagegen-repro-20260623-run04/
+docs/art-source/review/flow-grid-experiments/chinchilla-set00-8-imagegen-repro-20260623-run05/
+```
+
+Setup:
+
+- `E`: C extraction-cleanliness base plus modest B gait wording and frame-by-frame walk sequence.
+- `F`: removed gait wording and returned to near-identical clean review poses.
+- `G`: angle-table prompt with attached-foot rules, informed by a local pose blueprint.
+
+Result:
+
+- `E` generated coherent 8-animal sheets, but diagnostic green-normalized parse dropped to `3/8`, `5/8`, `5/8`, and `3/8`. Rejects were mainly `transparent/chroma pinholes`, plus occasional detached alpha fragments.
+- `F` reduced animation ambition but became near-static and sometimes upright. Diagnostic green-normalized parse was `7/8`, `5/8`, `5/8`, and one fixed-cell layout failure.
+- `G` made angle-table prompting testable. Fixed-cell green-normalized parse still failed because the model did not preserve cell boundaries, but local recentering reached `7/8` and `8/8`.
+
+Interpretation:
+
+Adding walk-specific wording directly to an 8-frame ImageGen sheet is currently counterproductive: it improves pose intent but creates belly, foot, and tail matte defects. Angle tables are useful as a motion-design/specification tool, especially when each species has its own allowed-moving-parts profile, but they do not make 8-frame sheets production-safe. Keep ImageGen sheets as review-only layout, pose, and style references. Production accepted frames stay one-frame-per-PNG.
+
+New flow:
+
+1. Ask a species pose profile before prompting: movable parts, locked identity parts, risky anatomy, allowed angle/phase changes, and banned words.
+2. For motion blocks, create a bone-only or silhouette-only blueprint locally to define phase and angle values.
+3. Convert the blueprint into text prompts for review-only sheet experiments.
+4. Use successful sheet poses only as references for one-frame-per-PNG production, not as direct accepted source frames.
+
 ## Trial Results
 
 ### 2026-06-22: ChatGPT Pro `2x1` Gecko Trial

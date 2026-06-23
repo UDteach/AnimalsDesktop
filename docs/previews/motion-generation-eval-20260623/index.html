@@ -657,6 +657,54 @@
                   <p>All eight samples produced exactly 8 large animal components. The remaining reproducibility problem is not count or layout; it is parser-pure green, pinholes, and the tradeoff between flatter sprite style and matte stability.</p>
                 </div>
               </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 03 E: C + gait wording</span>
+                  <span class="tag bad">failed direction</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-8-repro-run03-contact.png" alt="Chinchilla ImageGen run 03 E prompt comparison" />
+                </div>
+                <div class="comparison-copy">
+                  <p>E added modest gait wording to the clean C prompt. All four samples kept 8 visible chinchillas, but green-normalized parse fell to 3/8, 5/8, 5/8, and 3/8. The gait wording increased belly, foot, and tail pinholes.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 04 F: clean near-hold poses</span>
+                  <span class="tag warn">too static</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-8-repro-run04-clean-contact.png" alt="Chinchilla ImageGen run 04 F near-identical clean poses" />
+                </div>
+                <div class="comparison-copy">
+                  <p>F removed frame-by-frame gait instructions. The faces stayed coherent, but output became near-static and sometimes upright. Diagnostic parse did not recover to C-level stability: 7/8, 5/8, 5/8, and one fixed-cell layout failure.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Run 05 G: angle blueprint wording</span>
+                  <span class="tag warn">review-only</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-8-run05-angle-contact.png" alt="Chinchilla ImageGen run 05 angle blueprint wording" />
+                </div>
+                <div class="comparison-copy">
+                  <p>Angle-table wording gave some controlled foot/tail variation, but fixed-cell placement still failed before local recentering. Recentered diagnostics reached 7/8 and 8/8, so this is useful as a motion-design aid, not an accepted-frame shortcut.</p>
+                </div>
+              </article>
+              <article class="comparison-card">
+                <h3>
+                  <span>Pose blueprint draft</span>
+                  <span class="tag ok">species profile</span>
+                </h3>
+                <div class="comparison-image">
+                  <img src="assets/imagegen-chinchilla-pose-blueprint-silhouette.png" alt="Chinchilla silhouette pose blueprint" />
+                </div>
+                <div class="comparison-copy">
+                  <p>The next flow asks each species which body parts may move before prompting. Bone-only and silhouette-only guides help define angles, but visible guides should not be uploaded by default because labels and lines can be copied into generated art.</p>
+                </div>
+              </article>
             </div>
           </div>
         </div>
