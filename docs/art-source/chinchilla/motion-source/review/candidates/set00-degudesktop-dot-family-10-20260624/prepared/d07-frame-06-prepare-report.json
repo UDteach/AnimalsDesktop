@@ -1,0 +1,22 @@
+{
+  "source": "docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d07-frame-06-source.png",
+  "output": "docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d07-frame-06.png",
+  "source_width": 1536,
+  "source_height": 1024,
+  "output_width": 96,
+  "output_height": 64,
+  "background_mode": "chroma-green",
+  "background_removed": true,
+  "content": {
+    "x": 104,
+    "y": 122,
+    "w": 1252,
+    "h": 738
+  },
+  "output_content": {
+    "x": 4,
+    "y": 6,
+    "w": 88,
+    "h": 52
+  }
+}

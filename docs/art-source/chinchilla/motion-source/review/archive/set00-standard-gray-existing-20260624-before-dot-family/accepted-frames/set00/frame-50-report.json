@@ -1,0 +1,22 @@
+{
+  "source": "docs/art-source/chinchilla/motion-source/review/candidates/set00-frame-50-candidate01-alert-pause-parent-imagegen-20260623/raw-imagegen-candidate.png",
+  "output": "docs/art-source/chinchilla/motion-source/accepted-frames/set00/frame-50.png",
+  "source_width": 1536,
+  "source_height": 1024,
+  "output_width": 96,
+  "output_height": 64,
+  "background_mode": "chroma-green",
+  "background_removed": true,
+  "content": {
+    "x": 243,
+    "y": 186,
+    "w": 973,
+    "h": 603
+  },
+  "output_content": {
+    "x": 6,
+    "y": 6,
+    "w": 84,
+    "h": 52
+  }
+}

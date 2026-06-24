@@ -1,0 +1,22 @@
+{
+  "source": "docs/art-source/chinchilla/motion-source/review/candidates/set00-frame-49-candidate01-alert-pause-parent-imagegen-20260623/raw-imagegen-candidate.png",
+  "output": "docs/art-source/chinchilla/motion-source/review/candidates/set00-frame-49-candidate01-alert-pause-parent-imagegen-20260623/frame-49-prepared.png",
+  "source_width": 1536,
+  "source_height": 1024,
+  "output_width": 96,
+  "output_height": 64,
+  "background_mode": "chroma-green",
+  "background_removed": true,
+  "content": {
+    "x": 315,
+    "y": 182,
+    "w": 860,
+    "h": 617
+  },
+  "output_content": {
+    "x": 12,
+    "y": 6,
+    "w": 72,
+    "h": 52
+  }
+}

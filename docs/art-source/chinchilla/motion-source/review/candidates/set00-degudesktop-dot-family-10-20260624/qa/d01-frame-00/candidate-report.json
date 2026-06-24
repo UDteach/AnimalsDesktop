@@ -1,0 +1,134 @@
+{
+  "label": "d01-frame-00",
+  "candidate": {
+    "path": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+    "width": 96,
+    "height": 64,
+    "size_ok_96x64": true,
+    "visible_pixels": 2256,
+    "transparent_pixels": 3888,
+    "fully_opaque": false,
+    "partial_alpha_pixels": 376,
+    "pure_chroma_green_pixels": 0,
+    "pure_chroma_green_visible_pixels": 0,
+    "bbox": {
+      "left": 13,
+      "top": 6,
+      "right": 82,
+      "bottom": 57,
+      "width": 70,
+      "height": 52
+    },
+    "baseline_y": 57,
+    "edge_touch": false,
+    "visible_rgb_mean": [
+      126.55,
+      118.73,
+      118.91
+    ],
+    "alpha_components": {
+      "skipped": false,
+      "count": 1,
+      "largest": {
+        "pixels": 2256,
+        "bbox": {
+          "left": 13,
+          "top": 6,
+          "right": 82,
+          "bottom": 57
+        }
+      },
+      "small_components": []
+    },
+    "transparent_holes": {
+      "skipped": false,
+      "pixels": 1,
+      "components": 1,
+      "largest": {
+        "pixels": 1,
+        "bbox": {
+          "left": 80,
+          "top": 35,
+          "right": 80,
+          "bottom": 35
+        }
+      }
+    }
+  },
+  "anchors": [
+    {
+      "path": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+      "width": 96,
+      "height": 64,
+      "size_ok_96x64": true,
+      "visible_pixels": 2256,
+      "transparent_pixels": 3888,
+      "fully_opaque": false,
+      "partial_alpha_pixels": 376,
+      "pure_chroma_green_pixels": 0,
+      "pure_chroma_green_visible_pixels": 0,
+      "bbox": {
+        "left": 13,
+        "top": 6,
+        "right": 82,
+        "bottom": 57,
+        "width": 70,
+        "height": 52
+      },
+      "baseline_y": 57,
+      "edge_touch": false,
+      "visible_rgb_mean": [
+        126.55,
+        118.73,
+        118.91
+      ],
+      "alpha_components": {
+        "skipped": false,
+        "count": 1,
+        "largest": {
+          "pixels": 2256,
+          "bbox": {
+            "left": 13,
+            "top": 6,
+            "right": 82,
+            "bottom": 57
+          }
+        },
+        "small_components": []
+      },
+      "transparent_holes": {
+        "skipped": false,
+        "pixels": 1,
+        "components": 1,
+        "largest": {
+          "pixels": 1,
+          "bbox": {
+            "left": 80,
+            "top": 35,
+            "right": 80,
+            "bottom": 35
+          }
+        }
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+      "size_match": true,
+      "alpha_iou": 1.0,
+      "candidate_only_alpha_pixels": 0,
+      "anchor_only_alpha_pixels": 0,
+      "rgb_mae_on_alpha_union": 0.0,
+      "bbox_delta": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "width": 0,
+        "height": 0
+      },
+      "baseline_delta": 0
+    }
+  ]
+}

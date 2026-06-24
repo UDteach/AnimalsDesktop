@@ -1,0 +1,645 @@
+[
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d01-frame-00-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d01-frame-00-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d01-frame-00-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d01-frame-00-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d01-frame-00.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d01-frame-00\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d01-frame-00\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 1\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d01-frame-00",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 1,
+      "bbox": {
+        "left": 13,
+        "top": 6,
+        "right": 82,
+        "bottom": 57,
+        "width": 70,
+        "height": 52
+      },
+      "visible_pixels": 2256,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 1.0,
+          "candidate_only_alpha_pixels": 0,
+          "anchor_only_alpha_pixels": 0,
+          "rgb_mae_on_alpha_union": 0.0,
+          "bbox_delta": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "width": 0,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d01",
+    "target": "frame-00",
+    "motion": "idle breath, neutral standing pose",
+    "decision": "reject",
+    "reason": "transparent holes=1 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d02-frame-01-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d02-frame-01-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d02-frame-01-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d02-frame-01-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d02-frame-01.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d02-frame-01.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d02-frame-01-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d02-frame-01\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d02-frame-01\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 1\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d02-frame-01",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 1,
+      "bbox": {
+        "left": 12,
+        "top": 6,
+        "right": 82,
+        "bottom": 57,
+        "width": 71,
+        "height": 52
+      },
+      "visible_pixels": 2323,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.9272,
+          "candidate_only_alpha_pixels": 120,
+          "anchor_only_alpha_pixels": 53,
+          "rgb_mae_on_alpha_union": 19.665,
+          "bbox_delta": {
+            "left": -1,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "width": 1,
+            "height": 0
+          },
+          "baseline_delta": 0
+        },
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.9272,
+          "candidate_only_alpha_pixels": 120,
+          "anchor_only_alpha_pixels": 53,
+          "rgb_mae_on_alpha_union": 19.665,
+          "bbox_delta": {
+            "left": -1,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "width": 1,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d02",
+    "target": "frame-01",
+    "motion": "idle breath continuation, tiny ear and chest shift",
+    "decision": "reject",
+    "reason": "transparent holes=1 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d03-frame-02-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d03-frame-02-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d03-frame-02-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d03-frame-02-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d03-frame-02.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d03-frame-02.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d03-frame-02-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d03-frame-02\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d03-frame-02\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 5\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d03-frame-02",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 5,
+      "bbox": {
+        "left": 10,
+        "top": 6,
+        "right": 85,
+        "bottom": 57,
+        "width": 76,
+        "height": 52
+      },
+      "visible_pixels": 2418,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.8244,
+          "candidate_only_alpha_pixels": 306,
+          "anchor_only_alpha_pixels": 144,
+          "rgb_mae_on_alpha_union": 42.218,
+          "bbox_delta": {
+            "left": -3,
+            "top": 0,
+            "right": 3,
+            "bottom": 0,
+            "width": 6,
+            "height": 0
+          },
+          "baseline_delta": 0
+        },
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d02-frame-01.png",
+          "size_match": true,
+          "alpha_iou": 0.8585,
+          "candidate_only_alpha_pixels": 228,
+          "anchor_only_alpha_pixels": 133,
+          "rgb_mae_on_alpha_union": 35.829,
+          "bbox_delta": {
+            "left": -2,
+            "top": 0,
+            "right": 3,
+            "bottom": 0,
+            "width": 5,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d03",
+    "target": "frame-02",
+    "motion": "idle weight shift, same baseline and tail",
+    "decision": "reject",
+    "reason": "transparent holes=5 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d04-frame-03-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d04-frame-03-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d04-frame-03-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": false,
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d04-frame-03-source.png has transparent pinholes after background preparation: holes=1 area=7 largest=7\nexit status 1"
+        },
+        {
+          "mode": "auto",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d04-frame-03-source.png still has no transparent background after preparation\nexit status 1"
+        }
+      ]
+    },
+    "id": "d04",
+    "target": "frame-03",
+    "motion": "idle settle, tiny head and forepaw reset",
+    "decision": "reject",
+    "reason": "prepareframe failed"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d05-frame-04-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d05-frame-04-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d05-frame-04-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": false,
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d05-frame-04-source.png has transparent pinholes after background preparation: holes=3 area=27 largest=20\nexit status 1"
+        },
+        {
+          "mode": "auto",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d05-frame-04-source.png still has no transparent background after preparation\nexit status 1"
+        }
+      ]
+    },
+    "id": "d05",
+    "target": "frame-04",
+    "motion": "walk start, front paw begins to lift",
+    "decision": "reject",
+    "reason": "prepareframe failed"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d06-frame-05-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d06-frame-05-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d06-frame-05-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": false,
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d06-frame-05-source.png has transparent pinholes after background preparation: holes=1 area=15 largest=15\nexit status 1"
+        },
+        {
+          "mode": "auto",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d06-frame-05-source.png still has no transparent background after preparation\nexit status 1"
+        }
+      ]
+    },
+    "id": "d06",
+    "target": "frame-05",
+    "motion": "walk contact, front paw reaches forward",
+    "decision": "reject",
+    "reason": "prepareframe failed"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d07-frame-06-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d07-frame-06-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d07-frame-06-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d07-frame-06-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d07-frame-06.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d07-frame-06.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d07-frame-06-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d07-frame-06\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d07-frame-06\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 1\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d07-frame-06",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 1,
+      "bbox": {
+        "left": 4,
+        "top": 6,
+        "right": 91,
+        "bottom": 57,
+        "width": 88,
+        "height": 52
+      },
+      "visible_pixels": 2721,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.642,
+          "candidate_only_alpha_pixels": 775,
+          "anchor_only_alpha_pixels": 310,
+          "rgb_mae_on_alpha_union": 66.09,
+          "bbox_delta": {
+            "left": -9,
+            "top": 0,
+            "right": 9,
+            "bottom": 0,
+            "width": 18,
+            "height": 0
+          },
+          "baseline_delta": 0
+        },
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d09-frame-08.png",
+          "size_match": true,
+          "alpha_iou": 0.7303,
+          "candidate_only_alpha_pixels": 547,
+          "anchor_only_alpha_pixels": 256,
+          "rgb_mae_on_alpha_union": 55.679,
+          "bbox_delta": {
+            "left": -6,
+            "top": 0,
+            "right": 6,
+            "bottom": 0,
+            "width": 12,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d07",
+    "target": "frame-06",
+    "motion": "walk passing step, body advances slightly",
+    "decision": "reject",
+    "reason": "transparent holes=1 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d08-frame-07-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d08-frame-07-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d08-frame-07-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d08-frame-07-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d08-frame-07.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d08-frame-07.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d08-frame-07-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d08-frame-07\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d08-frame-07\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 4\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d08-frame-07",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 4,
+      "bbox": {
+        "left": 6,
+        "top": 6,
+        "right": 89,
+        "bottom": 57,
+        "width": 84,
+        "height": 52
+      },
+      "visible_pixels": 2585,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.6792,
+          "candidate_only_alpha_pixels": 627,
+          "anchor_only_alpha_pixels": 298,
+          "rgb_mae_on_alpha_union": 64.741,
+          "bbox_delta": {
+            "left": -7,
+            "top": 0,
+            "right": 7,
+            "bottom": 0,
+            "width": 14,
+            "height": 0
+          },
+          "baseline_delta": 0
+        },
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d10-frame-09.png",
+          "size_match": true,
+          "alpha_iou": 0.7603,
+          "candidate_only_alpha_pixels": 403,
+          "anchor_only_alpha_pixels": 285,
+          "rgb_mae_on_alpha_union": 55.075,
+          "bbox_delta": {
+            "left": -4,
+            "top": 0,
+            "right": 5,
+            "bottom": 0,
+            "width": 9,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d08",
+    "target": "frame-07",
+    "motion": "walk contact alternate, hind foot visible",
+    "decision": "reject",
+    "reason": "transparent holes=4 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d09-frame-08-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d09-frame-08-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d09-frame-08-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d09-frame-08-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d09-frame-08.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d09-frame-08.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d09-frame-08-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d09-frame-08\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d09-frame-08\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 1\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d09-frame-08",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 1,
+      "bbox": {
+        "left": 10,
+        "top": 6,
+        "right": 85,
+        "bottom": 57,
+        "width": 76,
+        "height": 52
+      },
+      "visible_pixels": 2430,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.8072,
+          "candidate_only_alpha_pixels": 337,
+          "anchor_only_alpha_pixels": 163,
+          "rgb_mae_on_alpha_union": 46.877,
+          "bbox_delta": {
+            "left": -3,
+            "top": 0,
+            "right": 3,
+            "bottom": 0,
+            "width": 6,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d09",
+    "target": "frame-08",
+    "motion": "walk recovery, tail balance locked",
+    "decision": "reject",
+    "reason": "transparent holes=1 px"
+  },
+  {
+    "state": "raw-found",
+    "raw": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d10-frame-09-raw.png",
+    "normalized": {
+      "source": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\raw\\d10-frame-09-raw.png",
+      "normalized": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\normalized\\d10-frame-09-source.png",
+      "source_format": "PNG",
+      "source_width": 1536,
+      "source_height": 1024
+    },
+    "prepare": {
+      "ok": true,
+      "mode": "chroma-green",
+      "attempts": [
+        {
+          "mode": "chroma-green",
+          "returncode": 0,
+          "stdout": "prepared docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/normalized/d10-frame-09-source.png -> docs/art-source/chinchilla/motion-source/review/candidates/set00-degudesktop-dot-family-10-20260624/prepared/d10-frame-09.png",
+          "stderr": ""
+        }
+      ]
+    },
+    "prepared": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d10-frame-09.png",
+    "prepare_report": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d10-frame-09-prepare-report.json",
+    "qa": {
+      "ok": true,
+      "stdout": "{\n  \"label\": \"d10-frame-09\",\n  \"out_dir\": \"docs\\\\art-source\\\\chinchilla\\\\motion-source\\\\review\\\\candidates\\\\set00-degudesktop-dot-family-10-20260624\\\\qa\\\\d10-frame-09\",\n  \"size_ok_96x64\": true,\n  \"edge_touch\": false,\n  \"alpha_components\": 1,\n  \"transparent_holes_px\": 1\n}",
+      "stderr": "",
+      "qa_dir": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\qa\\d10-frame-09",
+      "size_ok_96x64": true,
+      "edge_touch": false,
+      "alpha_components": 1,
+      "transparent_holes_px": 1,
+      "bbox": {
+        "left": 10,
+        "top": 6,
+        "right": 84,
+        "bottom": 57,
+        "width": 75,
+        "height": 52
+      },
+      "visible_pixels": 2467,
+      "comparisons": [
+        {
+          "anchor": "docs\\art-source\\chinchilla\\motion-source\\review\\candidates\\set00-degudesktop-dot-family-10-20260624\\prepared\\d01-frame-00.png",
+          "size_match": true,
+          "alpha_iou": 0.8536,
+          "candidate_only_alpha_pixels": 292,
+          "anchor_only_alpha_pixels": 81,
+          "rgb_mae_on_alpha_union": 34.074,
+          "bbox_delta": {
+            "left": -3,
+            "top": 0,
+            "right": 2,
+            "bottom": 0,
+            "width": 5,
+            "height": 0
+          },
+          "baseline_delta": 0
+        }
+      ]
+    },
+    "id": "d10",
+    "target": "frame-09",
+    "motion": "walk finish, returns toward neutral height",
+    "decision": "reject",
+    "reason": "transparent holes=1 px"
+  }
+]

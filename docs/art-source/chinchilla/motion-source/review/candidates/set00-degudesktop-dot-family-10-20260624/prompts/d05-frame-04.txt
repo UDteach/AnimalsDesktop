@@ -1,0 +1,19 @@
+Create exactly one original 96x64-style pixel-art sprite candidate for AnimalsDesktop.
+
+Subject: one complete right-facing standard gray chinchilla only.
+Target: set00/frame-04.
+Motion: walk start, front paw begins to lift.
+
+Style target:
+- original tiny desktop pet pixel art, DeguDesktop-compatible discipline but not copied from degu assets
+- crisp hand-pixelled silhouette, readable at 96x64
+- compact round chinchilla body, large round ears, black eye, short muzzle, tiny whisker cluster, small forepaws, hind feet, curled fluffy tail
+- consistent camera, baseline, body size, tail balance, face design, and coat palette across this new dot-family run
+
+Output requirements:
+- one standalone animal only, not a sprite sheet, grid, strip, sequence, or contact sheet
+- pure flat chroma green #00ff00 background
+- no floor, no shadow, no platform, no lower shelf, no scenery, no props, no text, no border
+- full animal visible; ears, feet, whiskers, and tail must not be cropped
+- use a limited neutral gray pixel palette with dark outline and small highlights
+- animal pixels must be solid and continuous; no transparent holes, no green pinholes inside the body, no missing pixels

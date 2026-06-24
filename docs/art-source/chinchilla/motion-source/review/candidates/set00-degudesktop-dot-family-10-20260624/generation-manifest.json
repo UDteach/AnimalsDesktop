@@ -1,0 +1,72 @@
+[
+  {
+    "id": "d01",
+    "target": "frame-00",
+    "motion": "idle breath, neutral standing pose",
+    "prompt": "prompts\\d01-frame-00.txt",
+    "expected_raw": "raw/d01-frame-00-raw.png"
+  },
+  {
+    "id": "d02",
+    "target": "frame-01",
+    "motion": "idle breath continuation, tiny ear and chest shift",
+    "prompt": "prompts\\d02-frame-01.txt",
+    "expected_raw": "raw/d02-frame-01-raw.png"
+  },
+  {
+    "id": "d03",
+    "target": "frame-02",
+    "motion": "idle weight shift, same baseline and tail",
+    "prompt": "prompts\\d03-frame-02.txt",
+    "expected_raw": "raw/d03-frame-02-raw.png"
+  },
+  {
+    "id": "d04",
+    "target": "frame-03",
+    "motion": "idle settle, tiny head and forepaw reset",
+    "prompt": "prompts\\d04-frame-03.txt",
+    "expected_raw": "raw/d04-frame-03-raw.png"
+  },
+  {
+    "id": "d05",
+    "target": "frame-04",
+    "motion": "walk start, front paw begins to lift",
+    "prompt": "prompts\\d05-frame-04.txt",
+    "expected_raw": "raw/d05-frame-04-raw.png"
+  },
+  {
+    "id": "d06",
+    "target": "frame-05",
+    "motion": "walk contact, front paw reaches forward",
+    "prompt": "prompts\\d06-frame-05.txt",
+    "expected_raw": "raw/d06-frame-05-raw.png"
+  },
+  {
+    "id": "d07",
+    "target": "frame-06",
+    "motion": "walk passing step, body advances slightly",
+    "prompt": "prompts\\d07-frame-06.txt",
+    "expected_raw": "raw/d07-frame-06-raw.png"
+  },
+  {
+    "id": "d08",
+    "target": "frame-07",
+    "motion": "walk contact alternate, hind foot visible",
+    "prompt": "prompts\\d08-frame-07.txt",
+    "expected_raw": "raw/d08-frame-07-raw.png"
+  },
+  {
+    "id": "d09",
+    "target": "frame-08",
+    "motion": "walk recovery, tail balance locked",
+    "prompt": "prompts\\d09-frame-08.txt",
+    "expected_raw": "raw/d09-frame-08-raw.png"
+  },
+  {
+    "id": "d10",
+    "target": "frame-09",
+    "motion": "walk finish, returns toward neutral height",
+    "prompt": "prompts\\d10-frame-09.txt",
+    "expected_raw": "raw/d10-frame-09-raw.png"
+  }
+]
