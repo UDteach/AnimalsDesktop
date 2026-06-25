@@ -66,7 +66,8 @@ go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./c
 git diff --check
 ```
 
-Windows release ZIPs are built on Windows CI or a Windows machine:
+Windows release ZIPs are built separately on a Windows machine after the Mac
+preview release:
 
 ```powershell
 New-Item -ItemType Directory -Force dist | Out-Null

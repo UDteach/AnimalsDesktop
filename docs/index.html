@@ -127,6 +127,13 @@
         background: var(--leaf-dark);
       }
 
+      .button.disabled {
+        border-color: var(--line);
+        color: var(--muted);
+        background: transparent;
+        cursor: default;
+      }
+
       .download-note {
         margin: 12px 0 0;
         color: var(--muted);
@@ -419,16 +426,11 @@
             <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-amd64.zip">
               Mac版 Intel macOS 12+
             </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-amd64.zip">
-              Windows版 x64
-            </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-386.zip">
-              Windows版 x86
-            </a>
+            <span class="button disabled" aria-disabled="true">Windows版は別途ビルド</span>
           </div>
           <p class="download-note">
             v0.1.3は5種のset00モーションを入れたプレビューreleaseです。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。
-            Windows版はWindows機でのビルド確認後に同じreleaseへ追加する想定です。
+            Windows版は別のWindows環境でビルド確認します。
           </p>
           <div class="release-meta" aria-label="Build information">
             <span>Preview release <strong data-release-version>v0.1.3</strong></span>

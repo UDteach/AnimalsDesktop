@@ -553,9 +553,10 @@ func TestFixedCoatModeRefreshesAllPets(t *testing.T) {
 
 	a.setCoatMode(coatFixed)
 
+	want := len(variants) - 1
 	for i, pet := range a.pets {
-		if pet.variant != 0 {
-			t.Fatalf("pet %d variant = %d, want fixed variant 0", i, pet.variant)
+		if pet.variant != want {
+			t.Fatalf("pet %d variant = %d, want fixed variant %d", i, pet.variant, want)
 		}
 	}
 }
@@ -572,14 +573,15 @@ func TestSelectedCoatModeUsesPerPetChoices(t *testing.T) {
 
 	a.setCoatMode(coatSelected)
 
+	want := []int{0, 3, len(variants) - 1}
 	for i := range []int{0, 1, 2} {
-		if got := a.pets[i].variant; got != 0 {
-			t.Fatalf("pet %d variant = %d, want 0", i, got)
+		if got := a.pets[i].variant; got != want[i] {
+			t.Fatalf("pet %d variant = %d, want %d", i, got, want[i])
 		}
 	}
 	a.setSelectedVariant(1, 8)
-	if got := a.pets[1].variant; got != 0 {
-		t.Fatalf("selected variant update = %d, want 0", got)
+	if got, want := a.pets[1].variant, len(variants)-1; got != want {
+		t.Fatalf("selected variant update = %d, want %d", got, want)
 	}
 }
 

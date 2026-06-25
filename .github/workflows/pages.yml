@@ -22,7 +22,7 @@ jobs:
           grep -q "Animals Desktop" docs/index.html
           grep -q "v0.1.3" docs/index.html
           grep -q "Mac版 Apple Silicon" docs/index.html
-          grep -q "Windows版 x64" docs/index.html
+          grep -q "Windows版は別途ビルド" docs/index.html
           grep -q "ファンシーラット" docs/index.html
           grep -q "レオパルド・ゲッコー" docs/index.html
           grep -q "animalsdesktop-coming-soon-silhouettes.png" docs/index.html
