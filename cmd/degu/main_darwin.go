@@ -889,9 +889,10 @@ func (a *darwinPetApp) render() *image.RGBA {
 		if a.wheel != nil {
 			draw.Draw(canvas, image.Rect(wheelX, wheelY, wheelX+wheelSize, wheelY+wheelSize), a.wheel, image.Point{}, draw.Over)
 		}
-		if frames := a.frames[a.variantID(a.pets[0].variant)]; len(frames) > a.pets[0].frame {
+		variantID := a.variantID(a.pets[0].variant)
+		if frames := a.frames[variantID]; len(frames) > a.pets[0].frame {
 			runner := scaleNearest(frames[a.pets[0].frame], 66, 44)
-			drawFacingImage(canvas, runner, image.Rect(wheelX+3, wheelY+22, wheelX+69, wheelY+66), 1)
+			drawFacingImage(canvas, runner, image.Rect(wheelX+3, wheelY+22, wheelX+69, wheelY+66), darwinDrawDirection(1, variantID))
 		}
 	}
 
@@ -900,12 +901,13 @@ func (a *darwinPetApp) render() *image.RGBA {
 			continue
 		}
 		p := &a.pets[i]
-		frames := a.frames[a.variantID(p.variant)]
+		variantID := a.variantID(p.variant)
+		frames := a.frames[variantID]
 		if len(frames) <= p.frame {
 			continue
 		}
 		y := sceneH - spriteH - p.lane
-		drawFacingImage(canvas, frames[p.frame], image.Rect(p.x, y, p.x+spriteW, y+spriteH), p.dir)
+		drawFacingImage(canvas, frames[p.frame], image.Rect(p.x, y, p.x+spriteW, y+spriteH), darwinDrawDirection(p.dir, variantID))
 	}
 	a.drawReactions(canvas)
 	return canvas
@@ -1050,6 +1052,23 @@ func drawFacingImage(dst *image.RGBA, src *image.RGBA, r image.Rectangle, dir in
 		}
 	}
 	draw.Draw(dst, r, flipped, image.Point{}, draw.Over)
+}
+
+func darwinDrawDirection(desiredDir int, variantID string) int {
+	dir := 1
+	if desiredDir < 0 {
+		dir = -1
+	}
+	return dir * darwinSourceFacingDirection(variantID)
+}
+
+func darwinSourceFacingDirection(variantID string) int {
+	switch variantID {
+	case "sugar_glider_gray":
+		return -1
+	default:
+		return 1
+	}
 }
 
 func scaleNearest(src *image.RGBA, width, height int) *image.RGBA {

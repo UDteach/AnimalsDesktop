@@ -834,7 +834,7 @@ func (a *petApp) render() {
 		frame := currentFrameForVariant(p.state, p.frame, variant)
 		src := a.frames.frame(variant, p.motionSet, frame)
 		y := sceneH - spriteH - p.laneOffset
-		drawPetSprite(canvas, src, p, p.x, y)
+		drawPetSprite(canvas, src, p, variant, p.x, y)
 		if p.state == stateCarry && p.carryKind != noItem {
 			propX := p.x + spriteW - 18
 			if p.dir < 0 {
@@ -859,7 +859,7 @@ func (a *petApp) render() {
 			variant := variants[a.petVariant(p)]
 			frame := currentFrameForVariant(p.state, p.frame, variant)
 			src := a.frames.frame(variant, p.motionSet, frame)
-			drawWheelRunner(canvas, wheelX, wheelY, src, p.frame)
+			drawWheelRunner(canvas, wheelX, wheelY, src, p.frame, drawDirectionForVariant(1, variant))
 		}
 		drawWheelFront(canvas, wheelX, wheelY, a.tickCount)
 	}
@@ -2828,12 +2828,12 @@ func (a *petApp) drawForageProp(dst *image.RGBA, x, y, kind int) {
 	fillCircle(dst, x, y-2, 3, rgba(170, 150, 94, 220))
 }
 
-func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *deguPet, x, y int) {
+func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *deguPet, variant coatVariant, x, y int) {
 	dir := normalizeDir(p.dir)
 	if p.state == stateTurn {
 		dir = turnDrawDirection(p.dir, p.nextDir)
 	}
-	drawFacingImage(dst, src, image.Rect(x, y, x+spriteW, y+spriteH), dir)
+	drawFacingImage(dst, src, image.Rect(x, y, x+spriteW, y+spriteH), drawDirectionForVariant(dir, variant))
 }
 
 func turnDrawDirection(dir, nextDir int) int {
@@ -2841,6 +2841,19 @@ func turnDrawDirection(dir, nextDir int) int {
 		return -1
 	}
 	return 1
+}
+
+func drawDirectionForVariant(desiredDir int, variant coatVariant) int {
+	return normalizeDir(desiredDir) * sourceFacingDirection(variant.ID)
+}
+
+func sourceFacingDirection(variantID string) int {
+	switch variantID {
+	case "sugar_glider_gray":
+		return -1
+	default:
+		return 1
+	}
 }
 
 func drawFacingImage(dst *image.RGBA, src *image.RGBA, r image.Rectangle, dir int) {
@@ -3908,14 +3921,14 @@ func drawWheelBack(dst *image.RGBA, x, y int, wheel *image.RGBA) {
 	}
 }
 
-func drawWheelRunner(dst *image.RGBA, x, y int, src *image.RGBA, frame int) {
+func drawWheelRunner(dst *image.RGBA, x, y int, src *image.RGBA, frame int, dir int) {
 	runnerW := 58
 	runnerH := 40
 	scaled := fitVisibleImageTo(src, runnerW, runnerH)
 	bob := int(math.Sin(float64(frame)/2.0) * 2)
 	dstX := x + (wheelSize-runnerW)/2
 	dstY := y + wheelSize/2 - runnerH/2 + 3 + bob
-	draw.Draw(dst, image.Rect(dstX, dstY, dstX+runnerW, dstY+runnerH), scaled, image.Point{}, draw.Over)
+	drawFacingImage(dst, scaled, image.Rect(dstX, dstY, dstX+runnerW, dstY+runnerH), dir)
 }
 
 func drawWheelFront(dst *image.RGBA, x, y, tick int) {

@@ -334,3 +334,18 @@ func TestDarwinDrawFacingImageMirrorsNegativeDirection(t *testing.T) {
 		t.Fatalf("drawFacingImage negative right pixel = %#v, want %#v", got, red)
 	}
 }
+
+func TestDarwinDrawDirectionCompensatesLeftFacingSource(t *testing.T) {
+	if got := darwinDrawDirection(1, "sugar_glider_gray"); got != -1 {
+		t.Fatalf("sugar glider right-moving draw direction = %d, want -1", got)
+	}
+	if got := darwinDrawDirection(-1, "sugar_glider_gray"); got != 1 {
+		t.Fatalf("sugar glider left-moving draw direction = %d, want 1", got)
+	}
+	if got := darwinDrawDirection(1, "hamster_golden_syrian"); got != 1 {
+		t.Fatalf("hamster right-moving draw direction = %d, want 1", got)
+	}
+	if got := darwinDrawDirection(-1, "hamster_golden_syrian"); got != -1 {
+		t.Fatalf("hamster left-moving draw direction = %d, want -1", got)
+	}
+}

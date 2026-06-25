@@ -523,6 +523,24 @@ func TestDrawFacingImageMirrorsNegativeDirection(t *testing.T) {
 	}
 }
 
+func TestDrawDirectionForVariantCompensatesLeftFacingSource(t *testing.T) {
+	sugarGlider := coatVariant{ID: "sugar_glider_gray"}
+	hamster := coatVariant{ID: "hamster_golden_syrian"}
+
+	if got := drawDirectionForVariant(1, sugarGlider); got != -1 {
+		t.Fatalf("sugar glider right-moving draw direction = %d, want -1", got)
+	}
+	if got := drawDirectionForVariant(-1, sugarGlider); got != 1 {
+		t.Fatalf("sugar glider left-moving draw direction = %d, want 1", got)
+	}
+	if got := drawDirectionForVariant(1, hamster); got != 1 {
+		t.Fatalf("hamster right-moving draw direction = %d, want 1", got)
+	}
+	if got := drawDirectionForVariant(-1, hamster); got != -1 {
+		t.Fatalf("hamster left-moving draw direction = %d, want -1", got)
+	}
+}
+
 func TestFixedCoatModeRefreshesAllPets(t *testing.T) {
 	a := &petApp{
 		variant: 99,
