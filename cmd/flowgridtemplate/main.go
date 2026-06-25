@@ -10,6 +10,7 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	xdraw "golang.org/x/image/draw"
@@ -52,6 +53,7 @@ func main() {
 	source := flag.String("source", "flow-output.png", "expected Flow output PNG filename")
 	frames := flag.Int("frames", 16, "number of frame cells to request")
 	frameStart := flag.Int("frame-start", 0, "first frame number")
+	frameList := flag.String("frame-list", "", "comma-separated explicit frame numbers; overrides -frames and -frame-start")
 	columns := flag.Int("columns", 0, "grid columns; default is derived from frame count")
 	rows := flag.Int("rows", 0, "grid rows; default is derived from frame count")
 	canvas := flag.Int("canvas", defaultCanvas, "square guide canvas size")
@@ -63,12 +65,14 @@ func main() {
 	if *outDir == "" {
 		fatalf("-out-dir is required")
 	}
-	if *frames <= 0 {
-		fatalf("-frames must be positive")
+	frameNumbers, err := selectedFrameNumbers(*frameList, *frames, *frameStart)
+	if err != nil {
+		fatalf("%v", err)
 	}
-	cols, gridRows := gridShape(*frames, *columns, *rows)
-	if cols <= 0 || gridRows <= 0 || cols*gridRows < *frames {
-		fatalf("invalid grid shape: cols=%d rows=%d frames=%d", cols, gridRows, *frames)
+	frameCount := len(frameNumbers)
+	cols, gridRows := gridShape(frameCount, *columns, *rows)
+	if cols <= 0 || gridRows <= 0 || cols*gridRows < frameCount {
+		fatalf("invalid grid shape: cols=%d rows=%d frames=%d", cols, gridRows, frameCount)
 	}
 	if *canvas <= 0 || *margin < 0 || *gutter < 0 {
 		fatalf("invalid canvas/margin/gutter")
@@ -98,10 +102,9 @@ func main() {
 		PitchY:      pitchY,
 		GuardPixels: 4,
 		Background:  "chroma-green",
-		Frames:      make([]manifestFrame, 0, *frames),
+		Frames:      make([]manifestFrame, 0, frameCount),
 	}
-	for i := 0; i < *frames; i++ {
-		frameNo := *frameStart + i
+	for i, frameNo := range frameNumbers {
 		id := fmt.Sprintf("%s-frame-%02d", *sequence, frameNo)
 		pack.Frames = append(pack.Frames, manifestFrame{
 			ID:     id,
@@ -147,7 +150,52 @@ func main() {
 	if err := os.WriteFile(filepath.Join(*outDir, "prompt.txt"), []byte(promptText(pack, *source, len(anchorPaths), *canvas)), 0o644); err != nil {
 		fatalf("write prompt: %v", err)
 	}
-	fmt.Printf("wrote Flow grid experiment pack: %s frames=%d grid=%dx%d cell=%dx%d\n", *outDir, *frames, cols, gridRows, cellW, cellH)
+	fmt.Printf("wrote Flow grid experiment pack: %s frames=%d grid=%dx%d cell=%dx%d\n", *outDir, frameCount, cols, gridRows, cellW, cellH)
+}
+
+func selectedFrameNumbers(frameList string, frames int, frameStart int) ([]int, error) {
+	if strings.TrimSpace(frameList) != "" {
+		return parseFrameList(frameList)
+	}
+	if frames <= 0 {
+		return nil, fmt.Errorf("-frames must be positive")
+	}
+	if frameStart < 0 {
+		return nil, fmt.Errorf("-frame-start must be non-negative")
+	}
+	out := make([]int, 0, frames)
+	for i := 0; i < frames; i++ {
+		out = append(out, frameStart+i)
+	}
+	return out, nil
+}
+
+func parseFrameList(value string) ([]int, error) {
+	parts := strings.Split(value, ",")
+	out := make([]int, 0, len(parts))
+	seen := map[int]bool{}
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			return nil, fmt.Errorf("-frame-list contains an empty frame number")
+		}
+		n, err := strconv.Atoi(part)
+		if err != nil {
+			return nil, fmt.Errorf("-frame-list contains invalid frame number %q", part)
+		}
+		if n < 0 {
+			return nil, fmt.Errorf("-frame-list contains negative frame number %d", n)
+		}
+		if seen[n] {
+			return nil, fmt.Errorf("-frame-list contains duplicate frame number %d", n)
+		}
+		seen[n] = true
+		out = append(out, n)
+	}
+	if len(out) == 0 {
+		return nil, fmt.Errorf("-frame-list must include at least one frame number")
+	}
+	return out, nil
 }
 
 func gridShape(frames int, columns int, rows int) (int, int) {
