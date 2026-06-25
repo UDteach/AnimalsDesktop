@@ -56,6 +56,22 @@ func TestDarwinTickWalksInDirectionWithStableFrame(t *testing.T) {
 	}
 }
 
+func TestDarwinMovePetReflectsAtSceneEdges(t *testing.T) {
+	a := &darwinPetApp{sceneW: 220}
+
+	left := darwinPet{x: 1, dir: -1}
+	a.movePet(&left, 4)
+	if left.x != 0 || left.dir != 1 {
+		t.Fatalf("left edge reflection = x:%d dir:%d, want x 0 dir +1", left.x, left.dir)
+	}
+
+	right := darwinPet{x: a.sceneW - spriteW - 1, dir: 1}
+	a.movePet(&right, 4)
+	if right.x != a.sceneW-spriteW || right.dir != -1 {
+		t.Fatalf("right edge reflection = x:%d dir:%d, want max dir -1", right.x, right.dir)
+	}
+}
+
 func TestDarwinSeqFrameFromHandlesEmptyAndBadDivisor(t *testing.T) {
 	if got := seqFrameFrom(nil, 12, 2); got != idleStart {
 		t.Fatalf("seqFrameFrom(nil) = %d, want %d", got, idleStart)
@@ -63,6 +79,24 @@ func TestDarwinSeqFrameFromHandlesEmptyAndBadDivisor(t *testing.T) {
 	seq := []int{7, 9}
 	if got := seqFrameFrom(seq, 3, 0); got != 9 {
 		t.Fatalf("seqFrameFrom with zero divisor = %d, want 9", got)
+	}
+}
+
+func TestDarwinRandomPauseAvoidsWeakNibbleFrames(t *testing.T) {
+	for _, variantID := range []string{"sugar_glider_gray", "rabbit_chestnut_agouti"} {
+		for tick := 0; tick < 32; tick++ {
+			got := darwinRandomPauseFrame(variantID, 0, tick)
+			if got < hopStart || got >= hopStart+4 {
+				t.Fatalf("%s pause nibble tick %d = %d, want stable action fallback", variantID, tick, got)
+			}
+		}
+	}
+
+	for tick := 0; tick < 24; tick++ {
+		got := darwinRandomPauseFrame("hamster_golden_syrian", 0, tick)
+		if got < nibbleStart || got >= nibbleStart+3 {
+			t.Fatalf("hamster pause nibble tick %d = %d, want original nibble frames", tick, got)
+		}
 	}
 }
 

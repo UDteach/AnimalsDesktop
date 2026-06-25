@@ -4,6 +4,8 @@ package main
 
 import (
 	"encoding/json"
+	"image"
+	"image/color"
 	"os"
 	"path/filepath"
 	"testing"
@@ -17,6 +19,8 @@ func TestHorizontalMotionFramesUseStableRightFacingWalkSequence(t *testing.T) {
 	}
 	states := []behaviorState{
 		stateWalk,
+		stateScurry,
+		stateWheel,
 		stateForage,
 		stateCarry,
 	}
@@ -31,27 +35,57 @@ func TestHorizontalMotionFramesUseStableRightFacingWalkSequence(t *testing.T) {
 	}
 }
 
-func TestScurryUsesDedicatedFastMotionFrames(t *testing.T) {
+func TestScurryUsesStableFastWalkFrames(t *testing.T) {
+	allowed := map[int]bool{
+		walkStart:     true,
+		walkStart + 1: true,
+		walkStart + 3: true,
+	}
 	for frame := 0; frame < scurryFrames*2; frame++ {
 		got := currentFrame(stateScurry, frame)
-		if got < scurryStart || got >= scurryStart+scurryFrames {
-			t.Fatalf("currentFrame(stateScurry, %d) = %d, want dedicated scurry frame", frame, got)
+		if !allowed[got] {
+			t.Fatalf("currentFrame(stateScurry, %d) = %d, want stable fast walk frame", frame, got)
 		}
-	}
-	if got := currentFrame(stateScurry, scurryFrames); got != scurryStart {
-		t.Fatalf("scurry loop frame = %d, want %d", got, scurryStart)
 	}
 }
 
-func TestWheelUsesDedicatedRunFrames(t *testing.T) {
+func TestWheelUsesStableWalkFramesForAnimalRuntime(t *testing.T) {
+	allowed := map[int]bool{
+		walkStart:     true,
+		walkStart + 1: true,
+		walkStart + 3: true,
+	}
 	for frame := 0; frame < wheelRunFrames*2; frame++ {
 		got := currentFrame(stateWheel, frame)
-		if got < wheelRunStart || got >= wheelRunStart+wheelRunFrames {
-			t.Fatalf("currentFrame(stateWheel, %d) = %d, want dedicated wheelrun frame", frame, got)
+		if !allowed[got] {
+			t.Fatalf("currentFrame(stateWheel, %d) = %d, want stable walk frame", frame, got)
 		}
 	}
-	if got := currentFrame(stateWheel, wheelRunFrames); got != wheelRunStart {
-		t.Fatalf("wheelrun loop frame = %d, want %d", got, wheelRunStart)
+}
+
+func TestWeakNibbleVariantsUseStableActionFallback(t *testing.T) {
+	for _, variant := range []coatVariant{
+		{ID: "sugar_glider_gray"},
+		{ID: "rabbit_chestnut_agouti"},
+	} {
+		for frame := 0; frame < 32; frame++ {
+			got := currentFrameForVariant(stateNibble, frame, variant)
+			if got < hopStart || got >= hopStart+4 {
+				t.Fatalf("%s nibble frame %d = %d, want stable action fallback", variant.ID, frame, got)
+			}
+			got = currentFrameForVariant(stateGroom, frame, variant)
+			if got < groomStart || got >= groomStart+groomFrames {
+				t.Fatalf("%s groom frame %d = %d, want groom fallback", variant.ID, frame, got)
+			}
+		}
+	}
+
+	hamster := coatVariant{ID: "hamster_golden_syrian"}
+	for frame := 0; frame < 12; frame++ {
+		got := currentFrameForVariant(stateNibble, frame, hamster)
+		if got < nibbleStart || got >= nibbleStart+3 {
+			t.Fatalf("hamster nibble frame %d = %d, want original nibble frames", frame, got)
+		}
 	}
 }
 
@@ -396,6 +430,96 @@ func TestSetBidirectionalOffNormalizesPets(t *testing.T) {
 		if pet.state == stateTurn {
 			t.Fatalf("pet %d remained in stateTurn", i)
 		}
+	}
+}
+
+func TestResetPetAtEdgeReentersFromOppositeSideWithMatchingDirection(t *testing.T) {
+	a := &petApp{
+		sceneW:        500,
+		speed:         3,
+		coatMode:      coatSelected,
+		selectedCoats: defaultSelectedCoats(),
+		forage: []forageItem{
+			{owner: 0, active: true},
+			{owner: reservedItem, active: true},
+		},
+	}
+
+	right := deguPet{dir: 1, nextDir: 1, item: 0, carryKind: 2, state: stateCarry}
+	a.resetPetAtEdge(0, &right, 1)
+	if right.x > -spriteW || right.dir != 1 || right.nextDir != 1 {
+		t.Fatalf("right-moving reset = x:%d dir:%d next:%d, want off-left and direction +1", right.x, right.dir, right.nextDir)
+	}
+	if right.item != noItem || right.carryKind != noItem || right.state != stateWalk {
+		t.Fatalf("right-moving reset state = item:%d carry:%d state:%v, want cleared walk", right.item, right.carryKind, right.state)
+	}
+	if a.forage[0].owner != noItem {
+		t.Fatalf("owned forage was not released: owner=%d", a.forage[0].owner)
+	}
+
+	left := deguPet{dir: -1, nextDir: -1, item: noItem, state: stateWalk}
+	a.resetPetAtEdge(1, &left, -1)
+	if left.x < a.sceneW || left.dir != -1 || left.nextDir != -1 {
+		t.Fatalf("left-moving reset = x:%d dir:%d next:%d, want off-right and direction -1", left.x, left.dir, left.nextDir)
+	}
+}
+
+func TestTickPetMovesByDirectionAndWrapsPastEdges(t *testing.T) {
+	a := &petApp{
+		sceneW:        240,
+		speed:         3,
+		coatMode:      coatSelected,
+		selectedCoats: defaultSelectedCoats(),
+	}
+
+	right := deguPet{x: 20, dir: 1, nextDir: 1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
+	a.tickPet(0, &right)
+	if right.x != 24 {
+		t.Fatalf("right-moving tick x = %d, want 24", right.x)
+	}
+
+	left := deguPet{x: 20, dir: -1, nextDir: -1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
+	a.tickPet(0, &left)
+	if left.x != 16 {
+		t.Fatalf("left-moving tick x = %d, want 16", left.x)
+	}
+
+	right.x = a.sceneW + 9
+	a.tickPet(0, &right)
+	if right.x > -spriteW || right.dir != 1 {
+		t.Fatalf("right edge wrap = x:%d dir:%d, want off-left dir +1", right.x, right.dir)
+	}
+
+	left.x = -spriteW - 9
+	a.tickPet(0, &left)
+	if left.x < a.sceneW || left.dir != -1 {
+		t.Fatalf("left edge wrap = x:%d dir:%d, want off-right dir -1", left.x, left.dir)
+	}
+}
+
+func TestDrawFacingImageMirrorsNegativeDirection(t *testing.T) {
+	red := color.RGBA{R: 255, A: 255}
+	blue := color.RGBA{B: 255, A: 255}
+	src := image.NewRGBA(image.Rect(0, 0, 2, 1))
+	src.SetRGBA(0, 0, red)
+	src.SetRGBA(1, 0, blue)
+
+	dst := image.NewRGBA(src.Bounds())
+	drawFacingImage(dst, src, dst.Bounds(), 1)
+	if got := dst.RGBAAt(0, 0); got != red {
+		t.Fatalf("positive left pixel = %#v, want %#v", got, red)
+	}
+	if got := dst.RGBAAt(1, 0); got != blue {
+		t.Fatalf("positive right pixel = %#v, want %#v", got, blue)
+	}
+
+	dst = image.NewRGBA(src.Bounds())
+	drawFacingImage(dst, src, dst.Bounds(), -1)
+	if got := dst.RGBAAt(0, 0); got != blue {
+		t.Fatalf("negative left pixel = %#v, want %#v", got, blue)
+	}
+	if got := dst.RGBAAt(1, 0); got != red {
+		t.Fatalf("negative right pixel = %#v, want %#v", got, red)
 	}
 }
 

@@ -822,14 +822,7 @@ func (a *darwinPetApp) tickPets() {
 		if p.nextPause <= 0 {
 			p.pause = 30 + rand.Intn(70)
 			p.nextPause = 120 + rand.Intn(180)
-			switch rand.Intn(3) {
-			case 0:
-				p.frame = seqFrameFrom(nibbleFrameSeq, a.tick, 3)
-			case 1:
-				p.frame = seqFrameFrom(hopFrameSeq, a.tick, 2)
-			default:
-				p.frame = seqFrameFrom(idleFrameSeq, a.tick, 5)
-			}
+			p.frame = darwinRandomPauseFrame(a.variantID(p.variant), rand.Intn(3), a.tick)
 			continue
 		}
 		a.movePet(p, p.speed)
@@ -977,6 +970,27 @@ func seqFrameFrom(seq []int, tick, delay int) int {
 		delay = 1
 	}
 	return seq[(tick/delay)%len(seq)]
+}
+
+func darwinRandomPauseFrame(variantID string, action int, tick int) int {
+	switch action {
+	case 0:
+		seq, delay := darwinNibbleLikeSequence(variantID)
+		return seqFrameFrom(seq, tick, delay)
+	case 1:
+		return seqFrameFrom(hopFrameSeq, tick, 2)
+	default:
+		return seqFrameFrom(idleFrameSeq, tick, 5)
+	}
+}
+
+func darwinNibbleLikeSequence(variantID string) ([]int, int) {
+	switch variantID {
+	case "sugar_glider_gray", "rabbit_chestnut_agouti":
+		return hopFrameSeq, 2
+	default:
+		return nibbleFrameSeq, 3
+	}
 }
 
 func loadDarwinSprites() map[string][]*image.RGBA {

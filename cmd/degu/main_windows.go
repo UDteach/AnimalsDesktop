@@ -830,8 +830,9 @@ func (a *petApp) render() {
 		if p.state == stateWheel {
 			continue
 		}
-		frame := currentFrame(p.state, p.frame)
-		src := a.frames.frame(variants[a.petVariant(p)], p.motionSet, frame)
+		variant := variants[a.petVariant(p)]
+		frame := currentFrameForVariant(p.state, p.frame, variant)
+		src := a.frames.frame(variant, p.motionSet, frame)
 		y := sceneH - spriteH - p.laneOffset
 		drawPetSprite(canvas, src, p, p.x, y)
 		if p.state == stateCarry && p.carryKind != noItem {
@@ -855,8 +856,9 @@ func (a *petApp) render() {
 			if p.state != stateWheel {
 				continue
 			}
-			frame := currentFrame(p.state, p.frame)
-			src := a.frames.frame(variants[a.petVariant(p)], p.motionSet, frame)
+			variant := variants[a.petVariant(p)]
+			frame := currentFrameForVariant(p.state, p.frame, variant)
+			src := a.frames.frame(variant, p.motionSet, frame)
 			drawWheelRunner(canvas, wheelX, wheelY, src, p.frame)
 		}
 		drawWheelFront(canvas, wheelX, wheelY, a.tickCount)
@@ -866,20 +868,28 @@ func (a *petApp) render() {
 }
 
 func currentFrame(state behaviorState, frame int) int {
+	return currentFrameForVariant(state, frame, coatVariant{})
+}
+
+func currentFrameForVariant(state behaviorState, frame int, variant coatVariant) int {
 	switch state {
 	case stateIdle:
 		return frameFromSeq(idleFrameSeq, frame, 5)
 	case stateWalk, stateForage, stateCarry:
 		return frameFromSeq(walkFrameSeq, frame, 2)
-	case stateScurry:
-		return frameFromSeq(scurryFrameSeq, frame, 1)
-	case stateWheel:
-		return frameFromSeq(wheelRunFrameSeq, frame, 1)
+	case stateScurry, stateWheel:
+		return frameFromSeq(walkFrameSeq, frame, 1)
 	case stateNibble:
+		if usesStableActionFallback(variant) {
+			return frameFromSeq(hopFrameSeq, frame, 3)
+		}
 		return frameFromSeq(nibbleFrameSeq, frame, 3)
 	case stateHop:
 		return frameFromSeq(hopFrameSeq, frame, 2)
 	case stateGroom:
+		if usesStableActionFallback(variant) {
+			return frameFromSeq(groomFrameSeq, frame, 3)
+		}
 		return frameFromSeq(nibbleFrameSeq, frame, 4)
 	case stateTurn:
 		return frameFromSeqClamped(turnFrameSeq, frame, 2)
@@ -893,6 +903,15 @@ func currentFrame(state behaviorState, frame int) int {
 		return frameFromSeq(groomFrameSeq, frame, 3)
 	}
 	return idleStart
+}
+
+func usesStableActionFallback(variant coatVariant) bool {
+	switch variant.ID {
+	case "sugar_glider_gray", "rabbit_chestnut_agouti":
+		return true
+	default:
+		return false
+	}
 }
 
 func frameFromSeq(seq []int, frame, divisor int) int {
