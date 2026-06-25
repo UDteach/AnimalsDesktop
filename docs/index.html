@@ -6,7 +6,7 @@
     <title>Animals Desktop</title>
     <meta
       name="description"
-      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー付近やMacのDock付近を歩き回るデスクトップペットアプリです。"
+      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
     />
     <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <style>
@@ -326,6 +326,17 @@
           width: 100%;
         }
 
+        .release-meta {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 8px;
+        }
+
+        .release-meta span {
+          justify-content: center;
+          min-width: 0;
+        }
+
         .animal-card {
           grid-template-columns: 96px minmax(0, 1fr);
         }
@@ -354,7 +365,7 @@
           <h1>Animals Desktop</h1>
           <p class="lead">
             チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎが、Windowsのタスクバー付近や
-            MacのDock付近を歩き回るデスクトップペットです。作業のじゃまをしにくい軽い表示で、
+            MacのDock付近を歩き回るデスクトップペットです。作業のそばで控えめに動きながら、
             小動物たちの歩き、待機、クリック反応を楽しめます。
           </p>
           <div id="download" class="actions">
@@ -369,7 +380,7 @@
             </a>
           </div>
           <p class="download-note">
-            v0.1.3は、5種類の小動物と基本モーションを試せる先行お試し版です。Windows版はZIPを展開して
+            v0.1.3は、5種類の小動物と基本モーションを試せるプレビュー版です。Windows版はZIPを展開して
             <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
             <code>AnimalsDesktop.app</code> を起動してください。
           </p>
@@ -387,7 +398,7 @@
           <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with five animals above a desktop taskbar" />
           <div class="note">
             まずは5種類の小動物と基本的な動きを試せるプレビュー版です。
-            見た目や動きの品質を確認しながら、公開する動物を順番に増やしていきます。
+            これからも、見た目と動きが整った動物から順番に追加していきます。
           </div>
         </div>
       </header>
@@ -396,7 +407,7 @@
         <div class="section-head">
           <div>
             <h2 id="animals-heading">登場する動物</h2>
-            <p>現在選べる動物は以下の5種類です。品質を確認できた動物から順番に公開しています。</p>
+            <p>現在選べる動物は以下の5種類です。まずはこの5種類から遊べます。</p>
           </div>
         </div>
         <div class="current-grid">
@@ -404,35 +415,35 @@
             <img src="assets/animal-icons/current-chinchilla_standard_gray.png" alt="チンチラのアイコン" />
             <div>
               <h3>チンチラ</h3>
-              <p>標準グレーのチンチラです。丸い体、大きな耳、ふさっとした尾が分かるように調整しています。</p>
+              <p>標準グレーのチンチラです。丸い体、大きな耳、ふさっとした尾が小さな表示でも伝わります。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-hamster_golden_syrian.png" alt="ハムスターのアイコン" />
             <div>
               <h3>ハムスター</h3>
-              <p>ゴールデンシリアンハムスターです。小さな体でちょこちょこ動く雰囲気を大切にしています。</p>
+              <p>ゴールデンシリアンハムスターです。小さな体でちょこちょこ歩く雰囲気を楽しめます。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-macaroni_mouse_tan.png" alt="マカロニマウスのアイコン" />
             <div>
               <h3>マカロニマウス</h3>
-              <p>太い尾が特徴の小動物です。低めの姿勢で、すばやく動く様子が分かるようにしています。</p>
+              <p>太い尾が特徴の小動物です。低めの姿勢で、すばやく動く様子が伝わる見た目です。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-sugar_glider_gray.png" alt="モモンガのアイコン" />
             <div>
               <h3>モモンガ</h3>
-              <p>灰色の体とシルエットが、小さな表示でも読みやすくなるように調整しています。</p>
+              <p>灰色の体と独特のシルエットが、小さな表示でも読み取りやすい見た目です。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-rabbit_chestnut_agouti.png" alt="うさぎのアイコン" />
             <div>
               <h3>うさぎ</h3>
-              <p>チェスナットアグーチのうさぎです。長い耳と、ぴょんと跳ねる姿勢が分かりやすい見た目です。</p>
+              <p>チェスナットアグーチのうさぎです。長い耳と、ぴょんと跳ねる姿が画面の端でよく映えます。</p>
             </div>
           </article>
         </div>
@@ -450,24 +461,24 @@
             <p>Windowsではタスクバー付近、MacではDock付近に小動物を表示します。</p>
           </article>
           <article>
-            <h3>最大10匹</h3>
-            <p>設定から表示数を変え、複数の小動物を同時に歩かせられます。</p>
+            <h3>最大10匹まで表示</h3>
+            <p>設定から表示数を変えて、複数の小動物を同時に歩かせられます。</p>
           </article>
           <article>
             <h3>表示位置の調整</h3>
-            <p>Windows版では、表示する画面、歩く範囲、縦位置を好みに合わせて調整できます。</p>
+            <p>Windows版では、表示する画面、歩き回る範囲、縦位置を好みに合わせて調整できます。</p>
           </article>
           <article>
             <h3>クリック反応</h3>
-            <p>動物をクリックすると小さな反応をします。普段の作業中のクリックは、できるだけ邪魔しないようにしています。</p>
+            <p>動物をクリックすると小さな反応をします。作業中のクリック操作をできるだけ妨げません。</p>
           </article>
           <article>
             <h3>シンプルな表示</h3>
-            <p>v0.1.3では木、種、餌などの追加アイテムを出さず、動物本体の見た目と動きを中心に確認できます。</p>
+            <p>v0.1.3では木、種、餌などの追加アイテムは表示せず、動物本体のしぐさを中心に楽しめます。</p>
           </article>
           <article>
-            <h3>Windows / Mac配布</h3>
-            <p>Windows版とMac版を同じReleaseページからダウンロードできます。</p>
+            <h3>Windows / Mac対応</h3>
+            <p>Windows版とMac版を同じダウンロードページから入手できます。</p>
           </article>
         </div>
       </section>
@@ -477,8 +488,8 @@
           <div>
             <h2 id="scope-heading">この版について</h2>
             <p>
-              v0.1.3は、5種類の小動物を先に試せるお試し版です。
-              現在は、見た目や動きの品質を確認できた動物だけを掲載しています。
+              v0.1.3は、5種類の小動物を先に試せるプレビュー版です。
+              今後も、見た目と動きが整った動物から順番に追加します。
               木、種、餌などの追加アイテムはこの版では表示しません。
             </p>
           </div>
