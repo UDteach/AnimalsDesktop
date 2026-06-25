@@ -1,8 +1,9 @@
 package catalog
 
 import (
-	"bytes"
 	"fmt"
+	"image"
+	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
@@ -100,19 +101,46 @@ func TestRuntimeSpritesMatchAcceptedMotionSources(t *testing.T) {
 		sourcePaths := expectedRuntimeMotionSources(t, variant.MotionSourcePath, runtimeMotionSets)
 		for set := 0; set < runtimeMotionSets; set++ {
 			runtimePath := repoPath("assets", "sprites", fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
-			runtimeData, err := os.ReadFile(runtimePath)
+			runtimeImg, err := readPNG(runtimePath)
 			if err != nil {
 				t.Fatalf("read runtime sprite %s: %v", runtimePath, err)
 			}
-			sourceData, err := os.ReadFile(sourcePaths[set])
+			sourceImg, err := readPNG(sourcePaths[set])
 			if err != nil {
 				t.Fatalf("read motion source %s: %v", sourcePaths[set], err)
 			}
-			if !bytes.Equal(runtimeData, sourceData) {
+			if !imagesEqual(runtimeImg, sourceImg) {
 				t.Fatalf("runtime sprite %s does not match accepted source %s", runtimePath, sourcePaths[set])
 			}
 		}
 	}
+}
+
+func readPNG(path string) (image.Image, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return png.Decode(f)
+}
+
+func imagesEqual(a image.Image, b image.Image) bool {
+	ab := a.Bounds()
+	bb := b.Bounds()
+	if ab != bb {
+		return false
+	}
+	for y := ab.Min.Y; y < ab.Max.Y; y++ {
+		for x := ab.Min.X; x < ab.Max.X; x++ {
+			ar, ag, ablu, aa := a.At(x, y).RGBA()
+			br, bg, bblu, ba := b.At(x, y).RGBA()
+			if ar != br || ag != bg || ablu != bblu || aa != ba {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func expectedRuntimeMotionSources(t *testing.T, set00Path string, sets int) []string {

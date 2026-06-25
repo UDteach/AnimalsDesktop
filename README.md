@@ -1,21 +1,44 @@
 # AnimalsDesktop
 
-AnimalsDesktop is a Windows desktop pet app currently preparing its first animal-complete release.
+AnimalsDesktop is a small desktop pet app for Windows and macOS. Chinchilla,
+hamster, macaroni mouse, sugar glider, and rabbit sprites walk near the Windows
+taskbar or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-The project is in Coming Soon mode.
+`v0.1.3` is the first public preview release for the five accepted set00
+ImageGen motion animals:
 
-- The first formal pet target is chinchilla.
-- Unfinished animals and prototype assets are not listed as released pets.
-- The next release tag waits until chinchilla has full motion coverage, settings/runtime selection, local QA, and GitHub workflow success.
-- After chinchilla, the same completion loop will move to the next animal family.
+- chinchilla standard gray
+- golden Syrian hamster
+- tan macaroni mouse
+- gray sugar glider
+- chestnut agouti rabbit
+
+This is not the final DeguDesktop-level completion gate. The preview release is
+for checking desktop behavior, scale, direction handling, click interaction, and
+wheel/action behavior before expanding each animal to the full 10-set motion
+contract.
+
+## Next Animal Queue
+
+The next base-motion priorities are:
+
+- fancy rat
+- gecko
+- guinea pig
+- albino chipmunk
+- Yorkshire Terrier
+- leopard gecko
+
+After each base motion works in runtime, color, breed, and morph variants can be
+added with the same QA loop.
 
 ## Release Gate
 
-A pet is release-ready only when it has:
+A full animal-family release is ready only when it has:
 
 - accepted ImageGen source art
 - 96x64 transparent sprite coverage
@@ -25,6 +48,9 @@ A pet is release-ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
+`v0.1.3` is an explicit preview exception for the five set00 animals plus Mac
+distribution. Future full-content releases should still satisfy the full gate.
+
 ## Development
 
 Useful checks during local development:
@@ -33,27 +59,45 @@ Useful checks during local development:
 go run ./cmd/importsheet
 go run ./cmd/importanimals
 go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames
-go run ./cmd/validatemotion -variant chinchilla_standard_gray
+go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/degu
 git diff --check
 ```
 
-Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop. It rejects checker/noisy backgrounds; prepared output still needs visual review before it counts as accepted art:
+Windows release ZIPs are built on Windows CI or a Windows machine:
+
+```powershell
+New-Item -ItemType Directory -Force dist | Out-Null
+$env:GOOS = "windows"
+$env:GOARCH = "amd64"
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.3" -o dist\AnimalsDesktop.exe ./cmd/degu
+Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
+```
+
+macOS release ZIPs are built with:
+
+```bash
+VERSION=v0.1.3 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.1.3 GOARCH=amd64 scripts/build_macos.sh
+```
+
+Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.
+It rejects checker/noisy backgrounds; prepared output still needs visual review
+before it counts as accepted art:
 
 ```powershell
 go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
 go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
 ```
 
-Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes for that set:
+Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes:
 
 ```powershell
 go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -strict
 go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png
 ```
 
-In-progress sets are expected to fail strict mode until all 62 standalone transparent frames exist.
-
-Do not create a release tag until the current animal target is complete.
+In-progress sets are expected to fail strict mode until all 62 standalone
+transparent frames exist.

@@ -20,25 +20,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify unlisted preview page
+      - name: Verify public release page
         shell: bash
         run: |
           SPRITE_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
-          grep -q "unlisted direct links" docs/index.html
+          grep -q "Animals Desktop" docs/index.html
+          grep -q "v0.1.3" docs/index.html
+          grep -q "Mac版 Apple Silicon" docs/index.html
+          grep -q "Windows版 x64" docs/index.html
+          grep -q "ファンシーラット" docs/index.html
+          grep -q "レオパルド・ゲッコー" docs/index.html
+          grep -q "animalsdesktop-coming-soon-silhouettes.png" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"
           grep -q "Generator Comparison Images" "docs/$MOTION_PREVIEW/index.html"
           grep -q "noindex,nofollow,noarchive" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "noindex,nofollow,noarchive" "docs/$MOTION_PREVIEW/index.html"
-          ! grep -q "download/" docs/index.html
           ! grep -q "$SPRITE_PREVIEW" docs/index.html
           ! grep -q "$MOTION_PREVIEW" docs/index.html
           ! grep -q "Open Sprite Review" docs/index.html
           ! grep -q 'href="review/' docs/index.html
+          ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" docs/index.html
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$SPRITE_PREVIEW/index.html"
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$MOTION_PREVIEW/index.html"
-          test -f docs/assets/animalsdesktop-seed-preview.png
+          test -f docs/assets/animalsdesktop-preview.png
+          test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
+          test -f docs/assets/animal-icons/current-chinchilla_standard_gray.png
+          test -f docs/assets/animal-icons/current-hamster_golden_syrian.png
+          test -f docs/assets/animal-icons/current-macaroni_mouse_tan.png
+          test -f docs/assets/animal-icons/current-rabbit_chestnut_agouti.png
+          test -f docs/assets/animal-icons/current-sugar_glider_gray.png
           test -f docs/robots.txt
           for asset in \
             chinchilla_standard_gray_set00.png \
@@ -52,9 +64,12 @@ jobs:
           test -f "docs/$MOTION_PREVIEW/assets/chinchilla_standard_gray_set00.png"
           test -f "docs/$MOTION_PREVIEW/assets/imagegen-four-pose-candidate.png"
           mkdir -p "public-site/assets"
+          mkdir -p "public-site/assets/animal-icons"
           cp docs/index.html public-site/index.html
           cp docs/robots.txt public-site/robots.txt
-          cp docs/assets/animalsdesktop-seed-preview.png public-site/assets/animalsdesktop-seed-preview.png
+          cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
+          cp docs/assets/animalsdesktop-coming-soon-silhouettes.png public-site/assets/animalsdesktop-coming-soon-silhouettes.png
+          cp docs/assets/animal-icons/current-*.png public-site/assets/animal-icons/
           for preview in "$SPRITE_PREVIEW" "$MOTION_PREVIEW"
           do
             mkdir -p "public-site/$preview"

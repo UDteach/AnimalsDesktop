@@ -3,29 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Animals Desktop</title>
     <meta
       name="description"
-      content="AnimalsDesktop is a Windows taskbar pet app. Sprite previews are shared through unlisted review links while the app is still in production."
+      content="チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー上やMacのDock上を歩き回る、Go製のデスクトップペットアプリ。"
     />
-    <title>AnimalsDesktop</title>
+    <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <style>
       :root {
         color-scheme: light;
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
-        color: #24292f;
-        background: #f6f8fa;
-        --border: #d0d7de;
-        --muted: #57606a;
-        --panel: #ffffff;
-        --panel-soft: #f6f8fa;
-        --accent: #0969da;
-        --success: #1a7f37;
-        --warning: #9a6700;
+        --ink: #20251f;
+        --muted: #5c665f;
+        --paper: #f8f8f3;
+        --surface: #fffdf7;
+        --line: #d8d8ce;
+        --leaf: #3e6f52;
+        --leaf-dark: #2f573f;
+        --slate: #63788a;
+        --gold: #b9852d;
+        --rust: #a95f36;
       }
 
       * {
@@ -34,281 +30,544 @@
 
       body {
         margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--paper);
       }
 
-      a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      header {
-        border-bottom: 1px solid var(--border);
-        background: var(--panel);
-      }
-
-      .topbar,
       main {
-        width: min(1180px, 100%);
+        width: min(1080px, calc(100% - 32px));
         margin: 0 auto;
-        padding-inline: 24px;
+        padding: 28px 0 40px;
       }
 
-      .topbar {
+      nav {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        min-height: 64px;
+        min-height: 48px;
+        border-bottom: 1px solid var(--line);
       }
 
-      .repo {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 8px;
-        min-width: 0;
-      }
-
-      .repo strong {
-        font-size: 1.05rem;
-      }
-
-      .slash,
-      .muted {
-        color: var(--muted);
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        min-height: 22px;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        padding: 0 8px;
-        color: var(--muted);
-        font-size: 0.78rem;
-        font-weight: 600;
-        white-space: nowrap;
-      }
-
-      .pill.success {
-        border-color: #aceebb;
-        color: var(--success);
-        background: #dafbe1;
-      }
-
-      .pill.warning {
-        border-color: #f0d98c;
-        color: var(--warning);
-        background: #fff8c5;
+      .brand {
+        font-weight: 700;
       }
 
       .navlinks {
         display: flex;
-        flex-wrap: wrap;
         gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .navlinks a {
         color: var(--muted);
-        font-size: 0.92rem;
+        text-decoration: none;
+        font-size: 14px;
       }
 
-      main {
-        padding-top: 30px;
-        padding-bottom: 64px;
-      }
-
-      .hero {
+      header {
         display: grid;
-        grid-template-columns: minmax(280px, 0.85fr) minmax(320px, 1.15fr);
-        gap: 22px;
-        align-items: start;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+        gap: 42px;
+        align-items: center;
+        min-height: calc(100vh - 92px);
+        padding: 34px 0;
       }
 
       h1 {
-        margin: 0 0 12px;
-        font-size: clamp(2.4rem, 6vw, 4.8rem);
-        line-height: 1;
+        margin: 0;
+        font-size: clamp(42px, 8vw, 82px);
+        line-height: 0.96;
         letter-spacing: 0;
       }
 
       .lead {
-        margin: 0;
-        max-width: 680px;
-        color: #30363d;
-        font-size: 1.03rem;
-        line-height: 1.75;
+        margin: 22px 0 0;
+        max-width: 690px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.7;
       }
 
       .actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 20px;
+        gap: 12px;
+        margin-top: 28px;
       }
 
       .button {
         display: inline-flex;
+        max-width: 100%;
+        min-height: 46px;
         align-items: center;
         justify-content: center;
-        min-height: 38px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 8px 12px;
-        background: #fff;
-        color: #24292f;
-        font-weight: 700;
+        padding: 0 18px;
+        border: 1px solid var(--ink);
+        background: var(--surface);
+        text-decoration: none;
+        text-align: center;
+        font-weight: 650;
+        line-height: 1.25;
       }
 
       .button.primary {
-        border-color: #1f883d;
-        background: #1f883d;
-        color: #fff;
+        border-color: var(--leaf);
+        background: var(--leaf);
+        color: white;
       }
 
-      .panel {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: var(--panel);
-        overflow: hidden;
+      .button.primary:hover {
+        background: var(--leaf-dark);
       }
 
-      .panel-head {
+      .download-note {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .release-meta {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        border-bottom: 1px solid var(--border);
-        padding: 12px 14px;
-        background: var(--panel-soft);
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+        color: var(--muted);
+        font-size: 13px;
       }
 
-      .panel-head h2 {
-        margin: 0;
-        font-size: 0.98rem;
+      .release-meta span {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 10px;
+        border: 1px solid var(--line);
+        background: rgba(255, 253, 247, 0.72);
+      }
+
+      .release-meta strong {
+        color: var(--ink);
+        font-weight: 650;
+      }
+
+      .preview-wrap {
+        display: grid;
+        gap: 14px;
+        align-items: center;
       }
 
       .preview {
-        display: block;
         width: 100%;
         height: auto;
-      }
-
-      .panel-body {
-        padding: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 50px rgba(42, 49, 43, 0.1);
       }
 
       .note {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      section {
+        border-top: 1px solid var(--line);
+        padding-top: 26px;
+      }
+
+      section + section {
+        margin-top: 30px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .section-head p,
+      article p,
+      .english p {
         margin: 0;
         color: var(--muted);
-        font-size: 0.92rem;
-        line-height: 1.65;
+        line-height: 1.7;
       }
 
-      .status-grid {
+      .current-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .animal-card {
+        border-top: 3px solid var(--gold);
+        background: rgba(255, 253, 247, 0.7);
+        padding: 12px 10px 14px;
+      }
+
+      .animal-card:nth-child(2) {
+        border-color: var(--rust);
+      }
+
+      .animal-card:nth-child(3) {
+        border-color: var(--slate);
+      }
+
+      .animal-card:nth-child(4) {
+        border-color: var(--leaf);
+      }
+
+      .animal-card:nth-child(5) {
+        border-color: #7e6541;
+      }
+
+      .animal-card img {
+        display: block;
+        width: min(100%, 156px);
+        height: auto;
+        margin: 0 auto 8px;
+        image-rendering: pixelated;
+      }
+
+      .animal-card h3,
+      .features h3 {
+        margin: 0 0 5px;
+        font-size: 16px;
+      }
+
+      .animal-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .features {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 20px;
+        gap: 22px;
       }
 
-      .metric {
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 13px 14px;
-        background: var(--panel);
+      .features article {
+        border-top: 3px solid var(--gold);
+        padding-top: 14px;
       }
 
-      .metric b {
+      .features article:nth-child(2),
+      .features article:nth-child(5) {
+        border-color: var(--slate);
+      }
+
+      .features article:nth-child(3),
+      .features article:nth-child(6) {
+        border-color: var(--leaf);
+      }
+
+      .teaser {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+        gap: 22px;
+        align-items: center;
+      }
+
+      .teaser-image {
         display: block;
-        font-size: 1.34rem;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: 0 16px 42px rgba(42, 49, 43, 0.09);
       }
 
-      .metric span {
+      .teaser-copy {
+        border-top: 3px solid var(--leaf);
+        padding-top: 14px;
+      }
+
+      .teaser-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .teaser-list span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        border: 1px solid var(--line);
+        padding: 0 10px;
+        background: rgba(255, 253, 247, 0.72);
         color: var(--muted);
-        font-size: 0.84rem;
+        font-size: 13px;
       }
 
-      @media (max-width: 860px) {
-        .topbar,
-        main {
-          padding-inline: 16px;
-        }
+      .english {
+        padding-bottom: 12px;
+      }
 
-        .topbar,
-        .hero {
+      code {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 0.92em;
+      }
+
+      @media (max-width: 900px) {
+        header,
+        .features,
+        .current-grid {
           grid-template-columns: 1fr;
         }
 
-        .topbar {
+        header {
+          min-height: auto;
+          padding: 34px 0 28px;
+        }
+
+        nav,
+        .section-head {
           align-items: flex-start;
           flex-direction: column;
-          padding-block: 14px;
         }
 
-        .status-grid {
+        nav {
+          padding-bottom: 12px;
+        }
+
+        .animal-card {
+          display: grid;
+          grid-template-columns: 124px minmax(0, 1fr);
+          gap: 12px;
+          align-items: center;
+        }
+
+        .animal-card img {
+          margin: 0;
+          width: 124px;
+        }
+
+        .teaser {
           grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 520px) {
+        main {
+          width: min(100% - 24px, 1080px);
+        }
+
+        .actions {
+          display: grid;
+        }
+
+        .button {
+          width: 100%;
+        }
+
+        .animal-card {
+          grid-template-columns: 96px minmax(0, 1fr);
+        }
+
+        .animal-card img {
+          width: 96px;
+        }
+
+        .teaser-list span {
+          width: 100%;
         }
       }
     </style>
   </head>
   <body>
-    <header>
-      <div class="topbar">
-        <div class="repo">
-          <span>UDteach</span>
-          <span class="slash">/</span>
-          <strong>AnimalsDesktop</strong>
-          <span class="pill success">sprite preview</span>
-          <span class="pill warning">work in progress</span>
-        </div>
-        <nav class="navlinks" aria-label="Page links">
-          <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
-          <a href="https://kdevelopk.pages.dev/">Works</a>
-        </nav>
-      </div>
-    </header>
-
     <main>
-      <section class="hero">
+      <nav>
+        <div class="brand">Animals Desktop</div>
+        <div class="navlinks">
+          <a href="#download">ダウンロード</a>
+          <a href="#animals">登場動物</a>
+          <a href="#next">これから</a>
+          <a href="#english">English</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+        </div>
+      </nav>
+
+      <header>
         <div>
-          <h1>AnimalsDesktop</h1>
+          <h1>Animals Desktop</h1>
           <p class="lead">
-            Windows taskbar pet app with transparent 2D sprites. The app is still in production, and sprite review pages are shared only as unlisted direct links.
+            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎが、Windowsのタスクバー上やMacのDock上を歩き回るデスクトップペットです。
+            Degu Desktopの透明オーバーレイ型デスクトップペットを土台に、複数の小動物へ広げています。
           </p>
-          <div class="actions">
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
+          <div id="download" class="actions">
+            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-arm64.zip">
+              Mac版 Apple Silicon macOS 12+
+            </a>
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-amd64.zip">
+              Mac版 Intel macOS 12+
+            </a>
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-amd64.zip">
+              Windows版 x64
+            </a>
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-386.zip">
+              Windows版 x86
+            </a>
           </div>
-          <div class="status-grid" aria-label="Current asset status">
-            <div class="metric">
-              <b>5 / 5</b>
-              <span>active animals have complete set00 previews</span>
-            </div>
-            <div class="metric">
-              <b>62</b>
-              <span>frames per public preview set</span>
-            </div>
-            <div class="metric">
-              <b>draft</b>
-              <span>not a release download yet</span>
-            </div>
+          <p class="download-note">
+            v0.1.3は5種のset00モーションを入れたプレビューreleaseです。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。
+            Windows版はWindows機でのビルド確認後に同じreleaseへ追加する想定です。
+          </p>
+          <div class="release-meta" aria-label="Build information">
+            <span>Preview release <strong data-release-version>v0.1.3</strong></span>
+            <span>Mac版 <strong>v0.1.3</strong></span>
+            <span>動物 <strong>5種</strong></span>
+            <span>フレーム <strong>62 x set00</strong></span>
+            <span>更新日 <strong data-build-date>2026-06-25</strong></span>
           </div>
         </div>
 
-        <aside class="panel" aria-label="AnimalsDesktop preview">
-          <div class="panel-head">
-            <h2>Current Preview</h2>
-            <span class="pill">generated asset</span>
+        <div class="preview-wrap">
+          <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with five animals above a desktop taskbar" />
+          <div class="note">
+            今の版は小動物5種の表示、移動、左右反転、クリック反応、回し車などを確認するためのプレビューです。
+            10セットすべてを完成させる正式版とは分けて扱っています。
           </div>
-          <img class="preview" src="assets/animalsdesktop-seed-preview.png" alt="AnimalsDesktop sprite preview on a Windows-style taskbar" />
-          <div class="panel-body">
-            <p class="note">
-              This public preview shows current runtime sprite assets. Frame-by-frame light and dark background checks are kept on an unlisted review page.
+        </div>
+      </header>
+
+      <section id="animals" aria-labelledby="animals-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="animals-heading">登場する動物</h2>
+            <p>現在アプリ内で選ばれる5種です。各アイコンは実際のランタイムスプライトから作っています。</p>
+          </div>
+        </div>
+        <div class="current-grid">
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-chinchilla_standard_gray.png" alt="チンチラのアイコン" />
+            <div>
+              <h3>チンチラ</h3>
+              <p>標準グレー。丸い体、耳、ふさっとした尾をDeguDesktopサイズの動きに収めています。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-hamster_golden_syrian.png" alt="ハムスターのアイコン" />
+            <div>
+              <h3>ハムスター</h3>
+              <p>ゴールデンシリアン。短い尾と丸い体で、回し車にも対応する小動物枠です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-macaroni_mouse_tan.png" alt="マカロニマウスのアイコン" />
+            <div>
+              <h3>マカロニマウス</h3>
+              <p>太い尾が特徴の小型げっ歯類。低めの姿勢で素早く動く枠です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-sugar_glider_gray.png" alt="モモンガのアイコン" />
+            <div>
+              <h3>モモンガ</h3>
+              <p>膜のシルエットが出るように調整。素材向きの違いもランタイムで補正しています。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-rabbit_chestnut_agouti.png" alt="うさぎのアイコン" />
+            <div>
+              <h3>うさぎ</h3>
+              <p>チェスナットアグーチ。耳と跳ねる姿勢が読みやすいようにしています。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="features-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="features-heading">できること</h2>
+          </div>
+        </div>
+        <div class="features">
+          <article>
+            <h3>タスクバー上のペット</h3>
+            <p>透明な最前面レイヤーで、Windowsではタスクバー付近、MacではDock上の下端に小動物がいるように見せます。</p>
+          </article>
+          <article>
+            <h3>最大10匹</h3>
+            <p>設定から表示数を切り替え、複数の小動物を同時に歩かせられます。</p>
+          </article>
+          <article>
+            <h3>自然な左右移動</h3>
+            <p>移動方向とスプライトの向きが合うように描画時に反転し、後ろ向き移動が目立たないようにしています。</p>
+          </article>
+          <article>
+            <h3>クリック反応</h3>
+            <p>動物をクリックすると小さな反応が出ます。デスクトップへの通常クリックは通します。</p>
+          </article>
+          <article>
+            <h3>回し車</h3>
+            <p>小動物向けの回し車表示に対応します。種類ごとの動きに合わせて使うフレームを調整しています。</p>
+          </article>
+          <article>
+            <h3>Mac版</h3>
+            <p>Mac版はメニューバーから設定できます。今回のreleaseからMac ZIPも配布対象に入れています。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="next" aria-labelledby="next-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="next-heading">これから増やしていく動物</h2>
+            <p>まずベースモーションを作る優先6種です。リリースページでは、次に来るかもしれない動物としてモノクロのシルエットで見せます。</p>
+          </div>
+        </div>
+        <div class="teaser">
+          <img
+            class="teaser-image"
+            src="assets/animalsdesktop-coming-soon-silhouettes.png"
+            alt="ファンシーラット、ヤモリ、モルモット、アルビノシマリス、ヨークシャテリア、レオパルド・ゲッコーのシルエット"
+          />
+          <div class="teaser-copy">
+            <h3>これがくるかも！？</h3>
+            <p>
+              優先対応はファンシーラット、ヤモリ、モルモット、シマリス（アルビノ）、ヨークシャテリア、レオパルド・ゲッコーです。
+              まず各種のベースモーションを作り、その後に色違い、品種違い、モーフ違いへ広げます。
             </p>
+            <div class="teaser-list" aria-label="Priority animals">
+              <span>ファンシーラット</span>
+              <span>ヤモリ</span>
+              <span>モルモット</span>
+              <span>シマリス（アルビノ）</span>
+              <span>ヨークシャテリア</span>
+              <span>レオパルド・ゲッコー</span>
+            </div>
           </div>
-        </aside>
+        </div>
+      </section>
+
+      <section class="english" id="english">
+        <h2>English</h2>
+        <p>
+          Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, macaroni mouse,
+          sugar glider, and rabbit sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
+          Version v0.1.3 is a preview release for the first five set00 motion animals. It is useful for checking the
+          desktop behavior, sprite scale, direction handling, clicks, and wheel behavior before the later full 10-set
+          motion release.
+        </p>
       </section>
     </main>
   </body>

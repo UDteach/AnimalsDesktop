@@ -69,6 +69,12 @@ After `v0.1.2`, do not tag a new release just for planning, queue, page, or seed
 
 This means the next content release should finish a concrete slice such as `chinchilla_standard_gray` or the first accepted chinchilla family set before bumping from `v0.1.2`.
 
+### v0.1.3 Preview Exception
+
+`v0.1.3` is a preview-release exception approved for five accepted set00 runtime animals plus Mac distribution. It may ship with chinchilla, hamster, macaroni mouse, sugar glider, and rabbit visible in runtime while the full 10-set DeguDesktop-level gate remains open. The release page must label this as a preview and must not claim full animal-family completion.
+
+After `v0.1.3`, future full-content releases should return to the full release gate above unless a new preview exception is documented here.
+
 ## One-Animal Version Routine
 
 Use this cycle repeatedly:
@@ -85,7 +91,7 @@ Use this cycle repeatedly:
 10. Run local QA and confirm GitHub Actions.
 11. Commit, then tag a release only when the animal family meets the release gate above.
 
-Near-term order is chinchilla, macaroni mouse / fat-tailed gerbil, hamster, gecko, momonga family, then small birds.
+Near-term base-motion order is fancy rat, gecko, guinea pig, albino chipmunk, Yorkshire Terrier, and leopard gecko. Color, breed, and morph variants should follow only after each base motion is readable in runtime.
 
 ## Profile-Specific Notes
 

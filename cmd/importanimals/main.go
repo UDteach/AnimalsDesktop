@@ -168,12 +168,11 @@ func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, 
 		if len(sourcePaths) == motionSets {
 			sourcePath = sourcePaths[set]
 		}
-		sheet, err := loadMotionSourceSheet(sourcePath)
-		if err != nil {
+		if _, err := loadMotionSourceSheet(sourcePath); err != nil {
 			return nil, 0, 0, nil, err
 		}
 		outPath := filepath.Join(outDir, fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
-		if err := writePNG(outPath, sheet); err != nil {
+		if err := copyFile(sourcePath, outPath); err != nil {
 			return nil, 0, 0, nil, err
 		}
 		outputs = append(outputs, filepath.ToSlash(outPath))
@@ -852,6 +851,17 @@ func writePNG(path string, img image.Image) error {
 	}
 	defer f.Close()
 	return png.Encode(f, img)
+}
+
+func copyFile(srcPath string, dstPath string) error {
+	if err := os.MkdirAll(filepath.Dir(dstPath), 0o755); err != nil {
+		return err
+	}
+	data, err := os.ReadFile(srcPath)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(dstPath, data, 0o644)
 }
 
 func writeJSON(path string, report []seedReport) {

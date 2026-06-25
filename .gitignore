@@ -3,6 +3,7 @@
 *.exe
 *.dll
 *.log
+assets/sprites/degu_*.png
 dist/
 build/
 .agents/

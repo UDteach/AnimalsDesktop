@@ -150,7 +150,7 @@ func main() {
 	must(os.MkdirAll(filepath.Dir(*reportPath), 0o755))
 
 	rep := report{
-		Source:      filepath.Clean(*source),
+		Source:      filepath.ToSlash(filepath.Clean(*source)),
 		Columns:     totalFrames,
 		Rows:        atlasRows,
 		FrameWidth:  frameW,

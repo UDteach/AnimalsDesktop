@@ -2,14 +2,14 @@
   {
     "variant": "chinchilla_standard_gray",
     "species": "chinchilla",
-    "breed_or_morph": "Chinchilla - standard gray",
-    "color": "Chinchilla - standard gray",
-    "popularity_tier": 3,
+    "breed_or_morph": "Chinchilla",
+    "color": "standard gray",
+    "popularity_tier": 1,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "motion_source_draft",
+    "source_status": "motion_source_accepted",
     "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
     "generated_source": "assets/source/animals/generated/chinchilla_standard_gray-source.png",
-    "motion_source": "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00-draft.png",
+    "motion_source": "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png",
     "motion_frames": 62,
     "motion_sets": 1,
     "sprite_base": "chinchilla_standard_gray",
@@ -140,13 +140,16 @@
   {
     "variant": "macaroni_mouse_tan",
     "species": "macaroni_mouse",
-    "breed_or_morph": "Macaroni mouse - tan",
-    "color": "Macaroni mouse - tan",
-    "popularity_tier": 3,
+    "breed_or_morph": "Macaroni mouse",
+    "color": "tan",
+    "popularity_tier": 1,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
+    "source_status": "motion_source_accepted",
     "source": "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png",
     "generated_source": "assets/source/animals/generated/macaroni_mouse_tan-source.png",
+    "motion_source": "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "macaroni_mouse_tan",
     "source_width": 512,
     "source_height": 384,
@@ -167,6 +170,9 @@
       "assets/sprites/macaroni_mouse_tan_set07.png",
       "assets/sprites/macaroni_mouse_tan_set08.png",
       "assets/sprites/macaroni_mouse_tan_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -238,13 +244,16 @@
   {
     "variant": "rabbit_chestnut_agouti",
     "species": "rabbit",
-    "breed_or_morph": "Rabbit - chestnut agouti",
-    "color": "Rabbit - chestnut agouti",
-    "popularity_tier": 3,
+    "breed_or_morph": "Rabbit",
+    "color": "chestnut agouti",
+    "popularity_tier": 1,
     "motion_profile": "rabbit-hop",
-    "source_status": "prototype_only",
+    "source_status": "motion_source_accepted",
     "source": "docs/source-truth/rabbit-source-truth.png",
     "generated_source": "assets/source/animals/generated/rabbit_chestnut_agouti-source.png",
+    "motion_source": "docs/art-source/rabbit/motion-source/sheets/rabbit-chestnut-agouti-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "rabbit_chestnut_agouti",
     "source_width": 1536,
     "source_height": 1024,
@@ -265,6 +274,9 @@
       "assets/sprites/rabbit_chestnut_agouti_set07.png",
       "assets/sprites/rabbit_chestnut_agouti_set08.png",
       "assets/sprites/rabbit_chestnut_agouti_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -929,13 +941,16 @@
   {
     "variant": "hamster_golden_syrian",
     "species": "hamster",
-    "breed_or_morph": "Hamster - golden Syrian",
-    "color": "Hamster - golden Syrian",
-    "popularity_tier": 3,
+    "breed_or_morph": "Hamster",
+    "color": "golden Syrian",
+    "popularity_tier": 1,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
+    "source_status": "motion_source_accepted",
     "source": "docs/art-source/hamster/hamster-source-truth.png",
     "generated_source": "assets/source/animals/generated/hamster_golden_syrian-source.png",
+    "motion_source": "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "hamster_golden_syrian",
     "source_width": 1513,
     "source_height": 1039,
@@ -956,6 +971,9 @@
       "assets/sprites/hamster_golden_syrian_set07.png",
       "assets/sprites/hamster_golden_syrian_set08.png",
       "assets/sprites/hamster_golden_syrian_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1664,24 +1682,26 @@
   {
     "variant": "sugar_glider_gray",
     "species": "sugar_glider",
-    "breed_or_morph": "Sugar glider - gray",
-    "color": "Sugar glider - gray",
-    "popularity_tier": 3,
+    "breed_or_morph": "Sugar glider",
+    "color": "gray",
+    "popularity_tier": 1,
     "motion_profile": "sugar-glider-skitter",
-    "source_status": "prototype_only",
-    "source": "procedural:sugar_glider",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/sugar_glider_gray-source.png",
+    "motion_source": "docs/art-source/sugar-glider/motion-source/sheets/sugar-glider-gray-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "sugar_glider_gray",
-    "shape": "sugar_glider",
     "tint_hex": "8c8d88",
     "accent_hex": "f1eee4",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 36,
-      "y": 142,
-      "w": 291,
-      "h": 109
+      "x": 8,
+      "y": 12,
+      "w": 83,
+      "h": 47
     },
     "outputs": [
       "assets/sprites/sugar_glider_gray_set00.png",
@@ -1696,7 +1716,7 @@
       "assets/sprites/sugar_glider_gray_set09.png"
     ],
     "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
