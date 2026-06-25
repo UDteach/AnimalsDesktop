@@ -23,3 +23,11 @@
 - Added `cmd/prepareframe` for one-pose ImageGen candidates: true-alpha input is fitted to 96x64, uniform edge backgrounds can be removed, and checker/noisy backgrounds are rejected before any visual-review promotion.
 - Tested a pure green single-pose ImageGen fallback. The first prepared output visibly retained green background, so `cmd/prepareframe` was tightened to fail when cleaned content still touches the source canvas edge; the candidate remains rejected.
 - Added explicit `chroma-green` preparation, transparent-RGB cleanup, and green despill. The first visually reviewed chinchilla idle frame was promoted to `accepted-frames/set00/frame-00.png`; `cmd/auditframes` now reports `valid=1 missing=619`.
+
+## 2026-06-25
+
+- Ran a Codex built-in ImageGen-only review pass for `hamster_golden_syrian`, `macaroni_mouse_tan`, `sugar_glider_gray`, and `rabbit_chestnut_agouti` under `docs/art-source/external-ai-trials/codex-imagegen-20260625/`, keeping all outputs out of `accepted-frames` and runtime/catalog paths.
+- Produced and locally split 16-cell trial sheets for all four variants; all split outputs had non-empty alpha and no edge-alpha cells after 96x64 normalization.
+- Attempted 62-frame sheets only for the strongest 16-cell directions, `macaroni_mouse_tan` and `sugar_glider_gray`, then rejected both because visual contact sheets showed row-wrapped/cropped fragments despite passing mechanical empty/edge checks.
+- Recorded prompts, saved paths, visual decisions, and parent-thread integration recommendations in `docs/art-source/external-ai-trials/codex-imagegen-20260625/report.md`.
+- Tested a Codex built-in ImageGen one-frame retry-until-pass method for eight high-risk `sugar_glider_gray` poses under the same isolated external trial directory. All eight attempt-01 outputs produced complete 96x64 review candidates with no empty alpha and no edge-alpha; the method appears stronger than sheet extraction for high-risk pose repair, with style/scale matching as the remaining integration risk. See `docs/art-source/external-ai-trials/codex-imagegen-20260625/one-frame-method-report.md`.

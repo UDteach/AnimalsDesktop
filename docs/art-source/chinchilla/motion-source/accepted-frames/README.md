@@ -26,13 +26,14 @@ Expected set folders:
 
 Current accepted progress:
 
-- `set00/frame-00.png`: accepted idle pose candidate prepared from a single green-background ImageGen output after chroma cleanup, despill, and light/dark visual review.
+- `set00/frame-00.png` through `set00/frame-61.png`: accepted after one-frame ImageGen regeneration, `prepareframe`, `auditframes`, source-sheet assembly, and motion-slot visual QA.
+- The earlier single accepted `frame-00` was preserved under `stale/pre-one-frame-fullrun-20260625/` before the regenerated set replaced it for consistency.
 
 After all 62 frames in a set pass visual review:
 
 ```powershell
 go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -strict
-go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-report.json
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-assemblemotion-report.json
 ```
 
 The assembler is a gate, not an art fixer. If it rejects a frame, regenerate or manually curate the source PNG before assembling.

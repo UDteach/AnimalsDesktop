@@ -1,7 +1,7 @@
 # Chinchilla Motion Source
 
-Status: in_progress
-Generated: 2026-06-21
+Status: set00_accepted
+Generated: 2026-06-21; set00 regenerated 2026-06-25
 
 ## Source Batch
 
@@ -35,25 +35,38 @@ Each extracted pose frame is:
 
 ## Current Use
 
-These frames are source material for the chinchilla motion pass. They are not yet a release-ready motion family.
+The 2026-06-21 16-pose draft frames remain reference-only. They are not accepted source art and are not release-ready motion art.
 
-The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review. `cmd/importanimals` can emit 10 runtime sheets from this one draft sheet, but this is only a temporary integration path.
+The `source-set00-draft` sheet maps the 16 extracted poses into the 62-frame slot contract for review only. Do not promote it into accepted frames.
 
-This family is intentionally marked draft because it still reuses key poses and has not passed the accepted-motion bar. Mechanically shifted draft `set01` through `set09` sheets were rejected because they looked wrong and are not a substitute for accepted ImageGen motion sources.
+The draft was rejected for accepted use after visual QA found extra debris and doubled-face/face-like artifacts. Mechanically shifted draft `set01` through `set09` sheets were also rejected because they looked wrong and are not a substitute for accepted ImageGen motion sources.
+
+Accepted `set00` now lives under:
+
+- `accepted-frames/set00/frame-00.png` through `frame-61.png`
+
+The accepted `set00` source sheet is:
+
+- `sheets/chinchilla-standard-gray-source-set00.png`
+
+The one-frame regeneration provenance is:
+
+- `../one-frame-method-fullrun-20260625/chinchilla/manifest.csv`
+- `../one-frame-method-fullrun-20260625/chinchilla/report.md`
+- `../one-frame-method-fullrun-20260625/motion-visual-qa/chinchilla-accepted-motion-groups.png`
 
 Accepted replacement work must be generated as one pose per PNG. Do not promote a multi-pose sheet, grid, contact sheet, or baked checker-background image as source art, even if it can be cut into 96x64 frames. A batch may contain up to four separate single-pose PNGs for review, but each accepted source frame must be a standalone transparent PNG before it is assembled into the 62-frame runtime sheet.
 
 Use `cmd/assemblemotion` only after all 62 standalone frames in a set are accepted:
 
 ```powershell
-go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-report.json
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00.png -report docs\art-source\chinchilla\motion-source\accepted-frames\set00-assemblemotion-report.json
 ```
 
 The assembler rejects wrong-sized frames, empty alpha, and fully opaque/checker-style backgrounds before writing a sheet.
 
 Before release, this family still needs:
 
-- 62 accepted frames with enough real pose variation for the selected chinchilla variant
-- accepted ImageGen `set00` through `set09` motion source variation
-- visual QA on light and dark backgrounds
+- accepted ImageGen `set01` through `set09` motion source variation
+- runtime import and catalog validation
 - local Go tests, vet, Windows build, and GitHub Actions success
