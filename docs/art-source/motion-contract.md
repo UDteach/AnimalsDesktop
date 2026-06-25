@@ -8,7 +8,7 @@ This file is the acceptance standard for promoting one animal family from seed/p
 
 Every selectable variant must keep the DeguDesktop sprite-sheet shape:
 
-- 10 runtime motion sets per variant: `set00` through `set09`.
+- 10 runtime motion sets per variant.
 - 62 frames per set.
 - 96x64 transparent canvas per frame.
 - One complete animal per frame.
@@ -46,7 +46,7 @@ Promote one animal family at a time. A family is complete for a version bump onl
 
 - source-truth PNGs reviewed at 96x64 on light and dark backgrounds;
 - 62 standalone transparent motion-frame PNGs for every accepted variant;
-- generated `set00` through `set09` runtime sheets;
+- generated runtime sheets for all 10 motion sets;
 - non-empty alpha-bounded frames with stable baseline and no cropped anatomy;
 - a contact sheet or preview proving the full motion set is visually reviewable;
 - catalog entries with species, breed/morph, color, popularity tier, source status, motion profile, and sprite base;
@@ -71,7 +71,7 @@ This means the next content release should finish a concrete slice such as `chin
 
 ### v0.1.3 Preview Exception
 
-`v0.1.3` is a preview-release exception approved for five accepted set00 runtime animals plus Mac distribution. It may ship with chinchilla, hamster, macaroni mouse, sugar glider, and rabbit visible in runtime while the full 10-set DeguDesktop-level gate remains open. The release page must label this as a preview and must not claim full animal-family completion.
+`v0.1.3` is a preview-release exception approved for five accepted initial-motion runtime animals plus Mac distribution. It may ship with chinchilla, hamster, macaroni mouse, sugar glider, and rabbit visible in runtime while the full 10-set DeguDesktop-level gate remains open. The release page must label this as a preview and must not claim full animal-family completion.
 
 After `v0.1.3`, future full-content releases should return to the full release gate above unless a new preview exception is documented here.
 

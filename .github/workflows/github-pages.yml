@@ -30,7 +30,7 @@ jobs:
           grep -q "Windows版 Windows 10/11" docs/index.html
           grep -q "Mac版 Apple Silicon" docs/index.html
           grep -q "AnimalsDesktop-windows-amd64.zip" docs/index.html
-          grep -q "この版で表示する範囲" docs/index.html
+          grep -q "この版について" docs/index.html
           ! grep -Eq "coming-soon|将来候補|Priority animals|animalsdesktop-coming-soon-silhouettes" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"

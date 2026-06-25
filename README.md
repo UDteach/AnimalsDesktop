@@ -8,8 +8,8 @@ Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-`v0.1.3` is the first early public test release for the five accepted set00
-ImageGen motion animals:
+`v0.1.3` is the first early public test release for the five accepted
+initial 62-frame ImageGen motion animals:
 
 - chinchilla standard gray
 - golden Syrian hamster
@@ -23,7 +23,7 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.1.3 test release intentionally exposes only the five accepted set00
+The v0.1.3 test release intentionally exposes only the five accepted initial
 runtime animals listed above. Unverified candidate species are not listed on the
 public page and should not appear in the runtime picker until their source art
 and motion behavior pass the release QA loop.
@@ -48,8 +48,9 @@ A full animal-family release is ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
-`v0.1.3` is an explicit test-preview exception for the five set00 animals plus Mac
-distribution. Future full-content releases should still satisfy the full gate.
+`v0.1.3` is an explicit test-preview exception for the five initial-motion
+animals plus Mac distribution. Future full-content releases should still satisfy
+the full gate.
 
 ## Development
 
@@ -89,15 +90,15 @@ It rejects checker/noisy backgrounds; prepared output still needs visual review
 before it counts as accepted art:
 
 ```powershell
-go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
-go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\set00\frame-00.png
+go run ./cmd/prepareframe -src path\to\candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\<set-id>\frame-00.png
+go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.png -out docs\art-source\chinchilla\motion-source\prepared-candidates\<set-id>\frame-00.png
 ```
 
 Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes:
 
 ```powershell
-go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -strict
-go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\set00 -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-set00-draft.png
+go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\<set-id> -strict
+go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\<set-id> -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-<set-id>-draft.png
 ```
 
 In-progress sets are expected to fail strict mode until all 62 standalone

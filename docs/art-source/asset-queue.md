@@ -7,7 +7,7 @@ when the parent thread explicitly accepts it as the next production target.
 ## Current Released State
 
 - Latest test-preview release: `v0.1.3`
-- Preview scope: five accepted set00 runtime animals with Windows and Mac ZIPs
+- Preview scope: five accepted initial runtime animals with Windows and Mac ZIPs
 - Current preview animals: chinchilla, hamster, macaroni mouse, sugar glider, rabbit
 - Public page scope: only the five preview animals above
 - Next full animal-content release: hold until one accepted family reaches
@@ -36,7 +36,7 @@ only when its source-truth art, 62-frame motion set, importer output,
 settings/tray reflection, visual review, and QA pass.
 
 Work one family at a time for full releases. The `v0.1.3` preview is allowed to
-publish five accepted set00 animals for runtime testing, but the next
+publish five accepted initial-motion animals for runtime testing, but the next
 full-content version should finish a concrete 10-set slice before claiming
 DeguDesktop-level coverage. Do not add a public priority list until the next
 family is deliberately chosen.
