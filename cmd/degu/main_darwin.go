@@ -33,7 +33,7 @@ import (
 const (
 	frameW        = 96
 	frameH        = 64
-	frameCount    = 56
+	frameCount    = 62
 	spriteW       = frameW
 	spriteH       = frameH
 	sceneH        = 92
