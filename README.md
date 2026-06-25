@@ -8,7 +8,7 @@ Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-`v0.1.3` is the first public preview release for the five accepted set00
+`v0.1.3` is the first early public test release for the five accepted set00
 ImageGen motion animals:
 
 - chinchilla standard gray
@@ -17,10 +17,9 @@ ImageGen motion animals:
 - gray sugar glider
 - chestnut agouti rabbit
 
-This is not the final DeguDesktop-level completion gate. The preview release is
-for checking desktop behavior, scale, direction handling, click interaction, and
-wheel/action behavior before expanding each animal to the full 10-set motion
-contract.
+This is not the final DeguDesktop-level completion gate. The test release is for
+checking desktop behavior, scale, direction handling, and click interaction
+before expanding each animal to the full 10-set motion contract.
 
 ## Next Animal Queue
 
@@ -48,7 +47,7 @@ A full animal-family release is ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
-`v0.1.3` is an explicit preview exception for the five set00 animals plus Mac
+`v0.1.3` is an explicit test-preview exception for the five set00 animals plus Mac
 distribution. Future full-content releases should still satisfy the full gate.
 
 ## Development
@@ -67,7 +66,7 @@ git diff --check
 ```
 
 Windows release ZIPs are built separately on a Windows machine after the Mac
-preview release:
+test release:
 
 ```powershell
 New-Item -ItemType Directory -Force dist | Out-Null
