@@ -32,6 +32,9 @@ func TestValidateVariantReportsDraftNotReleaseReady(t *testing.T) {
 	if report.ReleaseReady {
 		t.Fatalf("draft motion source reported release-ready")
 	}
+	if report.AcceptedSource {
+		t.Fatalf("draft motion source reported accepted")
+	}
 	if len(report.Warnings) == 0 {
 		t.Fatalf("draft motion source should report a warning")
 	}
@@ -53,6 +56,9 @@ func TestValidateVariantReportsAcceptedReleaseReady(t *testing.T) {
 	}
 	if !report.ReleaseReady {
 		t.Fatalf("accepted motion source reported not release-ready")
+	}
+	if !report.AcceptedSource {
+		t.Fatalf("accepted motion source reported not accepted")
 	}
 	if report.UniqueSetHashes != motionSets {
 		t.Fatalf("unique set hashes = %d, want %d", report.UniqueSetHashes, motionSets)
@@ -89,8 +95,46 @@ func TestValidateVariantAllowsSingleDraftSourceSet(t *testing.T) {
 	if report.ReleaseReady {
 		t.Fatalf("single draft source set reported release-ready")
 	}
+	if report.AcceptedSource {
+		t.Fatalf("single draft source set reported accepted")
+	}
 	if len(report.Warnings) < 2 {
 		t.Fatalf("warnings = %v, want draft and source-set count warnings", report.Warnings)
+	}
+}
+
+func TestValidateVariantAcceptsSingleAcceptedSourceSetButNotReleaseReady(t *testing.T) {
+	root := t.TempDir()
+	set00Path := filepath.Join(root, "animal-set00-source.png")
+	sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
+	for frame := 0; frame < totalFrames; frame++ {
+		x0 := frame * frameW
+		sheet.SetRGBA(x0+6, 6, color.RGBA{R: 80, G: byte(frame), B: 80, A: 255})
+		for y := 28; y < 52; y++ {
+			for x := 20; x < 76; x++ {
+				sheet.SetRGBA(x0+x, y, color.RGBA{R: 150, G: 150, B: 145, A: 255})
+			}
+		}
+	}
+	writePNG(t, set00Path, sheet)
+
+	report, err := validateVariant(catalog.Variant{
+		ID:               "chinchilla_standard_gray",
+		SpeciesID:        "chinchilla",
+		SourceStatus:     catalog.SourceStatusMotionAccepted,
+		MotionSourcePath: set00Path,
+	})
+	if err != nil {
+		t.Fatalf("validateVariant() error = %v", err)
+	}
+	if !report.AcceptedSource {
+		t.Fatalf("single accepted source set reported not accepted")
+	}
+	if report.ReleaseReady {
+		t.Fatalf("single accepted source set reported release-ready")
+	}
+	if len(report.Warnings) == 0 {
+		t.Fatalf("warnings = %v, want source-set count warning", report.Warnings)
 	}
 }
 

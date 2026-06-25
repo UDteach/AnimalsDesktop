@@ -8,8 +8,23 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 )
+
+var (
+	testSpriteSheetOnce sync.Once
+	testSpriteSheetDir  string
+	testSpriteSheetErr  error
+)
+
+func TestMain(m *testing.M) {
+	code := m.Run()
+	if testSpriteSheetDir != "" {
+		_ = os.RemoveAll(testSpriteSheetDir)
+	}
+	os.Exit(code)
+}
 
 func TestGeneratedSpritesHaveFixedCanvas(t *testing.T) {
 	for _, path := range spriteSheetPaths(t) {
@@ -157,7 +172,16 @@ func TestGeneratedWheelSpriteHasTransparentCenter(t *testing.T) {
 
 func spriteSheetPaths(t *testing.T) []string {
 	t.Helper()
-	spriteDir := filepath.Join("..", "..", "assets", "sprites")
+	testSpriteSheetOnce.Do(func() {
+		testSpriteSheetDir, testSpriteSheetErr = os.MkdirTemp("", "animals-importsheet-sprites-*")
+		if testSpriteSheetErr == nil {
+			testSpriteSheetErr = generateTestSpriteSheets(testSpriteSheetDir)
+		}
+	})
+	if testSpriteSheetErr != nil {
+		t.Fatalf("generate legacy degu test sprites: %v", testSpriteSheetErr)
+	}
+	spriteDir := testSpriteSheetDir
 	paths := make([]string, 0, len(variants)*motionSets)
 	for _, id := range variants {
 		for set := 0; set < motionSets; set++ {
@@ -169,6 +193,30 @@ func spriteSheetPaths(t *testing.T) []string {
 		}
 	}
 	return paths
+}
+
+func generateTestSpriteSheets(outDir string) error {
+	frameDir := filepath.Join("..", "..", "assets", "source", "frames")
+	coatGuideDir := filepath.Join("..", "..", "assets", "source", "coat-guides")
+	sheets := make(map[string]*image.RGBA, len(variants))
+	rep := report{
+		Source:      filepath.Clean(frameDir),
+		Columns:     totalFrames,
+		Rows:        len(variants),
+		FrameWidth:  frameW,
+		FrameHeight: frameH,
+	}
+	if !frameFilesReady(frameDir) {
+		return fmt.Errorf("legacy degu frame source is incomplete under %s", frameDir)
+	}
+	importFrameFiles(frameDir, coatGuideDir, sheets, &rep, outDir)
+	for _, id := range variants {
+		if sheets[id] == nil {
+			return fmt.Errorf("legacy importer did not generate sheet for %s", id)
+		}
+		writeSpriteSets(outDir, id, sheets[id])
+	}
+	return nil
 }
 
 func twoDigits(v int) string {

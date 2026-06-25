@@ -84,14 +84,19 @@ var SpeciesList = []Species{
 }
 
 const (
-	srcChinchilla            = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
-	srcChinchillaMotionDraft = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00-draft.png"
-	srcMacaroniMouse         = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
-	srcRabbit                = "docs/source-truth/rabbit-source-truth.png"
-	srcDog                   = "docs/art-intake/dog/dog-source-truth-transparent.png"
-	srcCat                   = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
-	srcGecko                 = "docs/art-source/gecko/gecko-source-truth.png"
-	srcHamster               = "docs/art-source/hamster/hamster-source-truth.png"
+	srcChinchilla          = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
+	srcChinchillaMotion    = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png"
+	srcMacaroniMouse       = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
+	srcMacaroniMouseMotion = "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png"
+	srcRabbit              = "docs/source-truth/rabbit-source-truth.png"
+	srcRabbitMotion        = "docs/art-source/rabbit/motion-source/sheets/rabbit-chestnut-agouti-source-set00.png"
+	srcDog                 = "docs/art-intake/dog/dog-source-truth-transparent.png"
+	srcCat                 = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
+	srcGecko               = "docs/art-source/gecko/gecko-source-truth.png"
+	srcHamster             = "docs/art-source/hamster/hamster-source-truth.png"
+	srcHamsterMotion       = "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png"
+	srcSugarGlider         = "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png"
+	srcSugarGliderMotion   = "docs/art-source/sugar-glider/motion-source/sheets/sugar-glider-gray-source-set00.png"
 )
 
 var Variants = []Variant{
@@ -107,16 +112,16 @@ var Variants = []Variant{
 	deguVariant("blue_pied", "blue pied (slate gray)", "degu_blue_pied"),
 	deguVariant("cream_pied", "cream pied", "degu_cream_pied"),
 
-	motionSourceVariant("chinchilla_standard_gray", "chinchilla", "Chinchilla - standard gray", "chinchilla_standard_gray", srcChinchilla, srcChinchillaMotionDraft, "", ""),
+	acceptedMotionVariant("chinchilla_standard_gray", "chinchilla", "Chinchilla", "チンチラ", "chinchilla_standard_gray", srcChinchilla, srcChinchillaMotion, "", "", "Chinchilla", "standard gray", 1),
 	sourceVariant("chinchilla_beige", "chinchilla", "Chinchilla - beige", "chinchilla_beige", srcChinchilla, "c8b184", ""),
 	sourceVariant("chinchilla_ebony", "chinchilla", "Chinchilla - ebony", "chinchilla_ebony", srcChinchilla, "3e3d39", ""),
 	sourceVariant("chinchilla_white_mosaic", "chinchilla", "Chinchilla - white mosaic", "chinchilla_white_mosaic", srcChinchilla, "e6e1d3", "8f9690"),
 
-	sourceVariant("macaroni_mouse_tan", "macaroni_mouse", "Macaroni mouse - tan", "macaroni_mouse_tan", srcMacaroniMouse, "", ""),
+	acceptedMotionVariant("macaroni_mouse_tan", "macaroni_mouse", "Macaroni mouse", "マカロニマウス", "macaroni_mouse_tan", srcMacaroniMouse, srcMacaroniMouseMotion, "", "", "Macaroni mouse", "tan", 1),
 	sourceVariant("macaroni_mouse_gray", "macaroni_mouse", "Macaroni mouse - gray", "macaroni_mouse_gray", srcMacaroniMouse, "8f8f84", ""),
 	sourceVariant("macaroni_mouse_cream", "macaroni_mouse", "Macaroni mouse - cream", "macaroni_mouse_cream", srcMacaroniMouse, "dcc698", ""),
 
-	sourceVariant("rabbit_chestnut_agouti", "rabbit", "Rabbit - chestnut agouti", "rabbit_chestnut_agouti", srcRabbit, "", ""),
+	acceptedMotionVariant("rabbit_chestnut_agouti", "rabbit", "Rabbit", "うさぎ", "rabbit_chestnut_agouti", srcRabbit, srcRabbitMotion, "", "", "Rabbit", "chestnut agouti", 1),
 	sourceVariant("rabbit_black", "rabbit", "Rabbit - black", "rabbit_black", srcRabbit, "2f2c29", ""),
 	sourceVariant("rabbit_white", "rabbit", "Rabbit - white", "rabbit_white", srcRabbit, "ebe7dc", ""),
 	sourceVariant("rabbit_blue_gray", "rabbit", "Rabbit - blue gray", "rabbit_blue_gray", srcRabbit, "777f86", ""),
@@ -141,7 +146,7 @@ var Variants = []Variant{
 	sourceVariant("gecko_blizzard", "gecko", "Gecko - blizzard", "gecko_blizzard", srcGecko, "d8d2c5", ""),
 	sourceVariant("gecko_albino", "gecko", "Gecko - albino", "gecko_albino", srcGecko, "e0cfa8", ""),
 
-	sourceVariant("hamster_golden_syrian", "hamster", "Hamster - golden Syrian", "hamster_golden_syrian", srcHamster, "", ""),
+	acceptedMotionVariant("hamster_golden_syrian", "hamster", "Hamster", "ハムスター", "hamster_golden_syrian", srcHamster, srcHamsterMotion, "", "", "Hamster", "golden Syrian", 1),
 	sourceVariant("hamster_cream", "hamster", "Hamster - cream", "hamster_cream", srcHamster, "e2c18b", ""),
 	sourceVariant("hamster_black_banded", "hamster", "Hamster - black banded", "hamster_black_banded", srcHamster, "3f342d", "ddd2bd"),
 	sourceVariant("hamster_white", "hamster", "Hamster - white", "hamster_white", srcHamster, "eee7d8", ""),
@@ -162,7 +167,7 @@ var Variants = []Variant{
 	shapeVariant("red_panda_classic", "red_panda", "Red panda - classic", "red_panda", "b85f31", "efe1c5"),
 	shapeVariant("red_panda_dark", "red_panda", "Red panda - dark", "red_panda", "6f3f2f", "e9d9bc"),
 	shapeVariant("otter_brown", "otter", "Otter - brown", "otter", "6b4a31", "d4bb91"),
-	shapeVariant("sugar_glider_gray", "sugar_glider", "Sugar glider - gray", "sugar_glider", "8c8d88", "f1eee4"),
+	acceptedMotionVariant("sugar_glider_gray", "sugar_glider", "Sugar glider", "モモンガ", "sugar_glider_gray", srcSugarGlider, srcSugarGliderMotion, "8c8d88", "f1eee4", "Sugar glider", "gray", 1),
 	shapeVariant("capybara_brown", "capybara", "Capybara - brown", "capybara", "8a603d", "c79d6a"),
 	shapeVariant("capybara_sand", "capybara", "Capybara - sand", "capybara", "b98a58", "e2c69c"),
 	shapeVariant("tortoise_olive", "tortoise", "Tortoise - olive", "tortoise", "6f7146", "3f3d2a"),
@@ -212,6 +217,10 @@ var Variants = []Variant{
 
 var runtimeVariantIDs = []string{
 	"chinchilla_standard_gray",
+	"hamster_golden_syrian",
+	"macaroni_mouse_tan",
+	"sugar_glider_gray",
+	"rabbit_chestnut_agouti",
 }
 
 func RuntimeVariants() []Variant {
@@ -271,6 +280,14 @@ func motionSourceVariant(id string, speciesID string, label string, spriteBase s
 	variant := sourceVariant(id, speciesID, label, spriteBase, sourcePath, tintHex, accentHex)
 	variant.SourceStatus = SourceStatusMotionDraft
 	variant.MotionSourcePath = motionSourcePath
+	return variant
+}
+
+func acceptedMotionVariant(id string, speciesID string, labelEN string, labelJA string, spriteBase string, sourcePath string, motionSourcePath string, tintHex string, accentHex string, breedOrMorph string, color string, popularityTier int) Variant {
+	variant := sourceVariantMeta(id, speciesID, labelEN, spriteBase, sourcePath, tintHex, accentHex, breedOrMorph, color, popularityTier)
+	variant.SourceStatus = SourceStatusMotionAccepted
+	variant.MotionSourcePath = motionSourcePath
+	variant.LabelJA = labelJA
 	return variant
 }
 

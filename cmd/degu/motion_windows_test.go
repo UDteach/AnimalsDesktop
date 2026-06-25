@@ -134,14 +134,21 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 	}
 }
 
-func TestRuntimeCatalogIsReleaseScopedToChinchilla(t *testing.T) {
-	if got := len(variants); got != 1 {
-		t.Fatalf("runtime variants = %d, want 1", got)
+func TestRuntimeCatalogIsReleaseScopedToFiveSmallAnimals(t *testing.T) {
+	wantIDs := []string{
+		"chinchilla_standard_gray",
+		"hamster_golden_syrian",
+		"macaroni_mouse_tan",
+		"sugar_glider_gray",
+		"rabbit_chestnut_agouti",
 	}
-	if got := variants[0].ID; got != "chinchilla_standard_gray" {
-		t.Fatalf("runtime variant = %q, want chinchilla_standard_gray", got)
+	if got := len(variants); got != len(wantIDs) {
+		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
 	}
-	for _, variant := range variants {
+	for i, variant := range variants {
+		if variant.ID != wantIDs[i] {
+			t.Fatalf("runtime variant[%d] = %q, want %q", i, variant.ID, wantIDs[i])
+		}
 		if variant.SpeciesID == "degu" {
 			t.Fatalf("runtime variants include degu: %+v", variant)
 		}
@@ -180,8 +187,8 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if err := json.Unmarshal(data, &saved); err != nil {
 		t.Fatalf("settings json is invalid: %v", err)
 	}
-	if saved.Version != 1 || saved.PetCount != 10 || saved.Mode != int(modeKeyboard) {
-		t.Fatalf("saved settings = %+v, want version 1 petCount 10 keyboard mode", saved)
+	if saved.Version != settingsVersion || saved.PetCount != 10 || saved.Mode != int(modeKeyboard) {
+		t.Fatalf("saved settings = %+v, want version %d petCount 10 keyboard mode", saved, settingsVersion)
 	}
 	if !saved.NameLabels {
 		t.Fatalf("saved NameLabels = false, want true")
@@ -195,8 +202,8 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 
 	b := &petApp{
 		variant:       0,
-		coatMode:      coatRandom,
-		selectedCoats: [maxPetCount]int{0, 1, 2, 4, 8, 6, 3, 7, 5, 9},
+		coatMode:      coatSelected,
+		selectedCoats: defaultSelectedCoats(),
 		speed:         3,
 		mode:          modeRandom,
 		petCount:      2,
@@ -209,7 +216,7 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if err := b.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	if b.variant != 0 || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != a.mode || b.petCount != a.petCount {
+	if b.variant != 4 || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != a.mode || b.petCount != a.petCount {
 		t.Fatalf("loaded scalar settings = variant:%d coat:%d speed:%d mode:%d count:%d", b.variant, b.coatMode, b.speed, b.mode, b.petCount)
 	}
 	if b.wheelEnabled != a.wheelEnabled || b.bidirectional != a.bidirectional || b.lang != a.lang {
@@ -218,13 +225,65 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if b.nameLabels != a.nameLabels {
 		t.Fatalf("loaded nameLabels = %v, want %v", b.nameLabels, a.nameLabels)
 	}
+	wantCoats := [maxPetCount]int{1, 3, 4, 4, 4, 0, 2, 4, 4, 4}
 	for i := 0; i < maxPetCount; i++ {
-		if b.selectedCoats[i] != 0 {
-			t.Fatalf("selectedCoats[%d] = %d, want 0", i, b.selectedCoats[i])
+		if b.selectedCoats[i] != wantCoats[i] {
+			t.Fatalf("selectedCoats[%d] = %d, want %d", i, b.selectedCoats[i], wantCoats[i])
 		}
 	}
 	if b.petNames[0] != "モカ" || b.petNames[1] != "Sora" || b.petNames[2] != "Nagi" {
 		t.Fatalf("loaded pet names = %#v", b.petNames[:3])
+	}
+}
+
+func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
+	configRoot := t.TempDir()
+	t.Setenv("APPDATA", configRoot)
+	dir := filepath.Join(configRoot, settingsDirName)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatalf("mkdir settings dir: %v", err)
+	}
+	path := filepath.Join(dir, settingsFileName)
+	data := []byte(`{
+  "version": 1,
+  "variant": 8,
+  "coatMode": 2,
+  "selectedCoats": [8, 7, 6, 5, 4, 3, 2, 1, 0, 9],
+  "speed": 5,
+  "mode": 0,
+  "petCount": 4,
+  "wheelEnabled": false,
+  "bidirectional": false,
+  "language": 1,
+  "nameLabels": true,
+  "petNames": ["モカ"]
+}`)
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &petApp{
+		variant:       0,
+		coatMode:      coatSelected,
+		selectedCoats: defaultSelectedCoats(),
+		speed:         3,
+		mode:          modeRandom,
+		petCount:      5,
+		wheelEnabled:  true,
+		bidirectional: true,
+		lang:          langJapanese,
+	}
+	if err := a.loadSettings(); err != nil {
+		t.Fatalf("loadSettings() error = %v", err)
+	}
+	if a.speed != 5 || a.mode != modeKeyboard || a.petCount != 4 || a.wheelEnabled || a.bidirectional || a.lang != langEnglish {
+		t.Fatalf("loaded preserved settings = speed:%d mode:%d count:%d wheel:%v bidi:%v lang:%d", a.speed, a.mode, a.petCount, a.wheelEnabled, a.bidirectional, a.lang)
+	}
+	if a.variant != 0 || a.coatMode != coatSelected || a.selectedCoats != defaultSelectedCoats() {
+		t.Fatalf("old animal selection was not reset: variant:%d coat:%d selected:%v", a.variant, a.coatMode, a.selectedCoats)
+	}
+	if !a.nameLabels || a.petNames[0] != "モカ" {
+		t.Fatalf("loaded name settings = labels:%v names:%v", a.nameLabels, a.petNames[:1])
 	}
 }
 

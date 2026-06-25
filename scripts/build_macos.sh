@@ -210,7 +210,7 @@ func max(a, b int) int {
 	return b
 }
 GO
-GOOS="$HOST_GOOS" GOARCH="$HOST_GOARCH" CGO_ENABLED=0 "$GO_CMD" run "$ICON_TMP/make_icon.go" "$ROOT_DIR/assets/sprites/degu_wild_agouti_set00.png" "$ICONSET"
+GOOS="$HOST_GOOS" GOARCH="$HOST_GOARCH" CGO_ENABLED=0 "$GO_CMD" run "$ICON_TMP/make_icon.go" "$ROOT_DIR/assets/sprites/chinchilla_standard_gray_set00.png" "$ICONSET"
 iconutil -c icns "$ICONSET" -o "$APP_DIR/Contents/Resources/AnimalsDesktop.icns"
 
 CGO_ENABLED=1 GOOS=darwin GOARCH="$ARCH" "$GO_CMD" build \

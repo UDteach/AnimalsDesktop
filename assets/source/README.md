@@ -1,4 +1,9 @@
-# ImageGen Asset Intake
+# Legacy Degu ImageGen Asset Intake
+
+This directory documents the original DeguDesktop sprite intake path. AnimalsDesktop
+runtime preview no longer ships the generated `assets/sprites/degu_*.png` sheets;
+current runtime sprites are the five representative small-animal families under
+`assets/sprites/<animal>_setNN.png`.
 
 Preferred source is one ImageGen PNG per runtime frame:
 
@@ -29,7 +34,7 @@ go run ./cmd/importsheet
 
 The importer writes:
 
-- `assets/sprites/degu_*.png`
+- legacy `assets/sprites/degu_*.png` outputs when the importer is run manually
 - `assets/tray.ico`
 - `docs/assets/degu-preview.png`
 - `assets/source/import-report.json`

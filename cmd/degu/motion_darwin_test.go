@@ -113,8 +113,8 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	}
 	a.setCoatMode(int(darwinCoatSelected))
 	a.setSelectedVariant(1, 7)
-	if a.coatMode != darwinCoatSelected || a.selectedCoats[1] != 7 || a.pets[1].variant != 7 {
-		t.Fatalf("selected coat state = mode:%d selected:%d pet:%d, want selected mode and variant 7", a.coatMode, a.selectedCoats[1], a.pets[1].variant)
+	if a.coatMode != darwinCoatSelected || a.selectedCoats[1] != 4 || a.pets[1].variant != 4 {
+		t.Fatalf("selected coat state = mode:%d selected:%d pet:%d, want selected mode and clamped variant 4", a.coatMode, a.selectedCoats[1], a.pets[1].variant)
 	}
 
 	a.keyHold = wheelKeyHold
@@ -139,14 +139,60 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 		wheelEnabled:  true,
 	}
 	b.loadSettings()
-	if b.speed != darwinSpeedFast || b.petCount != 3 || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 7 || b.wheelEnabled {
-		t.Fatalf("loaded settings = speed:%d count:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 keyboard selected variant 7 wheel:false", b.speed, b.petCount, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
+	if b.speed != darwinSpeedFast || b.petCount != 3 || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 4 || b.wheelEnabled {
+		t.Fatalf("loaded settings = speed:%d count:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 keyboard selected variant 4 wheel:false", b.speed, b.petCount, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
 	}
 	if !b.nameLabels || b.petNames[0] != "モカ" || b.petNames[2] != "abcdefghijklmnopqrstuvwx" {
 		t.Fatalf("loaded names = labels:%v names:%#v", b.nameLabels, b.petNames[:3])
 	}
-	if got := b.petDisplayName(1); got != "デグー2" {
-		t.Fatalf("default display name = %q, want デグー2", got)
+	if got := b.petDisplayName(1); got != "どうぶつ2" {
+		t.Fatalf("default display name = %q, want どうぶつ2", got)
+	}
+}
+
+func TestDarwinLoadsVersionOneSettingsWithoutOldAnimalSelection(t *testing.T) {
+	oldSettingsPath := darwinSettingsPath
+	settingsPath := filepath.Join(t.TempDir(), "settings.json")
+	darwinSettingsPath = func() (string, error) {
+		return settingsPath, nil
+	}
+	t.Cleanup(func() {
+		darwinSettingsPath = oldSettingsPath
+	})
+
+	data := []byte(`{
+  "version": 1,
+  "variant": 8,
+  "coatMode": 2,
+  "selectedCoats": [8, 7, 6, 5, 4, 3, 2, 1, 0, 9],
+  "speed": 5,
+  "mode": 0,
+  "petCount": 4,
+  "wheelEnabled": false,
+  "nameLabels": true,
+  "petNames": ["モカ"]
+}`)
+	if err := os.WriteFile(settingsPath, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &darwinPetApp{
+		speed:         darwinSpeedNormal,
+		petCount:      5,
+		mode:          darwinModeRandom,
+		coatMode:      darwinCoatSelected,
+		selectedCoats: defaultDarwinSelectedCoats(),
+		wheelEnabled:  true,
+	}
+	a.loadSettings()
+	if a.speed != darwinSpeedFast || a.petCount != 4 || a.mode != darwinModeKeyboard || a.wheelEnabled {
+		t.Fatalf("loaded preserved settings = speed:%d count:%d mode:%d wheel:%v", a.speed, a.petCount, a.mode, a.wheelEnabled)
+	}
+	if a.coatMode != darwinCoatSelected || a.variant != 0 || a.selectedCoats != defaultDarwinSelectedCoats() {
+		t.Fatalf("old animal selection was not reset: variant:%d coat:%d selected:%v", a.variant, a.coatMode, a.selectedCoats)
+	}
+	if !a.nameLabels || a.petNames[0] != "モカ" {
+		t.Fatalf("loaded name settings = labels:%v names:%v", a.nameLabels, a.petNames[:1])
 	}
 }
 

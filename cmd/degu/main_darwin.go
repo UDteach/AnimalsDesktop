@@ -62,6 +62,8 @@ const (
 	settingsDirName  = "AnimalsDesktop"
 	settingsFileName = "settings.json"
 
+	darwinSettingsVersion = 2
+
 	darwinSpeedSlow   = 2
 	darwinSpeedNormal = 3
 	darwinSpeedFast   = 5
@@ -95,17 +97,11 @@ type darwinCoatVariant struct {
 }
 
 var darwinVariants = []darwinCoatVariant{
-	{ID: "wild_agouti", LabelJA: "野生色 / アグーチ"},
-	{ID: "black", LabelJA: "ブラック"},
-	{ID: "blue", LabelJA: "ブルー（青みグレー）"},
-	{ID: "gray", LabelJA: "グレー"},
-	{ID: "white_cream", LabelJA: "ホワイト / クリーム"},
-	{ID: "sand_champagne", LabelJA: "サンド / シャンパン"},
-	{ID: "chocolate", LabelJA: "チョコレート"},
-	{ID: "black_pied", LabelJA: "ブラックパイド"},
-	{ID: "agouti_pied", LabelJA: "アグーチパイド"},
-	{ID: "blue_pied", LabelJA: "ブルーパイド（青みグレー）"},
-	{ID: "cream_pied", LabelJA: "クリームパイド"},
+	{ID: "chinchilla_standard_gray", LabelJA: "チンチラ"},
+	{ID: "hamster_golden_syrian", LabelJA: "ハムスター"},
+	{ID: "macaroni_mouse_tan", LabelJA: "マカロニマウス"},
+	{ID: "sugar_glider_gray", LabelJA: "モモンガ"},
+	{ID: "rabbit_chestnut_agouti", LabelJA: "うさぎ"},
 }
 
 var appVersion = "dev"
@@ -183,7 +179,7 @@ func newDarwinPetApp() *darwinPetApp {
 		speed:         darwinSpeedNormal,
 		petCount:      5,
 		mode:          darwinModeRandom,
-		coatMode:      darwinCoatRandom,
+		coatMode:      darwinCoatSelected,
 		selectedCoats: defaultDarwinSelectedCoats(),
 		wheelEnabled:  true,
 		frames:        loadDarwinSprites(),
@@ -537,18 +533,20 @@ func (a *darwinPetApp) loadSettings() {
 	if settings.PetCount != 0 {
 		a.petCount = normalizeDarwinPetCount(settings.PetCount)
 	}
-	if settings.Variant != nil {
-		a.variant = normalizeDarwinVariant(*settings.Variant)
-	}
-	if settings.CoatMode != nil {
-		a.coatMode = normalizeDarwinCoatMode(*settings.CoatMode)
-	}
-	if len(settings.SelectedCoats) > 0 {
-		for i, variant := range settings.SelectedCoats {
-			if i >= maxPetCount {
-				break
+	if settings.Version >= darwinSettingsVersion {
+		if settings.Variant != nil {
+			a.variant = normalizeDarwinVariant(*settings.Variant)
+		}
+		if settings.CoatMode != nil {
+			a.coatMode = normalizeDarwinCoatMode(*settings.CoatMode)
+		}
+		if len(settings.SelectedCoats) > 0 {
+			for i, variant := range settings.SelectedCoats {
+				if i >= maxPetCount {
+					break
+				}
+				a.selectedCoats[i] = normalizeDarwinVariant(variant)
 			}
-			a.selectedCoats[i] = normalizeDarwinVariant(variant)
 		}
 	}
 	if settings.Mode != nil {
@@ -585,7 +583,7 @@ func (a *darwinPetApp) saveSettings() {
 	coatMode := int(normalizeDarwinCoatMode(int(a.coatMode)))
 	mode := int(normalizeDarwinMode(int(a.mode)))
 	settings := darwinSettings{
-		Version:       1,
+		Version:       darwinSettingsVersion,
 		Variant:       &variant,
 		CoatMode:      &coatMode,
 		SelectedCoats: selectedCoats,
@@ -703,7 +701,7 @@ func (a *darwinPetApp) petDisplayName(index int) string {
 	if name := sanitizeDarwinPetName(a.petNames[index]); name != "" {
 		return name
 	}
-	return fmt.Sprintf("デグー%d", index+1)
+	return fmt.Sprintf("どうぶつ%d", index+1)
 }
 
 func (a *darwinPetApp) petSpeed(index int) int {
@@ -737,7 +735,7 @@ func (a *darwinPetApp) variantID(index int) string {
 }
 
 func defaultDarwinSelectedCoats() [maxPetCount]int {
-	return [maxPetCount]int{0, 1, 2, 4, 8, 6, 3, 7, 5, 9}
+	return [maxPetCount]int{0, 1, 2, 3, 4, 0, 1, 2, 3, 4}
 }
 
 func normalizeDarwinSpeed(speed int) int {
@@ -938,7 +936,10 @@ func (a *darwinPetApp) drawReactions(dst *image.RGBA) {
 }
 
 func (a *darwinPetApp) statusIconPNG() []byte {
-	frames := a.frames["wild_agouti"]
+	if len(darwinVariants) == 0 {
+		return nil
+	}
+	frames := a.frames[darwinVariants[0].ID]
 	if len(frames) == 0 {
 		return nil
 	}
@@ -981,7 +982,7 @@ func seqFrameFrom(seq []int, tick, delay int) int {
 func loadDarwinSprites() map[string][]*image.RGBA {
 	out := make(map[string][]*image.RGBA, len(darwinVariants))
 	for _, variant := range darwinVariants {
-		name := fmt.Sprintf("sprites/degu_%s_set00.png", variant.ID)
+		name := fmt.Sprintf("sprites/%s_set00.png", variant.ID)
 		data, err := fs.ReadFile(appassets.FS, name)
 		if err != nil {
 			panic(err)

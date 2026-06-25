@@ -63,6 +63,7 @@ const (
 	settingsClientH      int32 = 560
 	settingsDirName            = "AnimalsDesktop"
 	settingsFileName           = "settings.json"
+	settingsVersion            = 2
 	updateAPIURL               = "https://api.github.com/repos/UDteach/AnimalsDesktop/releases/latest"
 )
 
@@ -374,11 +375,11 @@ func main() {
 		forageSprites: loadForageSprites(),
 		wheel:         loadWheelSprite(),
 		variant:       0,
-		coatMode:      coatRandom,
-		selectedCoats: [maxPetCount]int{0, 1, 2, 4, 8, 6, 3, 7, 5, 9},
+		coatMode:      coatSelected,
+		selectedCoats: defaultSelectedCoats(),
 		speed:         3,
 		mode:          modeRandom,
-		petCount:      2,
+		petCount:      5,
 		wheelEnabled:  true,
 		bidirectional: true,
 		settingsTab:   tabAnimals,
@@ -521,16 +522,18 @@ func (a *petApp) loadSettings() error {
 	if err := json.Unmarshal(data, &settings); err != nil {
 		return err
 	}
-	if settings.Version != 1 {
+	if settings.Version < 1 || settings.Version > settingsVersion {
 		return nil
 	}
-	a.variant = clamp(settings.Variant, 0, len(variants)-1)
-	a.coatMode = normalizeCoatMode(settings.CoatMode)
-	for i, variant := range settings.SelectedCoats {
-		if i >= len(a.selectedCoats) {
-			break
+	if settings.Version >= settingsVersion {
+		a.variant = clamp(settings.Variant, 0, len(variants)-1)
+		a.coatMode = normalizeCoatMode(settings.CoatMode)
+		for i, variant := range settings.SelectedCoats {
+			if i >= len(a.selectedCoats) {
+				break
+			}
+			a.selectedCoats[i] = clamp(variant, 0, len(variants)-1)
 		}
-		a.selectedCoats[i] = clamp(variant, 0, len(variants)-1)
 	}
 	for i, name := range settings.PetNames {
 		if i >= len(a.petNames) {
@@ -571,7 +574,7 @@ func (a *petApp) saveSettings() error {
 		names[i] = sanitizePetName(a.petNames[i])
 	}
 	settings := appSettings{
-		Version:       1,
+		Version:       settingsVersion,
 		Variant:       clamp(a.variant, 0, len(variants)-1),
 		CoatMode:      int(a.coatMode),
 		SelectedCoats: coats,
@@ -1168,6 +1171,10 @@ func (a *petApp) variantForIndex(index int) int {
 		}
 	}
 	return clamp(a.variant, 0, len(variants)-1)
+}
+
+func defaultSelectedCoats() [maxPetCount]int {
+	return [maxPetCount]int{0, 1, 2, 3, 4, 0, 1, 2, 3, 4}
 }
 
 func (a *petApp) petVariant(p *deguPet) int {

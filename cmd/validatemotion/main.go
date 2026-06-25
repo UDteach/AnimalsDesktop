@@ -32,6 +32,7 @@ type variantReport struct {
 	FramesPerSet     int      `json:"frames_per_set"`
 	RuntimeSets      int      `json:"runtime_sets"`
 	UniqueSetHashes  int      `json:"unique_set_hashes"`
+	AcceptedSource   bool     `json:"accepted_source"`
 	ReleaseReady     bool     `json:"release_ready"`
 	Warnings         []string `json:"warnings,omitempty"`
 }
@@ -70,8 +71,8 @@ func main() {
 			hasFailure = true
 			continue
 		}
-		if *requireAccepted && !report.ReleaseReady {
-			fmt.Fprintf(os.Stderr, "%s is not release-ready: source status %s\n", variant.ID, variant.SourceStatus)
+		if *requireAccepted && !report.AcceptedSource {
+			fmt.Fprintf(os.Stderr, "%s is not an accepted motion source: source status %s\n", variant.ID, variant.SourceStatus)
 			hasFailure = true
 		}
 		reports = append(reports, report)
@@ -111,6 +112,7 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 		FramesPerSet:     totalFrames,
 		RuntimeSets:      len(paths),
 		UniqueSetHashes:  len(hashes),
+		AcceptedSource:   variant.SourceStatus == catalog.SourceStatusMotionAccepted,
 		ReleaseReady:     variant.SourceStatus == catalog.SourceStatusMotionAccepted && len(paths) == motionSets,
 	}
 	if variant.SourceStatus == catalog.SourceStatusMotionDraft {

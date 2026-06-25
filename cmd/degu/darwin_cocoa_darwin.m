@@ -38,17 +38,11 @@ enum {
 };
 
 static NSString *DeguVariantLabels[] = {
-	@"野生色 / アグーチ",
-	@"ブラック",
-	@"ブルー（青みグレー）",
-	@"グレー",
-	@"ホワイト / クリーム",
-	@"サンド / シャンパン",
-	@"チョコレート",
-	@"ブラックパイド",
-	@"アグーチパイド",
-	@"ブルーパイド（青みグレー）",
-	@"クリームパイド",
+	@"チンチラ",
+	@"ハムスター",
+	@"マカロニマウス",
+	@"モモンガ",
+	@"うさぎ",
 };
 
 static const NSInteger DeguMaxPetCount = 10;
@@ -93,7 +87,7 @@ static const CGFloat DeguSpriteWidth = 96.0;
 		name = [NSString stringWithUTF8String:buffer];
 	}
 	if (name == nil || [name length] == 0) {
-		name = [NSString stringWithFormat:@"デグー%ld", (long)self.hoverPet + 1];
+		name = [NSString stringWithFormat:@"どうぶつ%ld", (long)self.hoverPet + 1];
 	}
 
 	NSMutableParagraphStyle *style = [[[NSMutableParagraphStyle alloc] init] autorelease];
@@ -499,19 +493,19 @@ static DeguAppDelegate *deguDelegate = nil;
 	}
 	[animalView addSubview:self.countPopup];
 
-	[animalView addSubview:[self labelWithTitle:@"色の決め方" frame:NSMakeRect(22, 298, 120, 24)]];
+	[animalView addSubview:[self labelWithTitle:@"動物の決め方" frame:NSMakeRect(22, 298, 120, 24)]];
 	self.coatModePopup = [self popupWithFrame:NSMakeRect(150, 294, 180, 28) action:@selector(settingsCoatModeChanged:)];
 	for (NSString *label in @[@"固定", @"1匹ずつ選ぶ", @"ランダム"]) {
 		[self.coatModePopup addItemWithTitle:label];
 	}
 	[animalView addSubview:self.coatModePopup];
 
-	[animalView addSubview:[self labelWithTitle:@"決まった毛色" frame:NSMakeRect(22, 256, 120, 24)]];
+	[animalView addSubview:[self labelWithTitle:@"固定する動物" frame:NSMakeRect(22, 256, 120, 24)]];
 	self.fixedCoatPopup = [self popupWithFrame:NSMakeRect(150, 252, 260, 28) action:@selector(settingsFixedCoatChanged:)];
 	[self populateVariantPopup:self.fixedCoatPopup];
 	[animalView addSubview:self.fixedCoatPopup];
 
-	NSTextField *perPet = [self labelWithTitle:@"1匹ごとの毛色" frame:NSMakeRect(22, 214, 160, 24)];
+	NSTextField *perPet = [self labelWithTitle:@"1匹ごとの動物" frame:NSMakeRect(22, 214, 160, 24)];
 	[perPet setFont:[NSFont boldSystemFontOfSize:12.0]];
 	[animalView addSubview:perPet];
 
@@ -557,7 +551,7 @@ static DeguAppDelegate *deguDelegate = nil;
 	[self.nameLabelsCheckbox setAction:@selector(settingsNameLabelsChanged:)];
 	[namesView addSubview:self.nameLabelsCheckbox];
 
-	NSTextField *nameHint = [self labelWithTitle:@"ONのとき、デグーにカーソルを乗せると名前が表示されます。" frame:NSMakeRect(22, 312, 480, 22)];
+	NSTextField *nameHint = [self labelWithTitle:@"ONのとき、動物にカーソルを乗せると名前が表示されます。" frame:NSMakeRect(22, 312, 480, 22)];
 	[nameHint setTextColor:[NSColor secondaryLabelColor]];
 	[namesView addSubview:nameHint];
 
@@ -573,7 +567,7 @@ static DeguAppDelegate *deguDelegate = nil;
 		[field setTarget:self];
 		[field setAction:@selector(settingsPetNameChanged:)];
 		[field setDelegate:self];
-		[field setPlaceholderString:[NSString stringWithFormat:@"デグー%ld", (long)i + 1]];
+		[field setPlaceholderString:[NSString stringWithFormat:@"どうぶつ%ld", (long)i + 1]];
 		[namesView addSubview:field];
 		[self.petNameFields addObject:field];
 	}

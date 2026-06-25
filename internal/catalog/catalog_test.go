@@ -64,15 +64,25 @@ func TestCatalogInvariants(t *testing.T) {
 
 func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 	runtime := RuntimeVariants()
-	if got := len(runtime); got != 1 {
-		t.Fatalf("runtime variants = %d, want 1 release-scoped variant", got)
+	wantIDs := []string{
+		"chinchilla_standard_gray",
+		"hamster_golden_syrian",
+		"macaroni_mouse_tan",
+		"sugar_glider_gray",
+		"rabbit_chestnut_agouti",
 	}
-	if got := runtime[0].ID; got != "chinchilla_standard_gray" {
-		t.Fatalf("runtime variant = %q, want chinchilla_standard_gray", got)
+	if got := len(runtime); got != len(wantIDs) {
+		t.Fatalf("runtime variants = %d, want %d release-scoped variants", got, len(wantIDs))
 	}
-	for _, variant := range runtime {
+	for i, variant := range runtime {
+		if variant.ID != wantIDs[i] {
+			t.Fatalf("runtime variant[%d] = %q, want %q", i, variant.ID, wantIDs[i])
+		}
 		if variant.SpeciesID == "degu" {
 			t.Fatalf("runtime variants must not include degu: %+v", variant)
+		}
+		if variant.SourceStatus != SourceStatusMotionAccepted {
+			t.Fatalf("runtime variant %q source status = %q, want accepted", variant.ID, variant.SourceStatus)
 		}
 	}
 }
