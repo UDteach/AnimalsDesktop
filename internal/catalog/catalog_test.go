@@ -1,6 +1,13 @@
 package catalog
 
-import "testing"
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+)
 
 func TestCatalogInvariants(t *testing.T) {
 	if len(Variants) != 100 {
@@ -85,6 +92,56 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 			t.Fatalf("runtime variant %q source status = %q, want accepted", variant.ID, variant.SourceStatus)
 		}
 	}
+}
+
+func TestRuntimeSpritesMatchAcceptedMotionSources(t *testing.T) {
+	const runtimeMotionSets = 10
+	for _, variant := range RuntimeVariants() {
+		sourcePaths := expectedRuntimeMotionSources(t, variant.MotionSourcePath, runtimeMotionSets)
+		for set := 0; set < runtimeMotionSets; set++ {
+			runtimePath := repoPath("assets", "sprites", fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
+			runtimeData, err := os.ReadFile(runtimePath)
+			if err != nil {
+				t.Fatalf("read runtime sprite %s: %v", runtimePath, err)
+			}
+			sourceData, err := os.ReadFile(sourcePaths[set])
+			if err != nil {
+				t.Fatalf("read motion source %s: %v", sourcePaths[set], err)
+			}
+			if !bytes.Equal(runtimeData, sourceData) {
+				t.Fatalf("runtime sprite %s does not match accepted source %s", runtimePath, sourcePaths[set])
+			}
+		}
+	}
+}
+
+func expectedRuntimeMotionSources(t *testing.T, set00Path string, sets int) []string {
+	t.Helper()
+	if set00Path == "" {
+		t.Fatalf("runtime variant has no motion source path")
+	}
+	set00 := repoPath(filepath.FromSlash(set00Path))
+	out := make([]string, sets)
+	for set := 0; set < sets; set++ {
+		candidate := set00
+		if strings.Contains(set00, "set00") {
+			candidate = strings.Replace(set00, "set00", fmt.Sprintf("set%02d", set), 1)
+		}
+		if _, err := os.Stat(candidate); err != nil {
+			if set > 0 && os.IsNotExist(err) {
+				candidate = set00
+			} else {
+				t.Fatalf("stat motion source %s: %v", candidate, err)
+			}
+		}
+		out[set] = candidate
+	}
+	return out
+}
+
+func repoPath(parts ...string) string {
+	all := append([]string{"..", ".."}, parts...)
+	return filepath.Join(all...)
 }
 
 func TestWheelCapabilityByProfile(t *testing.T) {
