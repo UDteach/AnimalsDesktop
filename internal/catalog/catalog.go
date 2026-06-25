@@ -413,18 +413,23 @@ func MotionProfileForVariant(variant Variant) string {
 }
 
 func WheelCapableSpecies(speciesID string) bool {
-	return WheelCapableMotionProfile(DefaultMotionProfileForSpecies(speciesID))
-}
-
-func WheelCapableMotionProfile(profile string) bool {
-	switch profile {
-	case MotionProfileDegu, MotionProfileSmallRodentScurry:
+	switch speciesID {
+	case "chinchilla", "hamster":
 		return true
 	default:
 		return false
 	}
 }
 
+func WheelCapableMotionProfile(profile string) bool {
+	return false
+}
+
 func WheelCapableVariant(variant Variant) bool {
-	return WheelCapableMotionProfile(MotionProfileForVariant(variant))
+	switch variant.ID {
+	case "chinchilla_standard_gray", "hamster_golden_syrian":
+		return true
+	default:
+		return false
+	}
 }

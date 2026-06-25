@@ -91,7 +91,7 @@ Use this cycle repeatedly:
 10. Run local QA and confirm GitHub Actions.
 11. Commit, then tag a release only when the animal family meets the release gate above.
 
-Near-term base-motion order is fancy rat, gecko, guinea pig, albino chipmunk, Yorkshire Terrier, and leopard gecko. Color, breed, and morph variants should follow only after each base motion is readable in runtime.
+Do not publish or name a future animal queue until the next family is deliberately chosen by the parent thread. Color, breed, and morph variants should follow only after each accepted base motion is readable in runtime.
 
 ## Profile-Specific Notes
 

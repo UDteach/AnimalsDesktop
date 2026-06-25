@@ -172,24 +172,40 @@ func repoPath(parts ...string) string {
 	return filepath.Join(all...)
 }
 
-func TestWheelCapabilityByProfile(t *testing.T) {
-	tests := []struct {
-		species string
-		want    bool
-	}{
-		{"degu", true},
-		{"hamster", true},
-		{"mouse", true},
-		{"corn_snake", false},
-		{"whites_tree_frog", false},
-		{"gecko", false},
-		{"tortoise", false},
-		{"dog", false},
-		{"capybara", false},
+func TestWheelCapabilityIsLimitedToChinchillaAndHamster(t *testing.T) {
+	wantBySpecies := map[string]bool{
+		"chinchilla":     true,
+		"hamster":        true,
+		"degu":           false,
+		"macaroni_mouse": false,
+		"mouse":          false,
+		"sugar_glider":   false,
+		"rabbit":         false,
+		"gecko":          false,
 	}
-	for _, tt := range tests {
-		if got := WheelCapableSpecies(tt.species); got != tt.want {
-			t.Fatalf("WheelCapableSpecies(%q) = %v, want %v", tt.species, got, tt.want)
+	for species, want := range wantBySpecies {
+		if got := WheelCapableSpecies(species); got != want {
+			t.Fatalf("WheelCapableSpecies(%q) = %v, want %v", species, got, want)
+		}
+	}
+	if WheelCapableMotionProfile(MotionProfileSmallRodentScurry) {
+		t.Fatalf("small-rodent motion profile must not imply wheel capability")
+	}
+	wantByVariant := map[string]bool{
+		"chinchilla_standard_gray": true,
+		"hamster_golden_syrian":    true,
+		"macaroni_mouse_tan":       false,
+		"sugar_glider_gray":        false,
+		"rabbit_chestnut_agouti":   false,
+		"wild_agouti":              false,
+	}
+	for id, want := range wantByVariant {
+		variant, ok := VariantByID(id)
+		if !ok {
+			t.Fatalf("missing test variant %q", id)
+		}
+		if got := WheelCapableVariant(variant); got != want {
+			t.Fatalf("WheelCapableVariant(%q) = %v, want %v", id, got, want)
 		}
 	}
 }

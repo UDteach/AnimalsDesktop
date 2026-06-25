@@ -9,6 +9,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/lxn/win"
 )
 
 func TestHorizontalMotionFramesUseStableRightFacingWalkSequence(t *testing.T) {
@@ -194,19 +196,26 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	t.Setenv("APPDATA", configRoot)
 
 	a := &petApp{
-		variant:       4,
-		coatMode:      coatSelected,
-		selectedCoats: [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8},
-		petNames:      [maxPetCount]string{"モカ", "Sora", "  Nagi  ", "", "", "", "", "", "", ""},
-		nameLabels:    true,
-		speed:         5,
-		mode:          modeKeyboard,
-		petCount:      10,
-		wheelEnabled:  false,
-		bidirectional: false,
-		lang:          langEnglish,
-		settingsX:     220,
-		settingsY:     180,
+		variant:        4,
+		coatMode:       coatSelected,
+		selectedCoats:  [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8},
+		petNames:       [maxPetCount]string{"モカ", "Sora", "  Nagi  ", "", "", "", "", "", "", ""},
+		nameLabels:     true,
+		speed:          5,
+		mode:           modeKeyboard,
+		petCount:       10,
+		wheelEnabled:   false,
+		bidirectional:  false,
+		positionMode:   positionScreenBottom,
+		overlayOffsetY: 24,
+		displayIndex:   0,
+		displayScope:   displayScopeSingle,
+		displaySpanEnd: 0,
+		walkRangeStart: 15,
+		walkRangeEnd:   85,
+		lang:           langEnglish,
+		settingsX:      220,
+		settingsY:      180,
 	}
 	if err := a.saveSettings(); err != nil {
 		t.Fatalf("saveSettings() error = %v", err)
@@ -227,6 +236,18 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if !saved.NameLabels {
 		t.Fatalf("saved NameLabels = false, want true")
 	}
+	if saved.PositionMode == nil || *saved.PositionMode != int(positionScreenBottom) {
+		t.Fatalf("saved PositionMode = %#v, want screen bottom", saved.PositionMode)
+	}
+	if saved.VerticalOffset == nil || *saved.VerticalOffset != 24 {
+		t.Fatalf("saved VerticalOffset = %#v, want 24", saved.VerticalOffset)
+	}
+	if saved.DisplayScope == nil || *saved.DisplayScope != int(displayScopeSingle) || saved.DisplayIndex == nil || *saved.DisplayIndex != 0 || saved.DisplaySpanEnd == nil || *saved.DisplaySpanEnd != 0 {
+		t.Fatalf("saved display selection = scope:%#v index:%#v span:%#v", saved.DisplayScope, saved.DisplayIndex, saved.DisplaySpanEnd)
+	}
+	if saved.WalkRangeStart == nil || *saved.WalkRangeStart != 15 || saved.WalkRangeEnd == nil || *saved.WalkRangeEnd != 85 {
+		t.Fatalf("saved walk range = start:%#v end:%#v", saved.WalkRangeStart, saved.WalkRangeEnd)
+	}
 	if got := saved.PetNames[0]; got != "モカ" {
 		t.Fatalf("saved pet name 0 = %q, want モカ", got)
 	}
@@ -235,17 +256,22 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 
 	b := &petApp{
-		variant:       0,
-		coatMode:      coatSelected,
-		selectedCoats: defaultSelectedCoats(),
-		speed:         3,
-		mode:          modeRandom,
-		petCount:      2,
-		wheelEnabled:  true,
-		bidirectional: true,
-		lang:          langJapanese,
-		settingsX:     120,
-		settingsY:     120,
+		variant:        0,
+		coatMode:       coatSelected,
+		selectedCoats:  defaultSelectedCoats(),
+		speed:          3,
+		mode:           modeRandom,
+		petCount:       2,
+		wheelEnabled:   true,
+		bidirectional:  true,
+		positionMode:   positionTaskbarEdge,
+		overlayOffsetY: defaultOverlayOffsetY,
+		displayScope:   displayScopeSingle,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+		lang:           langJapanese,
+		settingsX:      120,
+		settingsY:      120,
 	}
 	if err := b.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
@@ -258,6 +284,12 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 	if b.nameLabels != a.nameLabels {
 		t.Fatalf("loaded nameLabels = %v, want %v", b.nameLabels, a.nameLabels)
+	}
+	if b.positionMode != a.positionMode || b.overlayOffsetY != a.overlayOffsetY || b.displayScope != a.displayScope || b.displayIndex != a.displayIndex || b.displaySpanEnd != a.displaySpanEnd {
+		t.Fatalf("loaded display settings = mode:%d offset:%d scope:%d index:%d span:%d", b.positionMode, b.overlayOffsetY, b.displayScope, b.displayIndex, b.displaySpanEnd)
+	}
+	if b.walkRangeStart != a.walkRangeStart || b.walkRangeEnd != a.walkRangeEnd {
+		t.Fatalf("loaded walk range = %d-%d, want %d-%d", b.walkRangeStart, b.walkRangeEnd, a.walkRangeStart, a.walkRangeEnd)
 	}
 	wantCoats := [maxPetCount]int{1, 3, 4, 4, 4, 0, 2, 4, 4, 4}
 	for i := 0; i < maxPetCount; i++ {
@@ -318,6 +350,54 @@ func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	}
 	if !a.nameLabels || a.petNames[0] != "モカ" {
 		t.Fatalf("loaded name settings = labels:%v names:%v", a.nameLabels, a.petNames[:1])
+	}
+}
+
+func TestNormalizeWalkRangeKeepsMinimumSpan(t *testing.T) {
+	start, end := normalizeWalkRange(48, 52)
+	if end-start != minWalkRangeSpan {
+		t.Fatalf("normalizeWalkRange narrow span = %d-%d, want %d point span", start, end, minWalkRangeSpan)
+	}
+	start, end = normalizeWalkRange(95, 10)
+	if start != 10 || end != 95 {
+		t.Fatalf("normalizeWalkRange reversed = %d-%d, want 10-95", start, end)
+	}
+}
+
+func TestOverlayRectForAppliesScreenBottomOffsetAndWalkRange(t *testing.T) {
+	a := &petApp{
+		positionMode:   positionScreenBottom,
+		overlayOffsetY: 24,
+		walkRangeStart: 25,
+		walkRangeEnd:   75,
+	}
+	work := win.RECT{Left: 0, Top: 0, Right: 1000, Bottom: 760}
+	screen := win.RECT{Left: 0, Top: 0, Right: 1000, Bottom: 800}
+	got := a.overlayRectFor(work, screen)
+	if got.Left != 250 || got.Right != 750 {
+		t.Fatalf("overlay x range = %d-%d, want 250-750", got.Left, got.Right)
+	}
+	if got.Top != int32(800-sceneH) || got.Bottom != 800 {
+		t.Fatalf("overlay y range = %d-%d, want clamped to screen bottom", got.Top, got.Bottom)
+	}
+}
+
+func TestOverlayRectForTaskbarOffsetStaysInsideScreen(t *testing.T) {
+	a := &petApp{
+		positionMode:   positionTaskbarEdge,
+		overlayOffsetY: -20,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+	}
+	work := win.RECT{Left: 100, Top: 50, Right: 900, Bottom: 700}
+	screen := win.RECT{Left: 0, Top: 0, Right: 1000, Bottom: 800}
+	got := a.overlayRectFor(work, screen)
+	if got.Left != work.Left || got.Right != work.Right {
+		t.Fatalf("overlay x = %d-%d, want work area %d-%d", got.Left, got.Right, work.Left, work.Right)
+	}
+	wantTop := int32(700 - sceneH - 20)
+	if got.Top != wantTop || got.Bottom != wantTop+sceneH {
+		t.Fatalf("overlay y = %d-%d, want %d-%d", got.Top, got.Bottom, wantTop, wantTop+sceneH)
 	}
 }
 
@@ -461,6 +541,46 @@ func TestResetPetAtEdgeReentersFromOppositeSideWithMatchingDirection(t *testing.
 	a.resetPetAtEdge(1, &left, -1)
 	if left.x < a.sceneW || left.dir != -1 || left.nextDir != -1 {
 		t.Fatalf("left-moving reset = x:%d dir:%d next:%d, want off-right and direction -1", left.x, left.dir, left.nextDir)
+	}
+}
+
+func TestForagePropsDisabledClearsPropsAndStopsAssignment(t *testing.T) {
+	if foragePropsEnabled {
+		t.Fatalf("foragePropsEnabled = true, want false for v0.1.3 preview")
+	}
+	a := &petApp{
+		sceneW: 500,
+		speed:  3,
+		forage: []forageItem{
+			{x: 100, kind: 2, owner: 0, active: true},
+			{x: 160, kind: 1, owner: reservedItem, active: true},
+		},
+		pets: []deguPet{
+			{state: stateCarry, item: 0, carryKind: 2, dir: 1, nextDir: 1},
+			{state: stateForage, item: 1, carryKind: noItem, dir: -1, nextDir: -1},
+		},
+	}
+
+	a.clearForageItems()
+
+	for i, item := range a.forage {
+		if item.active || item.owner != noItem {
+			t.Fatalf("forage %d = active:%v owner:%d, want cleared", i, item.active, item.owner)
+		}
+	}
+	for i, pet := range a.pets {
+		if pet.item != noItem || pet.carryKind != noItem || pet.state != stateWalk {
+			t.Fatalf("pet %d = item:%d carry:%d state:%v, want cleared walk", i, pet.item, pet.carryKind, pet.state)
+		}
+	}
+
+	a.forage = []forageItem{{x: 140, kind: 2, owner: noItem, active: true}}
+	p := deguPet{state: stateWalk, item: noItem, carryKind: noItem, x: 40, dir: 1}
+	if a.maybeAssignForageTarget(&p) {
+		t.Fatalf("maybeAssignForageTarget assigned forage while props are disabled")
+	}
+	if p.item != noItem || p.state != stateWalk {
+		t.Fatalf("pet after disabled assignment = item:%d state:%v, want unchanged", p.item, p.state)
 	}
 }
 

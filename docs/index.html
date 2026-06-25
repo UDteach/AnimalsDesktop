@@ -6,7 +6,7 @@
     <title>Animals Desktop</title>
     <meta
       name="description"
-      content="チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー上やMacのDock上を歩き回る、Go製のデスクトップペットアプリ。"
+      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー付近やMacのDock上を歩くデスクトップペットアプリです。"
     />
     <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <style>
@@ -127,18 +127,17 @@
         background: var(--leaf-dark);
       }
 
-      .button.disabled {
-        border-color: var(--line);
+      .download-note,
+      .note,
+      article p,
+      .section-head p {
         color: var(--muted);
-        background: transparent;
-        cursor: default;
+        line-height: 1.7;
       }
 
       .download-note {
         margin: 12px 0 0;
-        color: var(--muted);
         font-size: 13px;
-        line-height: 1.6;
       }
 
       .release-meta {
@@ -180,9 +179,7 @@
       }
 
       .note {
-        color: var(--muted);
         font-size: 13px;
-        line-height: 1.6;
       }
 
       section {
@@ -208,34 +205,48 @@
       }
 
       .section-head p,
-      article p,
-      .english p {
+      article p {
         margin: 0;
-        color: var(--muted);
-        line-height: 1.7;
       }
 
-      .current-grid {
+      .current-grid,
+      .features {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 16px;
       }
 
-      .animal-card {
+      .current-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .features {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .animal-card,
+      .features article {
         border-top: 3px solid var(--gold);
+        padding-top: 14px;
+      }
+
+      .animal-card {
         background: rgba(255, 253, 247, 0.7);
         padding: 12px 10px 14px;
       }
 
-      .animal-card:nth-child(2) {
+      .animal-card:nth-child(2),
+      .features article:nth-child(5) {
         border-color: var(--rust);
       }
 
-      .animal-card:nth-child(3) {
+      .animal-card:nth-child(3),
+      .features article:nth-child(2) {
         border-color: var(--slate);
       }
 
-      .animal-card:nth-child(4) {
+      .animal-card:nth-child(4),
+      .features article:nth-child(3),
+      .features article:nth-child(6) {
         border-color: var(--leaf);
       }
 
@@ -258,74 +269,8 @@
       }
 
       .animal-card p {
-        margin: 0;
-        color: var(--muted);
         font-size: 13px;
         line-height: 1.55;
-      }
-
-      .features {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 22px;
-      }
-
-      .features article {
-        border-top: 3px solid var(--gold);
-        padding-top: 14px;
-      }
-
-      .features article:nth-child(2),
-      .features article:nth-child(5) {
-        border-color: var(--slate);
-      }
-
-      .features article:nth-child(3),
-      .features article:nth-child(6) {
-        border-color: var(--leaf);
-      }
-
-      .teaser {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
-        gap: 22px;
-        align-items: center;
-      }
-
-      .teaser-image {
-        display: block;
-        width: 100%;
-        height: auto;
-        border: 1px solid var(--line);
-        background: var(--surface);
-        box-shadow: 0 16px 42px rgba(42, 49, 43, 0.09);
-      }
-
-      .teaser-copy {
-        border-top: 3px solid var(--leaf);
-        padding-top: 14px;
-      }
-
-      .teaser-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 14px;
-      }
-
-      .teaser-list span {
-        display: inline-flex;
-        align-items: center;
-        min-height: 30px;
-        border: 1px solid var(--line);
-        padding: 0 10px;
-        background: rgba(255, 253, 247, 0.72);
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      .english {
-        padding-bottom: 12px;
       }
 
       code {
@@ -366,10 +311,6 @@
           margin: 0;
           width: 124px;
         }
-
-        .teaser {
-          grid-template-columns: 1fr;
-        }
       }
 
       @media (max-width: 520px) {
@@ -392,10 +333,6 @@
         .animal-card img {
           width: 96px;
         }
-
-        .teaser-list span {
-          width: 100%;
-        }
       }
     </style>
   </head>
@@ -406,7 +343,7 @@
         <div class="navlinks">
           <a href="#download">ダウンロード</a>
           <a href="#animals">登場動物</a>
-          <a href="#next">これから</a>
+          <a href="#scope">公開範囲</a>
           <a href="#english">English</a>
           <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
         </div>
@@ -416,24 +353,28 @@
         <div>
           <h1>Animals Desktop</h1>
           <p class="lead">
-            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎが、Windowsのタスクバー上やMacのDock上を歩き回るデスクトップペットです。
-            Degu Desktopの透明オーバーレイ型デスクトップペットを土台に、複数の小動物へ広げています。
+            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎが、Windowsのタスクバー付近や
+            MacのDock上を歩くデスクトップペットです。DeguDesktopの軽量オーバーレイ体験を、複数の小動物へ広げています。
           </p>
           <div id="download" class="actions">
-            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-arm64.zip">
+            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-amd64.zip">
+              Windows版 Windows 10/11
+            </a>
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-arm64.zip">
               Mac版 Apple Silicon macOS 12+
             </a>
             <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-amd64.zip">
               Mac版 Intel macOS 12+
             </a>
-            <span class="button disabled" aria-disabled="true">Windows版は別途ビルド</span>
           </div>
           <p class="download-note">
-            v0.1.3は5種のset00モーションを入れたテスト先行公開版です。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。
-            Windows版は別のWindows環境でビルド確認します。
+            v0.1.3は5種のset00モーションを入れたテスト先行公開版です。Windows版はZIPを展開して
+            <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
+            <code>AnimalsDesktop.app</code> を起動してください。
           </p>
           <div class="release-meta" aria-label="Build information">
             <span>テスト先行公開版 <strong data-release-version>v0.1.3</strong></span>
+            <span>Windows版 <strong>v0.1.3</strong></span>
             <span>Mac版 <strong>v0.1.3</strong></span>
             <span>動物 <strong>5種</strong></span>
             <span>フレーム <strong>62 x set00</strong></span>
@@ -444,8 +385,8 @@
         <div class="preview-wrap">
           <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with five animals above a desktop taskbar" />
           <div class="note">
-            今の版は小動物5種の表示、移動、左右反転、クリック反応を確認するためのテスト先行公開版です。
-            10セットすべてを完成させる正式版とは分けて扱っています。
+            この版は、表示、移動、左右反転、クリック反応、Windows/Mac配布を確認するためのテスト版です。
+            10セットすべてを完成させる正式ゲートとは分けて扱っています。
           </div>
         </div>
       </header>
@@ -454,7 +395,7 @@
         <div class="section-head">
           <div>
             <h2 id="animals-heading">登場する動物</h2>
-            <p>現在アプリ内で選ばれる5種です。各アイコンは実際のランタイムスプライトから作っています。</p>
+            <p>現在アプリ内で選べる5種です。未検証の候補種は、公開ページにもアプリにも表示しません。</p>
           </div>
         </div>
         <div class="current-grid">
@@ -469,28 +410,28 @@
             <img src="assets/animal-icons/current-hamster_golden_syrian.png" alt="ハムスターのアイコン" />
             <div>
               <h3>ハムスター</h3>
-              <p>ゴールデンシリアン。短い尾と丸い体で、丸みのある小動物らしさを優先しています。</p>
+              <p>ゴールデンシリアン。回し車はチンチラとハムスターだけが使います。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-macaroni_mouse_tan.png" alt="マカロニマウスのアイコン" />
             <div>
               <h3>マカロニマウス</h3>
-              <p>太い尾が特徴の小型げっ歯類。低めの姿勢で素早く動く枠です。</p>
+              <p>太い尾が特徴の小動物。低めの姿勢で素早い動きに寄せています。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-sugar_glider_gray.png" alt="モモンガのアイコン" />
             <div>
               <h3>モモンガ</h3>
-              <p>膜のシルエットが出るように調整。素材向きの違いもランタイムで補正しています。</p>
+              <p>灰色のシルエットが分かるように調整し、素材差をランタイムで補正しています。</p>
             </div>
           </article>
           <article class="animal-card">
             <img src="assets/animal-icons/current-rabbit_chestnut_agouti.png" alt="うさぎのアイコン" />
             <div>
               <h3>うさぎ</h3>
-              <p>チェスナットアグーチ。耳と跳ねる姿勢が読みやすいようにしています。</p>
+              <p>チェスナットアグーチ。耳と跳ねる姿勢が読みやすいサイズにしています。</p>
             </div>
           </article>
         </div>
@@ -504,59 +445,41 @@
         </div>
         <div class="features">
           <article>
-            <h3>タスクバー上のペット</h3>
-            <p>透明な最前面レイヤーで、Windowsではタスクバー付近、MacではDock上の下端に小動物がいるように見せます。</p>
+            <h3>タスクバー付近のペット</h3>
+            <p>Windowsではタスクバー付近、MacではDock上の下端に小動物を表示します。</p>
           </article>
           <article>
             <h3>最大10匹</h3>
-            <p>設定から表示数を切り替え、複数の小動物を同時に歩かせられます。</p>
+            <p>設定から表示数を変え、複数の小動物を同時に歩かせられます。</p>
           </article>
           <article>
-            <h3>自然な左右移動</h3>
-            <p>移動方向とスプライトの向きが合うように描画時に反転し、後ろ向き移動が目立たないようにしています。</p>
+            <h3>画面設定</h3>
+            <p>Windows版はDeguDesktop由来の表示画面、歩行範囲、縦位置設定を持っています。</p>
           </article>
           <article>
             <h3>クリック反応</h3>
             <p>動物をクリックすると小さな反応が出ます。デスクトップへの通常クリックは通します。</p>
           </article>
           <article>
-            <h3>テスト先行版</h3>
-            <p>まずは表示、移動、左右反転、クリック反応を確認するための公開です。正式版ではモーションを増やします。</p>
+            <h3>小物なし</h3>
+            <p>v0.1.3では木、種、餌などの小物を出さず、動物本体の表示と動きだけを確認します。</p>
           </article>
           <article>
-            <h3>Mac版</h3>
-            <p>Mac版はメニューバーから設定できます。今回のreleaseからMac ZIPも配布対象に入れています。</p>
+            <h3>Windows / Mac配布</h3>
+            <p>v0.1.3ではWindows ZIPとMac ZIPを同じReleaseに置いています。</p>
           </article>
         </div>
       </section>
 
-      <section id="next" aria-labelledby="next-heading">
+      <section id="scope" aria-labelledby="scope-heading">
         <div class="section-head">
           <div>
-            <h2 id="next-heading">これから増やしていく動物</h2>
-            <p>まずベースモーションを作る優先6種です。リリースページでは、次に来るかもしれない動物としてモノクロのシルエットで見せます。</p>
-          </div>
-        </div>
-        <div class="teaser">
-          <img
-            class="teaser-image"
-            src="assets/animalsdesktop-coming-soon-silhouettes.png"
-            alt="ファンシーラット、ヤモリ、モルモット、アルビノシマリス、ヨークシャテリア、レオパルド・ゲッコーのシルエット"
-          />
-          <div class="teaser-copy">
-            <h3>これがくるかも！？</h3>
+            <h2 id="scope-heading">この版で表示する範囲</h2>
             <p>
-              優先対応はファンシーラット、ヤモリ、モルモット、シマリス（アルビノ）、ヨークシャテリア、レオパルド・ゲッコーです。
-              まず各種のベースモーションを作り、その後に色違い、品種違い、モーフ違いへ広げます。
+              このテスト先行公開版では、アプリ内で選べる動物を上記5種に限定しています。
+              未検証の候補種は、品質が確認できるまで公開ページに並べません。
+              木、種、餌などの小物表示もこの版では止めています。
             </p>
-            <div class="teaser-list" aria-label="Priority animals">
-              <span>ファンシーラット</span>
-              <span>ヤモリ</span>
-              <span>モルモット</span>
-              <span>シマリス（アルビノ）</span>
-              <span>ヨークシャテリア</span>
-              <span>レオパルド・ゲッコー</span>
-            </div>
           </div>
         </div>
       </section>
@@ -566,9 +489,8 @@
         <p>
           Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, macaroni mouse,
           sugar glider, and rabbit sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
-          Version v0.1.3 is an early public test release for the first five set00 motion animals. It is useful for
-          checking desktop behavior, sprite scale, direction handling, and clicks before the later full 10-set motion
-          release.
+          Version v0.1.3 is an early public test release for the first five set00 motion animals. The Windows build
+          now shares the same release tag as the Mac builds. Runtime foraging props are disabled in this preview.
         </p>
       </section>
     </main>

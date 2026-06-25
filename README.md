@@ -21,19 +21,20 @@ This is not the final DeguDesktop-level completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
 before expanding each animal to the full 10-set motion contract.
 
-## Next Animal Queue
+## Runtime Scope
 
-The next base-motion priorities are:
+The v0.1.3 test release intentionally exposes only the five accepted set00
+runtime animals listed above. Unverified candidate species are not listed on the
+public page and should not appear in the runtime picker until their source art
+and motion behavior pass the release QA loop.
 
-- fancy rat
-- gecko
-- guinea pig
-- albino chipmunk
-- Yorkshire Terrier
-- leopard gecko
+The typing wheel is intentionally limited to chinchilla and hamster. Other
+runtime animals continue to react to typing with movement, but do not enter the
+wheel state.
 
-After each base motion works in runtime, color, breed, and morph variants can be
-added with the same QA loop.
+Foraging props such as hay, twigs, seeds, and other small food/debris items are
+disabled in v0.1.3 so the preview shows only the animal sprites and their core
+movement.
 
 ## Release Gate
 
@@ -65,8 +66,8 @@ go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./c
 git diff --check
 ```
 
-Windows release ZIPs are built separately on a Windows machine after the Mac
-test release:
+Windows release ZIPs are built on a Windows machine and uploaded to the same
+release tag as the Mac ZIPs:
 
 ```powershell
 New-Item -ItemType Directory -Force dist | Out-Null

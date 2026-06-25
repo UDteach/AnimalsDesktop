@@ -21,11 +21,11 @@ jobs:
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
           grep -q "v0.1.3" docs/index.html
+          grep -q "Windows版 Windows 10/11" docs/index.html
           grep -q "Mac版 Apple Silicon" docs/index.html
-          grep -q "Windows版は別途ビルド" docs/index.html
-          grep -q "ファンシーラット" docs/index.html
-          grep -q "レオパルド・ゲッコー" docs/index.html
-          grep -q "animalsdesktop-coming-soon-silhouettes.png" docs/index.html
+          grep -q "AnimalsDesktop-windows-amd64.zip" docs/index.html
+          grep -q "この版で表示する範囲" docs/index.html
+          ! grep -Eq "coming-soon|将来候補|Priority animals|animalsdesktop-coming-soon-silhouettes" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"
           grep -q "Generator Comparison Images" "docs/$MOTION_PREVIEW/index.html"
@@ -39,7 +39,6 @@ jobs:
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$SPRITE_PREVIEW/index.html"
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$MOTION_PREVIEW/index.html"
           test -f docs/assets/animalsdesktop-preview.png
-          test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
           test -f docs/assets/animal-icons/current-chinchilla_standard_gray.png
           test -f docs/assets/animal-icons/current-hamster_golden_syrian.png
           test -f docs/assets/animal-icons/current-macaroni_mouse_tan.png
@@ -62,7 +61,6 @@ jobs:
           cp docs/index.html public-site/index.html
           cp docs/robots.txt public-site/robots.txt
           cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
-          cp docs/assets/animalsdesktop-coming-soon-silhouettes.png public-site/assets/animalsdesktop-coming-soon-silhouettes.png
           cp docs/assets/animal-icons/current-*.png public-site/assets/animal-icons/
           for preview in "$SPRITE_PREVIEW" "$MOTION_PREVIEW"
           do
