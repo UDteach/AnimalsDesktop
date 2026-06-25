@@ -70,6 +70,23 @@ The target is recoloring only. Preserve:
 
 Hard reject if the output changes species, pose, body shape, baseline, face structure, scale, or adds floor/shadow/text/debris.
 
+The first real-world color expansion wave is tracked in:
+
+```text
+docs/art-source/external-ai-trials/google-flow-20260625/real-variant-plan.md
+docs/art-source/external-ai-trials/google-flow-20260625/flow-pilot-manifest.tsv
+```
+
+First-wave pilot packets:
+
+- `chinchilla-beige-color-pilot/`
+- `hamster-cream-color-pilot/`
+- `macaroni-mouse-cream-color-pilot/`
+- `rabbit-white-color-pilot/`
+- `sugar-glider-white-faced-blonde-color-pilot/`
+
+Run only one first-wave pilot in Flow at a time, review it locally, then move to the next species. Do not expand a second color for one family until all five families have at least one reviewed color pilot.
+
 ## Google Flow Route
 
 Use Google Flow as the first color-variant trial when a visible/manual prompt path is available.
@@ -123,6 +140,18 @@ docs/art-source/external-ai-trials/google-flow-20260625/hamster-cream-color-pilo
 ```
 
 It targets a cream recolor pilot for the accepted hamster set00 style and uses the representative frames `00,04,12,26,32,40,52,56`.
+
+Prepared first-wave color packets:
+
+```text
+docs/art-source/external-ai-trials/google-flow-20260625/chinchilla-beige-color-pilot/
+docs/art-source/external-ai-trials/google-flow-20260625/hamster-cream-color-pilot/
+docs/art-source/external-ai-trials/google-flow-20260625/macaroni-mouse-cream-color-pilot/
+docs/art-source/external-ai-trials/google-flow-20260625/rabbit-white-color-pilot/
+docs/art-source/external-ai-trials/google-flow-20260625/sugar-glider-white-faced-blonde-color-pilot/
+```
+
+Known anchor caveat: `macaroni-mouse` `frame-00` has a tiny transparent pinhole, so the first Flow color packet uses `04,12,32` as style anchors. Repair or regenerate `frame-00` before using it as a future external style anchor.
 
 ## ChatGPT / InAppBrowser Route
 

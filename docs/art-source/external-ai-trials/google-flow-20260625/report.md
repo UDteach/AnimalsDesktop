@@ -2,8 +2,9 @@
 
 ## Scope
 
-This was a review-only Google Flow trial lane for four AnimalsDesktop set00 source families:
+This was a review-only Google Flow trial lane for AnimalsDesktop set00 source families:
 
+- `chinchilla_standard_gray`
 - `hamster_golden_syrian`
 - `macaroni_mouse_tan`
 - `sugar_glider_gray`
@@ -67,20 +68,35 @@ The following manual/next-run packets are ready:
 
 Use them one species at a time. Do not run a 62-frame generation as the first Flow test.
 
+## Prepared Color Variant Pilots
+
+The first real-world color expansion pilots are ready as 8-frame anchor-based Flow packets:
+
+- `chinchilla-beige-color-pilot/`
+- `hamster-cream-color-pilot/`
+- `macaroni-mouse-cream-color-pilot/`
+- `rabbit-white-color-pilot/`
+- `sugar-glider-white-faced-blonde-color-pilot/`
+
+See `real-variant-plan.md` and `flow-pilot-manifest.tsv` for target colors, source anchors, and QA status. These packets are for Flow input only; no generated output has been accepted.
+
+The macaroni mouse pilot intentionally does not use `frame-00` as a style anchor because the stricter Flow anchor validation found a 1px transparent pinhole in that accepted frame. It uses `04,12,32` instead.
+
 ## Recommended Next Flow Test
 
-Start with `hamster_golden_syrian` because the existing frame00 read is already strong and should make quality drift easier to judge.
+Start with `hamster-cream-color-pilot/` because the existing hamster read is already strong and should make quality drift easier to judge. After that, run one pilot per family before expanding a second color for any species.
 
 If entering the prompt manually in the visible browser:
 
 1. Create a new Flow project or use the project created for this trial.
 2. Keep image generation on `Nano Banana 2`, `16:9`, and `x2` or reduce to `x1` if output volume should be minimized.
-3. Paste only the sanitized prompt text from `source-packets/hamster_golden_syrian_8cell_prompt.md`.
-4. Confirm the UI still reports `0 credits` or otherwise stop before generation.
-5. Generate only the 8-cell sheet.
-6. Save the original output under `raw/`.
-7. Crop review-only candidates under `candidates/hamster_golden_syrian_8cell/`.
-8. Build a contact sheet under `contact-sheets/`.
+3. Upload the pilot pack images if the UI supports image anchors: `style-anchors.png`, `style-anchors-neutral.png` if transparency renders poorly, `grid-seed.png`, and `grid-guide.png`.
+4. Paste only the sanitized prompt text from the target pilot `prompt.txt`.
+5. Confirm the UI still reports `0 credits` or otherwise stop before generation.
+6. Generate only the 8-cell sheet.
+7. Save the original output under `raw/`.
+8. Crop review-only candidates under `candidates/<pilot-id>/`.
+9. Build a contact sheet under `contact-sheets/`.
 
 ## Adoption Notes
 
