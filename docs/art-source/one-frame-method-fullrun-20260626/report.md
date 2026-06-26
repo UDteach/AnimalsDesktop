@@ -9,7 +9,9 @@ This run used the successful one-frame ImageGen workflow to create first-pass `f
 - gray-brown gecko
 - albino chipmunk
 
-The outputs are review candidates only. Nothing was promoted to `accepted-frames`, runtime sprites, catalog runtime variants, or release assets.
+The seed outputs in this top-level run are review candidates only. Nothing from the four `frame-00` seed candidates was promoted directly to `accepted-frames`, runtime sprites, catalog runtime variants, or release assets.
+
+A later follow-up under `gecko-set00-oneframe-62/` used the gecko seed direction to generate a full 62-frame gray-brown gecko `set00`. That follow-up was separately normalized, QA-reviewed, and promoted to `docs/art-source/gecko/motion-source/accepted-frames/set00/` as accepted source art.
 
 ## Method
 

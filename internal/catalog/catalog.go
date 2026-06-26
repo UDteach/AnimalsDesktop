@@ -93,6 +93,7 @@ const (
 	srcDog                 = "docs/art-intake/dog/dog-source-truth-transparent.png"
 	srcCat                 = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
 	srcGecko               = "docs/art-source/gecko/gecko-source-truth.png"
+	srcGeckoMotion         = "docs/art-source/gecko/motion-source/sheets/gecko-gray-brown-source-set00.png"
 	srcHamster             = "docs/art-source/hamster/hamster-source-truth.png"
 	srcHamsterMotion       = "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png"
 	srcSugarGlider         = "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png"
@@ -140,7 +141,7 @@ var Variants = []Variant{
 	sourceVariant("cat_gray", "cat", "Cat - gray", "cat_gray", srcCat, "818783", ""),
 	sourceVariant("cat_cream", "cat", "Cat - cream", "cat_cream", srcCat, "d7b983", ""),
 
-	sourceVariant("gecko_gray_brown", "gecko", "Gecko - gray brown", "gecko_gray_brown", srcGecko, "", ""),
+	acceptedMotionVariant("gecko_gray_brown", "gecko", "Gecko", "ヤモリ", "gecko_gray_brown", srcGecko, srcGeckoMotion, "", "", "Gecko", "gray brown", 1),
 	sourceVariant("gecko_leopard", "gecko", "Gecko - leopard", "gecko_leopard", srcGecko, "c99b4a", "4d3a22"),
 	sourceVariant("gecko_tangerine", "gecko", "Gecko - tangerine", "gecko_tangerine", srcGecko, "de8a34", ""),
 	sourceVariant("gecko_blizzard", "gecko", "Gecko - blizzard", "gecko_blizzard", srcGecko, "d8d2c5", ""),
