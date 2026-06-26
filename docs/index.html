@@ -6,7 +6,7 @@
     <title>Animals Desktop</title>
     <meta
       name="description"
-      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎ、ヤモリがWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
+      content="Animals Desktopは、チンチラ、ハムスター、ジャンガリアンハムスター、マカロニマウス、モモンガ、うさぎ、ホーランドロップ、ネザーランドドワーフ、ヒマラヤンうさぎ、ヤモリ、モルモット、ファンシーラット、アルビノシマリス、リチャードソンジリス、ヨークシャーテリアがWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
     />
     <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <style>
@@ -223,7 +223,8 @@
       }
 
       .current-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        align-items: stretch;
       }
 
       .features {
@@ -238,7 +239,11 @@
 
       .animal-card {
         background: rgba(255, 253, 247, 0.7);
+        display: grid;
+        grid-template-rows: 156px auto;
+        align-content: start;
         padding: 12px 10px 14px;
+        min-width: 0;
       }
 
       .animal-card:nth-child(2),
@@ -265,12 +270,37 @@
         border-color: #6f756d;
       }
 
+      .animal-card:nth-child(7) {
+        border-color: #8d7048;
+      }
+
+      .animal-card:nth-child(8) {
+        border-color: #5f4d3d;
+      }
+
+      .animal-card:nth-child(9) {
+        border-color: #c48d4f;
+      }
+
+      .animal-card:nth-child(10) {
+        border-color: #9b7b4d;
+      }
+
+      .animal-card:nth-child(11) {
+        border-color: #87613f;
+      }
+
       .animal-card img {
         display: block;
-        width: min(100%, 156px);
-        height: auto;
+        width: 156px;
+        height: 156px;
+        object-fit: contain;
         margin: 0 auto 8px;
         image-rendering: pixelated;
+      }
+
+      .animal-card div {
+        min-width: 0;
       }
 
       .animal-card h3,
@@ -287,7 +317,9 @@
       .future-art {
         display: block;
         width: 100%;
+        aspect-ratio: 3 / 2;
         height: auto;
+        object-fit: cover;
         border: 1px solid var(--line);
         background: var(--surface);
       }
@@ -329,6 +361,7 @@
         .animal-card {
           display: grid;
           grid-template-columns: 124px minmax(0, 1fr);
+          grid-template-rows: auto;
           gap: 12px;
           align-items: center;
         }
@@ -336,6 +369,7 @@
         .animal-card img {
           margin: 0;
           width: 124px;
+          height: 124px;
         }
       }
 
@@ -369,6 +403,7 @@
 
         .animal-card img {
           width: 96px;
+          height: 96px;
         }
       }
     </style>
@@ -391,38 +426,38 @@
         <div>
           <h1>Animals Desktop</h1>
           <p class="lead">
-            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎ、ヤモリが、Windowsのタスクバー付近や
+            チンチラ、ハムスター、ジャンガリアンハムスター、キャンベルハムスター、マカロニマウス、モモンガ、うさぎ、ホーランドロップ、ネザーランドドワーフ、ヒマラヤンうさぎ、ヤモリ、モルモット、ファンシーラット、アルビノシマリス、リチャードソンジリス、ヨークシャーテリアが、Windowsのタスクバー付近や
             MacのDock付近を歩き回るデスクトップペットです。作業のそばで控えめに動きながら、
             小動物たちの歩き、待機、クリック反応を楽しめます。
           </p>
           <div id="download" class="actions">
             <span class="button disabled" aria-disabled="true">Windows版 Windows 10/11 準備中</span>
-            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.4/AnimalsDesktop-macos-arm64.zip">
+            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.5/AnimalsDesktop-macos-arm64.zip">
               Mac版 Apple Silicon macOS 12+
             </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.4/AnimalsDesktop-macos-amd64.zip">
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.5/AnimalsDesktop-macos-amd64.zip">
               Mac版 Intel macOS 12+
             </a>
           </div>
           <p class="download-note">
-            v0.1.4は、6種類の小動物と基本モーションを試せる先行お試し版です。Windows版はZIPを展開して
+            v0.1.5は、16種類の小動物と基本モーションを試せる先行お試し版です。Windows版はZIPを展開して
             <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
             <code>AnimalsDesktop.app</code> を起動してください。
           </p>
           <div class="release-meta" aria-label="Build information">
-            <span>先行お試し版 <strong data-release-version>v0.1.4</strong></span>
-            <span>Windows版 <strong>v0.1.4準備中</strong></span>
-            <span>Mac版 <strong>v0.1.4</strong></span>
-            <span>小動物 <strong>6種</strong></span>
+            <span>先行お試し版 <strong data-release-version>v0.1.5</strong></span>
+            <span>Windows版 <strong>v0.1.5準備中</strong></span>
+            <span>Mac版 <strong>v0.1.5</strong></span>
+            <span>小動物 <strong>16種</strong></span>
             <span>内容 <strong>基本モーション入り</strong></span>
             <span>更新日 <strong data-build-date>2026-06-26</strong></span>
           </div>
         </div>
 
         <div class="preview-wrap">
-          <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with six animals above a desktop taskbar" />
+          <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with sixteen animals above a desktop taskbar" />
           <div class="note">
-            まずは6種類の小動物と基本的な動きを試せる先行お試し版です。
+            まずは16種類の小動物と基本的な動きを試せる先行お試し版です。
             これからも、見た目と動きが整った動物から順番に追加していきます。
           </div>
         </div>
@@ -432,7 +467,7 @@
         <div class="section-head">
           <div>
             <h2 id="animals-heading">登場する動物</h2>
-            <p>現在選べる動物は以下の6種類です。まずはこの6種類から遊べます。</p>
+            <p>現在選べる動物は以下の16種類です。まずはこの16種類から遊べます。</p>
           </div>
         </div>
         <div class="current-grid">
@@ -448,6 +483,20 @@
             <div>
               <h3>ハムスター</h3>
               <p>ゴールデンシリアンハムスターです。小さな体でちょこちょこ歩く雰囲気を楽しめます。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-djungarian_hamster.png" alt="ジャンガリアンハムスターのアイコン" />
+            <div>
+              <h3>ジャンガリアンハムスター</h3>
+              <p>灰白色の小さなドワーフハムスターです。背中のラインと丸い体が、小さな表示でも読み取れます。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-campbell_hamster.png" alt="キャンベルハムスターのアイコン" />
+            <div>
+              <h3>キャンベルハムスター</h3>
+              <p>あたたかい灰褐色のドワーフハムスターです。背中のラインと丸い体で、小さな表示でも見分けやすい見た目です。</p>
             </div>
           </article>
           <article class="animal-card">
@@ -472,10 +521,66 @@
             </div>
           </article>
           <article class="animal-card">
+            <img src="assets/animal-icons/current-holland_lop_broken_orange.png" alt="ホーランドロップのアイコン" />
+            <div>
+              <h3>ホーランドロップ</h3>
+              <p>オレンジと白の垂れ耳うさぎです。丸い体と下がった耳が、小さな表示でも伝わります。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-netherland_dwarf_chestnut.png" alt="ネザーランドドワーフのアイコン" />
+            <div>
+              <h3>ネザーランドドワーフ</h3>
+              <p>チェスナット系の小型うさぎです。短めの耳と丸い体で、コンパクトな姿がよく伝わります。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-himalayan_rabbit.png" alt="ヒマラヤンうさぎのアイコン" />
+            <div>
+              <h3>ヒマラヤンうさぎ</h3>
+              <p>明るい体に耳や鼻先の濃いポイントが入ったうさぎです。淡い体色と濃い差し色が特徴です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
             <img src="assets/animal-icons/current-gecko_gray_brown.png" alt="ヤモリのアイコン" />
             <div>
               <h3>ヤモリ</h3>
               <p>灰褐色のヤモリです。低い姿勢、細い尾、ゆっくりしたクロールの動きが特徴です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-guinea_pig_tricolor.png" alt="モルモットのアイコン" />
+            <div>
+              <h3>モルモット</h3>
+              <p>三毛模様のモルモットです。丸い体と低めの姿勢で、ゆっくり歩く雰囲気が伝わります。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-fancy_rat_hooded.png" alt="ファンシーラットのアイコン" />
+            <div>
+              <h3>ファンシーラット</h3>
+              <p>白い体に黒茶のフード模様が入ったラットです。細い尾と低い姿勢で、すばやく動く雰囲気が伝わります。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-albino_chipmunk.png" alt="アルビノシマリスのアイコン" />
+            <div>
+              <h3>アルビノシマリス</h3>
+              <p>淡いクリーム色の体に、うっすらした縞模様が入ったシマリスです。軽い跳ねる動きが特徴です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-richardsons_ground_squirrel.png" alt="リチャードソンジリスのアイコン" />
+            <div>
+              <h3>リチャードソンジリス</h3>
+              <p>低い姿勢で動く地上性のジリスです。短めの耳と落ち着いた茶色の体が特徴です。</p>
+            </div>
+          </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-yorkshire_terrier_longcoat.png" alt="ヨークシャーテリアのアイコン" />
+            <div>
+              <h3>ヨークシャーテリア</h3>
+              <p>長い毛並みの小型犬です。黒とタンの毛色、低めの体型、細かな足運びが特徴です。</p>
             </div>
           </article>
         </div>
@@ -485,11 +590,12 @@
         <div class="section-head">
           <div>
             <h2 id="upcoming-heading">これから追加予定</h2>
-            <p>モルモット、ファンシーラット、アルビノシマリス、リチャードソンジリスを優先して制作します。</p>
+            <p>
+              次の制作候補として、通常色のシマリスを準備します。
+            </p>
           </div>
         </div>
-        <img class="future-art" src="assets/animalsdesktop-coming-soon-silhouettes.png" alt="これから追加予定の動物シルエット" />
-        <p class="future-note">リリースに入った動物は、この予定枠から順番に外して登場動物へ移します。</p>
+        <p class="future-note">公開用のシルエットは、ページ専用の生成画像が用意できたタイミングで追加します。</p>
       </section>
 
       <section aria-labelledby="features-heading">
@@ -517,7 +623,7 @@
           </article>
           <article>
             <h3>シンプルな表示</h3>
-            <p>v0.1.4では木、種、餌などの追加アイテムは表示せず、動物本体のしぐさを中心に楽しめます。</p>
+            <p>v0.1.5では木、種、餌などの追加アイテムは表示せず、動物本体のしぐさを中心に楽しめます。</p>
           </article>
           <article>
             <h3>Windows / Mac対応</h3>
@@ -531,7 +637,7 @@
           <div>
             <h2 id="scope-heading">この版について</h2>
             <p>
-              v0.1.4は、6種類の小動物を先に試せるプレビュー版です。
+              v0.1.5は、16種類の小動物を先に試せるプレビュー版です。
               今後も、見た目と動きが整った動物から順番に追加します。
               木、種、餌などの追加アイテムはこの版では表示しません。
             </p>
@@ -542,9 +648,10 @@
       <section class="english" id="english">
         <h2>English</h2>
         <p>
-          Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, macaroni mouse,
-          sugar glider, rabbit, and gecko sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
-          Version v0.1.4 is an early public test release for six initial-motion animals. The Windows build target
+          Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, Djungarian hamster,
+          Campbell hamster, macaroni mouse, sugar glider, rabbit, Holland Lop, Netherland Dwarf, Himalayan rabbit,
+          gecko, guinea pig, fancy rat, albino chipmunk, Richardson's ground squirrel, and Yorkshire Terrier sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
+          Version v0.1.5 is an early public test release for sixteen initial-motion animals. The Windows build target
           shares the same release tag as the Mac builds, and the Windows ZIP is prepared on a Windows machine. Runtime foraging props are disabled in this preview.
         </p>
       </section>

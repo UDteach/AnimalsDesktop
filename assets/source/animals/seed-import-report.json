@@ -983,6 +983,86 @@
     ]
   },
   {
+    "variant": "djungarian_hamster",
+    "species": "hamster",
+    "breed_or_morph": "Djungarian hamster",
+    "color": "winter white gray",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/djungarian-hamster/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/djungarian_hamster-source.png",
+    "motion_source": "docs/art-source/djungarian-hamster/motion-source/sheets/djungarian-hamster-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "djungarian_hamster",
+    "tint_hex": "a9a49a",
+    "accent_hex": "f4efe7",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 11,
+      "w": 84,
+      "h": 47
+    },
+    "outputs": [
+      "assets/sprites/djungarian_hamster_set00.png",
+      "assets/sprites/djungarian_hamster_set01.png",
+      "assets/sprites/djungarian_hamster_set02.png",
+      "assets/sprites/djungarian_hamster_set03.png",
+      "assets/sprites/djungarian_hamster_set04.png",
+      "assets/sprites/djungarian_hamster_set05.png",
+      "assets/sprites/djungarian_hamster_set06.png",
+      "assets/sprites/djungarian_hamster_set07.png",
+      "assets/sprites/djungarian_hamster_set08.png",
+      "assets/sprites/djungarian_hamster_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "campbell_hamster",
+    "species": "hamster",
+    "breed_or_morph": "Campbell dwarf hamster",
+    "color": "warm gray brown",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/campbell-hamster/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/campbell_hamster-source.png",
+    "motion_source": "docs/art-source/campbell-hamster/motion-source/sheets/campbell-hamster-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "campbell_hamster",
+    "tint_hex": "9b846f",
+    "accent_hex": "d6c9b8",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 12,
+      "w": 84,
+      "h": 46
+    },
+    "outputs": [
+      "assets/sprites/campbell_hamster_set00.png",
+      "assets/sprites/campbell_hamster_set01.png",
+      "assets/sprites/campbell_hamster_set02.png",
+      "assets/sprites/campbell_hamster_set03.png",
+      "assets/sprites/campbell_hamster_set04.png",
+      "assets/sprites/campbell_hamster_set05.png",
+      "assets/sprites/campbell_hamster_set06.png",
+      "assets/sprites/campbell_hamster_set07.png",
+      "assets/sprites/campbell_hamster_set08.png",
+      "assets/sprites/campbell_hamster_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "hamster_cream",
     "species": "hamster",
     "breed_or_morph": "Hamster - cream",
@@ -1232,24 +1312,26 @@
   {
     "variant": "guinea_pig_tricolor",
     "species": "guinea_pig",
-    "breed_or_morph": "Guinea pig - tricolor",
-    "color": "Guinea pig - tricolor",
-    "popularity_tier": 3,
+    "breed_or_morph": "Guinea pig",
+    "color": "tricolor",
+    "popularity_tier": 1,
     "motion_profile": "guinea-pig-waddle",
-    "source_status": "prototype_only",
-    "source": "procedural:guinea_pig",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/guinea-pig/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/guinea_pig_tricolor-source.png",
+    "motion_source": "docs/art-source/guinea-pig/motion-source/sheets/guinea-pig-tricolor-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "guinea_pig_tricolor",
-    "shape": "guinea_pig",
     "tint_hex": "b46c32",
     "accent_hex": "f0e6d2",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 100,
-      "y": 140,
-      "w": 259,
-      "h": 144
+      "x": 6,
+      "y": 14,
+      "w": 84,
+      "h": 44
     },
     "outputs": [
       "assets/sprites/guinea_pig_tricolor_set00.png",
@@ -1264,7 +1346,7 @@
       "assets/sprites/guinea_pig_tricolor_set09.png"
     ],
     "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1493,6 +1575,46 @@
     ],
     "warnings": [
       "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "richardsons_ground_squirrel",
+    "species": "ground_squirrel",
+    "breed_or_morph": "Richardson's ground squirrel",
+    "color": "tan",
+    "popularity_tier": 3,
+    "motion_profile": "squirrel-bound",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/richardsons-ground-squirrel/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/richardsons_ground_squirrel-source.png",
+    "motion_source": "docs/art-source/richardsons-ground-squirrel/motion-source/sheets/richardsons-ground-squirrel-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "richardsons_ground_squirrel",
+    "tint_hex": "a8895c",
+    "accent_hex": "d8c091",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 21,
+      "w": 84,
+      "h": 37
+    },
+    "outputs": [
+      "assets/sprites/richardsons_ground_squirrel_set00.png",
+      "assets/sprites/richardsons_ground_squirrel_set01.png",
+      "assets/sprites/richardsons_ground_squirrel_set02.png",
+      "assets/sprites/richardsons_ground_squirrel_set03.png",
+      "assets/sprites/richardsons_ground_squirrel_set04.png",
+      "assets/sprites/richardsons_ground_squirrel_set05.png",
+      "assets/sprites/richardsons_ground_squirrel_set06.png",
+      "assets/sprites/richardsons_ground_squirrel_set07.png",
+      "assets/sprites/richardsons_ground_squirrel_set08.png",
+      "assets/sprites/richardsons_ground_squirrel_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2282,6 +2404,46 @@
     ]
   },
   {
+    "variant": "yorkshire_terrier_longcoat",
+    "species": "dog",
+    "breed_or_morph": "Yorkshire Terrier",
+    "color": "long coat",
+    "popularity_tier": 2,
+    "motion_profile": "dog-trot",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/yorkshire-terrier/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/yorkshire_terrier_longcoat-source.png",
+    "motion_source": "docs/art-source/yorkshire-terrier/motion-source/sheets/yorkshire-terrier-longcoat-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "yorkshire_terrier_longcoat",
+    "tint_hex": "b87a3b",
+    "accent_hex": "242326",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 7,
+      "y": 4,
+      "w": 82,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/yorkshire_terrier_longcoat_set00.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set01.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set02.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set03.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set04.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set05.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set06.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set07.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set08.png",
+      "assets/sprites/yorkshire_terrier_longcoat_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "maine_coon_brown_tabby",
     "species": "cat",
     "breed_or_morph": "Maine Coon",
@@ -2625,19 +2787,22 @@
     "color": "broken orange",
     "popularity_tier": 1,
     "motion_profile": "rabbit-hop",
-    "source_status": "prototype_only",
-    "source": "docs/source-truth/rabbit-source-truth.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/holland-lop/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/holland_lop_broken_orange-source.png",
+    "motion_source": "docs/art-source/holland-lop/motion-source/sheets/holland-lop-broken-orange-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "holland_lop_broken_orange",
     "tint_hex": "e6d8c3",
     "accent_hex": "c97833",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 189,
-      "y": 62,
-      "w": 1078,
-      "h": 859
+      "x": 6,
+      "y": 4,
+      "w": 84,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/holland_lop_broken_orange_set00.png",
@@ -2650,6 +2815,9 @@
       "assets/sprites/holland_lop_broken_orange_set07.png",
       "assets/sprites/holland_lop_broken_orange_set08.png",
       "assets/sprites/holland_lop_broken_orange_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2659,19 +2827,22 @@
     "color": "chestnut",
     "popularity_tier": 1,
     "motion_profile": "rabbit-hop",
-    "source_status": "prototype_only",
-    "source": "docs/source-truth/rabbit-source-truth.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/netherland-dwarf/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/netherland_dwarf_chestnut-source.png",
+    "motion_source": "docs/art-source/netherland-dwarf/motion-source/sheets/netherland-dwarf-chestnut-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "netherland_dwarf_chestnut",
     "tint_hex": "8c633d",
     "accent_hex": "d3b17a",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 189,
-      "y": 62,
-      "w": 1078,
-      "h": 859
+      "x": 17,
+      "y": 4,
+      "w": 61,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/netherland_dwarf_chestnut_set00.png",
@@ -2684,6 +2855,49 @@
       "assets/sprites/netherland_dwarf_chestnut_set07.png",
       "assets/sprites/netherland_dwarf_chestnut_set08.png",
       "assets/sprites/netherland_dwarf_chestnut_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "himalayan_rabbit",
+    "species": "rabbit",
+    "breed_or_morph": "Himalayan rabbit",
+    "color": "seal point",
+    "popularity_tier": 1,
+    "motion_profile": "rabbit-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/himalayan-rabbit/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/himalayan_rabbit-source.png",
+    "motion_source": "docs/art-source/himalayan-rabbit/motion-source/sheets/himalayan-rabbit-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "himalayan_rabbit",
+    "tint_hex": "f3e5c8",
+    "accent_hex": "5b3b2d",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 20,
+      "y": 4,
+      "w": 56,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/himalayan_rabbit_set00.png",
+      "assets/sprites/himalayan_rabbit_set01.png",
+      "assets/sprites/himalayan_rabbit_set02.png",
+      "assets/sprites/himalayan_rabbit_set03.png",
+      "assets/sprites/himalayan_rabbit_set04.png",
+      "assets/sprites/himalayan_rabbit_set05.png",
+      "assets/sprites/himalayan_rabbit_set06.png",
+      "assets/sprites/himalayan_rabbit_set07.png",
+      "assets/sprites/himalayan_rabbit_set08.png",
+      "assets/sprites/himalayan_rabbit_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2795,20 +3009,22 @@
     "color": "hooded",
     "popularity_tier": 2,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
-    "source": "procedural:small_rodent",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/fancy-rat/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/fancy_rat_hooded-source.png",
+    "motion_source": "docs/art-source/fancy-rat/motion-source/sheets/fancy-rat-hooded-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "fancy_rat_hooded",
-    "shape": "small_rodent",
     "tint_hex": "efe5d4",
     "accent_hex": "3b332c",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 32,
-      "y": 148,
-      "w": 293,
-      "h": 130
+      "x": 6,
+      "y": 24,
+      "w": 84,
+      "h": 34
     },
     "outputs": [
       "assets/sprites/fancy_rat_hooded_set00.png",
@@ -2823,7 +3039,7 @@
       "assets/sprites/fancy_rat_hooded_set09.png"
     ],
     "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2976,6 +3192,46 @@
     ],
     "warnings": [
       "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "albino_chipmunk",
+    "species": "chipmunk",
+    "breed_or_morph": "Chipmunk",
+    "color": "albino cream",
+    "popularity_tier": 3,
+    "motion_profile": "squirrel-bound",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/albino_chipmunk-source.png",
+    "motion_source": "docs/art-source/albino-chipmunk/motion-source/sheets/albino-chipmunk-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "albino_chipmunk",
+    "tint_hex": "f2dfbd",
+    "accent_hex": "cf9a5b",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 16,
+      "w": 84,
+      "h": 42
+    },
+    "outputs": [
+      "assets/sprites/albino_chipmunk_set00.png",
+      "assets/sprites/albino_chipmunk_set01.png",
+      "assets/sprites/albino_chipmunk_set02.png",
+      "assets/sprites/albino_chipmunk_set03.png",
+      "assets/sprites/albino_chipmunk_set04.png",
+      "assets/sprites/albino_chipmunk_set05.png",
+      "assets/sprites/albino_chipmunk_set06.png",
+      "assets/sprites/albino_chipmunk_set07.png",
+      "assets/sprites/albino_chipmunk_set08.png",
+      "assets/sprites/albino_chipmunk_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {

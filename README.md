@@ -1,22 +1,35 @@
 # AnimalsDesktop
 
 AnimalsDesktop is a small desktop pet app for Windows and macOS. Chinchilla,
-hamster, macaroni mouse, sugar glider, rabbit, and gecko sprites walk near the
-Windows taskbar or along the bottom edge above the Mac Dock.
+hamster, Djungarian hamster, Campbell hamster, macaroni mouse, sugar glider,
+rabbit, Holland Lop, Netherland Dwarf, Himalayan rabbit, gecko, guinea pig,
+fancy rat, albino chipmunk, Richardson's ground squirrel, and Yorkshire Terrier
+sprites walk near the Windows taskbar or along the bottom edge above the Mac
+Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-`v0.1.4` is an early public test release for six accepted initial 62-frame
-ImageGen motion animals:
+`v0.1.5` is an early public test release prep for sixteen accepted initial
+62-frame ImageGen motion animals:
 
 - chinchilla standard gray
 - golden Syrian hamster
+- Djungarian hamster
+- Campbell hamster
 - tan macaroni mouse
 - gray sugar glider
 - chestnut agouti rabbit
+- broken orange Holland Lop
+- chestnut Netherland Dwarf
+- Himalayan rabbit
 - gray-brown gecko
+- tricolor guinea pig
+- hooded fancy rat
+- albino chipmunk
+- Richardson's ground squirrel
+- longcoat Yorkshire Terrier
 
 This is not the final DeguDesktop-level completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
@@ -24,19 +37,19 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.1.4 test release intentionally exposes only the six accepted initial
-runtime animals listed above. Unverified candidate species are shown only as
-public-page "coming soon" silhouettes and should not appear in the runtime picker
-until their source art and motion behavior pass the release QA loop. As animals
-graduate into a release, remove them from the silhouette queue and move them into
-the current-animal page section.
+The v0.1.5 preview prep intentionally exposes only the sixteen accepted initial
+runtime animals listed above. Unverified candidate species should not appear in
+the runtime picker until their source art and motion behavior pass the release QA
+loop. As animals graduate into a release, remove them from the future queue and
+move them into the current-animal page section. Coming-soon silhouettes should be
+page-specific generated art, not repurposed runtime/prototype images.
 
 The typing wheel is intentionally limited to chinchilla and hamster. Other
 runtime animals continue to react to typing with movement, but do not enter the
 wheel state.
 
 Foraging props such as hay, twigs, seeds, and other small food/debris items are
-disabled in v0.1.4 so the preview shows only the animal sprites and their core
+disabled in v0.1.5 so the preview shows only the animal sprites and their core
 movement.
 
 ## Release Gate
@@ -51,9 +64,9 @@ A full animal-family release is ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
-`v0.1.4` is an explicit test-preview exception for the six initial-motion animals
-plus Mac distribution. Future full-content releases should still satisfy the
-full gate unless a new preview exception is documented.
+`v0.1.5` is an explicit test-preview exception prep for the sixteen
+initial-motion animals plus Mac distribution. Future full-content releases should
+still satisfy the full gate unless a new preview exception is documented.
 
 ## Development
 
@@ -77,15 +90,15 @@ same release tag as the Mac ZIPs when they are ready:
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.4" -o dist\AnimalsDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.5" -o dist\AnimalsDesktop.exe ./cmd/degu
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.1.4 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.1.4 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.1.5 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.1.5 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.

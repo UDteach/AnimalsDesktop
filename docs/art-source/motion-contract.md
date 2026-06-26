@@ -85,7 +85,32 @@ Public coming-soon silhouettes are release-managed: when an animal graduates int
 a release, remove it from the planned silhouette/list and move it into the
 current-animal section. For `v0.1.4`, gecko is removed from the future queue.
 
-After `v0.1.4`, future full-content releases should return to the full release gate above unless a new preview exception is documented here.
+After `v0.1.4`, the parent thread may approve small preview version bumps for
+animals that reach accepted `set00` implemented-asset parity, as long as the
+release page and notes keep calling them preview animals and do not claim
+DeguDesktop-level 10-set completion. Full-content releases must still satisfy the
+release gate above.
+
+### v0.1.5 Preview Exception
+
+`v0.1.5` is a preview-release prep exception approved for the local
+sixteen-animal runtime set: chinchilla, hamster, Djungarian hamster, Campbell
+hamster, macaroni mouse, sugar glider, rabbit, Holland Lop, Netherland Dwarf,
+Himalayan rabbit, gecko, guinea pig, fancy rat, albino chipmunk, Richardson's
+ground squirrel, and Yorkshire Terrier. It may ship only as a preview build and
+must not claim DeguDesktop-level 10-set completion.
+
+The parent QA pass may use color correction only for isolated color continuity
+defects when the frame's anatomy, pose, alpha, scale, and species read are
+otherwise acceptable. Preserve the original frame, write a correction report,
+regenerate the contact sheet, rerun `cmd/auditframes`, and record the decision in
+the visual QA report. Regenerate instead of correcting when the defect is wrong
+species, wrong anatomy, cropped body parts, props, text, duplicate animals,
+opaque/scenery background, or an unusable pose.
+
+For future queues, normal striped chipmunk / シマリス is requested as a distinct
+source family from `albino_chipmunk`. Coming-soon silhouettes remain optional
+until page-specific generated future art exists.
 
 ## One-Animal Version Routine
 

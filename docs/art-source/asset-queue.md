@@ -7,12 +7,15 @@ when the parent thread explicitly accepts it as the next production target.
 ## Current Released State
 
 - Latest test-preview release: `v0.1.4`
-- Preview scope: six accepted initial runtime animals with Mac ZIPs; Windows ZIP prepared on a Windows machine
-- Current preview animals: chinchilla, hamster, macaroni mouse, sugar glider, rabbit, gecko
-- Public page scope: the six preview animals above, plus a "coming soon" silhouette queue
-- Coming-soon queue: guinea pig, fancy rat, albino chipmunk, Richardson's ground squirrel, Yorkshire terrier
-- Next full animal-content release: hold until one accepted family reaches
-  DeguDesktop-level 10-set asset coverage
+- Next local release prep: `v0.1.5`
+- Preview scope: sixteen accepted initial runtime animals with Mac ZIPs; Windows ZIP prepared on a Windows machine
+- Current local preview animals: chinchilla, hamster, Djungarian hamster, Campbell hamster, macaroni mouse, sugar glider, rabbit, Holland Lop, Netherland Dwarf, Himalayan rabbit, gecko, guinea pig, fancy rat, albino chipmunk, Richardson's ground squirrel, Yorkshire Terrier.
+- Public page scope: current preview animals plus text-only next candidate when no page-specific generated silhouette exists.
+- Next requested production candidate after this batch: normal striped chipmunk / シマリス, distinct from `albino_chipmunk`.
+- Incremental preview release policy: after an animal reaches accepted `set00`
+  parity, it may ship in the next small preview version after explicit release
+  approval and matching download artifacts. Do not claim DeguDesktop-level
+  completion until the full 10-set gate is met.
 - Wheel-capable runtime animals: chinchilla and hamster only
 
 ## Batch Strategy
@@ -21,7 +24,7 @@ One thread should produce more images, but for fewer animals:
 
 - Source candidate thread: one named family only after parent approval.
 - Motion thread: one species family, 1-3 accepted variants, 62 source frames per accepted variant.
-- Integration thread: parent only; verifies alpha bounds, 96x64 readability, deterministic import, catalog coverage, and runtime behavior.
+- Integration thread: parent only; verifies alpha bounds, 96x64 readability, deterministic import, catalog coverage, page assets, release docs, and runtime behavior.
 - Frame progress thread: one species family only; uses `cmd/auditframes` to track valid/missing/invalid standalone PNG frames without promoting unfinished or opaque ImageGen outputs.
 
 This gives each thread enough output to compare candidates without pushing 600+
@@ -36,17 +39,21 @@ not complete just because it is selectable; it is complete for a version bump
 only when its source-truth art, 62-frame motion set, importer output,
 settings/tray reflection, visual review, and QA pass.
 
-Work one family at a time for full releases. The `v0.1.4` preview is allowed to
-publish six accepted initial-motion animals for runtime testing, but the next
-full-content version should finish a concrete 10-set slice before claiming
-DeguDesktop-level coverage. Public coming-soon silhouettes are release-managed:
-when an animal ships, remove it from the queue image/list and move it into the
-current-animal section.
+Work one family at a time for full releases. Preview releases may incrementally
+add completed `set00` animals when the parent thread explicitly accepts the
+exception and the release page labels the build as a preview. Public coming-soon
+silhouettes are release-managed: when an animal ships, remove it from the queue
+image/list and move it into the current-animal section. Do not repurpose runtime,
+prototype, or accepted-frame art for coming-soon silhouettes; either generate
+page-specific future art or keep the future queue text-only.
 
 ## Profile-Specific Notes
 
 - Chinchilla: heavy soft body, rounded ears, fluffy tail, gentle scurry, no degu recolor.
 - Macaroni mouse / fat-tailed gerbil: compact small body, thick tail, tiny feet, low fast scurry.
 - Hamster: round cheek-forward body, very short tail, cheek/groom actions, wheel capable.
+- Campbell hamster: warm gray-brown dwarf hamster with visible dorsal stripe; color-only drift may be corrected when anatomy and alpha are otherwise acceptable.
+- Djungarian hamster: gray-white dwarf hamster with visible dorsal stripe; do not collapse it into the same visual read as Campbell.
+- Chipmunk: the next requested normal striped chipmunk must be a separate source family from `albino_chipmunk`, not a recolor.
 - Rabbit: readable ears, hop contact points, stable baseline.
 - Sugar glider / momonga-style runtime family: membrane silhouette, low skitter, no long airborne scene.

@@ -26,12 +26,11 @@ jobs:
           SPRITE_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
-          grep -q "v0.1.4" docs/index.html
+          grep -q "v0.1.5" docs/index.html
           grep -q "Windows版 Windows 10/11" docs/index.html
           grep -q "Mac版 Apple Silicon" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
           grep -q "この版について" docs/index.html
-          grep -q "animalsdesktop-coming-soon-silhouettes" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"
           grep -q "Generator Comparison Images" "docs/$MOTION_PREVIEW/index.html"
@@ -47,11 +46,20 @@ jobs:
           test -f docs/assets/animalsdesktop-preview.png
           test -f docs/assets/animal-icons/current-chinchilla_standard_gray.png
           test -f docs/assets/animal-icons/current-hamster_golden_syrian.png
+          test -f docs/assets/animal-icons/current-djungarian_hamster.png
+          test -f docs/assets/animal-icons/current-campbell_hamster.png
           test -f docs/assets/animal-icons/current-macaroni_mouse_tan.png
           test -f docs/assets/animal-icons/current-rabbit_chestnut_agouti.png
+          test -f docs/assets/animal-icons/current-holland_lop_broken_orange.png
+          test -f docs/assets/animal-icons/current-netherland_dwarf_chestnut.png
+          test -f docs/assets/animal-icons/current-himalayan_rabbit.png
           test -f docs/assets/animal-icons/current-sugar_glider_gray.png
           test -f docs/assets/animal-icons/current-gecko_gray_brown.png
-          test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
+          test -f docs/assets/animal-icons/current-guinea_pig_tricolor.png
+          test -f docs/assets/animal-icons/current-fancy_rat_hooded.png
+          test -f docs/assets/animal-icons/current-albino_chipmunk.png
+          test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
+          test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
           test -f docs/robots.txt
           for asset in \
             chinchilla_standard_gray_set00.png \
@@ -69,7 +77,6 @@ jobs:
           cp docs/index.html public-site/index.html
           cp docs/robots.txt public-site/robots.txt
           cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
-          cp docs/assets/animalsdesktop-coming-soon-silhouettes.png public-site/assets/animalsdesktop-coming-soon-silhouettes.png
           cp docs/assets/animal-icons/current-*.png public-site/assets/animal-icons/
           for preview in "$SPRITE_PREVIEW" "$MOTION_PREVIEW"
           do
