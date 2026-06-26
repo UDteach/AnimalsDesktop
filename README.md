@@ -31,7 +31,7 @@ Public page: <https://udteach.github.io/AnimalsDesktop/>
 - Richardson's ground squirrel
 - longcoat Yorkshire Terrier
 
-This is not the final DeguDesktop-level completion gate. The test release is for
+This is not the final full-motion completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
 before expanding each animal to the full 10-set motion contract.
 
@@ -79,7 +79,7 @@ go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted
 go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
-go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
 
@@ -90,7 +90,7 @@ same release tag as the Mac ZIPs when they are ready:
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.5" -o dist\AnimalsDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.5" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 

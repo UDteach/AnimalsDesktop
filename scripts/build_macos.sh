@@ -217,7 +217,7 @@ CGO_ENABLED=1 GOOS=darwin GOARCH="$ARCH" "$GO_CMD" build \
   -buildvcs=false \
   -ldflags="-s -w -X main.appVersion=$VERSION" \
   -o "$APP_DIR/Contents/MacOS/AnimalsDesktop" \
-  ./cmd/degu
+  ./cmd/animalsdesktop
 
 find "$APP_DIR" -name '._*' -delete
 codesign --force --deep --sign - "$APP_DIR"

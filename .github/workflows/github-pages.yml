@@ -28,6 +28,7 @@ jobs:
           grep -q "Animals Desktop" docs/index.html
           grep -q "v0.1.5" docs/index.html
           grep -q "Windows版 Windows 10/11" docs/index.html
+          grep -q "AnimalsDesktop-windows-amd64.zip" docs/index.html
           grep -q "Mac版 Apple Silicon" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
           grep -q "この版について" docs/index.html

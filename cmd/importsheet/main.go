@@ -137,7 +137,7 @@ func main() {
 	frameDir := flag.String("frame-dir", filepath.FromSlash("assets/source/frames"), "directory containing one ImageGen PNG per runtime frame")
 	sourceDir := flag.String("source-dir", filepath.FromSlash("assets/source/coats"), "directory containing one 8x5 ImageGen sheet per coat")
 	outDir := flag.String("out", filepath.FromSlash("assets/sprites"), "output sprite directory")
-	preview := flag.String("preview", filepath.FromSlash("docs/assets/degu-preview.png"), "preview PNG path")
+	preview := flag.String("preview", filepath.FromSlash("docs/assets/legacy-sheet-preview.png"), "preview PNG path")
 	reportPath := flag.String("report", filepath.FromSlash("assets/source/import-report.json"), "validation report path")
 	wheelSource := flag.String("wheel-source", filepath.FromSlash("assets/source/imagegen-wheel.png"), "single ImageGen wheel PNG")
 	forageDir := flag.String("forage-dir", filepath.FromSlash("assets/source/forage"), "directory containing ImageGen forage prop PNGs")
@@ -158,11 +158,11 @@ func main() {
 	}
 	sheets := make(map[string]*image.RGBA, len(variants))
 	if frameFilesReady(*frameDir) {
-		rep.Source = filepath.Clean(*frameDir)
+		rep.Source = filepath.ToSlash(filepath.Clean(*frameDir))
 		rep.Rows = len(variants)
 		importFrameFiles(*frameDir, *coatGuideDir, sheets, &rep, *outDir)
 	} else if actionSheetsReady(filepath.Dir(*source)) {
-		rep.Source = filepath.Clean(filepath.Dir(*source))
+		rep.Source = filepath.ToSlash(filepath.Clean(filepath.Dir(*source)))
 		rep.Rows = len(variants)
 		importActionSheets(filepath.Dir(*source), sheets, &rep, *outDir)
 	} else if posesReady(*poseDir) {

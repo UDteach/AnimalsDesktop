@@ -166,11 +166,11 @@ func main() {
 	darwinApp = newDarwinPetApp()
 	icon := darwinApp.statusIconPNG()
 	if len(icon) > 0 {
-		C.startDeguApp(C.int(sceneH), (*C.uchar)(unsafe.Pointer(&icon[0])), C.int(len(icon)))
+		C.startAnimalsDesktopApp(C.int(sceneH), (*C.uchar)(unsafe.Pointer(&icon[0])), C.int(len(icon)))
 		runtime.KeepAlive(icon)
 		return
 	}
-	C.startDeguApp(C.int(sceneH), nil, 0)
+	C.startAnimalsDesktopApp(C.int(sceneH), nil, 0)
 }
 
 func newDarwinPetApp() *darwinPetApp {
@@ -189,8 +189,8 @@ func newDarwinPetApp() *darwinPetApp {
 	return app
 }
 
-//export goDeguSetSceneWidth
-func goDeguSetSceneWidth(width C.int) {
+//export goAnimalsDesktopSetSceneWidth
+func goAnimalsDesktopSetSceneWidth(width C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -199,8 +199,8 @@ func goDeguSetSceneWidth(width C.int) {
 	darwinApp.setSceneWidth(int(width))
 }
 
-//export goDeguKeyDown
-func goDeguKeyDown() {
+//export goAnimalsDesktopKeyDown
+func goAnimalsDesktopKeyDown() {
 	if darwinApp == nil {
 		return
 	}
@@ -209,8 +209,8 @@ func goDeguKeyDown() {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetSpeed
-func goDeguSetSpeed(speed C.int) {
+//export goAnimalsDesktopSetSpeed
+func goAnimalsDesktopSetSpeed(speed C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -220,8 +220,8 @@ func goDeguSetSpeed(speed C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetPetCount
-func goDeguSetPetCount(count C.int) {
+//export goAnimalsDesktopSetPetCount
+func goAnimalsDesktopSetPetCount(count C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -231,8 +231,8 @@ func goDeguSetPetCount(count C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetWheelEnabled
-func goDeguSetWheelEnabled(enabled C.int) {
+//export goAnimalsDesktopSetWheelEnabled
+func goAnimalsDesktopSetWheelEnabled(enabled C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -242,8 +242,8 @@ func goDeguSetWheelEnabled(enabled C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetMode
-func goDeguSetMode(mode C.int) {
+//export goAnimalsDesktopSetMode
+func goAnimalsDesktopSetMode(mode C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -253,8 +253,8 @@ func goDeguSetMode(mode C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetCoatMode
-func goDeguSetCoatMode(mode C.int) {
+//export goAnimalsDesktopSetCoatMode
+func goAnimalsDesktopSetCoatMode(mode C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -264,8 +264,8 @@ func goDeguSetCoatMode(mode C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetVariant
-func goDeguSetVariant(variant C.int) {
+//export goAnimalsDesktopSetVariant
+func goAnimalsDesktopSetVariant(variant C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -275,8 +275,8 @@ func goDeguSetVariant(variant C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetSelectedCoat
-func goDeguSetSelectedCoat(index C.int, variant C.int) {
+//export goAnimalsDesktopSetSelectedCoat
+func goAnimalsDesktopSetSelectedCoat(index C.int, variant C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -286,8 +286,8 @@ func goDeguSetSelectedCoat(index C.int, variant C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetNameLabels
-func goDeguSetNameLabels(enabled C.int) {
+//export goAnimalsDesktopSetNameLabels
+func goAnimalsDesktopSetNameLabels(enabled C.int) {
 	if darwinApp == nil {
 		return
 	}
@@ -297,8 +297,8 @@ func goDeguSetNameLabels(enabled C.int) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguSetPetName
-func goDeguSetPetName(index C.int, value *C.char) {
+//export goAnimalsDesktopSetPetName
+func goAnimalsDesktopSetPetName(index C.int, value *C.char) {
 	if darwinApp == nil {
 		return
 	}
@@ -312,8 +312,8 @@ func goDeguSetPetName(index C.int, value *C.char) {
 	darwinApp.mu.Unlock()
 }
 
-//export goDeguClick
-func goDeguClick(x C.int, y C.int) C.int {
+//export goAnimalsDesktopClick
+func goAnimalsDesktopClick(x C.int, y C.int) C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -325,8 +325,8 @@ func goDeguClick(x C.int, y C.int) C.int {
 	return C.int(0)
 }
 
-//export goDeguPetAt
-func goDeguPetAt(x C.int, y C.int) C.int {
+//export goAnimalsDesktopPetAt
+func goAnimalsDesktopPetAt(x C.int, y C.int) C.int {
 	if darwinApp == nil {
 		return C.int(-1)
 	}
@@ -335,8 +335,8 @@ func goDeguPetAt(x C.int, y C.int) C.int {
 	return C.int(darwinApp.petAtScenePoint(int(x), int(y)))
 }
 
-//export goDeguGetSpeed
-func goDeguGetSpeed() C.int {
+//export goAnimalsDesktopGetSpeed
+func goAnimalsDesktopGetSpeed() C.int {
 	if darwinApp == nil {
 		return C.int(darwinSpeedNormal)
 	}
@@ -345,8 +345,8 @@ func goDeguGetSpeed() C.int {
 	return C.int(darwinApp.speed)
 }
 
-//export goDeguGetPetCount
-func goDeguGetPetCount() C.int {
+//export goAnimalsDesktopGetPetCount
+func goAnimalsDesktopGetPetCount() C.int {
 	if darwinApp == nil {
 		return C.int(5)
 	}
@@ -355,8 +355,8 @@ func goDeguGetPetCount() C.int {
 	return C.int(darwinApp.petCount)
 }
 
-//export goDeguGetWheelEnabled
-func goDeguGetWheelEnabled() C.int {
+//export goAnimalsDesktopGetWheelEnabled
+func goAnimalsDesktopGetWheelEnabled() C.int {
 	if darwinApp == nil {
 		return C.int(1)
 	}
@@ -368,8 +368,8 @@ func goDeguGetWheelEnabled() C.int {
 	return C.int(0)
 }
 
-//export goDeguGetMode
-func goDeguGetMode() C.int {
+//export goAnimalsDesktopGetMode
+func goAnimalsDesktopGetMode() C.int {
 	if darwinApp == nil {
 		return C.int(darwinModeRandom)
 	}
@@ -378,8 +378,8 @@ func goDeguGetMode() C.int {
 	return C.int(darwinApp.mode)
 }
 
-//export goDeguGetCoatMode
-func goDeguGetCoatMode() C.int {
+//export goAnimalsDesktopGetCoatMode
+func goAnimalsDesktopGetCoatMode() C.int {
 	if darwinApp == nil {
 		return C.int(darwinCoatRandom)
 	}
@@ -388,8 +388,8 @@ func goDeguGetCoatMode() C.int {
 	return C.int(darwinApp.coatMode)
 }
 
-//export goDeguGetVariant
-func goDeguGetVariant() C.int {
+//export goAnimalsDesktopGetVariant
+func goAnimalsDesktopGetVariant() C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -398,8 +398,8 @@ func goDeguGetVariant() C.int {
 	return C.int(darwinApp.variant)
 }
 
-//export goDeguGetSelectedCoat
-func goDeguGetSelectedCoat(index C.int) C.int {
+//export goAnimalsDesktopGetSelectedCoat
+func goAnimalsDesktopGetSelectedCoat(index C.int) C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -412,13 +412,13 @@ func goDeguGetSelectedCoat(index C.int) C.int {
 	return C.int(darwinApp.selectedCoats[i])
 }
 
-//export goDeguGetVariantCount
-func goDeguGetVariantCount() C.int {
+//export goAnimalsDesktopGetVariantCount
+func goAnimalsDesktopGetVariantCount() C.int {
 	return C.int(len(darwinVariants))
 }
 
-//export goDeguGetNameLabels
-func goDeguGetNameLabels() C.int {
+//export goAnimalsDesktopGetNameLabels
+func goAnimalsDesktopGetNameLabels() C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -430,8 +430,8 @@ func goDeguGetNameLabels() C.int {
 	return C.int(0)
 }
 
-//export goDeguCopyPetName
-func goDeguCopyPetName(index C.int, buffer *C.char, length C.int) C.int {
+//export goAnimalsDesktopCopyPetName
+func goAnimalsDesktopCopyPetName(index C.int, buffer *C.char, length C.int) C.int {
 	if darwinApp == nil || buffer == nil || length <= 0 {
 		return C.int(0)
 	}
@@ -456,8 +456,8 @@ func goDeguCopyPetName(index C.int, buffer *C.char, length C.int) C.int {
 	return C.int(len(data))
 }
 
-//export goDeguGetPetDrawX
-func goDeguGetPetDrawX(index C.int) C.int {
+//export goAnimalsDesktopGetPetDrawX
+func goAnimalsDesktopGetPetDrawX(index C.int) C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -470,8 +470,8 @@ func goDeguGetPetDrawX(index C.int) C.int {
 	return C.int(darwinApp.pets[i].x)
 }
 
-//export goDeguGetPetDrawY
-func goDeguGetPetDrawY(index C.int) C.int {
+//export goAnimalsDesktopGetPetDrawY
+func goAnimalsDesktopGetPetDrawY(index C.int) C.int {
 	if darwinApp == nil {
 		return C.int(0)
 	}
@@ -484,8 +484,8 @@ func goDeguGetPetDrawY(index C.int) C.int {
 	return C.int(sceneH - spriteH - darwinApp.pets[i].lane)
 }
 
-//export goDeguTick
-func goDeguTick() {
+//export goAnimalsDesktopTick
+func goAnimalsDesktopTick() {
 	if darwinApp == nil {
 		return
 	}
@@ -502,7 +502,7 @@ func goDeguTick() {
 	if len(data) == 0 {
 		return
 	}
-	C.updateDeguImage((*C.uchar)(unsafe.Pointer(&data[0])), C.int(len(data)), C.int(img.Bounds().Dx()), C.int(img.Bounds().Dy()))
+	C.updateAnimalsDesktopImage((*C.uchar)(unsafe.Pointer(&data[0])), C.int(len(data)), C.int(img.Bounds().Dx()), C.int(img.Bounds().Dy()))
 	runtime.KeepAlive(data)
 }
 
