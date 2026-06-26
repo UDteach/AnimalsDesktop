@@ -1,30 +1,13 @@
-# Legacy Degu ImageGen Asset Intake
+# Legacy Sprite Importer Inputs
 
-This directory documents the original DeguDesktop sprite intake path. AnimalsDesktop
-runtime preview no longer ships the generated `assets/sprites/degu_*.png` sheets;
-current runtime sprites are the five representative small-animal families under
-`assets/sprites/<animal>_setNN.png`.
+This directory is kept for the old sheet importer and regression checks only.
+The v0.1.5 runtime preview uses the release-scoped animal sprite sheets under
+`assets/sprites/<animal>_setNN.png`; new production art should follow the
+AnimalsDesktop asset-production flow instead of these legacy prompts.
 
-Preferred source is one ImageGen PNG per runtime frame:
-
-- path: `assets/source/frames/<coat_id>/<frame>_<action>_<step>.png`
-- 62 files for the canonical `wild_agouti` motion set
-- actions: idle, walk, scurry, nibble, hop, turn, eat, dig, stand, groomface, wheelrun
-- transparent background or simple checker background
-- one complete degu per file, with ears, whiskers, feet, and tail fully inside the image
-
-Fallback ImageGen sheets are still supported:
-
-- `assets/source/imagegen-idle.png`
-- `assets/source/imagegen-walk.png`
-- `assets/source/imagegen-scurry.png`
-- `assets/source/imagegen-nibble.png`
-- `assets/source/imagegen-hop.png`
-
-Extra ImageGen source assets:
-
-- `assets/source/imagegen-wheel.png` - transparent pixel-art exercise wheel back-layer source; front spokes are drawn at runtime
-- `assets/source/imagegen-icon.png` - square pixel-art degu icon source
+Preferred current source is one accepted PNG per runtime frame in the animal's
+own `docs/art-source/<animal>/motion-source` workspace, then imported through
+the release asset pipeline.
 
 Importer:
 
@@ -32,11 +15,7 @@ Importer:
 go run ./cmd/importsheet
 ```
 
-The importer writes:
-
-- legacy `assets/sprites/degu_*.png` outputs when the importer is run manually
-- `assets/tray.ico`
-- `docs/assets/degu-preview.png`
-- `assets/source/import-report.json`
-
-The report warns when background removal finds no content or when source content touches an edge and may be cropped.
+The legacy importer writes compatibility sheets, `assets/tray.ico`,
+`docs/assets/legacy-sheet-preview.png`, and
+`assets/source/import-report.json`. The report warns when background removal
+finds no content or when source content touches an edge and may be cropped.

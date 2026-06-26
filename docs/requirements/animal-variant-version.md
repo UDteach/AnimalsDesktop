@@ -178,14 +178,14 @@ Implementation phase is not complete until:
 
 ## Verification Plan
 
-For later code work, use the Degu Desktop standard checks:
+For later code work, use the AnimalsDesktop standard checks:
 
 ```powershell
-gofmt -w cmd\degu\main_windows.go cmd\degu\motion_windows_test.go cmd\importsheet\main.go cmd\importsheet\main_test.go
+gofmt -w cmd\animalsdesktop\main_windows.go cmd\animalsdesktop\motion_windows_test.go cmd\importsheet\main.go cmd\importsheet\main_test.go
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go run ./cmd/importsheet
-go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\DeguDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
 

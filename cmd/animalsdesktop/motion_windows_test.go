@@ -118,7 +118,7 @@ func TestTypingStartsAndExtendsWheelOnlyInKeyboardMode(t *testing.T) {
 		wheelX:       400,
 		sceneW:       1200,
 		speed:        3,
-		pets: []deguPet{
+		pets: []desktopPet{
 			{state: stateWalk, stateTicks: 12, item: noItem},
 			{state: stateWalk, stateTicks: 12, item: noItem},
 		},
@@ -159,7 +159,7 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 		wheelEnabled: true,
 		wheelX:       400,
 		sceneW:       1200,
-		pets: []deguPet{
+		pets: []desktopPet{
 			{state: stateWalk, stateTicks: 12, item: noItem},
 		},
 	}
@@ -174,10 +174,20 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 	wantIDs := []string{
 		"chinchilla_standard_gray",
 		"hamster_golden_syrian",
+		"djungarian_hamster",
+		"campbell_hamster",
 		"macaroni_mouse_tan",
 		"sugar_glider_gray",
 		"rabbit_chestnut_agouti",
+		"holland_lop_broken_orange",
+		"netherland_dwarf_chestnut",
+		"himalayan_rabbit",
 		"gecko_gray_brown",
+		"guinea_pig_tricolor",
+		"fancy_rat_hooded",
+		"albino_chipmunk",
+		"richardsons_ground_squirrel",
+		"yorkshire_terrier_longcoat",
 	}
 	if got := len(variants); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
@@ -200,6 +210,7 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 		variant:        4,
 		coatMode:       coatSelected,
 		selectedCoats:  [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8},
+		petSizes:       [maxPetCount]int{80, 90, 100, 110, 120, 70, 80, 90, 100, 110},
 		petNames:       [maxPetCount]string{"モカ", "Sora", "  Nagi  ", "", "", "", "", "", "", ""},
 		nameLabels:     true,
 		speed:          5,
@@ -255,11 +266,15 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if got := saved.PetNames[2]; got != "Nagi" {
 		t.Fatalf("saved pet name 2 = %q, want sanitized Nagi", got)
 	}
+	if len(saved.PetSizes) != maxPetCount || saved.PetSizes[0] != 80 || saved.PetSizes[4] != 120 || saved.PetSizes[5] != 70 {
+		t.Fatalf("saved pet sizes = %#v", saved.PetSizes)
+	}
 
 	b := &petApp{
 		variant:        0,
 		coatMode:       coatSelected,
 		selectedCoats:  defaultSelectedCoats(),
+		petSizes:       defaultPetSizes(),
 		speed:          3,
 		mode:           modeRandom,
 		petCount:       2,
@@ -292,7 +307,7 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if b.walkRangeStart != a.walkRangeStart || b.walkRangeEnd != a.walkRangeEnd {
 		t.Fatalf("loaded walk range = %d-%d, want %d-%d", b.walkRangeStart, b.walkRangeEnd, a.walkRangeStart, a.walkRangeEnd)
 	}
-	wantCoats := [maxPetCount]int{1, 3, 4, 4, 4, 0, 2, 4, 4, 4}
+	wantCoats := [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8}
 	for i := 0; i < maxPetCount; i++ {
 		if b.selectedCoats[i] != wantCoats[i] {
 			t.Fatalf("selectedCoats[%d] = %d, want %d", i, b.selectedCoats[i], wantCoats[i])
@@ -300,6 +315,11 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 	if b.petNames[0] != "モカ" || b.petNames[1] != "Sora" || b.petNames[2] != "Nagi" {
 		t.Fatalf("loaded pet names = %#v", b.petNames[:3])
+	}
+	for i, want := range a.petSizes {
+		if got := b.petSizes[i]; got != want {
+			t.Fatalf("loaded petSizes[%d] = %d, want %d", i, got, want)
+		}
 	}
 }
 
@@ -352,6 +372,11 @@ func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	if !a.nameLabels || a.petNames[0] != "モカ" {
 		t.Fatalf("loaded name settings = labels:%v names:%v", a.nameLabels, a.petNames[:1])
 	}
+	for i, size := range a.petSizes {
+		if size != defaultPetSizePercent {
+			t.Fatalf("legacy petSizes[%d] = %d, want default %d", i, size, defaultPetSizePercent)
+		}
+	}
 }
 
 func TestNormalizeWalkRangeKeepsMinimumSpan(t *testing.T) {
@@ -402,15 +427,179 @@ func TestOverlayRectForTaskbarOffsetStaysInsideScreen(t *testing.T) {
 	}
 }
 
+func TestPetScenePositionsDistributeFivePetsAcrossTwoDisplays(t *testing.T) {
+	positions := petScenePositions(3840, 5, []sceneSegment{
+		{Left: 0, Right: 1920},
+		{Left: 1920, Right: 3840},
+	})
+	if len(positions) != 5 {
+		t.Fatalf("positions = %d, want 5", len(positions))
+	}
+	mainCount := 0
+	subCount := 0
+	for i, x := range positions {
+		switch {
+		case x >= 0 && x+spriteW <= 1920:
+			mainCount++
+		case x >= 1920 && x+spriteW <= 3840:
+			subCount++
+		default:
+			t.Fatalf("position[%d] = %d escapes monitor segments", i, x)
+		}
+	}
+	if mainCount != 3 || subCount != 2 {
+		t.Fatalf("pet distribution = main:%d sub:%d, want 3 and 2", mainCount, subCount)
+	}
+}
+
+func TestPetScenePositionsAvoidMonitorGaps(t *testing.T) {
+	positions := petScenePositions(3800, 4, []sceneSegment{
+		{Left: 0, Right: 1600},
+		{Left: 2200, Right: 3800},
+	})
+	for i, x := range positions {
+		onLeft := x >= 0 && x+spriteW <= 1600
+		onRight := x >= 2200 && x+spriteW <= 3800
+		if !onLeft && !onRight {
+			t.Fatalf("position[%d] = %d falls in the monitor gap or offscreen", i, x)
+		}
+	}
+}
+
+func TestSetPetCountPlacesAllPetsInsideCurrentScene(t *testing.T) {
+	a := &petApp{
+		sceneW:        3840,
+		speed:         3,
+		coatMode:      coatFixed,
+		bidirectional: true,
+		petCount:      2,
+	}
+
+	a.setPetCount(5)
+	if len(a.pets) != 5 {
+		t.Fatalf("pets = %d, want 5", len(a.pets))
+	}
+	subCount := 0
+	for i, pet := range a.pets {
+		if pet.x < 0 || pet.x+spriteW > a.sceneW {
+			t.Fatalf("pet %d x = %d escapes scene width %d", i, pet.x, a.sceneW)
+		}
+		if pet.x >= 1920 {
+			subCount++
+		}
+	}
+	if subCount < 2 {
+		t.Fatalf("sub-display pets = %d, want at least 2 after choosing 5 pets", subCount)
+	}
+}
+
+func TestResetPositionDistributesPetsAcrossDetectedMultiMonitorSpan(t *testing.T) {
+	areas := monitorAreasByPosition()
+	if len(areas) < 2 {
+		t.Skip("multi-monitor placement check requires at least two detected displays")
+	}
+	a := &petApp{
+		speed:          3,
+		coatMode:       coatFixed,
+		bidirectional:  true,
+		petCount:       5,
+		displayScope:   displayScopeSpan,
+		displayIndex:   0,
+		displaySpanEnd: len(areas) - 1,
+		positionMode:   positionTaskbarEdge,
+		walkRangeEnd:   100,
+	}
+	a.resetPosition()
+	overlay := a.overlayRect()
+	segments := a.sceneSegmentsForOverlay(overlay)
+	if len(segments) < 2 {
+		t.Fatalf("detected display span produced %d visible segments, want at least 2", len(segments))
+	}
+	seen := make([]int, len(segments))
+	for _, pet := range a.pets {
+		for i, segment := range segments {
+			if pet.x >= segment.Left && pet.x+spriteW <= segment.Right {
+				seen[i]++
+				break
+			}
+		}
+	}
+	if len(a.pets) >= len(segments) {
+		for i, count := range seen {
+			if count == 0 {
+				t.Fatalf("segment %d received no pets; distribution=%v segments=%+v", i, seen, segments)
+			}
+		}
+	}
+}
+
+func TestWalkRangeSummaryDescribesMultiDisplaySegments(t *testing.T) {
+	a := &petApp{lang: langJapanese}
+	segments := []sceneSegment{
+		{Left: 0, Right: 1920},
+		{Left: 1920, Right: 3840},
+	}
+
+	cases := []struct {
+		name       string
+		start, end int
+		want       string
+	}{
+		{name: "all selected displays", start: 0, end: 100, want: "選択した画面ぜんぶ"},
+		{name: "first display only", start: 0, end: 50, want: "画面1だけ"},
+		{name: "second display only", start: 50, end: 100, want: "画面2だけ"},
+		{name: "partial displays", start: 25, end: 75, want: "画面1-2の一部"},
+	}
+
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := a.walkRangeSummaryForSegments(tt.start, tt.end, segments); got != tt.want {
+				t.Fatalf("summary = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDisplaySpanDefaultsWalkingRangeToAllDisplays(t *testing.T) {
+	if len(monitorAreas()) < 2 {
+		t.Skip("multi-monitor scope reset requires at least two detected displays")
+	}
+	a := &petApp{
+		displayScope:   displayScopeSingle,
+		displayIndex:   0,
+		displaySpanEnd: 0,
+		positionMode:   positionTaskbarEdge,
+		walkRangeStart: 25,
+		walkRangeEnd:   75,
+		petCount:       2,
+		speed:          3,
+		coatMode:       coatFixed,
+	}
+	a.resetPosition()
+	a.walkRangeStart = 25
+	a.walkRangeEnd = 75
+	a.setDisplayScope(displayScopeSpan)
+	if a.walkRangeStart != 0 || a.walkRangeEnd != 100 {
+		t.Fatalf("span walk range = %d-%d, want reset to 0-100", a.walkRangeStart, a.walkRangeEnd)
+	}
+
+	a.setWalkRange(50, 100)
+	a.adjustDisplaySpan(1)
+	if a.walkRangeStart != 50 || a.walkRangeEnd != 100 {
+		t.Fatalf("adjusting span changed fine range = %d-%d, want 50-100", a.walkRangeStart, a.walkRangeEnd)
+	}
+}
+
 func TestPetVariantRectsFitTenPetsInSettingsWindow(t *testing.T) {
 	seen := map[[4]int]bool{}
 	for i := 0; i < maxPetCount; i++ {
 		numberRect, buttonRect := settingsPetVariantRects(i)
-		if buttonRect.Right > 708 || buttonRect.Bottom > 502 {
+		sizeRect := settingsPetSizeRect(i)
+		if buttonRect.Right > 708 || buttonRect.Bottom > 562 || sizeRect.Right > 708 || sizeRect.Bottom > 562 {
 			t.Fatalf("pet variant button %d rect %+v overflows selected-coats panel", i, buttonRect)
 		}
-		if numberRect.Left < 238 || buttonRect.Left <= numberRect.Right {
-			t.Fatalf("pet variant %d number/button rects overlap or escape: number=%+v button=%+v", i, numberRect, buttonRect)
+		if numberRect.Left < 238 || buttonRect.Left <= numberRect.Right || sizeRect.Left <= buttonRect.Right {
+			t.Fatalf("pet variant %d row rects overlap or escape: number=%+v button=%+v size=%+v", i, numberRect, buttonRect, sizeRect)
 		}
 		key := [4]int{int(buttonRect.Left), int(buttonRect.Top), int(buttonRect.Right), int(buttonRect.Bottom)}
 		if seen[key] {
@@ -424,11 +613,15 @@ func TestPetNameRectsFitTenPetsWithCoatPicker(t *testing.T) {
 	for i := 0; i < maxPetCount; i++ {
 		numberRect, nameRect := settingsPetNameRects(i)
 		_, coatRect := settingsPetVariantRects(i)
+		sizeRect := settingsPetSizeRect(i)
 		if nameRect.Right >= coatRect.Left {
 			t.Fatalf("pet %d name rect overlaps coat rect: name=%+v coat=%+v", i, nameRect, coatRect)
 		}
-		if numberRect.Left < 238 || nameRect.Left <= numberRect.Right || coatRect.Right > 708 || nameRect.Bottom > 502 {
-			t.Fatalf("pet %d name/coat row escapes panel: number=%+v name=%+v coat=%+v", i, numberRect, nameRect, coatRect)
+		if coatRect.Right >= sizeRect.Left {
+			t.Fatalf("pet %d coat rect overlaps size rect: coat=%+v size=%+v", i, coatRect, sizeRect)
+		}
+		if numberRect.Left < 238 || nameRect.Left <= numberRect.Right || sizeRect.Right > 708 || nameRect.Bottom > 562 || sizeRect.Bottom > 562 {
+			t.Fatalf("pet %d name/coat/size row escapes panel: number=%+v name=%+v coat=%+v size=%+v", i, numberRect, nameRect, coatRect, sizeRect)
 		}
 	}
 }
@@ -494,7 +687,7 @@ func TestSetBidirectionalOffNormalizesPets(t *testing.T) {
 	a := &petApp{
 		bidirectional: true,
 		speed:         3,
-		pets: []deguPet{
+		pets: []desktopPet{
 			{state: stateTurn, dir: -1, nextDir: -1, item: noItem},
 			{state: stateWalk, dir: -1, nextDir: -1, item: noItem},
 		},
@@ -526,7 +719,7 @@ func TestResetPetAtEdgeReentersFromOppositeSideWithMatchingDirection(t *testing.
 		},
 	}
 
-	right := deguPet{dir: 1, nextDir: 1, item: 0, carryKind: 2, state: stateCarry}
+	right := desktopPet{dir: 1, nextDir: 1, item: 0, carryKind: 2, state: stateCarry}
 	a.resetPetAtEdge(0, &right, 1)
 	if right.x > -spriteW || right.dir != 1 || right.nextDir != 1 {
 		t.Fatalf("right-moving reset = x:%d dir:%d next:%d, want off-left and direction +1", right.x, right.dir, right.nextDir)
@@ -538,7 +731,7 @@ func TestResetPetAtEdgeReentersFromOppositeSideWithMatchingDirection(t *testing.
 		t.Fatalf("owned forage was not released: owner=%d", a.forage[0].owner)
 	}
 
-	left := deguPet{dir: -1, nextDir: -1, item: noItem, state: stateWalk}
+	left := desktopPet{dir: -1, nextDir: -1, item: noItem, state: stateWalk}
 	a.resetPetAtEdge(1, &left, -1)
 	if left.x < a.sceneW || left.dir != -1 || left.nextDir != -1 {
 		t.Fatalf("left-moving reset = x:%d dir:%d next:%d, want off-right and direction -1", left.x, left.dir, left.nextDir)
@@ -556,7 +749,7 @@ func TestForagePropsDisabledClearsPropsAndStopsAssignment(t *testing.T) {
 			{x: 100, kind: 2, owner: 0, active: true},
 			{x: 160, kind: 1, owner: reservedItem, active: true},
 		},
-		pets: []deguPet{
+		pets: []desktopPet{
 			{state: stateCarry, item: 0, carryKind: 2, dir: 1, nextDir: 1},
 			{state: stateForage, item: 1, carryKind: noItem, dir: -1, nextDir: -1},
 		},
@@ -576,7 +769,7 @@ func TestForagePropsDisabledClearsPropsAndStopsAssignment(t *testing.T) {
 	}
 
 	a.forage = []forageItem{{x: 140, kind: 2, owner: noItem, active: true}}
-	p := deguPet{state: stateWalk, item: noItem, carryKind: noItem, x: 40, dir: 1}
+	p := desktopPet{state: stateWalk, item: noItem, carryKind: noItem, x: 40, dir: 1}
 	if a.maybeAssignForageTarget(&p) {
 		t.Fatalf("maybeAssignForageTarget assigned forage while props are disabled")
 	}
@@ -593,13 +786,13 @@ func TestTickPetMovesByDirectionAndWrapsPastEdges(t *testing.T) {
 		selectedCoats: defaultSelectedCoats(),
 	}
 
-	right := deguPet{x: 20, dir: 1, nextDir: 1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
+	right := desktopPet{x: 20, dir: 1, nextDir: 1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
 	a.tickPet(0, &right)
 	if right.x != 24 {
 		t.Fatalf("right-moving tick x = %d, want 24", right.x)
 	}
 
-	left := deguPet{x: 20, dir: -1, nextDir: -1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
+	left := desktopPet{x: 20, dir: -1, nextDir: -1, state: stateWalk, moveSpeed: 4, stateTicks: 10, item: noItem, carryKind: noItem}
 	a.tickPet(0, &left)
 	if left.x != 16 {
 		t.Fatalf("left-moving tick x = %d, want 16", left.x)
@@ -665,7 +858,7 @@ func TestDrawDirectionForVariantCompensatesLeftFacingSource(t *testing.T) {
 func TestFixedCoatModeRefreshesAllPets(t *testing.T) {
 	a := &petApp{
 		variant: 99,
-		pets: []deguPet{
+		pets: []desktopPet{
 			{variant: 0},
 			{variant: 0},
 			{variant: 0},
@@ -685,7 +878,7 @@ func TestFixedCoatModeRefreshesAllPets(t *testing.T) {
 func TestSelectedCoatModeUsesPerPetChoices(t *testing.T) {
 	a := &petApp{
 		selectedCoats: [maxPetCount]int{0, 3, 5, 7, 9},
-		pets: []deguPet{
+		pets: []desktopPet{
 			{variant: 0},
 			{variant: 0},
 			{variant: 0},
@@ -694,14 +887,14 @@ func TestSelectedCoatModeUsesPerPetChoices(t *testing.T) {
 
 	a.setCoatMode(coatSelected)
 
-	want := []int{0, 3, len(variants) - 1}
+	want := []int{0, 3, 5}
 	for i := range []int{0, 1, 2} {
 		if got := a.pets[i].variant; got != want[i] {
 			t.Fatalf("pet %d variant = %d, want %d", i, got, want[i])
 		}
 	}
 	a.setSelectedVariant(1, 8)
-	if got, want := a.pets[1].variant, len(variants)-1; got != want {
+	if got, want := a.pets[1].variant, 8; got != want {
 		t.Fatalf("selected variant update = %d, want %d", got, want)
 	}
 }
@@ -718,8 +911,9 @@ func TestRandomCoatModeAssignsValidVariants(t *testing.T) {
 
 func TestPetAtScenePointFindsTopmostPet(t *testing.T) {
 	a := &petApp{
-		sceneW: 800,
-		pets: []deguPet{
+		sceneW:   800,
+		petSizes: defaultPetSizes(),
+		pets: []desktopPet{
 			{x: 100, laneOffset: 0, state: stateWalk},
 			{x: 110, laneOffset: 0, state: stateIdle},
 		},
@@ -734,9 +928,50 @@ func TestPetAtScenePointFindsTopmostPet(t *testing.T) {
 	}
 }
 
+func TestPetSizeAffectsHitTestingAndBounds(t *testing.T) {
+	a := &petApp{
+		sceneW:   800,
+		petSizes: defaultPetSizes(),
+		pets: []desktopPet{
+			{x: 100, laneOffset: 0, state: stateWalk},
+		},
+	}
+	a.setPetSize(0, 120)
+	w, h := a.petSpriteSize(0)
+	if w != 115 || h != 76 {
+		t.Fatalf("petSpriteSize(120%%) = %dx%d, want 115x76", w, h)
+	}
+	if got := a.petAtScenePoint(100+w-8, sceneH-h+8); got != 0 {
+		t.Fatalf("petAtScenePoint on enlarged pet = %d, want 0", got)
+	}
+	a.pets[0].x = 760
+	a.setPetSize(0, 120)
+	if a.pets[0].x+w > a.sceneW {
+		t.Fatalf("setPetSize did not clamp x: x=%d w=%d scene=%d", a.pets[0].x, w, a.sceneW)
+	}
+}
+
+func TestNormalizePetSizePercent(t *testing.T) {
+	tests := []struct {
+		in   int
+		want int
+	}{
+		{0, defaultPetSizePercent},
+		{64, minPetSizePercent},
+		{86, 90},
+		{119, maxPetSizePercent},
+		{200, maxPetSizePercent},
+	}
+	for _, tt := range tests {
+		if got := normalizePetSizePercent(tt.in); got != tt.want {
+			t.Fatalf("normalizePetSizePercent(%d) = %d, want %d", tt.in, got, tt.want)
+		}
+	}
+}
+
 func TestShowPetReactionRefreshesExistingBubble(t *testing.T) {
 	a := &petApp{
-		pets: []deguPet{{state: stateWalk}},
+		pets: []desktopPet{{state: stateWalk}},
 		reactions: []petReaction{
 			{pet: 0, kind: 1, ticks: 3},
 		},
@@ -753,7 +988,7 @@ func TestShowPetReactionRefreshesExistingBubble(t *testing.T) {
 
 func TestTickReactionsDropsExpiredAndInvalid(t *testing.T) {
 	a := &petApp{
-		pets: []deguPet{{state: stateWalk}},
+		pets: []desktopPet{{state: stateWalk}},
 		reactions: []petReaction{
 			{pet: 0, ticks: 1},
 			{pet: 3, ticks: 5},

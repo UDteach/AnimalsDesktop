@@ -33,12 +33,12 @@ AnimalsDesktop is a Go + Win32 Windows taskbar pet app. Keep the existing lightw
 Run the relevant subset after each iteration:
 
 ```powershell
-gofmt -w internal\catalog\catalog.go cmd\degu\main_windows.go cmd\degu\motion_windows_test.go cmd\importsheet\main.go cmd\importsheet\main_test.go cmd\importanimals\main.go cmd\importanimals\main_test.go
+gofmt -w internal\catalog\catalog.go cmd\animalsdesktop\main_windows.go cmd\animalsdesktop\motion_windows_test.go cmd\importsheet\main.go cmd\importsheet\main_test.go cmd\importanimals\main.go cmd\importanimals\main_test.go
 go run ./cmd/importsheet
 go run ./cmd/importanimals
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
-go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
 

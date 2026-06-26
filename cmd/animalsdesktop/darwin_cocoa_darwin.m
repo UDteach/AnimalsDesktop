@@ -1,43 +1,43 @@
 #import <Cocoa/Cocoa.h>
 #import <math.h>
 
-extern void goDeguTick(void);
-extern void goDeguKeyDown(void);
-extern void goDeguSetSceneWidth(int width);
-extern void goDeguSetSpeed(int speed);
-extern void goDeguSetPetCount(int count);
-extern void goDeguSetWheelEnabled(int enabled);
-extern void goDeguSetMode(int mode);
-extern void goDeguSetCoatMode(int mode);
-extern void goDeguSetVariant(int variant);
-extern void goDeguSetSelectedCoat(int index, int variant);
-extern void goDeguSetNameLabels(int enabled);
-extern void goDeguSetPetName(int index, char *value);
-extern int goDeguClick(int x, int y);
-extern int goDeguPetAt(int x, int y);
-extern int goDeguGetSpeed(void);
-extern int goDeguGetPetCount(void);
-extern int goDeguGetWheelEnabled(void);
-extern int goDeguGetMode(void);
-extern int goDeguGetCoatMode(void);
-extern int goDeguGetVariant(void);
-extern int goDeguGetSelectedCoat(int index);
-extern int goDeguGetVariantCount(void);
-extern int goDeguGetNameLabels(void);
-extern int goDeguCopyPetName(int index, char *buffer, int length);
-extern int goDeguGetPetDrawX(int index);
-extern int goDeguGetPetDrawY(int index);
+extern void goAnimalsDesktopTick(void);
+extern void goAnimalsDesktopKeyDown(void);
+extern void goAnimalsDesktopSetSceneWidth(int width);
+extern void goAnimalsDesktopSetSpeed(int speed);
+extern void goAnimalsDesktopSetPetCount(int count);
+extern void goAnimalsDesktopSetWheelEnabled(int enabled);
+extern void goAnimalsDesktopSetMode(int mode);
+extern void goAnimalsDesktopSetCoatMode(int mode);
+extern void goAnimalsDesktopSetVariant(int variant);
+extern void goAnimalsDesktopSetSelectedCoat(int index, int variant);
+extern void goAnimalsDesktopSetNameLabels(int enabled);
+extern void goAnimalsDesktopSetPetName(int index, char *value);
+extern int goAnimalsDesktopClick(int x, int y);
+extern int goAnimalsDesktopPetAt(int x, int y);
+extern int goAnimalsDesktopGetSpeed(void);
+extern int goAnimalsDesktopGetPetCount(void);
+extern int goAnimalsDesktopGetWheelEnabled(void);
+extern int goAnimalsDesktopGetMode(void);
+extern int goAnimalsDesktopGetCoatMode(void);
+extern int goAnimalsDesktopGetVariant(void);
+extern int goAnimalsDesktopGetSelectedCoat(int index);
+extern int goAnimalsDesktopGetVariantCount(void);
+extern int goAnimalsDesktopGetNameLabels(void);
+extern int goAnimalsDesktopCopyPetName(int index, char *buffer, int length);
+extern int goAnimalsDesktopGetPetDrawX(int index);
+extern int goAnimalsDesktopGetPetDrawY(int index);
 
 enum {
-	DeguMenuSettings = 1001,
-	DeguMenuSpeedSlow = 1101,
-	DeguMenuSpeedNormal = 1103,
-	DeguMenuSpeedFast = 1105,
-	DeguMenuCountBase = 1200,
-	DeguMenuWheelEnabled = 1301,
+	AnimalsMenuSettings = 1001,
+	AnimalsMenuSpeedSlow = 1101,
+	AnimalsMenuSpeedNormal = 1103,
+	AnimalsMenuSpeedFast = 1105,
+	AnimalsMenuCountBase = 1200,
+	AnimalsMenuWheelEnabled = 1301,
 };
 
-static NSString *DeguVariantLabels[] = {
+static NSString *AnimalsVariantLabels[] = {
 	@"チンチラ",
 	@"ハムスター",
 	@"マカロニマウス",
@@ -45,16 +45,16 @@ static NSString *DeguVariantLabels[] = {
 	@"うさぎ",
 };
 
-static const NSInteger DeguMaxPetCount = 10;
-static const NSInteger DeguVariantLabelCount = sizeof(DeguVariantLabels) / sizeof(DeguVariantLabels[0]);
-static const CGFloat DeguSpriteWidth = 96.0;
+static const NSInteger AnimalsMaxPetCount = 10;
+static const NSInteger AnimalsVariantLabelCount = sizeof(AnimalsVariantLabels) / sizeof(AnimalsVariantLabels[0]);
+static const CGFloat AnimalsSpriteWidth = 96.0;
 
-@interface DeguView : NSView
+@interface AnimalsView : NSView
 @property(nonatomic, retain) NSImage *image;
 @property(nonatomic) NSInteger hoverPet;
 @end
 
-@implementation DeguView
+@implementation AnimalsView
 - (instancetype)initWithFrame:(NSRect)frame {
 	self = [super initWithFrame:frame];
 	if (self) {
@@ -77,11 +77,11 @@ static const CGFloat DeguSpriteWidth = 96.0;
 	if (self.image != nil) {
 		[self.image drawInRect:self.bounds];
 	}
-	if (goDeguGetNameLabels() == 0 || self.hoverPet < 0 || self.hoverPet >= DeguMaxPetCount) {
+	if (goAnimalsDesktopGetNameLabels() == 0 || self.hoverPet < 0 || self.hoverPet >= AnimalsMaxPetCount) {
 		return;
 	}
 	char buffer[256] = {0};
-	int copied = goDeguCopyPetName((int)self.hoverPet, buffer, (int)sizeof(buffer));
+	int copied = goAnimalsDesktopCopyPetName((int)self.hoverPet, buffer, (int)sizeof(buffer));
 	NSString *name = nil;
 	if (copied > 0) {
 		name = [NSString stringWithUTF8String:buffer];
@@ -103,9 +103,9 @@ static const CGFloat DeguSpriteWidth = 96.0;
 	                                 attributes:attrs].size;
 	CGFloat labelW = MIN(MAX(72.0, ceil(textSize.width) + 22.0), 220.0);
 	CGFloat labelH = 24.0;
-	CGFloat petX = (CGFloat)goDeguGetPetDrawX((int)self.hoverPet);
-	CGFloat petY = (CGFloat)goDeguGetPetDrawY((int)self.hoverPet);
-	CGFloat x = MIN(MAX(2.0, petX + DeguSpriteWidth / 2.0 - labelW / 2.0), MAX(2.0, self.bounds.size.width - labelW - 2.0));
+	CGFloat petX = (CGFloat)goAnimalsDesktopGetPetDrawX((int)self.hoverPet);
+	CGFloat petY = (CGFloat)goAnimalsDesktopGetPetDrawY((int)self.hoverPet);
+	CGFloat x = MIN(MAX(2.0, petX + AnimalsSpriteWidth / 2.0 - labelW / 2.0), MAX(2.0, self.bounds.size.width - labelW - 2.0));
 	CGFloat y = MAX(0.0, petY - labelH - 4.0);
 	NSRect labelRect = NSMakeRect(x, y, labelW, labelH);
 	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:9.0 yRadius:9.0];
@@ -115,10 +115,10 @@ static const CGFloat DeguSpriteWidth = 96.0;
 }
 @end
 
-@interface DeguAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, NSTextFieldDelegate>
+@interface AnimalsAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, NSTextFieldDelegate>
 @property(nonatomic) CGFloat sceneHeight;
 @property(nonatomic, retain) NSWindow *window;
-@property(nonatomic, retain) DeguView *view;
+@property(nonatomic, retain) AnimalsView *view;
 @property(nonatomic, retain) NSStatusItem *statusItem;
 @property(nonatomic, retain) NSImage *statusIcon;
 @property(nonatomic, retain) NSTimer *timer;
@@ -139,9 +139,9 @@ static const CGFloat DeguSpriteWidth = 96.0;
 - (instancetype)initWithSceneHeight:(CGFloat)sceneHeight iconBytes:(const unsigned char *)iconBytes iconLength:(int)iconLength;
 @end
 
-static DeguAppDelegate *deguDelegate = nil;
+static AnimalsAppDelegate *animalsDelegate = nil;
 
-@implementation DeguAppDelegate
+@implementation AnimalsAppDelegate
 - (instancetype)initWithSceneHeight:(CGFloat)sceneHeight iconBytes:(const unsigned char *)iconBytes iconLength:(int)iconLength {
 	self = [super init];
 	if (self) {
@@ -180,18 +180,18 @@ static DeguAppDelegate *deguDelegate = nil;
 	                                    NSWindowCollectionBehaviorStationary |
 	                                    NSWindowCollectionBehaviorIgnoresCycle];
 
-	self.view = [[[DeguView alloc] initWithFrame:NSMakeRect(0, 0, width, self.sceneHeight)] autorelease];
+	self.view = [[[AnimalsView alloc] initWithFrame:NSMakeRect(0, 0, width, self.sceneHeight)] autorelease];
 	[self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[self.window setContentView:self.view];
 	[self.window orderFrontRegardless];
-	goDeguSetSceneWidth((int)width);
+	goAnimalsDesktopSetSceneWidth((int)width);
 
 	self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	if (self.statusIcon != nil) {
 		self.statusItem.button.image = self.statusIcon;
 		self.statusItem.button.imagePosition = NSImageOnly;
 	} else {
-		self.statusItem.button.title = @"Degu";
+		self.statusItem.button.title = @"Animals";
 	}
 	self.statusItem.button.toolTip = @"Animals Desktop";
 
@@ -202,29 +202,29 @@ static DeguAppDelegate *deguDelegate = nil;
 	[menu addItem:title];
 	[menu addItem:[NSMenuItem separatorItem]];
 
-	NSMenuItem *settings = [self menuItemWithTitle:@"設定を開く..." action:@selector(showSettings:) tag:DeguMenuSettings];
+	NSMenuItem *settings = [self menuItemWithTitle:@"設定を開く..." action:@selector(showSettings:) tag:AnimalsMenuSettings];
 	[menu addItem:settings];
 	[menu addItem:[NSMenuItem separatorItem]];
 
 	NSMenu *speedMenu = [[[NSMenu alloc] initWithTitle:@"速さ"] autorelease];
 	[speedMenu setDelegate:self];
-	[speedMenu addItem:[self menuItemWithTitle:@"ゆっくり" action:@selector(setSpeed:) tag:DeguMenuSpeedSlow]];
-	[speedMenu addItem:[self menuItemWithTitle:@"ふつう" action:@selector(setSpeed:) tag:DeguMenuSpeedNormal]];
-	[speedMenu addItem:[self menuItemWithTitle:@"はやい" action:@selector(setSpeed:) tag:DeguMenuSpeedFast]];
+	[speedMenu addItem:[self menuItemWithTitle:@"ゆっくり" action:@selector(setSpeed:) tag:AnimalsMenuSpeedSlow]];
+	[speedMenu addItem:[self menuItemWithTitle:@"ふつう" action:@selector(setSpeed:) tag:AnimalsMenuSpeedNormal]];
+	[speedMenu addItem:[self menuItemWithTitle:@"はやい" action:@selector(setSpeed:) tag:AnimalsMenuSpeedFast]];
 	NSMenuItem *speedRoot = [[[NSMenuItem alloc] initWithTitle:@"速さ" action:nil keyEquivalent:@""] autorelease];
 	[speedRoot setSubmenu:speedMenu];
 	[menu addItem:speedRoot];
 
 	NSMenu *countMenu = [[[NSMenu alloc] initWithTitle:@"表示数"] autorelease];
 	[countMenu setDelegate:self];
-	for (NSInteger i = 1; i <= DeguMaxPetCount; i++) {
-		[countMenu addItem:[self menuItemWithTitle:[NSString stringWithFormat:@"%ld匹", (long)i] action:@selector(setPetCount:) tag:DeguMenuCountBase + i]];
+	for (NSInteger i = 1; i <= AnimalsMaxPetCount; i++) {
+		[countMenu addItem:[self menuItemWithTitle:[NSString stringWithFormat:@"%ld匹", (long)i] action:@selector(setPetCount:) tag:AnimalsMenuCountBase + i]];
 	}
 	NSMenuItem *countRoot = [[[NSMenuItem alloc] initWithTitle:@"表示数" action:nil keyEquivalent:@""] autorelease];
 	[countRoot setSubmenu:countMenu];
 	[menu addItem:countRoot];
 
-	NSMenuItem *wheel = [self menuItemWithTitle:@"キーボード反応" action:@selector(toggleWheelEnabled:) tag:DeguMenuWheelEnabled];
+	NSMenuItem *wheel = [self menuItemWithTitle:@"キーボード反応" action:@selector(toggleWheelEnabled:) tag:AnimalsMenuWheelEnabled];
 	[menu addItem:wheel];
 	[menu addItem:[NSMenuItem separatorItem]];
 
@@ -243,11 +243,11 @@ static DeguAppDelegate *deguDelegate = nil;
 
 	self.globalMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskKeyDown
 	                                                             handler:^(NSEvent *event) {
-		goDeguKeyDown();
+		goAnimalsDesktopKeyDown();
 	}];
 	self.localMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskKeyDown
 	                                                          handler:^NSEvent *(NSEvent *event) {
-		goDeguKeyDown();
+		goAnimalsDesktopKeyDown();
 		return event;
 	}];
 	self.mouseClickMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskLeftMouseDown
@@ -281,7 +281,7 @@ static DeguAppDelegate *deguDelegate = nil;
 }
 
 - (void)tick:(NSTimer *)timer {
-	goDeguTick();
+	goAnimalsDesktopTick();
 }
 
 - (NSMenuItem *)menuItemWithTitle:(NSString *)title action:(SEL)action tag:(NSInteger)tag {
@@ -303,25 +303,25 @@ static DeguAppDelegate *deguDelegate = nil;
 	if (self.statusItem == nil || self.statusItem.menu == nil) {
 		return;
 	}
-	[self refreshMenuState:self.statusItem.menu speed:goDeguGetSpeed() count:goDeguGetPetCount() wheelEnabled:goDeguGetWheelEnabled()];
+	[self refreshMenuState:self.statusItem.menu speed:goAnimalsDesktopGetSpeed() count:goAnimalsDesktopGetPetCount() wheelEnabled:goAnimalsDesktopGetWheelEnabled()];
 	[self refreshSettingsControls];
 }
 
 - (void)refreshMenuState:(NSMenu *)menu speed:(int)speed count:(int)count wheelEnabled:(int)wheelEnabled {
 	for (NSMenuItem *item in [menu itemArray]) {
 		NSInteger tag = [item tag];
-		if (tag == DeguMenuSpeedSlow || tag == DeguMenuSpeedNormal || tag == DeguMenuSpeedFast) {
+		if (tag == AnimalsMenuSpeedSlow || tag == AnimalsMenuSpeedNormal || tag == AnimalsMenuSpeedFast) {
 			int itemSpeed = 3;
-			if (tag == DeguMenuSpeedSlow) {
+			if (tag == AnimalsMenuSpeedSlow) {
 				itemSpeed = 2;
-			} else if (tag == DeguMenuSpeedFast) {
+			} else if (tag == AnimalsMenuSpeedFast) {
 				itemSpeed = 5;
 			}
 			[item setState:(itemSpeed == speed) ? NSControlStateValueOn : NSControlStateValueOff];
-		} else if (tag > DeguMenuCountBase && tag <= DeguMenuCountBase + DeguMaxPetCount) {
-			int itemCount = (int)(tag - DeguMenuCountBase);
+		} else if (tag > AnimalsMenuCountBase && tag <= AnimalsMenuCountBase + AnimalsMaxPetCount) {
+			int itemCount = (int)(tag - AnimalsMenuCountBase);
 			[item setState:(itemCount == count) ? NSControlStateValueOn : NSControlStateValueOff];
-		} else if (tag == DeguMenuWheelEnabled) {
+		} else if (tag == AnimalsMenuWheelEnabled) {
 			[item setState:wheelEnabled ? NSControlStateValueOn : NSControlStateValueOff];
 		}
 		if ([item submenu] != nil) {
@@ -332,26 +332,26 @@ static DeguAppDelegate *deguDelegate = nil;
 
 - (void)setSpeed:(id)sender {
 	NSInteger tag = [sender tag];
-	if (tag == DeguMenuSpeedSlow) {
-		goDeguSetSpeed(2);
-	} else if (tag == DeguMenuSpeedFast) {
-		goDeguSetSpeed(5);
+	if (tag == AnimalsMenuSpeedSlow) {
+		goAnimalsDesktopSetSpeed(2);
+	} else if (tag == AnimalsMenuSpeedFast) {
+		goAnimalsDesktopSetSpeed(5);
 	} else {
-		goDeguSetSpeed(3);
+		goAnimalsDesktopSetSpeed(3);
 	}
 	[self refreshMenuState];
 }
 
 - (void)setPetCount:(id)sender {
 	NSInteger tag = [sender tag];
-	if (tag > DeguMenuCountBase && tag <= DeguMenuCountBase + DeguMaxPetCount) {
-		goDeguSetPetCount((int)(tag - DeguMenuCountBase));
+	if (tag > AnimalsMenuCountBase && tag <= AnimalsMenuCountBase + AnimalsMaxPetCount) {
+		goAnimalsDesktopSetPetCount((int)(tag - AnimalsMenuCountBase));
 	}
 	[self refreshMenuState];
 }
 
 - (void)toggleWheelEnabled:(id)sender {
-	goDeguSetWheelEnabled(goDeguGetWheelEnabled() ? 0 : 1);
+	goAnimalsDesktopSetWheelEnabled(goAnimalsDesktopGetWheelEnabled() ? 0 : 1);
 	[self refreshMenuState];
 }
 
@@ -388,7 +388,7 @@ static DeguAppDelegate *deguDelegate = nil;
 	if (![self localScenePointFromScreenPoint:point x:&localX y:&localY]) {
 		return;
 	}
-	goDeguClick(localX, localY);
+	goAnimalsDesktopClick(localX, localY);
 	[self updateHoverFromSceneX:localX y:localY];
 }
 
@@ -425,11 +425,11 @@ static DeguAppDelegate *deguDelegate = nil;
 }
 
 - (void)updateHoverFromSceneX:(int)localX y:(int)localY {
-	if (goDeguGetNameLabels() == 0) {
+	if (goAnimalsDesktopGetNameLabels() == 0) {
 		[self updateHoverPet:-1];
 		return;
 	}
-	[self updateHoverPet:goDeguPetAt(localX, localY)];
+	[self updateHoverPet:goAnimalsDesktopPetAt(localX, localY)];
 }
 
 - (void)updateHoverPet:(NSInteger)index {
@@ -488,7 +488,7 @@ static DeguAppDelegate *deguDelegate = nil;
 
 	[animalView addSubview:[self labelWithTitle:@"出現数" frame:NSMakeRect(22, 340, 120, 24)]];
 	self.countPopup = [self popupWithFrame:NSMakeRect(150, 336, 180, 28) action:@selector(settingsCountChanged:)];
-	for (NSInteger i = 1; i <= DeguMaxPetCount; i++) {
+	for (NSInteger i = 1; i <= AnimalsMaxPetCount; i++) {
 		[self.countPopup addItemWithTitle:[NSString stringWithFormat:@"%ld匹", (long)i]];
 	}
 	[animalView addSubview:self.countPopup];
@@ -509,8 +509,8 @@ static DeguAppDelegate *deguDelegate = nil;
 	[perPet setFont:[NSFont boldSystemFontOfSize:12.0]];
 	[animalView addSubview:perPet];
 
-	self.selectedCoatPopups = [NSMutableArray arrayWithCapacity:DeguMaxPetCount];
-	for (NSInteger i = 0; i < DeguMaxPetCount; i++) {
+	self.selectedCoatPopups = [NSMutableArray arrayWithCapacity:AnimalsMaxPetCount];
+	for (NSInteger i = 0; i < AnimalsMaxPetCount; i++) {
 		NSInteger column = i / 5;
 		NSInteger row = i % 5;
 		CGFloat x = 22 + column * 270;
@@ -555,8 +555,8 @@ static DeguAppDelegate *deguDelegate = nil;
 	[nameHint setTextColor:[NSColor secondaryLabelColor]];
 	[namesView addSubview:nameHint];
 
-	self.petNameFields = [NSMutableArray arrayWithCapacity:DeguMaxPetCount];
-	for (NSInteger i = 0; i < DeguMaxPetCount; i++) {
+	self.petNameFields = [NSMutableArray arrayWithCapacity:AnimalsMaxPetCount];
+	for (NSInteger i = 0; i < AnimalsMaxPetCount; i++) {
 		NSInteger column = i / 5;
 		NSInteger row = i % 5;
 		CGFloat x = 22 + column * 270;
@@ -586,9 +586,9 @@ static DeguAppDelegate *deguDelegate = nil;
 
 - (void)populateVariantPopup:(NSPopUpButton *)popup {
 	[popup removeAllItems];
-	NSInteger count = MIN((NSInteger)goDeguGetVariantCount(), DeguVariantLabelCount);
+	NSInteger count = MIN((NSInteger)goAnimalsDesktopGetVariantCount(), AnimalsVariantLabelCount);
 	for (NSInteger i = 0; i < count; i++) {
-		[popup addItemWithTitle:DeguVariantLabels[i]];
+		[popup addItemWithTitle:AnimalsVariantLabels[i]];
 	}
 }
 
@@ -596,75 +596,75 @@ static DeguAppDelegate *deguDelegate = nil;
 	if (self.settingsWindow == nil) {
 		return;
 	}
-	NSInteger count = goDeguGetPetCount();
-	[self.countPopup selectItemAtIndex:MAX(0, MIN(DeguMaxPetCount - 1, count - 1))];
-	[self.coatModePopup selectItemAtIndex:goDeguGetCoatMode()];
-	[self.fixedCoatPopup selectItemAtIndex:goDeguGetVariant()];
-	[self.modePopup selectItemAtIndex:goDeguGetMode()];
-	NSInteger speed = goDeguGetSpeed();
+	NSInteger count = goAnimalsDesktopGetPetCount();
+	[self.countPopup selectItemAtIndex:MAX(0, MIN(AnimalsMaxPetCount - 1, count - 1))];
+	[self.coatModePopup selectItemAtIndex:goAnimalsDesktopGetCoatMode()];
+	[self.fixedCoatPopup selectItemAtIndex:goAnimalsDesktopGetVariant()];
+	[self.modePopup selectItemAtIndex:goAnimalsDesktopGetMode()];
+	NSInteger speed = goAnimalsDesktopGetSpeed();
 	[self.speedPopup selectItemAtIndex:(speed == 2 ? 0 : (speed == 5 ? 2 : 1))];
-	[self.wheelCheckbox setState:goDeguGetWheelEnabled() ? NSControlStateValueOn : NSControlStateValueOff];
+	[self.wheelCheckbox setState:goAnimalsDesktopGetWheelEnabled() ? NSControlStateValueOn : NSControlStateValueOff];
 	for (NSInteger i = 0; i < [self.selectedCoatPopups count]; i++) {
 		NSPopUpButton *popup = [self.selectedCoatPopups objectAtIndex:i];
-		[popup selectItemAtIndex:goDeguGetSelectedCoat((int)i)];
-		[popup setEnabled:(goDeguGetCoatMode() == 1 && i < count)];
+		[popup selectItemAtIndex:goAnimalsDesktopGetSelectedCoat((int)i)];
+		[popup setEnabled:(goAnimalsDesktopGetCoatMode() == 1 && i < count)];
 	}
-	[self.fixedCoatPopup setEnabled:(goDeguGetCoatMode() == 0)];
-	[self.nameLabelsCheckbox setState:goDeguGetNameLabels() ? NSControlStateValueOn : NSControlStateValueOff];
+	[self.fixedCoatPopup setEnabled:(goAnimalsDesktopGetCoatMode() == 0)];
+	[self.nameLabelsCheckbox setState:goAnimalsDesktopGetNameLabels() ? NSControlStateValueOn : NSControlStateValueOff];
 	for (NSInteger i = 0; i < [self.petNameFields count]; i++) {
 		NSTextField *field = [self.petNameFields objectAtIndex:i];
 		char buffer[256] = {0};
-		if (goDeguCopyPetName((int)i, buffer, (int)sizeof(buffer)) > 0) {
+		if (goAnimalsDesktopCopyPetName((int)i, buffer, (int)sizeof(buffer)) > 0) {
 			NSString *name = [NSString stringWithUTF8String:buffer];
 			[field setStringValue:(name != nil ? name : @"")];
 		} else {
 			[field setStringValue:@""];
 		}
-		[field setEnabled:(goDeguGetNameLabels() != 0 && i < count)];
+		[field setEnabled:(goAnimalsDesktopGetNameLabels() != 0 && i < count)];
 	}
 }
 
 - (void)settingsCountChanged:(id)sender {
 	NSInteger index = [sender indexOfSelectedItem];
-	goDeguSetPetCount((int)index + 1);
+	goAnimalsDesktopSetPetCount((int)index + 1);
 	[self refreshMenuState];
 }
 
 - (void)settingsCoatModeChanged:(id)sender {
-	goDeguSetCoatMode((int)[sender indexOfSelectedItem]);
+	goAnimalsDesktopSetCoatMode((int)[sender indexOfSelectedItem]);
 	[self refreshMenuState];
 }
 
 - (void)settingsFixedCoatChanged:(id)sender {
-	goDeguSetVariant((int)[sender indexOfSelectedItem]);
+	goAnimalsDesktopSetVariant((int)[sender indexOfSelectedItem]);
 	[self refreshMenuState];
 }
 
 - (void)settingsSelectedCoatChanged:(id)sender {
-	goDeguSetSelectedCoat((int)[sender tag], (int)[sender indexOfSelectedItem]);
+	goAnimalsDesktopSetSelectedCoat((int)[sender tag], (int)[sender indexOfSelectedItem]);
 	[self refreshMenuState];
 }
 
 - (void)settingsModeChanged:(id)sender {
-	goDeguSetMode((int)[sender indexOfSelectedItem]);
+	goAnimalsDesktopSetMode((int)[sender indexOfSelectedItem]);
 	[self refreshMenuState];
 }
 
 - (void)settingsSpeedChanged:(id)sender {
 	NSInteger index = [sender indexOfSelectedItem];
 	int values[] = {2, 3, 5};
-	goDeguSetSpeed(values[index]);
+	goAnimalsDesktopSetSpeed(values[index]);
 	[self refreshMenuState];
 }
 
 - (void)settingsWheelChanged:(id)sender {
-	goDeguSetWheelEnabled([sender state] == NSControlStateValueOn ? 1 : 0);
+	goAnimalsDesktopSetWheelEnabled([sender state] == NSControlStateValueOn ? 1 : 0);
 	[self refreshMenuState];
 }
 
 - (void)settingsNameLabelsChanged:(id)sender {
-	goDeguSetNameLabels([sender state] == NSControlStateValueOn ? 1 : 0);
-	if (goDeguGetNameLabels() == 0) {
+	goAnimalsDesktopSetNameLabels([sender state] == NSControlStateValueOn ? 1 : 0);
+	if (goAnimalsDesktopGetNameLabels() == 0) {
 		[self updateHoverPet:-1];
 	} else {
 		[self updateHoverFromMouseLocation:[NSEvent mouseLocation]];
@@ -673,7 +673,7 @@ static DeguAppDelegate *deguDelegate = nil;
 }
 
 - (void)settingsPetNameChanged:(id)sender {
-	goDeguSetPetName((int)[sender tag], (char *)[[sender stringValue] UTF8String]);
+	goAnimalsDesktopSetPetName((int)[sender tag], (char *)[[sender stringValue] UTF8String]);
 	[self.view setNeedsDisplay:YES];
 	[self refreshMenuState];
 }
@@ -694,8 +694,8 @@ static DeguAppDelegate *deguDelegate = nil;
 }
 @end
 
-void updateDeguImage(const unsigned char *bytes, int length, int width, int height) {
-	if (deguDelegate == nil || deguDelegate.view == nil || bytes == NULL || length <= 0) {
+void updateAnimalsDesktopImage(const unsigned char *bytes, int length, int width, int height) {
+	if (animalsDelegate == nil || animalsDelegate.view == nil || bytes == NULL || length <= 0) {
 		return;
 	}
 	NSData *data = [NSData dataWithBytes:bytes length:(NSUInteger)length];
@@ -704,15 +704,15 @@ void updateDeguImage(const unsigned char *bytes, int length, int width, int heig
 		return;
 	}
 	[image setSize:NSMakeSize(width, height)];
-	deguDelegate.view.image = image;
-	[deguDelegate.view setNeedsDisplay:YES];
+	animalsDelegate.view.image = image;
+	[animalsDelegate.view setNeedsDisplay:YES];
 }
 
-void startDeguApp(int sceneHeight, const unsigned char *iconBytes, int iconLength) {
+void startAnimalsDesktopApp(int sceneHeight, const unsigned char *iconBytes, int iconLength) {
 	@autoreleasepool {
 		NSApplication *app = [NSApplication sharedApplication];
-		deguDelegate = [[DeguAppDelegate alloc] initWithSceneHeight:(CGFloat)sceneHeight iconBytes:iconBytes iconLength:iconLength];
-		[app setDelegate:deguDelegate];
+		animalsDelegate = [[AnimalsAppDelegate alloc] initWithSceneHeight:(CGFloat)sceneHeight iconBytes:iconBytes iconLength:iconLength];
+		[app setDelegate:animalsDelegate];
 		[app setActivationPolicy:NSApplicationActivationPolicyAccessory];
 		[app run];
 	}

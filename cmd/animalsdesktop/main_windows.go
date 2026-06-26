@@ -66,6 +66,10 @@ const (
 	defaultWalkRangeEnd         = 100
 	minWalkRangeSpan            = 25
 	walkRangeStep               = 5
+	defaultPetSizePercent       = 100
+	minPetSizePercent           = 70
+	maxPetSizePercent           = 120
+	petSizeStepPercent          = 10
 	wheelKeyHold                = 18
 	turnTicks                   = 16
 	reactionTicks               = 54
@@ -172,6 +176,7 @@ const (
 	ctrlNameLabels       int32 = 1044
 	ctrlPetVariantBase   int32 = 1050
 	ctrlPetNameBase      int32 = 1070
+	ctrlPetSizeBase      int32 = 1080
 	ctrlRenameEdit       int32 = 1100
 	ctrlRenameOK         int32 = 1101
 	ctrlRenameCancel     int32 = 1102
@@ -264,7 +269,7 @@ const (
 	displayScopeSpan
 )
 
-type deguPet struct {
+type desktopPet struct {
 	motionSet  int
 	variant    int
 	frame      int
@@ -334,12 +339,13 @@ type petApp struct {
 	frames             *spriteCache
 	forageSprites      []*image.RGBA
 	wheel              *image.RGBA
-	pets               []deguPet
+	pets               []desktopPet
 	forage             []forageItem
 	reactions          []petReaction
 	variant            int
 	coatMode           coatMode
 	selectedCoats      [maxPetCount]int
+	petSizes           [maxPetCount]int
 	petNames           [maxPetCount]string
 	nameLabels         bool
 	speed              int
@@ -383,6 +389,7 @@ type appSettings struct {
 	Variant        int      `json:"variant"`
 	CoatMode       int      `json:"coatMode"`
 	SelectedCoats  []int    `json:"selectedCoats"`
+	PetSizes       []int    `json:"petSizes,omitempty"`
 	Speed          int      `json:"speed"`
 	Mode           int      `json:"mode"`
 	PetCount       int      `json:"petCount"`
@@ -449,6 +456,7 @@ func main() {
 		variant:        0,
 		coatMode:       coatSelected,
 		selectedCoats:  defaultSelectedCoats(),
+		petSizes:       defaultPetSizes(),
 		speed:          3,
 		mode:           modeRandom,
 		petCount:       5,
@@ -578,6 +586,7 @@ func (a *petApp) resetPosition() {
 	overlay := a.overlayRect()
 	a.syncScene(overlay)
 	a.setPetCount(a.petCount)
+	a.arrangePetsForOverlay(overlay)
 }
 
 func settingsPath() (string, error) {
@@ -613,6 +622,15 @@ func (a *petApp) loadSettings() error {
 			}
 			a.selectedCoats[i] = clamp(variant, 0, len(variants)-1)
 		}
+		for i, size := range settings.PetSizes {
+			if i >= len(a.petSizes) {
+				break
+			}
+			a.petSizes[i] = normalizePetSizePercent(size)
+		}
+	}
+	for i := range a.petSizes {
+		a.petSizes[i] = normalizePetSizePercent(a.petSizes[i])
 	}
 	for i, name := range settings.PetNames {
 		if i >= len(a.petNames) {
@@ -675,6 +693,10 @@ func (a *petApp) saveSettings() error {
 	for i := range coats {
 		coats[i] = clamp(coats[i], 0, len(variants)-1)
 	}
+	sizes := make([]int, len(a.petSizes))
+	for i := range a.petSizes {
+		sizes[i] = a.petSizePercent(i)
+	}
 	names := make([]string, len(a.petNames))
 	for i := range a.petNames {
 		names[i] = sanitizePetName(a.petNames[i])
@@ -689,6 +711,7 @@ func (a *petApp) saveSettings() error {
 		Variant:        clamp(a.variant, 0, len(variants)-1),
 		CoatMode:       int(a.coatMode),
 		SelectedCoats:  coats,
+		PetSizes:       sizes,
 		Speed:          normalizeSpeed(a.speed),
 		Mode:           int(normalizeBehaviorMode(int(a.mode))),
 		PetCount:       clamp(a.petCount, 1, maxPetCount),
@@ -872,11 +895,11 @@ func (a *petApp) tickReactions() {
 	a.reactions = out
 }
 
-func (a *petApp) tickPet(index int, p *deguPet) {
+func (a *petApp) tickPet(index int, p *desktopPet) {
 	if p.stateTicks <= 0 {
 		switch p.state {
 		case stateWheel:
-			a.leaveWheel(p)
+			a.leaveWheel(index, p)
 		case stateTurn:
 			a.finishTurn(p)
 		case stateEat:
@@ -928,7 +951,8 @@ func (a *petApp) tickPet(index int, p *deguPet) {
 	case stateWalk, stateScurry, stateHop, stateForage, stateCarry:
 		speed = p.moveSpeed
 	case stateWheel:
-		p.x = clamp(a.wheelX-wheelSize/2, 0, max(0, a.sceneW-spriteW))
+		w, _ := a.petSpriteSize(index)
+		p.x = clamp(a.wheelX-wheelSize/2, 0, max(0, a.sceneW-w))
 	}
 
 	if speed > 0 {
@@ -939,15 +963,16 @@ func (a *petApp) tickPet(index int, p *deguPet) {
 	}
 
 	p.stateTicks--
+	w, _ := a.petSpriteSize(index)
 	if p.x > a.sceneW+8 {
 		a.resetPetAtEdge(index, p, 1)
-	} else if p.x < -spriteW-8 {
+	} else if p.x < -w-8 {
 		a.resetPetAtEdge(index, p, -1)
 	}
 	p.frame++
 }
 
-func (a *petApp) chooseRandomAction(p *deguPet) {
+func (a *petApp) chooseRandomAction(p *desktopPet) {
 	roll := rand.Intn(100)
 	p.frame = 0
 	p.motionSet = rand.Intn(motionSets)
@@ -1021,16 +1046,17 @@ func (a *petApp) render() {
 		variant := variants[a.petVariant(p)]
 		frame := currentFrameForVariant(p.state, p.frame, variant)
 		src := a.frames.frame(variant, p.motionSet, frame)
-		y := sceneH - spriteH - p.laneOffset
-		drawPetSprite(canvas, src, p, variant, p.x, y)
+		w, h := a.petSpriteSize(i)
+		y := sceneH - h - p.laneOffset
+		drawPetSprite(canvas, src, p, variant, p.x, y, w, h)
 		if foragePropsEnabled && p.state == stateCarry && p.carryKind != noItem {
-			propX := p.x + spriteW - 18
+			propX := p.x + w - 18
 			if p.dir < 0 {
 				propX = p.x + 18
 			}
 			a.drawForageProp(canvas, propX, y+35, p.carryKind)
 		} else if foragePropsEnabled && (p.state == stateEat || p.state == stateDig) && p.carryKind != noItem {
-			propX := p.x + spriteW - 20
+			propX := p.x + w - 20
 			if p.dir < 0 {
 				propX = p.x + 20
 			}
@@ -1134,7 +1160,7 @@ func (a *petApp) onTyping() {
 	for i := range a.pets {
 		p := &a.pets[i]
 		if a.wheelEnabled && !wheelStarted && p.item == noItem && a.petWheelCapable(p) {
-			a.enterWheelFromTyping(p)
+			a.enterWheelFromTyping(i, p)
 			wheelStarted = true
 			continue
 		}
@@ -1182,19 +1208,23 @@ func (a *petApp) petAtScenePoint(sceneX, sceneY int) int {
 		return -1
 	}
 	for i := len(a.pets) - 1; i >= 0; i-- {
-		if scenePointInPet(a.pets[i], sceneX, sceneY) {
+		w, h := a.petSpriteSize(i)
+		if scenePointInPet(a.pets[i], sceneX, sceneY, w, h) {
 			return i
 		}
 	}
 	return -1
 }
 
-func scenePointInPet(p deguPet, sceneX, sceneY int) bool {
+func scenePointInPet(p desktopPet, sceneX, sceneY int, w int, h int) bool {
 	if p.state == stateWheel {
 		return false
 	}
-	y := sceneH - spriteH - p.laneOffset
-	return sceneX >= p.x+6 && sceneX <= p.x+spriteW-6 && sceneY >= y+8 && sceneY <= y+spriteH-4
+	y := sceneH - h - p.laneOffset
+	insetX := min(6, max(0, w/8))
+	insetTop := min(8, max(0, h/8))
+	insetBottom := min(4, max(0, h/12))
+	return sceneX >= p.x+insetX && sceneX <= p.x+w-insetX && sceneY >= y+insetTop && sceneY <= y+h-insetBottom
 }
 
 func (a *petApp) updateHoverName() {
@@ -1235,8 +1265,9 @@ func (a *petApp) showNameWindow(index int) {
 	runes := []rune(name)
 	w := clamp(34+len(runes)*12, 72, 220)
 	h := 30
-	baseY := sceneH - spriteH - p.laneOffset
-	x := int(overlay.Left) + p.x + spriteW/2 - w/2
+	petW, petH := a.petSpriteSize(index)
+	baseY := sceneH - petH - p.laneOffset
+	x := int(overlay.Left) + p.x + petW/2 - w/2
 	y := int(overlay.Top) + baseY - h - 8
 	x = clamp(x, int(overlay.Left), int(overlay.Right)-w)
 	y = clamp(y, int(screen.Top), int(screen.Bottom)-h)
@@ -1407,8 +1438,9 @@ func (a *petApp) adjustOverlayOffset(delta int) {
 
 func (a *petApp) setWalkRange(start, end int) {
 	a.walkRangeStart, a.walkRangeEnd = normalizeWalkRange(start, end)
-	a.syncScene(a.overlayRect())
-	a.clampPetsToScene()
+	overlay := a.overlayRect()
+	a.syncScene(overlay)
+	a.arrangePetsForOverlay(overlay)
 }
 
 func (a *petApp) adjustWalkRangeWidth(delta int) {
@@ -1424,9 +1456,9 @@ func (a *petApp) shiftWalkRange(delta int) {
 }
 
 func (a *petApp) clampPetsToScene() {
-	limit := max(0, a.sceneW-spriteW)
 	for i := range a.pets {
-		a.pets[i].x = clamp(a.pets[i].x, 0, limit)
+		w, _ := a.petSpriteSize(i)
+		a.pets[i].x = clamp(a.pets[i].x, 0, max(0, a.sceneW-w))
 	}
 	for i := range a.forage {
 		if a.forage[i].active {
@@ -1458,6 +1490,7 @@ func (a *petApp) adjustDisplayIndex(delta int) {
 
 func (a *petApp) setDisplayScope(scope displayScope) {
 	targetScope := normalizeDisplayScope(int(scope))
+	wasSpan := normalizeDisplayScope(int(a.displayScope)) == displayScopeSpan
 	if targetScope == displayScopeSpan {
 		singleAreas := monitorAreas()
 		spanAreas := monitorAreasByPosition()
@@ -1476,6 +1509,10 @@ func (a *petApp) setDisplayScope(scope displayScope) {
 			}
 			a.displayScope = displayScopeSpan
 			a.displayIndex, a.displaySpanEnd = normalizeDisplaySpan(start, end, count)
+			if !wasSpan {
+				a.walkRangeStart = defaultWalkRangeStart
+				a.walkRangeEnd = defaultWalkRangeEnd
+			}
 			a.resetPosition()
 			return
 		}
@@ -1546,6 +1583,192 @@ func (a *petApp) setPetCount(count int) {
 			a.pets[i].nextDir = 1
 		}
 	}
+	a.arrangePetsAcrossScene()
+}
+
+type sceneSegment struct {
+	Left  int
+	Right int
+}
+
+func (a *petApp) arrangePetsAcrossScene() {
+	a.arrangePetsInSegments(nil)
+}
+
+func (a *petApp) arrangePetsForOverlay(overlay win.RECT) {
+	a.arrangePetsInSegments(a.sceneSegmentsForOverlay(overlay))
+}
+
+func (a *petApp) arrangePetsInSegments(segments []sceneSegment) {
+	positions := petScenePositions(a.sceneW, len(a.pets), segments)
+	for i, x := range positions {
+		p := &a.pets[i]
+		w, _ := a.petSpriteSize(i)
+		p.x = clamp(x, 0, max(0, a.sceneW-w))
+		dir := 1
+		if a.bidirectional && i%2 == 1 {
+			dir = -1
+		}
+		p.dir = dir
+		p.nextDir = dir
+		if p.state == stateTurn {
+			p.state = stateWalk
+			p.moveSpeed = max(1, a.speed-1)
+			p.stateTicks = 24
+		}
+	}
+}
+
+func (a *petApp) sceneSegmentsForOverlay(overlay win.RECT) []sceneSegment {
+	areas := displayAreaForScope(a.displayScope)
+	if len(areas) == 0 || overlay.Right <= overlay.Left {
+		return nil
+	}
+	scope, start, end := a.normalizedDisplaySelection(len(areas))
+	if scope != displayScopeSpan {
+		end = start
+	}
+	mode := normalizeOverlayPositionMode(int(a.positionMode))
+	segments := make([]sceneSegment, 0, end-start+1)
+	for _, area := range areas[start : end+1] {
+		base := area.Work
+		if mode == positionScreenBottom {
+			base = area.Screen
+		}
+		left := max(int(base.Left), int(overlay.Left))
+		right := min(int(base.Right), int(overlay.Right))
+		if right-left >= spriteW {
+			segments = append(segments, sceneSegment{
+				Left:  left - int(overlay.Left),
+				Right: right - int(overlay.Left),
+			})
+		}
+	}
+	return mergeSceneSegments(segments)
+}
+
+func mergeSceneSegments(segments []sceneSegment) []sceneSegment {
+	if len(segments) <= 1 {
+		return segments
+	}
+	sort.SliceStable(segments, func(i, j int) bool {
+		if segments[i].Left != segments[j].Left {
+			return segments[i].Left < segments[j].Left
+		}
+		return segments[i].Right < segments[j].Right
+	})
+	merged := segments[:0]
+	for _, segment := range segments {
+		if segment.Right <= segment.Left {
+			continue
+		}
+		if len(merged) == 0 || segment.Left >= merged[len(merged)-1].Right {
+			merged = append(merged, segment)
+			continue
+		}
+		if segment.Right > merged[len(merged)-1].Right {
+			merged[len(merged)-1].Right = segment.Right
+		}
+	}
+	return merged
+}
+
+func petScenePositions(sceneW, count int, segments []sceneSegment) []int {
+	if count <= 0 || sceneW <= 0 {
+		return nil
+	}
+	segments = normalizeSceneSegments(sceneW, segments)
+	if len(segments) == 0 {
+		segments = []sceneSegment{{Left: 0, Right: sceneW}}
+	}
+	allocations := allocatePetsToSegments(count, segments)
+	positions := make([]int, 0, count)
+	for i, segment := range segments {
+		n := allocations[i]
+		if n <= 0 {
+			continue
+		}
+		leftLimit := segment.Left
+		rightLimit := segment.Right - spriteW
+		if rightLimit < leftLimit {
+			rightLimit = leftLimit
+		}
+		margin := min(24, max(0, (rightLimit-leftLimit)/4))
+		left := leftLimit + margin
+		right := rightLimit - margin
+		if right < left {
+			left = leftLimit
+			right = rightLimit
+		}
+		for j := 0; j < n; j++ {
+			x := (left + right) / 2
+			if n > 1 {
+				x = left + (right-left)*j/(n-1)
+			}
+			positions = append(positions, clamp(x, 0, max(0, sceneW-spriteW)))
+		}
+	}
+	for len(positions) < count {
+		positions = append(positions, clamp(sceneW/2-spriteW/2, 0, max(0, sceneW-spriteW)))
+	}
+	return positions[:count]
+}
+
+func normalizeSceneSegments(sceneW int, segments []sceneSegment) []sceneSegment {
+	out := make([]sceneSegment, 0, len(segments))
+	for _, segment := range segments {
+		left := clamp(segment.Left, 0, sceneW)
+		right := clamp(segment.Right, 0, sceneW)
+		if right-left >= spriteW || (sceneW < spriteW && right > left) {
+			out = append(out, sceneSegment{Left: left, Right: right})
+		}
+	}
+	return mergeSceneSegments(out)
+}
+
+func allocatePetsToSegments(count int, segments []sceneSegment) []int {
+	allocations := make([]int, len(segments))
+	if count <= 0 || len(segments) == 0 {
+		return allocations
+	}
+	type remainder struct {
+		index int
+		value float64
+	}
+	totalWidth := 0
+	for _, segment := range segments {
+		totalWidth += max(0, segment.Right-segment.Left)
+	}
+	if totalWidth <= 0 {
+		allocations[0] = count
+		return allocations
+	}
+	remaining := count
+	if count >= len(segments) {
+		for i := range allocations {
+			allocations[i] = 1
+		}
+		remaining -= len(segments)
+	}
+	remainders := make([]remainder, 0, len(segments))
+	assigned := 0
+	for i, segment := range segments {
+		share := float64(max(0, segment.Right-segment.Left)) * float64(remaining) / float64(totalWidth)
+		whole := int(math.Floor(share))
+		allocations[i] += whole
+		assigned += whole
+		remainders = append(remainders, remainder{index: i, value: share - float64(whole)})
+	}
+	sort.SliceStable(remainders, func(i, j int) bool {
+		if remainders[i].value != remainders[j].value {
+			return remainders[i].value > remainders[j].value
+		}
+		return remainders[i].index < remainders[j].index
+	})
+	for i := 0; i < remaining-assigned; i++ {
+		allocations[remainders[i%len(remainders)].index]++
+	}
+	return allocations
 }
 
 func (a *petApp) setCoatMode(mode coatMode) {
@@ -1595,31 +1818,80 @@ func defaultSelectedCoats() [maxPetCount]int {
 	return [maxPetCount]int{0, 1, 2, 3, 4, 0, 1, 2, 3, 4}
 }
 
-func (a *petApp) petVariant(p *deguPet) int {
+func defaultPetSizes() [maxPetCount]int {
+	var sizes [maxPetCount]int
+	for i := range sizes {
+		sizes[i] = defaultPetSizePercent
+	}
+	return sizes
+}
+
+func normalizePetSizePercent(size int) int {
+	if size <= 0 {
+		return defaultPetSizePercent
+	}
+	size = clamp(size, minPetSizePercent, maxPetSizePercent)
+	return ((size + petSizeStepPercent/2) / petSizeStepPercent) * petSizeStepPercent
+}
+
+func petSpriteSizeForPercent(percent int) (int, int) {
+	percent = normalizePetSizePercent(percent)
+	return max(1, frameW*percent/100), max(1, frameH*percent/100)
+}
+
+func (a *petApp) petSizePercent(index int) int {
+	if index < 0 || index >= len(a.petSizes) {
+		return defaultPetSizePercent
+	}
+	return normalizePetSizePercent(a.petSizes[index])
+}
+
+func (a *petApp) petSpriteSize(index int) (int, int) {
+	return petSpriteSizeForPercent(a.petSizePercent(index))
+}
+
+func (a *petApp) petDrawY(index int, p *desktopPet) int {
+	_, h := a.petSpriteSize(index)
+	return sceneH - h - p.laneOffset
+}
+
+func (a *petApp) setPetSize(index int, size int) {
+	if index < 0 || index >= len(a.petSizes) {
+		return
+	}
+	a.petSizes[index] = normalizePetSizePercent(size)
+	if index < len(a.pets) {
+		w, _ := a.petSpriteSize(index)
+		a.pets[index].x = clamp(a.pets[index].x, 0, max(0, a.sceneW-w))
+	}
+}
+
+func (a *petApp) petVariant(p *desktopPet) int {
 	if len(variants) == 0 {
 		return 0
 	}
 	return clamp(p.variant, 0, len(variants)-1)
 }
 
-func (a *petApp) petWheelCapable(p *deguPet) bool {
+func (a *petApp) petWheelCapable(p *desktopPet) bool {
 	if len(variants) == 0 {
 		return false
 	}
 	return catalog.WheelCapableVariant(variants[a.petVariant(p)])
 }
 
-func (a *petApp) newPet(index int) deguPet {
-	spread := max(spriteW+24, a.sceneW/max(1, a.petCount+1))
+func (a *petApp) newPet(index int) desktopPet {
+	w, _ := a.petSpriteSize(index)
+	spread := max(w+24, a.sceneW/max(1, a.petCount+1))
 	dir := 1
 	if a.bidirectional && index%2 == 1 {
 		dir = -1
 	}
-	x := -spriteW - index*spread - rand.Intn(80)
+	x := -w - index*spread - rand.Intn(80)
 	if dir < 0 {
 		x = a.sceneW + index*spread + rand.Intn(80)
 	}
-	p := deguPet{
+	p := desktopPet{
 		x:          x,
 		laneOffset: (index % 3) * 5,
 		variant:    a.variantForIndex(index),
@@ -1633,22 +1905,23 @@ func (a *petApp) newPet(index int) deguPet {
 		nextDir:    dir,
 	}
 	if index == 0 {
-		p.x = rand.Intn(max(1, a.sceneW-spriteW))
+		p.x = rand.Intn(max(1, a.sceneW-w))
 	}
 	a.chooseRandomAction(&p)
 	return p
 }
 
-func (a *petApp) resetPetAtLeft(index int, p *deguPet) {
+func (a *petApp) resetPetAtLeft(index int, p *desktopPet) {
 	a.resetPetAtEdge(index, p, 1)
 }
 
-func (a *petApp) resetPetAtEdge(index int, p *deguPet, dir int) {
+func (a *petApp) resetPetAtEdge(index int, p *desktopPet, dir int) {
 	a.releaseForage(index, p)
+	w, _ := a.petSpriteSize(index)
 	if dir < 0 {
 		p.x = a.sceneW + rand.Intn(120)
 	} else {
-		p.x = -spriteW - rand.Intn(120)
+		p.x = -w - rand.Intn(120)
 	}
 	p.frame = 0
 	p.motionSet = rand.Intn(motionSets)
@@ -1663,7 +1936,7 @@ func (a *petApp) resetPetAtEdge(index int, p *deguPet, dir int) {
 	p.nextDir = p.dir
 }
 
-func (a *petApp) startTurn(p *deguPet, nextDir int, after behaviorState) {
+func (a *petApp) startTurn(p *desktopPet, nextDir int, after behaviorState) {
 	nextDir = normalizeDir(nextDir)
 	if p.dir == 0 {
 		p.dir = 1
@@ -1681,7 +1954,7 @@ func (a *petApp) startTurn(p *deguPet, nextDir int, after behaviorState) {
 	p.carryKind = noItem
 }
 
-func (a *petApp) finishTurn(p *deguPet) {
+func (a *petApp) finishTurn(p *desktopPet) {
 	p.dir = normalizeDir(p.nextDir)
 	p.nextDir = p.dir
 	p.frame = 0
@@ -1759,7 +2032,7 @@ func (a *petApp) clearForageItems() {
 	}
 }
 
-func (a *petApp) maybeAssignForageTarget(p *deguPet) bool {
+func (a *petApp) maybeAssignForageTarget(p *desktopPet) bool {
 	if !foragePropsEnabled {
 		return false
 	}
@@ -1799,7 +2072,7 @@ func (a *petApp) maybeAssignForageTarget(p *deguPet) bool {
 	return true
 }
 
-func (a *petApp) maybeStartGnawing(index int, p *deguPet) {
+func (a *petApp) maybeStartGnawing(index int, p *desktopPet) {
 	if p.item < 0 || p.item >= len(a.forage) {
 		a.releaseForage(index, p)
 		a.chooseRandomAction(p)
@@ -1831,7 +2104,7 @@ func (a *petApp) maybeStartGnawing(index int, p *deguPet) {
 	p.stateTicks = 28 + rand.Intn(34)
 }
 
-func (a *petApp) finishGnawing(index int, p *deguPet) {
+func (a *petApp) finishGnawing(index int, p *desktopPet) {
 	item := &a.forage[p.item]
 	kind := item.kind
 	item.active = false
@@ -1864,7 +2137,7 @@ func (a *petApp) finishGnawing(index int, p *deguPet) {
 	a.chooseRandomAction(p)
 }
 
-func (a *petApp) finishEating(index int, p *deguPet) {
+func (a *petApp) finishEating(index int, p *desktopPet) {
 	a.releaseForage(index, p)
 	p.carryKind = noItem
 	if a.mode == modeRandom {
@@ -1876,7 +2149,7 @@ func (a *petApp) finishEating(index int, p *deguPet) {
 	p.stateTicks = 12
 }
 
-func (a *petApp) releaseForage(index int, p *deguPet) {
+func (a *petApp) releaseForage(index int, p *desktopPet) {
 	if p.item >= 0 && p.item < len(a.forage) && (a.forage[p.item].owner == index || a.forage[p.item].owner == reservedItem) {
 		a.forage[p.item].owner = noItem
 		a.forage[p.item].active = false
@@ -1930,8 +2203,10 @@ func (a *petApp) maybeStartSocial() {
 				return
 			}
 			anchor := min(pi.x, pj.x)
-			pi.x = clamp(anchor, 0, max(0, a.sceneW-spriteW-36))
-			pj.x = clamp(pi.x+34+rand.Intn(14), 0, max(0, a.sceneW-spriteW))
+			piW, _ := a.petSpriteSize(i)
+			pjW, _ := a.petSpriteSize(j)
+			pi.x = clamp(anchor, 0, max(0, a.sceneW-piW-36))
+			pj.x = clamp(pi.x+34+rand.Intn(14), 0, max(0, a.sceneW-pjW))
 			pj.laneOffset = pi.laneOffset
 			ticks := 44 + rand.Intn(70)
 			pi.state = stateGroom
@@ -1947,7 +2222,7 @@ func (a *petApp) maybeStartSocial() {
 	}
 }
 
-func canSocialize(p *deguPet) bool {
+func canSocialize(p *desktopPet) bool {
 	return p.item == noItem && (p.state == stateIdle || p.state == stateWalk || p.state == stateNibble)
 }
 
@@ -1982,8 +2257,9 @@ func (a *petApp) drawReactions(dst *image.RGBA) {
 		if p.state == stateWheel {
 			continue
 		}
-		baseY := sceneH - spriteH - p.laneOffset
-		x := clamp(p.x+spriteW/2-18, 2, max(2, a.sceneW-42))
+		petW, petH := a.petSpriteSize(reaction.pet)
+		baseY := sceneH - petH - p.laneOffset
+		x := clamp(p.x+petW/2-18, 2, max(2, a.sceneW-42))
 		y := clamp(baseY-26-(reactionTicks-reaction.ticks)/8, 0, sceneH-32)
 		drawReactionBubble(dst, x, y, reaction.kind, reaction.ticks)
 	}
@@ -2032,15 +2308,15 @@ func (a *petApp) createSettingsWindow() {
 
 		a.createButton(hwnd, ctrlVariantCombo, "", 360, 298, 318, 34, 0)
 		a.createButton(hwnd, ctrlNameLabels, "", 548, 344, 132, 28, 0)
-		if a.nameLabels {
-			for i := 0; i < a.petCount; i++ {
-				_, nameRect := settingsPetNameRects(i)
-				a.createButton(hwnd, ctrlPetNameBase+int32(i), "", nameRect.Left, nameRect.Top, nameRect.Right-nameRect.Left, nameRect.Bottom-nameRect.Top, 0)
-				if a.coatMode == coatSelected {
-					_, buttonRect := settingsPetVariantRects(i)
-					a.createButton(hwnd, ctrlPetVariantBase+int32(i), "", buttonRect.Left, buttonRect.Top, buttonRect.Right-buttonRect.Left, buttonRect.Bottom-buttonRect.Top, 0)
-				}
+		for i := 0; i < a.petCount; i++ {
+			_, nameRect := settingsPetNameRects(i)
+			a.createButton(hwnd, ctrlPetNameBase+int32(i), "", nameRect.Left, nameRect.Top, nameRect.Right-nameRect.Left, nameRect.Bottom-nameRect.Top, 0)
+			if a.coatMode == coatSelected {
+				_, buttonRect := settingsPetVariantRects(i)
+				a.createButton(hwnd, ctrlPetVariantBase+int32(i), "", buttonRect.Left, buttonRect.Top, buttonRect.Right-buttonRect.Left, buttonRect.Bottom-buttonRect.Top, 0)
 			}
+			sizeRect := settingsPetSizeRect(i)
+			a.createButton(hwnd, ctrlPetSizeBase+int32(i), "", sizeRect.Left, sizeRect.Top, sizeRect.Right-sizeRect.Left, sizeRect.Bottom-sizeRect.Top, 0)
 		}
 	} else if a.settingsTab == tabMotion {
 		a.createButton(hwnd, ctrlModeKeyboard, a.txt("modeKeyboard"), 250, 164, 210, 32, win.WS_GROUP)
@@ -2137,7 +2413,7 @@ func (a *petApp) paintSettingsWindow(hwnd win.HWND) {
 	if a.settingsTab == tabAnimals {
 		drawRoundFill(hdc, win.RECT{Left: 238, Top: 142, Right: 708, Bottom: 192}, rgb(238, 242, 237), 14)
 		drawRoundFill(hdc, win.RECT{Left: 238, Top: 238, Right: 708, Bottom: 292}, rgb(238, 242, 237), 14)
-		drawRoundFill(hdc, win.RECT{Left: 238, Top: 338, Right: 708, Bottom: 502}, rgb(238, 242, 237), 14)
+		drawRoundFill(hdc, win.RECT{Left: 238, Top: 338, Right: 708, Bottom: 562}, rgb(238, 242, 237), 14)
 	} else if a.settingsTab == tabMotion {
 		drawRoundFill(hdc, win.RECT{Left: 238, Top: 150, Right: 708, Bottom: 208}, rgb(238, 242, 237), 14)
 		drawRoundFill(hdc, win.RECT{Left: 238, Top: 256, Right: 708, Bottom: 314}, rgb(238, 242, 237), 14)
@@ -2159,12 +2435,12 @@ func (a *petApp) paintSettingsWindow(hwnd win.HWND) {
 	labelColor := rgb(50, 61, 55)
 	if a.settingsTab == tabAnimals {
 		drawTextLine(hdc, a.txt("animalSection"), win.RECT{Left: 246, Top: 116, Right: 470, Bottom: 140}, a.settingsFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
-		drawTextLine(hdc, a.txt("deguCount"), win.RECT{Left: 250, Top: 154, Right: 390, Bottom: 184}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
+		drawTextLine(hdc, a.txt("petCount"), win.RECT{Left: 250, Top: 154, Right: 390, Bottom: 184}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, fmt.Sprintf("%d", a.petCount), win.RECT{Left: 464, Top: 154, Right: 498, Bottom: 184}, a.settingsFont, rgb(25, 49, 40), win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.txt("coatMode"), win.RECT{Left: 250, Top: 214, Right: 420, Bottom: 238}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.txt("coatColor"), win.RECT{Left: 250, Top: 302, Right: 352, Bottom: 328}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.petNameSectionLabel(), win.RECT{Left: 250, Top: 344, Right: 520, Bottom: 370}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
-		if a.nameLabels {
+		if a.petCount > 0 {
 			for i := 0; i < a.petCount; i++ {
 				numberRect, _ := settingsPetNameRects(i)
 				drawTextLine(hdc, fmt.Sprintf("%d", i+1), numberRect, a.settingsSmallFont, rgb(69, 78, 72), win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
@@ -2180,7 +2456,7 @@ func (a *petApp) paintSettingsWindow(hwnd win.HWND) {
 		drawTextLine(hdc, a.localText("表示範囲", "Display scope"), win.RECT{Left: 246, Top: 126, Right: 400, Bottom: 150}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.displaySummary(), win.RECT{Left: 250, Top: 186, Right: 688, Bottom: 208}, a.settingsFont, rgb(27, 36, 32), win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX|win.DT_END_ELLIPSIS)
 
-		drawTextLine(hdc, a.localText("歩行範囲", "Walking range"), win.RECT{Left: 246, Top: 222, Right: 390, Bottom: 244}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
+		drawTextLine(hdc, a.walkRangeSectionLabel(), win.RECT{Left: 246, Top: 222, Right: 390, Bottom: 244}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.walkRangeSummary(), win.RECT{Left: 394, Top: 222, Right: 688, Bottom: 244}, a.settingsSmallFont, rgb(91, 104, 96), win.DT_RIGHT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX|win.DT_END_ELLIPSIS)
 		a.drawWalkRangePreview(hdc)
 		drawTextLine(hdc, a.localText("左端", "Left edge"), win.RECT{Left: 250, Top: 254, Right: 316, Bottom: 280}, a.settingsSmallFont, labelColor, win.DT_RIGHT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
@@ -2370,8 +2646,15 @@ func (a *petApp) drawSettingsButton(dis *win.DRAWITEMSTRUCT) bool {
 	}
 	if selectField {
 		arrowRect := win.RECT{Left: r.Right - 24, Top: r.Top, Right: r.Right - 8, Bottom: r.Bottom}
+		if id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount {
+			textRect = win.RECT{Left: r.Left + 6, Top: r.Top, Right: r.Right - 16, Bottom: r.Bottom}
+			arrowRect = win.RECT{Left: r.Right - 16, Top: r.Top, Right: r.Right - 4, Bottom: r.Bottom}
+		}
 		drawTextLine(dis.HDC, "v", arrowRect, a.settingsFont, text, win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		textRect.Right -= 24
+		if id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount {
+			textRect.Right = r.Right - 16
+		}
 	}
 
 	flags := uint32(win.DT_VCENTER | win.DT_SINGLELINE | win.DT_NOPREFIX | win.DT_END_ELLIPSIS)
@@ -2437,6 +2720,9 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 	case ctrlDisplaySpanMore:
 		return a.localText("広く", "More")
 	case ctrlRangeFull:
+		if normalizeDisplayScope(int(a.displayScope)) == displayScopeSpan {
+			return a.localText("全画面", "All")
+		}
 		return a.localText("全幅", "Full")
 	case ctrlRangeNarrow:
 		return a.localText("狭く", "Narrow")
@@ -2458,7 +2744,7 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 	case ctrlClose:
 		return a.txt("close")
 	case ctrlNameLabels:
-		return a.localText("名前を付ける", "Use names")
+		return a.localText("名前を表示", "Show names")
 	case ctrlRenameOK:
 		return a.localText("保存", "Save")
 	case ctrlRenameCancel:
@@ -2469,6 +2755,9 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 	}
 	if id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount {
 		return a.petDisplayName(int(id - ctrlPetNameBase))
+	}
+	if id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount {
+		return fmt.Sprintf("%d%%", a.petSizePercent(int(id-ctrlPetSizeBase)))
 	}
 	return ""
 }
@@ -2516,7 +2805,10 @@ func (a *petApp) settingsButtonSelected(id int32) bool {
 }
 
 func (a *petApp) settingsSelectButton(id int32) bool {
-	return id == ctrlVariantCombo || id == ctrlLanguageCombo || (id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount)
+	return id == ctrlVariantCombo ||
+		id == ctrlLanguageCombo ||
+		(id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount) ||
+		(id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount)
 }
 
 func (a *petApp) settingsSidebarButton(id int32) bool {
@@ -2541,7 +2833,8 @@ func (a *petApp) settingsButtonBackplate(id int32) settingsRGB {
 		return rgb(235, 232, 220)
 	}
 	if (id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount) ||
-		(id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount) {
+		(id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount) ||
+		(id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount) {
 		return rgb(235, 232, 220)
 	}
 	return rgb(255, 255, 251)
@@ -2628,10 +2921,130 @@ func (a *petApp) displaySummary() string {
 
 func (a *petApp) walkRangeSummary() string {
 	start, end := normalizeWalkRange(a.walkRangeStart, a.walkRangeEnd)
+	if summary := a.walkRangeSummaryForSegments(start, end, a.displaySegmentsForSummary()); summary != "" {
+		return summary
+	}
 	if start == 0 && end == 100 {
 		return a.localText("全幅 (0%-100%)", "Full width (0%-100%)")
 	}
 	return fmt.Sprintf("%d%% - %d%%", start, end)
+}
+
+func (a *petApp) walkRangeSectionLabel() string {
+	if normalizeDisplayScope(int(a.displayScope)) == displayScopeSpan {
+		return a.localText("歩く画面", "Walking displays")
+	}
+	return a.localText("歩行範囲", "Walking range")
+}
+
+func (a *petApp) displaySegmentsForSummary() []sceneSegment {
+	areas := displayAreaForScope(a.displayScope)
+	if len(areas) == 0 {
+		return nil
+	}
+	scope, start, end := a.normalizedDisplaySelection(len(areas))
+	if scope != displayScopeSpan {
+		end = start
+	}
+	selected := areas[start : end+1]
+	combined := combineDisplayAreas(selected)
+	base := combined.Work
+	if normalizeOverlayPositionMode(int(a.positionMode)) == positionScreenBottom {
+		base = combined.Screen
+	}
+	if base.Right <= base.Left {
+		return nil
+	}
+	segments := make([]sceneSegment, 0, len(selected))
+	for _, area := range selected {
+		segmentBase := area.Work
+		if normalizeOverlayPositionMode(int(a.positionMode)) == positionScreenBottom {
+			segmentBase = area.Screen
+		}
+		left := max(int(segmentBase.Left), int(base.Left))
+		right := min(int(segmentBase.Right), int(base.Right))
+		if right-left >= spriteW {
+			segments = append(segments, sceneSegment{
+				Left:  left - int(base.Left),
+				Right: right - int(base.Left),
+			})
+		}
+	}
+	return mergeSceneSegments(segments)
+}
+
+func (a *petApp) walkRangeSummaryForSegments(start, end int, segments []sceneSegment) string {
+	start, end = normalizeWalkRange(start, end)
+	segments = normalizeSceneSegments(segmentSpanWidth(segments), segments)
+	if len(segments) == 0 {
+		return ""
+	}
+	if start == 0 && end == 100 {
+		if len(segments) == 1 {
+			return a.localText("全幅", "Full width")
+		}
+		return a.localText("選択した画面ぜんぶ", "All selected displays")
+	}
+	totalLeft := segments[0].Left
+	totalRight := segments[0].Right
+	for _, segment := range segments[1:] {
+		totalLeft = min(totalLeft, segment.Left)
+		totalRight = max(totalRight, segment.Right)
+	}
+	totalW := max(1, totalRight-totalLeft)
+	walkLeft := totalLeft + totalW*start/100
+	walkRight := totalLeft + totalW*end/100
+	covered := make([]int, 0, len(segments))
+	fullCovered := true
+	for i, segment := range segments {
+		left := max(walkLeft, segment.Left)
+		right := min(walkRight, segment.Right)
+		if right-left <= 0 {
+			continue
+		}
+		covered = append(covered, i+1)
+		if left > segment.Left+2 || right < segment.Right-2 {
+			fullCovered = false
+		}
+	}
+	if len(covered) == 0 {
+		return fmt.Sprintf("%d%% - %d%%", start, end)
+	}
+	if len(segments) == 1 {
+		return a.localText("画面の一部", "Part of display")
+	}
+	if len(covered) == len(segments) && fullCovered {
+		return a.localText("選択した画面ぜんぶ", "All selected displays")
+	}
+	first := covered[0]
+	last := covered[len(covered)-1]
+	if fullCovered {
+		if first == last {
+			return fmt.Sprintf("%s%d%s", a.localText("画面", "Display "), first, a.localText("だけ", " only"))
+		}
+		return fmt.Sprintf("%s%d-%d", a.localText("画面", "Displays "), first, last)
+	}
+	if first == last {
+		if a.lang == langEnglish {
+			return fmt.Sprintf("Part of display %d", first)
+		}
+		return fmt.Sprintf("画面%dの一部", first)
+	}
+	if a.lang == langEnglish {
+		return fmt.Sprintf("Part of displays %d-%d", first, last)
+	}
+	return fmt.Sprintf("画面%d-%dの一部", first, last)
+}
+
+func segmentSpanWidth(segments []sceneSegment) int {
+	if len(segments) == 0 {
+		return 0
+	}
+	right := segments[0].Right
+	for _, segment := range segments[1:] {
+		right = max(right, segment.Right)
+	}
+	return right
 }
 
 func (a *petApp) positionSummary() string {
@@ -2650,30 +3063,33 @@ func (a *petApp) settingsCoatSelectButton(id int32) bool {
 	return id == ctrlVariantCombo || (id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount)
 }
 
-func settingsPetVariantRects(index int) (win.RECT, win.RECT) {
-	col := index / 5
-	row := index % 5
-	if col > 1 {
-		col = 1
+func settingsPetRowRects(index int) (win.RECT, win.RECT, win.RECT, win.RECT) {
+	row := index
+	if row < 0 {
+		row = 0
 	}
-	left := int32(250 + col*228)
-	top := int32(370 + row*26)
-	numberRect := win.RECT{Left: left, Top: top, Right: left + 24, Bottom: top + 26}
-	buttonRect := win.RECT{Left: left + 110, Top: top, Right: left + 224, Bottom: top + 26}
-	return numberRect, buttonRect
+	left := int32(250)
+	top := int32(372 + row*19)
+	numberRect := win.RECT{Left: left, Top: top, Right: left + 24, Bottom: top + 18}
+	nameRect := win.RECT{Left: left + 32, Top: top, Right: left + 104, Bottom: top + 18}
+	variantRect := win.RECT{Left: left + 112, Top: top, Right: left + 344, Bottom: top + 18}
+	sizeRect := win.RECT{Left: left + 350, Top: top, Right: left + 454, Bottom: top + 18}
+	return numberRect, nameRect, variantRect, sizeRect
+}
+
+func settingsPetVariantRects(index int) (win.RECT, win.RECT) {
+	numberRect, _, variantRect, _ := settingsPetRowRects(index)
+	return numberRect, variantRect
 }
 
 func settingsPetNameRects(index int) (win.RECT, win.RECT) {
-	col := index / 5
-	row := index % 5
-	if col > 1 {
-		col = 1
-	}
-	left := int32(250 + col*228)
-	top := int32(370 + row*26)
-	numberRect := win.RECT{Left: left, Top: top, Right: left + 24, Bottom: top + 26}
-	editRect := win.RECT{Left: left + 30, Top: top + 1, Right: left + 104, Bottom: top + 25}
-	return numberRect, editRect
+	numberRect, nameRect, _, _ := settingsPetRowRects(index)
+	return numberRect, nameRect
+}
+
+func settingsPetSizeRect(index int) win.RECT {
+	_, _, _, sizeRect := settingsPetRowRects(index)
+	return sizeRect
 }
 
 func (a *petApp) settingsSelectVariant(id int32) int {
@@ -2698,9 +3114,9 @@ func (a *petApp) petDisplayName(index int) string {
 
 func (a *petApp) petNameSectionLabel() string {
 	if a.coatMode == coatSelected {
-		return a.localText("名前 / 個別カラー", "Names / animals")
+		return a.localText("名前 / 動物 / サイズ", "Names / animals / size")
 	}
-	return a.localText("名前", "Names")
+	return a.localText("名前 / サイズ", "Names / size")
 }
 
 func (a *petApp) localText(ja, en string) string {
@@ -2987,6 +3403,7 @@ func (a *petApp) syncSettingsWindow() {
 	for i := 0; i < a.petCount; i++ {
 		a.syncSelectButton(ctrlPetNameBase + int32(i))
 		a.syncSelectButton(ctrlPetVariantBase + int32(i))
+		a.syncSelectButton(ctrlPetSizeBase + int32(i))
 	}
 	a.syncSelectButton(ctrlLanguageCombo)
 	win.EnableWindow(win.GetDlgItem(a.settingsHwnd, ctrlPetMinus), a.petCount > 1)
@@ -3120,10 +3537,18 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 		return true
 	}
 	if id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount {
-		if !a.nameLabels {
-			return true
-		}
 		a.showRenameDialog(int(id - ctrlPetNameBase))
+		return true
+	}
+	if id >= ctrlPetSizeBase && id < ctrlPetSizeBase+maxPetCount {
+		index := int(id - ctrlPetSizeBase)
+		sel, ok := a.pickPetSizeFromMenu(id, a.petSizePercent(index))
+		if ok {
+			a.setPetSize(index, sel)
+		}
+		a.syncSettingsWindow()
+		a.persistSettings()
+		a.render()
 		return true
 	}
 	switch id {
@@ -3157,9 +3582,11 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 		}
 	case ctrlPetMinus:
 		a.setPetCount(a.petCount - 1)
+		a.resetPosition()
 		a.recreateSettingsWindow()
 	case ctrlPetPlus:
 		a.setPetCount(a.petCount + 1)
+		a.resetPosition()
 		a.recreateSettingsWindow()
 	case ctrlModeKeyboard:
 		a.handleMenu(menuModeKeyboard)
@@ -3249,6 +3676,29 @@ func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 		return 0, false
 	}
 	return choice, true
+}
+
+func (a *petApp) pickPetSizeFromMenu(id int32, selected int) (int, bool) {
+	menu := win.CreatePopupMenu()
+	choiceID := uintptr(1)
+	for size := minPetSizePercent; size <= maxPetSizePercent; size += petSizeStepPercent {
+		flags := uint32(win.MF_STRING)
+		if size == normalizePetSizePercent(selected) {
+			flags |= win.MF_CHECKED
+		}
+		appendMenu(menu, flags, choiceID, syscall.StringToUTF16Ptr(fmt.Sprintf("%d%%", size)))
+		choiceID++
+	}
+	cmd := a.trackControlMenu(id, menu)
+	win.DestroyMenu(menu)
+	if cmd == 0 {
+		return 0, false
+	}
+	size := minPetSizePercent + (int(cmd)-1)*petSizeStepPercent
+	if size < minPetSizePercent || size > maxPetSizePercent {
+		return 0, false
+	}
+	return size, true
 }
 
 func (a *petApp) pickLanguageFromMenu(id int32) (language, bool) {
@@ -3441,9 +3891,9 @@ func (a *petApp) txt(key string) string {
 		case "settingsLead":
 			return "Taskbar companion controls"
 		case "animalPageTitle":
-			return "Animals and colors"
+			return "Animals and size"
 		case "animalPageLead":
-			return "Choose how many animals appear and how species or colors are assigned."
+			return "Set visible pets, animal assignment, names, and per-pet size."
 		case "motionPageTitle":
 			return "Motion behavior"
 		case "motionPageLead":
@@ -3460,7 +3910,7 @@ func (a *petApp) txt(key string) string {
 			return "Display"
 		case "animalSection":
 			return "Animals"
-		case "deguCount":
+		case "petCount":
 			return "Visible pets"
 		case "coatColor":
 			return "Fixed animal"
@@ -3514,9 +3964,9 @@ func (a *petApp) txt(key string) string {
 	case "settingsLead":
 		return "タスクバーで遊ぶペットの設定"
 	case "animalPageTitle":
-		return "ペットの数と種類"
+		return "ペットの数とサイズ"
 	case "animalPageLead":
-		return "ペットの数と、種類の選び方を調整します。"
+		return "ペットの数、種類の選び方、名前、1匹ごとのサイズを調整します。"
 	case "motionPageTitle":
 		return "動きかた"
 	case "motionPageLead":
@@ -3527,7 +3977,7 @@ func (a *petApp) txt(key string) string {
 		return "動き"
 	case "animalSection":
 		return "ペット"
-	case "deguCount":
+	case "petCount":
 		return "出現数"
 	case "coatColor":
 		return "決まったペット"
@@ -3597,12 +4047,12 @@ func (a *petApp) drawForageProp(dst *image.RGBA, x, y, kind int) {
 	fillCircle(dst, x, y-2, 3, rgba(170, 150, 94, 220))
 }
 
-func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *deguPet, variant coatVariant, x, y int) {
+func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *desktopPet, variant coatVariant, x, y int, w int, h int) {
 	dir := normalizeDir(p.dir)
 	if p.state == stateTurn {
 		dir = turnDrawDirection(p.dir, p.nextDir)
 	}
-	drawFacingImage(dst, src, image.Rect(x, y, x+spriteW, y+spriteH), drawDirectionForVariant(dir, variant))
+	drawFacingImage(dst, src, image.Rect(x, y, x+w, y+h), drawDirectionForVariant(dir, variant))
 }
 
 func turnDrawDirection(dir, nextDir int) int {
@@ -3653,7 +4103,7 @@ func drawFacingImage(dst *image.RGBA, src *image.RGBA, r image.Rectangle, dir in
 	}
 }
 
-func (a *petApp) enterWheelFromTyping(p *deguPet) {
+func (a *petApp) enterWheelFromTyping(index int, p *desktopPet) {
 	alreadyRunning := p.state == stateWheel
 	p.state = stateWheel
 	if !alreadyRunning {
@@ -3664,10 +4114,11 @@ func (a *petApp) enterWheelFromTyping(p *deguPet) {
 	p.carryKind = noItem
 	p.moveSpeed = 0
 	p.stateTicks = wheelKeyHold
-	p.x = clamp(a.wheelX-wheelSize/2, 0, max(0, a.sceneW-spriteW))
+	w, _ := a.petSpriteSize(index)
+	p.x = clamp(a.wheelX-wheelSize/2, 0, max(0, a.sceneW-w))
 }
 
-func (a *petApp) leaveWheel(p *deguPet) {
+func (a *petApp) leaveWheel(index int, p *desktopPet) {
 	p.state = stateScurry
 	p.frame = 0
 	p.motionSet = rand.Intn(motionSets)
@@ -3675,7 +4126,8 @@ func (a *petApp) leaveWheel(p *deguPet) {
 	p.nextDir = 1
 	p.moveSpeed = a.speed + 1 + rand.Intn(2)
 	p.stateTicks = 16 + rand.Intn(20)
-	p.x = clamp(a.wheelX+wheelSize/2-20, 0, max(0, a.sceneW-spriteW))
+	w, _ := a.petSpriteSize(index)
+	p.x = clamp(a.wheelX+wheelSize/2-20, 0, max(0, a.sceneW-w))
 }
 
 type spriteCache struct {
@@ -4268,7 +4720,7 @@ func (a *petApp) showTrayMenu() {
 	appendChecked(countMenu, menuCount3, "3", a.petCount == 3)
 	appendChecked(countMenu, menuCount5, "5", a.petCount == 5)
 	appendChecked(countMenu, menuCount10, "10", a.petCount == 10)
-	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(countMenu), syscall.StringToUTF16Ptr(a.txt("deguCount")))
+	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(countMenu), syscall.StringToUTF16Ptr(a.txt("petCount")))
 
 	appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
@@ -4342,19 +4794,24 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 		a.speed = 5
 	case id == menuCount1:
 		a.setPetCount(1)
+		a.resetPosition()
 	case id == menuCount2:
 		a.setPetCount(2)
+		a.resetPosition()
 	case id == menuCount3:
 		a.setPetCount(3)
+		a.resetPosition()
 	case id == menuCount5:
 		a.setPetCount(5)
+		a.resetPosition()
 	case id == menuCount10:
 		a.setPetCount(10)
+		a.resetPosition()
 	case id == menuWheelToggle:
 		a.wheelEnabled = !a.wheelEnabled
 		for i := range a.pets {
 			if a.pets[i].state == stateWheel {
-				a.leaveWheel(&a.pets[i])
+				a.leaveWheel(i, &a.pets[i])
 			}
 		}
 	case id == menuCoatFixed:

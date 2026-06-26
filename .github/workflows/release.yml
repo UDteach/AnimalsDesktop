@@ -22,7 +22,7 @@ jobs:
           go run ./cmd/importanimals
           go run ./cmd/validatemotion -runtime-only -require-accepted
       - name: Test
-        run: go test -buildvcs=false ./cmd/degu
+        run: go test -buildvcs=false ./cmd/animalsdesktop
       - name: Build macOS ZIPs
         run: |
           VERSION="${{ github.ref_name }}" GOARCH=arm64 bash scripts/build_macos.sh
