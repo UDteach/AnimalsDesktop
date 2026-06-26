@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 FRAME_W = 96
 FRAME_H = 64
 ICON_SIZE = 192
-PREVIEW_W = 960
-PREVIEW_H = 520
+PREVIEW_W = 957
+PREVIEW_H = 516
 
 CURRENT_VARIANTS = [
     "chinchilla_standard_gray",
