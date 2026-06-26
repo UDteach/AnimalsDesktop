@@ -222,6 +222,7 @@ var runtimeVariantIDs = []string{
 	"macaroni_mouse_tan",
 	"sugar_glider_gray",
 	"rabbit_chestnut_agouti",
+	"gecko_gray_brown",
 }
 
 func RuntimeVariants() []Variant {

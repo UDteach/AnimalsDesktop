@@ -1,21 +1,22 @@
 # AnimalsDesktop
 
 AnimalsDesktop is a small desktop pet app for Windows and macOS. Chinchilla,
-hamster, macaroni mouse, sugar glider, and rabbit sprites walk near the Windows
-taskbar or along the bottom edge above the Mac Dock.
+hamster, macaroni mouse, sugar glider, rabbit, and gecko sprites walk near the
+Windows taskbar or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-`v0.1.3` is the first early public test release for the five accepted
-initial 62-frame ImageGen motion animals:
+`v0.1.4` is an early public test release for six accepted initial 62-frame
+ImageGen motion animals:
 
 - chinchilla standard gray
 - golden Syrian hamster
 - tan macaroni mouse
 - gray sugar glider
 - chestnut agouti rabbit
+- gray-brown gecko
 
 This is not the final DeguDesktop-level completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
@@ -23,17 +24,19 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.1.3 test release intentionally exposes only the five accepted initial
-runtime animals listed above. Unverified candidate species are not listed on the
-public page and should not appear in the runtime picker until their source art
-and motion behavior pass the release QA loop.
+The v0.1.4 test release intentionally exposes only the six accepted initial
+runtime animals listed above. Unverified candidate species are shown only as
+public-page "coming soon" silhouettes and should not appear in the runtime picker
+until their source art and motion behavior pass the release QA loop. As animals
+graduate into a release, remove them from the silhouette queue and move them into
+the current-animal page section.
 
 The typing wheel is intentionally limited to chinchilla and hamster. Other
 runtime animals continue to react to typing with movement, but do not enter the
 wheel state.
 
 Foraging props such as hay, twigs, seeds, and other small food/debris items are
-disabled in v0.1.3 so the preview shows only the animal sprites and their core
+disabled in v0.1.4 so the preview shows only the animal sprites and their core
 movement.
 
 ## Release Gate
@@ -48,9 +51,9 @@ A full animal-family release is ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
-`v0.1.3` is an explicit test-preview exception for the five initial-motion
-animals plus Mac distribution. Future full-content releases should still satisfy
-the full gate.
+`v0.1.4` is an explicit test-preview exception for the six initial-motion animals
+plus Mac distribution. Future full-content releases should still satisfy the
+full gate unless a new preview exception is documented.
 
 ## Development
 
@@ -67,22 +70,22 @@ go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./c
 git diff --check
 ```
 
-Windows release ZIPs are built on a Windows machine and uploaded to the same
-release tag as the Mac ZIPs:
+Windows release ZIPs are built on a Windows machine and can be uploaded to the
+same release tag as the Mac ZIPs when they are ready:
 
 ```powershell
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.3" -o dist\AnimalsDesktop.exe ./cmd/degu
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.4" -o dist\AnimalsDesktop.exe ./cmd/degu
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.1.3 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.1.3 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.1.4 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.1.4 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.

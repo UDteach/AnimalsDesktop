@@ -78,6 +78,7 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 		"macaroni_mouse_tan",
 		"sugar_glider_gray",
 		"rabbit_chestnut_agouti",
+		"gecko_gray_brown",
 	}
 	if got := len(runtime); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d release-scoped variants", got, len(wantIDs))

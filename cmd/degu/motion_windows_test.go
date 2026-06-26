@@ -170,13 +170,14 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 	}
 }
 
-func TestRuntimeCatalogIsReleaseScopedToFiveSmallAnimals(t *testing.T) {
+func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 	wantIDs := []string{
 		"chinchilla_standard_gray",
 		"hamster_golden_syrian",
 		"macaroni_mouse_tan",
 		"sugar_glider_gray",
 		"rabbit_chestnut_agouti",
+		"gecko_gray_brown",
 	}
 	if got := len(variants); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
@@ -546,7 +547,7 @@ func TestResetPetAtEdgeReentersFromOppositeSideWithMatchingDirection(t *testing.
 
 func TestForagePropsDisabledClearsPropsAndStopsAssignment(t *testing.T) {
 	if foragePropsEnabled {
-		t.Fatalf("foragePropsEnabled = true, want false for v0.1.3 preview")
+		t.Fatalf("foragePropsEnabled = true, want false for preview release")
 	}
 	a := &petApp{
 		sceneW: 500,

@@ -776,13 +776,16 @@
   {
     "variant": "gecko_gray_brown",
     "species": "gecko",
-    "breed_or_morph": "Gecko - gray brown",
-    "color": "Gecko - gray brown",
-    "popularity_tier": 3,
+    "breed_or_morph": "Gecko",
+    "color": "gray brown",
+    "popularity_tier": 1,
     "motion_profile": "gecko-crawl",
-    "source_status": "prototype_only",
+    "source_status": "motion_source_accepted",
     "source": "docs/art-source/gecko/gecko-source-truth.png",
     "generated_source": "assets/source/animals/generated/gecko_gray_brown-source.png",
+    "motion_source": "docs/art-source/gecko/motion-source/sheets/gecko-gray-brown-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "gecko_gray_brown",
     "source_width": 1717,
     "source_height": 916,
@@ -803,6 +806,9 @@
       "assets/sprites/gecko_gray_brown_set07.png",
       "assets/sprites/gecko_gray_brown_set08.png",
       "assets/sprites/gecko_gray_brown_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {

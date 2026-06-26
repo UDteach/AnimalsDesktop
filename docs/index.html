@@ -6,7 +6,7 @@
     <title>Animals Desktop</title>
     <meta
       name="description"
-      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎがWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
+      content="Animals Desktopは、チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎ、ヤモリがWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
     />
     <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <style>
@@ -127,6 +127,13 @@
         background: var(--leaf-dark);
       }
 
+      .button.disabled {
+        border-color: var(--line);
+        background: #eceee8;
+        color: var(--muted);
+        cursor: not-allowed;
+      }
+
       .download-note,
       .note,
       article p,
@@ -216,7 +223,7 @@
       }
 
       .current-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
       }
 
       .features {
@@ -254,6 +261,10 @@
         border-color: #7e6541;
       }
 
+      .animal-card:nth-child(6) {
+        border-color: #6f756d;
+      }
+
       .animal-card img {
         display: block;
         width: min(100%, 156px);
@@ -271,6 +282,21 @@
       .animal-card p {
         font-size: 13px;
         line-height: 1.55;
+      }
+
+      .future-art {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .future-note {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
       }
 
       code {
@@ -354,6 +380,7 @@
         <div class="navlinks">
           <a href="#download">ダウンロード</a>
           <a href="#animals">登場動物</a>
+          <a href="#upcoming">追加予定</a>
           <a href="#scope">この版について</a>
           <a href="#english">English</a>
           <a href="https://github.com/UDteach/AnimalsDesktop">GitHub</a>
@@ -364,40 +391,38 @@
         <div>
           <h1>Animals Desktop</h1>
           <p class="lead">
-            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎが、Windowsのタスクバー付近や
+            チンチラ、ハムスター、マカロニマウス、モモンガ、うさぎ、ヤモリが、Windowsのタスクバー付近や
             MacのDock付近を歩き回るデスクトップペットです。作業のそばで控えめに動きながら、
             小動物たちの歩き、待機、クリック反応を楽しめます。
           </p>
           <div id="download" class="actions">
-            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-windows-amd64.zip">
-              Windows版 Windows 10/11
-            </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-arm64.zip">
+            <span class="button disabled" aria-disabled="true">Windows版 Windows 10/11 準備中</span>
+            <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.4/AnimalsDesktop-macos-arm64.zip">
               Mac版 Apple Silicon macOS 12+
             </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.3/AnimalsDesktop-macos-amd64.zip">
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.1.4/AnimalsDesktop-macos-amd64.zip">
               Mac版 Intel macOS 12+
             </a>
           </div>
           <p class="download-note">
-            v0.1.3は、5種類の小動物と基本モーションを試せるプレビュー版です。Windows版はZIPを展開して
+            v0.1.4は、6種類の小動物と基本モーションを試せる先行お試し版です。Windows版はZIPを展開して
             <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
             <code>AnimalsDesktop.app</code> を起動してください。
           </p>
           <div class="release-meta" aria-label="Build information">
-            <span>先行お試し版 <strong data-release-version>v0.1.3</strong></span>
-            <span>Windows版 <strong>v0.1.3</strong></span>
-            <span>Mac版 <strong>v0.1.3</strong></span>
-            <span>小動物 <strong>5種</strong></span>
+            <span>先行お試し版 <strong data-release-version>v0.1.4</strong></span>
+            <span>Windows版 <strong>v0.1.4準備中</strong></span>
+            <span>Mac版 <strong>v0.1.4</strong></span>
+            <span>小動物 <strong>6種</strong></span>
             <span>内容 <strong>基本モーション入り</strong></span>
-            <span>更新日 <strong data-build-date>2026-06-25</strong></span>
+            <span>更新日 <strong data-build-date>2026-06-26</strong></span>
           </div>
         </div>
 
         <div class="preview-wrap">
-          <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with five animals above a desktop taskbar" />
+          <img class="preview" src="assets/animalsdesktop-preview.png" alt="Animals Desktop preview with six animals above a desktop taskbar" />
           <div class="note">
-            まずは5種類の小動物と基本的な動きを試せるプレビュー版です。
+            まずは6種類の小動物と基本的な動きを試せる先行お試し版です。
             これからも、見た目と動きが整った動物から順番に追加していきます。
           </div>
         </div>
@@ -407,7 +432,7 @@
         <div class="section-head">
           <div>
             <h2 id="animals-heading">登場する動物</h2>
-            <p>現在選べる動物は以下の5種類です。まずはこの5種類から遊べます。</p>
+            <p>現在選べる動物は以下の6種類です。まずはこの6種類から遊べます。</p>
           </div>
         </div>
         <div class="current-grid">
@@ -446,7 +471,25 @@
               <p>チェスナットアグーチのうさぎです。長い耳と、ぴょんと跳ねる姿が画面の端でよく映えます。</p>
             </div>
           </article>
+          <article class="animal-card">
+            <img src="assets/animal-icons/current-gecko_gray_brown.png" alt="ヤモリのアイコン" />
+            <div>
+              <h3>ヤモリ</h3>
+              <p>灰褐色のヤモリです。低い姿勢、細い尾、ゆっくりしたクロールの動きが特徴です。</p>
+            </div>
+          </article>
         </div>
+      </section>
+
+      <section id="upcoming" aria-labelledby="upcoming-heading">
+        <div class="section-head">
+          <div>
+            <h2 id="upcoming-heading">これから追加予定</h2>
+            <p>モルモット、ファンシーラット、アルビノシマリス、リチャードソンジリスを優先して制作します。</p>
+          </div>
+        </div>
+        <img class="future-art" src="assets/animalsdesktop-coming-soon-silhouettes.png" alt="これから追加予定の動物シルエット" />
+        <p class="future-note">リリースに入った動物は、この予定枠から順番に外して登場動物へ移します。</p>
       </section>
 
       <section aria-labelledby="features-heading">
@@ -474,7 +517,7 @@
           </article>
           <article>
             <h3>シンプルな表示</h3>
-            <p>v0.1.3では木、種、餌などの追加アイテムは表示せず、動物本体のしぐさを中心に楽しめます。</p>
+            <p>v0.1.4では木、種、餌などの追加アイテムは表示せず、動物本体のしぐさを中心に楽しめます。</p>
           </article>
           <article>
             <h3>Windows / Mac対応</h3>
@@ -488,7 +531,7 @@
           <div>
             <h2 id="scope-heading">この版について</h2>
             <p>
-              v0.1.3は、5種類の小動物を先に試せるプレビュー版です。
+              v0.1.4は、6種類の小動物を先に試せるプレビュー版です。
               今後も、見た目と動きが整った動物から順番に追加します。
               木、種、餌などの追加アイテムはこの版では表示しません。
             </p>
@@ -500,9 +543,9 @@
         <h2>English</h2>
         <p>
           Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, macaroni mouse,
-          sugar glider, and rabbit sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
-          Version v0.1.3 is an early public test release for the first five initial-motion animals. The Windows build
-          now shares the same release tag as the Mac builds. Runtime foraging props are disabled in this preview.
+          sugar glider, rabbit, and gecko sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
+          Version v0.1.4 is an early public test release for six initial-motion animals. The Windows build target
+          shares the same release tag as the Mac builds, and the Windows ZIP is prepared on a Windows machine. Runtime foraging props are disabled in this preview.
         </p>
       </section>
     </main>

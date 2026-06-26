@@ -1,6 +1,6 @@
 # AnimalsDesktop Motion Contract
 
-Last updated: 2026-06-21
+Last updated: 2026-06-26
 
 This file is the acceptance standard for promoting one animal family from seed/prototype art to accepted AnimalsDesktop motion art. The goal is to keep DeguDesktop compatibility while letting each species move like itself.
 
@@ -73,7 +73,19 @@ This means the next content release should finish a concrete slice such as `chin
 
 `v0.1.3` is a preview-release exception approved for five accepted initial-motion runtime animals plus Mac distribution. It may ship with chinchilla, hamster, macaroni mouse, sugar glider, and rabbit visible in runtime while the full 10-set DeguDesktop-level gate remains open. The release page must label this as a preview and must not claim full animal-family completion.
 
-After `v0.1.3`, future full-content releases should return to the full release gate above unless a new preview exception is documented here.
+### v0.1.4 Preview Exception
+
+`v0.1.4` is a preview-release exception approved for adding the accepted gecko
+set00 motion source to the runtime preview. It may ship with chinchilla,
+hamster, macaroni mouse, sugar glider, rabbit, and gecko visible in runtime while
+the full 10-set DeguDesktop-level gate remains open. The release page must label
+this as a preview and must not claim full animal-family completion.
+
+Public coming-soon silhouettes are release-managed: when an animal graduates into
+a release, remove it from the planned silhouette/list and move it into the
+current-animal section. For `v0.1.4`, gecko is removed from the future queue.
+
+After `v0.1.4`, future full-content releases should return to the full release gate above unless a new preview exception is documented here.
 
 ## One-Animal Version Routine
 
