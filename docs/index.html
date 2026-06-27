@@ -217,12 +217,14 @@
       }
 
       .current-grid,
+      .future-grid,
       .features {
         display: grid;
         gap: 16px;
       }
 
-      .current-grid {
+      .current-grid,
+      .future-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
         align-items: stretch;
       }
@@ -314,6 +316,48 @@
         line-height: 1.55;
       }
 
+      .future-card {
+        display: grid;
+        min-width: 0;
+        grid-template-rows: 130px auto;
+        padding: 12px 10px 14px;
+        border-top: 3px solid var(--slate);
+        background: rgba(255, 253, 247, 0.72);
+      }
+
+      .future-card:nth-child(2) {
+        border-color: var(--gold);
+      }
+
+      .future-card:nth-child(3) {
+        border-color: var(--rust);
+      }
+
+      .future-card:nth-child(4) {
+        border-color: var(--leaf);
+      }
+
+      .future-card img {
+        display: block;
+        width: 100%;
+        max-width: 190px;
+        height: 120px;
+        object-fit: contain;
+        margin: 0 auto 8px;
+      }
+
+      .future-card h3 {
+        margin: 0 0 5px;
+        font-size: 16px;
+      }
+
+      .future-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
       .future-art {
         display: block;
         width: 100%;
@@ -339,6 +383,7 @@
       @media (max-width: 900px) {
         header,
         .features,
+        .future-grid,
         .current-grid {
           grid-template-columns: 1fr;
         }
@@ -358,7 +403,8 @@
           padding-bottom: 12px;
         }
 
-        .animal-card {
+        .animal-card,
+        .future-card {
           display: grid;
           grid-template-columns: 124px minmax(0, 1fr);
           grid-template-rows: auto;
@@ -366,7 +412,8 @@
           align-items: center;
         }
 
-        .animal-card img {
+        .animal-card img,
+        .future-card img {
           margin: 0;
           width: 124px;
           height: 124px;
@@ -397,11 +444,13 @@
           min-width: 0;
         }
 
-        .animal-card {
+        .animal-card,
+        .future-card {
           grid-template-columns: 96px minmax(0, 1fr);
         }
 
-        .animal-card img {
+        .animal-card img,
+        .future-card img {
           width: 96px;
           height: 96px;
         }
@@ -593,11 +642,93 @@
           <div>
             <h2 id="upcoming-heading">これから追加予定</h2>
             <p>
-              次の制作候補として、通常色のシマリスを準備します。
+              近日リリース候補と、次に作る鳥類候補をページ専用のシルエットで並べています。
+              セキセイインコ、オカメインコ、文鳥は次の生成波で優先します。
             </p>
           </div>
         </div>
-        <p class="future-note">公開用のシルエットは、ページ専用の生成画像が用意できたタイミングで追加します。</p>
+        <div class="future-grid">
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/leopard_gecko.png" alt="ヒョウモントカゲモドキのシルエット" />
+            <div>
+              <h3>ヒョウモントカゲモドキ</h3>
+              <p>近日リリース候補。レオパの低い姿勢と太い尾を保って仕上げます。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/whites_tree_frog.png" alt="水色イエアメガエルのシルエット" />
+            <div>
+              <h3>水色イエアメガエル</h3>
+              <p>近日リリース候補。丸い目とずんぐりした体の読みやすさを優先します。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/chipmunk.png" alt="シマリスのシルエット" />
+            <div>
+              <h3>シマリス</h3>
+              <p>近日リリース候補。通常色の縞模様が小さな表示でも伝わる形で進めます。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/budgerigar.png" alt="セキセイインコのシルエット" />
+            <div>
+              <h3>セキセイインコ</h3>
+              <p>最優先。緑黄色系から始め、青白系などの色違いも候補にします。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/cockatiel.png" alt="オカメインコのシルエット" />
+            <div>
+              <h3>オカメインコ</h3>
+              <p>最優先。冠羽と長い尾が小さくても読める形から作ります。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/java_sparrow.png" alt="文鳥のシルエット" />
+            <div>
+              <h3>文鳥</h3>
+              <p>最優先。白文鳥、桜文鳥などの色候補を分けて検討します。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/lovebird.png" alt="コザクラインコのシルエット" />
+            <div>
+              <h3>コザクラインコ</h3>
+              <p>鳥類の次候補。丸い体と短い尾の読みやすさを確認します。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/parrotlet.png" alt="マメルリハのシルエット" />
+            <div>
+              <h3>マメルリハ</h3>
+              <p>鳥類の次候補。小型インコとしてセキセイと形を分けます。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/mixed_cat.png" alt="ねこのシルエット" />
+            <div>
+              <h3>ねこ</h3>
+              <p>人気ペット候補。歩き、座り、しっぽの動きを別設計にします。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/toy_poodle.png" alt="トイプードルのシルエット" />
+            <div>
+              <h3>トイプードル</h3>
+              <p>犬種候補。丸い毛量と小型犬の歩幅が読める形を探します。</p>
+            </div>
+          </article>
+          <article class="future-card">
+            <img src="assets/upcoming-silhouettes/chihuahua.png" alt="チワワのシルエット" />
+            <div>
+              <h3>チワワ</h3>
+              <p>犬種候補。大きな耳と小さな体でヨークシャーと差を出します。</p>
+            </div>
+          </article>
+        </div>
+        <p class="future-note">
+          ここにある画像はGitHub Pages専用の仮シルエットです。runtime用の動物フレームや既存accepted sourceは流用していません。
+        </p>
       </section>
 
       <section aria-labelledby="features-heading">
@@ -640,7 +771,7 @@
             <h2 id="scope-heading">この版について</h2>
             <p>
               v0.1.5は、16種類の小動物を先に試せるプレビュー版です。
-              今後も、見た目と動きが整った動物から順番に追加します。
+              レオパ、水色イエアメガエル、通常色のシマリスなど、見た目と動きが整った動物から順番に追加します。
               木、種、餌などの追加アイテムはこの版では表示しません。
             </p>
           </div>
@@ -653,7 +784,8 @@
           Animals Desktop is a small desktop pet app for Windows and macOS. Chinchilla, hamster, Djungarian hamster,
           Campbell hamster, macaroni mouse, sugar glider, rabbit, Holland Lop, Netherland Dwarf, Himalayan rabbit,
           gecko, guinea pig, fancy rat, albino chipmunk, Richardson's ground squirrel, and Yorkshire Terrier sprites walk near the Windows taskbar or along the bottom edge above the Mac Dock.
-          Version v0.1.5 is an early public test release for sixteen initial-motion animals. The Windows build target
+          Version v0.1.5 is an early public test release for sixteen initial-motion animals. Leopard gecko,
+          blue White's tree frog, and striped chipmunk are next-release candidates. The Windows build target
           shares the same release tag as the Mac builds, and the Windows ZIP is prepared on a Windows machine. Runtime foraging props are disabled in this preview.
         </p>
       </section>

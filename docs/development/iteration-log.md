@@ -63,3 +63,18 @@
 - Accepted Himalayan rabbit after the child run reached 62 frames. It passed `oneframe_run.py review` with no issues and `auditframes -strict -artifact-warnings` with `valid=62 missing=0 invalid=0 warnings=28`; visual QA accepts it as a cream-bodied Himalayan rabbit with dark ears, nose, feet, and tail. Promoted `himalayan_rabbit` to accepted `set00` source art under `docs/art-source/himalayan-rabbit/motion-source/`, regenerated runtime sprites/page preview assets for 15 local preview animals, and moved Himalayan rabbit out of the coming-soon queue.
 - Accepted Campbell hamster after the child run reached 62 frames. It passed `oneframe_run.py review` with no issues and `auditframes -strict -artifact-warnings` with `valid=62 missing=0 invalid=0 warnings=71`; visual QA accepts it as a warm gray-brown Campbell dwarf hamster with a visible dorsal stripe. Frames `60` and `61` had a localized warm color drift, so the parent preserved originals, applied a color-only correction toward frames `56-59`, regenerated contact sheets, and reran audit before promotion. Promoted `campbell_hamster` to accepted `set00` source art under `docs/art-source/campbell-hamster/motion-source/`, regenerated runtime sprites/page preview assets for 16 local preview animals, prepared v0.1.5 page/docs/workflow checks, and moved the future queue to text-only normal striped chipmunk (`シマリス`) without reusing albino chipmunk art.
 - Added `scripts/build_page_assets.py` to rebuild page icons and the hero preview from runtime sheets. It keeps `sugar_glider_gray` right-facing for page assets only, leaving runtime sprites unchanged.
+
+## 2026-06-27
+
+- Updated the public GitHub Pages Coming Soon section with page-only silhouette
+  cards. The first cards are quick release candidates for
+  `gecko_leopard`, `whites_tree_frog_blue`, and `chipmunk_striped`; the next
+  generation wave prioritizes budgerigar, cockatiel, and Java sparrow, with
+  lovebird and parrotlet as the 4-5 thread cap fillers.
+- Kept the published v0.1.5 page scoped to sixteen current animals so the live
+  download links do not claim unreleased animals. Leopard gecko, blue White's
+  tree frog, and striped chipmunk remain local accepted `set00` candidates until
+  a follow-up release/version step updates artifacts.
+- Extended `scripts/build_page_assets.py` and both Pages workflows so upcoming
+  silhouette PNGs are generated, verified, copied into the Pages artifact, and
+  kept separate from runtime/accepted source frames.

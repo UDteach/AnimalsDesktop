@@ -61,6 +61,22 @@ jobs:
           test -f docs/assets/animal-icons/current-albino_chipmunk.png
           test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
           test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
+          test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
+          for silhouette in \
+            leopard_gecko \
+            whites_tree_frog \
+            chipmunk \
+            budgerigar \
+            cockatiel \
+            java_sparrow \
+            lovebird \
+            parrotlet \
+            mixed_cat \
+            toy_poodle \
+            chihuahua
+          do
+            test -f "docs/assets/upcoming-silhouettes/$silhouette.png"
+          done
           test -f docs/robots.txt
           for asset in \
             chinchilla_standard_gray_set00.png \
@@ -75,10 +91,13 @@ jobs:
           test -f "docs/$MOTION_PREVIEW/assets/imagegen-four-pose-candidate.png"
           mkdir -p "public-site/assets"
           mkdir -p "public-site/assets/animal-icons"
+          mkdir -p "public-site/assets/upcoming-silhouettes"
           cp docs/index.html public-site/index.html
           cp docs/robots.txt public-site/robots.txt
           cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
+          cp docs/assets/animalsdesktop-coming-soon-silhouettes.png public-site/assets/animalsdesktop-coming-soon-silhouettes.png
           cp docs/assets/animal-icons/current-*.png public-site/assets/animal-icons/
+          cp docs/assets/upcoming-silhouettes/*.png public-site/assets/upcoming-silhouettes/
           for preview in "$SPRITE_PREVIEW" "$MOTION_PREVIEW"
           do
             mkdir -p "public-site/$preview"
