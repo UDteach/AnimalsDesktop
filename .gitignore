@@ -10,6 +10,8 @@ __MACOSX/
 assets/sprites/degu_*.png
 dist/
 build/
+cmd/animalsdesktop/rsrc_windows_*.syso
+winres/icon.png
 .agents/
 .codex/
 .wrangler/

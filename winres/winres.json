@@ -1,0 +1,56 @@
+{
+  "RT_GROUP_ICON": {
+    "APP": {
+      "0000": [
+        "icon.png"
+      ]
+    }
+  },
+  "RT_MANIFEST": {
+    "#1": {
+      "0409": {
+        "identity": {
+          "name": "UDteach.AnimalsDesktop",
+          "version": "0.2.1.0"
+        },
+        "description": "Animals Desktop taskbar pet",
+        "minimum-os": "win10",
+        "execution-level": "as invoker",
+        "ui-access": false,
+        "auto-elevate": false,
+        "dpi-awareness": "system",
+        "disable-theming": false,
+        "disable-window-filtering": false,
+        "high-resolution-scrolling-aware": true,
+        "ultra-high-resolution-scrolling-aware": false,
+        "long-path-aware": true,
+        "printer-driver-isolation": false,
+        "gdi-scaling": false,
+        "segment-heap": true,
+        "use-common-controls-v6": true
+      }
+    }
+  },
+  "RT_VERSION": {
+    "#1": {
+      "0000": {
+        "fixed": {
+          "file_version": "0.2.1.0",
+          "product_version": "0.2.1.0"
+        },
+        "info": {
+          "0409": {
+            "CompanyName": "UDteach",
+            "FileDescription": "Animals Desktop - Windows taskbar pet",
+            "FileVersion": "v0.2.1",
+            "InternalName": "AnimalsDesktop",
+            "LegalCopyright": "Copyright (c) UDteach",
+            "OriginalFilename": "AnimalsDesktop.exe",
+            "ProductName": "Animals Desktop",
+            "ProductVersion": "v0.2.1"
+          }
+        }
+      }
+    }
+  }
+}

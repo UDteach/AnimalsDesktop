@@ -3,11 +3,16 @@
 package main
 
 import (
+	"archive/zip"
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"image"
 	"image/color"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/lxn/win"
@@ -662,6 +667,211 @@ func TestSelectUpdateAssetFindsWindowsZip(t *testing.T) {
 	}
 }
 
+func TestVerifyDownloadedAssetChecksSizeAndSHA256Digest(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "update.zip")
+	data := []byte("trusted update bytes")
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		t.Fatalf("write update: %v", err)
+	}
+	sum := sha256.Sum256(data)
+	asset := githubReleaseAsset{
+		Size:   int64(len(data)),
+		Digest: fmt.Sprintf("sha256:%x", sum[:]),
+	}
+	if err := verifyDownloadedAsset(path, asset); err != nil {
+		t.Fatalf("verifyDownloadedAsset() error = %v", err)
+	}
+	asset.Size++
+	if err := verifyDownloadedAsset(path, asset); err == nil {
+		t.Fatalf("verifyDownloadedAsset accepted a size mismatch")
+	}
+	asset.Size = int64(len(data))
+	asset.Digest = "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+	if err := verifyDownloadedAsset(path, asset); err == nil {
+		t.Fatalf("verifyDownloadedAsset accepted a digest mismatch")
+	}
+}
+
+func TestParseUpdateApplyArgsRequiresSafeCleanupDir(t *testing.T) {
+	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"unit-test")
+	opts, err := parseUpdateApplyArgs([]string{
+		"--source", filepath.Join(cleanupDir, "AnimalsDesktop.exe"),
+		"--target", filepath.Join(t.TempDir(), "AnimalsDesktop.exe"),
+		"--parent-pid", "1234",
+		"--cleanup-dir", cleanupDir,
+	})
+	if err != nil {
+		t.Fatalf("parseUpdateApplyArgs() error = %v", err)
+	}
+	if opts.ParentPID != 1234 || opts.CleanupDir != cleanupDir {
+		t.Fatalf("parseUpdateApplyArgs() = %+v", opts)
+	}
+	if _, err := parseUpdateApplyArgs([]string{
+		"--source", "a.exe",
+		"--target", "b.exe",
+		"--cleanup-dir", t.TempDir(),
+	}); err == nil {
+		t.Fatalf("parseUpdateApplyArgs accepted a non-update cleanup dir")
+	}
+	if _, err := parseUpdateApplyArgs([]string{
+		"--source", filepath.Join(t.TempDir(), "AnimalsDesktop.exe"),
+		"--target", filepath.Join(t.TempDir(), "AnimalsDesktop.exe"),
+		"--cleanup-dir", cleanupDir,
+	}); err == nil {
+		t.Fatalf("parseUpdateApplyArgs accepted a source outside cleanup dir")
+	}
+	if _, err := parseUpdateApplyArgs([]string{
+		"--source", filepath.Join(cleanupDir, "payload", "AnimalsDesktop.exe"),
+		"--target", filepath.Join(cleanupDir, "installed", "AnimalsDesktop.exe"),
+		"--cleanup-dir", cleanupDir,
+	}); err == nil {
+		t.Fatalf("parseUpdateApplyArgs accepted a target inside cleanup dir")
+	}
+	if _, err := parseUpdateApplyArgs([]string{
+		"--source", filepath.Join(cleanupDir, "payload", "AnimalsDesktop.exe"),
+		"--target", filepath.Join(t.TempDir(), "renamed.exe"),
+		"--cleanup-dir", cleanupDir,
+	}); err == nil {
+		t.Fatalf("parseUpdateApplyArgs accepted a renamed target")
+	}
+}
+
+func TestExtractUpdateExeUsesFixedPayloadPath(t *testing.T) {
+	tmpDir := t.TempDir()
+	zipPath := filepath.Join(tmpDir, "update.zip")
+	zipFile, err := os.Create(zipPath)
+	if err != nil {
+		t.Fatalf("create zip: %v", err)
+	}
+	zw := zip.NewWriter(zipFile)
+	w, err := zw.Create("release/nested/AnimalsDesktop.exe")
+	if err != nil {
+		t.Fatalf("create zip entry: %v", err)
+	}
+	if _, err := w.Write([]byte("exe bytes")); err != nil {
+		t.Fatalf("write zip entry: %v", err)
+	}
+	if err := zw.Close(); err != nil {
+		t.Fatalf("close zip writer: %v", err)
+	}
+	if err := zipFile.Close(); err != nil {
+		t.Fatalf("close zip file: %v", err)
+	}
+
+	exePath, err := extractUpdateExe(zipPath, tmpDir)
+	if err != nil {
+		t.Fatalf("extractUpdateExe() error = %v", err)
+	}
+	want := filepath.Join(tmpDir, "payload", "AnimalsDesktop.exe")
+	if exePath != want {
+		t.Fatalf("extractUpdateExe() = %q, want %q", exePath, want)
+	}
+	data, err := os.ReadFile(exePath)
+	if err != nil {
+		t.Fatalf("read extracted exe: %v", err)
+	}
+	if string(data) != "exe bytes" {
+		t.Fatalf("extracted data = %q", data)
+	}
+}
+
+func TestUpdaterCommandsInvokeAppExeDirectly(t *testing.T) {
+	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"command-test")
+	sourceExe := filepath.Join(cleanupDir, "payload", "AnimalsDesktop.exe")
+	targetExe := filepath.Join(t.TempDir(), "AnimalsDesktop.exe")
+	helperExe := filepath.Join(cleanupDir, "helper", "AnimalsDesktop.exe")
+
+	applyCmd := newUpdaterHelperCommand(helperExe, cleanupDir, sourceExe, targetExe, 1234)
+	assertCommandAvoidsPowerShell(t, applyCmd)
+	if !strings.EqualFold(applyCmd.Path, helperExe) {
+		t.Fatalf("apply command path = %q, want %q", applyCmd.Path, helperExe)
+	}
+	assertArgsContainInOrder(t, applyCmd.Args,
+		updaterApplyArg,
+		"--source", sourceExe,
+		"--target", targetExe,
+		"--parent-pid", "1234",
+		"--cleanup-dir", cleanupDir,
+	)
+	if applyCmd.SysProcAttr == nil || !applyCmd.SysProcAttr.HideWindow {
+		t.Fatalf("apply command should hide its helper window")
+	}
+
+	cleanupCmd := newUpdaterCleanupCommand(targetExe, cleanupDir)
+	assertCommandAvoidsPowerShell(t, cleanupCmd)
+	if !strings.EqualFold(cleanupCmd.Path, targetExe) {
+		t.Fatalf("cleanup command path = %q, want %q", cleanupCmd.Path, targetExe)
+	}
+	assertArgsContainInOrder(t, cleanupCmd.Args, updaterCleanupArg, cleanupDir)
+	if cleanupCmd.SysProcAttr == nil || !cleanupCmd.SysProcAttr.HideWindow {
+		t.Fatalf("cleanup command should hide its helper window")
+	}
+}
+
+func TestReleaseWorkflowPowerShellBlocksParseAfterGitHubSubstitution(t *testing.T) {
+	workflowPath := filepath.Join("..", "..", ".github", "workflows", "release.yml")
+	scriptByStep := map[string]string{
+		"Generate Windows assets": extractWorkflowRunBlock(t, workflowPath, "Generate Windows assets"),
+		"Build Windows":           extractWorkflowRunBlock(t, workflowPath, "Build Windows"),
+		"Package Windows":         extractWorkflowRunBlock(t, workflowPath, "Package Windows"),
+	}
+	for stepName, script := range scriptByStep {
+		t.Run(stepName, func(t *testing.T) {
+			script = strings.ReplaceAll(script, "${{ github.ref_name }}", "v0.2.1")
+			assertPowerShellParses(t, script)
+		})
+	}
+}
+
+func TestReleaseWorkflowPackageIncludesSecurityManifestAndHashes(t *testing.T) {
+	workflowPath := filepath.Join("..", "..", ".github", "workflows", "release.yml")
+	script := extractWorkflowRunBlock(t, workflowPath, "Package Windows")
+	for _, want := range []string{
+		"SECURITY.txt",
+		"SHA256SUMS.txt",
+		"AnimalsDesktop-windows-amd64.zip/AnimalsDesktop.exe",
+		"AnimalsDesktop-windows-386.zip/AnimalsDesktop.exe",
+		"Microsoft Security Intelligence",
+		"McAfee Dispute Detection & Allowlisting",
+	} {
+		if !strings.Contains(script, want) {
+			t.Fatalf("Package script does not contain %q", want)
+		}
+	}
+}
+
+func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
+	workflowPath := filepath.Join("..", "..", ".github", "workflows", "release.yml")
+	data, err := os.ReadFile(workflowPath)
+	if err != nil {
+		t.Fatalf("read workflow: %v", err)
+	}
+	workflow := string(data)
+	for _, want := range []string{
+		"go run ./cmd/validatemotion -runtime-only -require-accepted",
+		"go build -buildvcs=false",
+		"./cmd/animalsdesktop",
+		"body_path: dist/RELEASE_NOTES.md",
+		"github.ref_name == 'v0.2.1'",
+		"docs/releases/${version}.md",
+		"release-assets/**/SHA256SUMS.txt",
+	} {
+		if !strings.Contains(workflow, want) {
+			t.Fatalf("release workflow does not contain %q", want)
+		}
+	}
+}
+
+func TestUpdateCleanupDirOnlyAcceptsUpdateTempDirs(t *testing.T) {
+	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"cleanup-test")
+	if got := updateCleanupDir([]string{updaterCleanupArg, cleanupDir}); got != cleanupDir {
+		t.Fatalf("updateCleanupDir() = %q, want %q", got, cleanupDir)
+	}
+	if got := updateCleanupDir([]string{updaterCleanupArg, t.TempDir()}); got != "" {
+		t.Fatalf("updateCleanupDir accepted non-update dir %q", got)
+	}
+}
+
 func TestTurnStateUsesGeneratedTurnFrames(t *testing.T) {
 	if got := currentFrame(stateTurn, 0); got != turnStart {
 		t.Fatalf("turn frame 0 = %d, want %d", got, turnStart)
@@ -1016,5 +1226,118 @@ func TestSpriteCacheLoadsVariantOnDemand(t *testing.T) {
 	_ = cache.frame(variants[0], motionSets+99, frameCount+99)
 	if got := len(cache.loaded); got != 1 {
 		t.Fatalf("cache reloaded same variant; loaded = %d", got)
+	}
+}
+
+func assertCommandAvoidsPowerShell(t *testing.T, cmd *exec.Cmd) {
+	t.Helper()
+	joined := strings.ToLower(strings.Join(cmd.Args, " "))
+	for _, forbidden := range []string{"powershell", "pwsh", ".ps1", "executionpolicy", "bypass"} {
+		if strings.Contains(joined, forbidden) {
+			t.Fatalf("command unexpectedly contains %q: %q", forbidden, joined)
+		}
+	}
+}
+
+func assertArgsContainInOrder(t *testing.T, args []string, want ...string) {
+	t.Helper()
+	next := 0
+	for _, arg := range args {
+		if next < len(want) && arg == want[next] {
+			next++
+		}
+	}
+	if next != len(want) {
+		t.Fatalf("args %q did not contain %q in order", args, want)
+	}
+}
+
+func extractWorkflowRunBlock(t *testing.T, workflowPath, stepName string) string {
+	t.Helper()
+	data, err := os.ReadFile(workflowPath)
+	if err != nil {
+		t.Fatalf("read workflow: %v", err)
+	}
+	lines := strings.Split(string(data), "\n")
+	stepIndex := -1
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "- name: "+stepName {
+			stepIndex = i
+			break
+		}
+	}
+	if stepIndex < 0 {
+		t.Fatalf("workflow step %q was not found", stepName)
+	}
+	runIndex := -1
+	for i := stepIndex + 1; i < len(lines); i++ {
+		trimmed := strings.TrimSpace(lines[i])
+		if strings.HasPrefix(trimmed, "- name: ") {
+			break
+		}
+		if trimmed == "run: |" {
+			runIndex = i
+			break
+		}
+	}
+	if runIndex < 0 {
+		t.Fatalf("workflow step %q has no run block", stepName)
+	}
+	contentIndent := -1
+	for i := runIndex + 1; i < len(lines); i++ {
+		if strings.TrimSpace(lines[i]) == "" {
+			continue
+		}
+		contentIndent = leadingSpaces(lines[i])
+		break
+	}
+	if contentIndent < 0 {
+		t.Fatalf("workflow step %q has an empty run block", stepName)
+	}
+	var out []string
+	for i := runIndex + 1; i < len(lines); i++ {
+		line := strings.TrimRight(lines[i], "\r")
+		if strings.TrimSpace(line) != "" && leadingSpaces(line) < contentIndent {
+			break
+		}
+		if len(line) >= contentIndent {
+			line = line[contentIndent:]
+		}
+		out = append(out, line)
+	}
+	return strings.Join(out, "\n")
+}
+
+func leadingSpaces(s string) int {
+	return len(s) - len(strings.TrimLeft(s, " "))
+}
+
+func assertPowerShellParses(t *testing.T, script string) {
+	t.Helper()
+	powershell, err := exec.LookPath("powershell.exe")
+	if err != nil {
+		powershell, err = exec.LookPath("powershell")
+	}
+	if err != nil {
+		t.Skipf("PowerShell was not found: %v", err)
+	}
+	scriptPath := filepath.Join(t.TempDir(), "script-under-test.ps1")
+	if err := os.WriteFile(scriptPath, []byte(script), 0o600); err != nil {
+		t.Fatalf("write script under test: %v", err)
+	}
+	parser := `
+$script = Get-Content -LiteralPath $args[0] -Raw
+$tokens = $null
+$errors = $null
+[System.Management.Automation.Language.Parser]::ParseInput($script, [ref]$tokens, [ref]$errors) | Out-Null
+if ($errors.Count -gt 0) {
+  $errors | ForEach-Object { $_.Message }
+  exit 1
+}
+`
+	cmd := exec.Command(powershell, "-NoProfile", "-NonInteractive", "-Command", parser, scriptPath)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("PowerShell parser rejected script: %v\n%s", err, out)
 	}
 }
