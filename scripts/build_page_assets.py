@@ -32,7 +32,7 @@ UPCOMING_SOURCE = (
 )
 UPCOMING_SOURCE_COLS = 5
 UPCOMING_SOURCE_ROWS = 3
-SILHOUETTE_INK = (28, 33, 30, 235)
+SILHOUETTE_INK = (14, 18, 15, 255)
 
 CURRENT_VARIANTS = [
     "chinchilla_standard_gray",
@@ -343,6 +343,12 @@ def write_upcoming_silhouettes() -> None:
 
     out_dir = ROOT / "docs" / "assets" / "upcoming-silhouettes"
     out_dir.mkdir(parents=True, exist_ok=True)
+    expected = {f"{kind}.png" for kind in UPCOMING_SILHOUETTES}
+    for sidecar in out_dir.glob("._*.png"):
+        sidecar.unlink()
+    for stale in out_dir.glob("*.png"):
+        if stale.name not in expected:
+            stale.unlink()
     silhouettes: list[Image.Image] = []
     for i, kind in enumerate(UPCOMING_SILHOUETTES):
         cell = _crop_upcoming_source_cell(source, i)
@@ -358,12 +364,21 @@ def write_upcoming_silhouettes() -> None:
         y = (i // 4) * UPCOMING_H
         composite.alpha_composite(img, (x, y))
     composite.save(ROOT / "docs" / "assets" / "animalsdesktop-coming-soon-silhouettes.png")
+    for sidecar in out_dir.glob("._*.png"):
+        sidecar.unlink()
+
+
+def delete_appledouble_sidecars(root: Path) -> None:
+    for sidecar in root.rglob("._*"):
+        if sidecar.is_file():
+            sidecar.unlink()
 
 
 def main() -> None:
     write_icons()
     write_preview()
     write_upcoming_silhouettes()
+    delete_appledouble_sidecars(ROOT / "docs" / "assets")
     print(
         f"wrote {len(CURRENT_VARIANTS)} page icons, preview, "
         f"and {len(UPCOMING_SILHOUETTES)} upcoming silhouettes"
