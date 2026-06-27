@@ -10,8 +10,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "docs" / "index.html"
+WINDOWS_AMD64_ASSET = "AnimalsDesktop-windows-amd64.zip"
+WINDOWS_386_ASSET = "AnimalsDesktop-windows-386.zip"
 MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
+CHECKSUM_ASSET = "SHA256SUMS.txt"
 
 
 def fail(message: str) -> None:
@@ -31,31 +34,50 @@ def one(pattern: str, html: str, label: str) -> str:
     return match
 
 
+def release_tag(asset: str, html: str, label: str) -> str:
+    return one(
+        rf'releases/download/(v[0-9][^"/]*)/{re.escape(asset)}',
+        html,
+        label,
+    )
+
+
 def main() -> None:
     html = INDEX.read_text(encoding="utf-8")
 
-    for term in [
-        "AnimalsDesktop-windows",
-        "releases/download/v0.2.0",
-        "SHA256SUMS.txt",
-    ]:
-        if term in html:
-            fail(f"blocked public Windows v0.2.0 release link remains: {term}")
+    if "releases/download/v0.2.0" in html:
+        fail("blocked public Windows v0.2.0 release link remains")
 
-    mac_arm64_tag = one(
-        rf'releases/download/(v[0-9][^"/]*)/{re.escape(MAC_ARM64_ASSET)}',
+    windows_tag = release_tag(WINDOWS_AMD64_ASSET, html, "Windows amd64 download version tag")
+    windows_386_tag = release_tag(WINDOWS_386_ASSET, html, "Windows 386 download version tag")
+    checksum_tag = release_tag(CHECKSUM_ASSET, html, "SHA256SUMS download version tag")
+    mac_arm64_tag = release_tag(MAC_ARM64_ASSET, html, "macOS arm64 download version tag")
+    mac_amd64_tag = release_tag(MAC_AMD64_ASSET, html, "macOS amd64 download version tag")
+
+    windows_badge = one(
+        r"<span>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
         html,
-        "macOS arm64 download version tag",
+        "visible Windows version badge",
     )
-    mac_amd64_tag = one(
-        rf'releases/download/(v[0-9][^"/]*)/{re.escape(MAC_AMD64_ASSET)}',
+    release_badge = one(
+        r"<strong data-release-version>(v[0-9][^<]*)</strong>",
         html,
-        "macOS amd64 download version tag",
+        "public release version badge",
     )
+
+    for label, got in {
+        "Windows 386 download": windows_386_tag,
+        "SHA256SUMS download": checksum_tag,
+        "Windows badge": windows_badge,
+        "release badge": release_badge,
+    }.items():
+        if got != windows_tag:
+            fail(f"{label} {got} does not match Windows amd64 tag {windows_tag}")
+
     if mac_arm64_tag != mac_amd64_tag:
         fail(f"macOS download tags differ: {mac_arm64_tag} != {mac_amd64_tag}")
 
-    print(f"Pages release links verified: macOS {mac_arm64_tag}, Windows v0.2.0 hidden")
+    print(f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}")
 
 
 if __name__ == "__main__":
