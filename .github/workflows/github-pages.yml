@@ -68,21 +68,24 @@ jobs:
           test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
           test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
           for silhouette in \
-            leopard_gecko \
-            whites_tree_frog \
             chipmunk \
+            leucistic_sugar_glider \
+            african_dormouse \
+            netherland_dwarf_himalayan \
+            american_flying_squirrel \
+            longhair_hamster_black_white \
+            djungarian_hamster_yellow \
+            djungarian_hamster_pearl_white \
+            fancy_rat_blue_hooded \
+            fancy_rat_chocolate_self \
+            fancy_rat_cream_agouti \
+            rabbit_gray \
+            whites_tree_frog \
+            leopard_gecko \
             budgerigar \
             cockatiel \
             java_sparrow \
-            lovebird \
-            parrotlet \
-            scottish_fold \
-            mixed_cat \
-            munchkin \
-            ragdoll \
-            minuet \
-            toy_poodle \
-            chihuahua
+            african_fat_tailed_gecko
           do
             test -f "docs/assets/upcoming-silhouettes/$silhouette.png"
           done

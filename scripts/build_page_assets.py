@@ -28,9 +28,9 @@ UPCOMING_SOURCE = (
     / "art-source"
     / "one-frame-method-fullrun-20260627"
     / "page-coming-soon"
-    / "coming-soon-fifteen-animals-imagegen-source.png"
+    / "coming-soon-eighteen-animals-imagegen-source.png"
 )
-UPCOMING_SOURCE_COLS = 5
+UPCOMING_SOURCE_COLS = 6
 UPCOMING_SOURCE_ROWS = 3
 SILHOUETTE_INK = (14, 18, 15, 255)
 
@@ -91,39 +91,45 @@ PREVIEW_POSES = {
 # The page-specific ImageGen source sheet was generated in this cell order.
 # Keep this separate so the public display order can follow product priority.
 UPCOMING_SOURCE_LAYOUT = [
-    "leopard_gecko",
-    "whites_tree_frog",
     "chipmunk",
+    "leucistic_sugar_glider",
+    "african_dormouse",
+    "netherland_dwarf_himalayan",
+    "american_flying_squirrel",
+    "longhair_hamster_black_white",
+    "djungarian_hamster_yellow",
+    "djungarian_hamster_pearl_white",
+    "fancy_rat_blue_hooded",
+    "fancy_rat_chocolate_self",
+    "fancy_rat_cream_agouti",
+    "rabbit_gray",
+    "whites_tree_frog",
+    "leopard_gecko",
     "budgerigar",
     "cockatiel",
     "java_sparrow",
-    "lovebird",
-    "parrotlet",
-    "scottish_fold",
-    "mixed_cat",
-    "munchkin",
-    "ragdoll",
-    "minuet",
-    "toy_poodle",
-    "chihuahua",
+    "african_fat_tailed_gecko",
 ]
 
 UPCOMING_SILHOUETTES = [
     "chipmunk",
+    "leucistic_sugar_glider",
+    "african_dormouse",
+    "netherland_dwarf_himalayan",
+    "american_flying_squirrel",
+    "longhair_hamster_black_white",
+    "djungarian_hamster_yellow",
+    "djungarian_hamster_pearl_white",
+    "fancy_rat_blue_hooded",
+    "fancy_rat_chocolate_self",
+    "fancy_rat_cream_agouti",
+    "rabbit_gray",
     "whites_tree_frog",
     "leopard_gecko",
     "budgerigar",
     "cockatiel",
     "java_sparrow",
-    "lovebird",
-    "parrotlet",
-    "scottish_fold",
-    "mixed_cat",
-    "munchkin",
-    "ragdoll",
-    "minuet",
-    "toy_poodle",
-    "chihuahua",
+    "african_fat_tailed_gecko",
 ]
 
 

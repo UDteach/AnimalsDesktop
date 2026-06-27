@@ -18,20 +18,23 @@ CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
 EXPECTED_UPCOMING = [
     "chipmunk",
+    "leucistic_sugar_glider",
+    "african_dormouse",
+    "netherland_dwarf_himalayan",
+    "american_flying_squirrel",
+    "longhair_hamster_black_white",
+    "djungarian_hamster_yellow",
+    "djungarian_hamster_pearl_white",
+    "fancy_rat_blue_hooded",
+    "fancy_rat_chocolate_self",
+    "fancy_rat_cream_agouti",
+    "rabbit_gray",
     "whites_tree_frog",
     "leopard_gecko",
     "budgerigar",
     "cockatiel",
     "java_sparrow",
-    "lovebird",
-    "parrotlet",
-    "scottish_fold",
-    "mixed_cat",
-    "munchkin",
-    "ragdoll",
-    "minuet",
-    "toy_poodle",
-    "chihuahua",
+    "african_fat_tailed_gecko",
 ]
 
 

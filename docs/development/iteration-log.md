@@ -148,3 +148,14 @@
   `VERSION=v0.2.2` ZIP builds. The motion validator remains `release_ready=false`
   for all runtime animals because this is a one-set preview, not the full
   10-set release gate.
+- Reprioritized the GitHub Pages Coming Soon queue from the parent takeover
+  thread. The first wave now favors シマリス, リューシスティックモモンガ,
+  アフリカヤマネ, ネザーランドドワーフ（ヒマラヤン）, アメリカモモンガ,
+  hamster / Djungarian color variants, fancy rat coat variants, and グレーうさぎ
+  before the earlier frog / gecko / bird candidates. Reptile morph expansion is
+  tracked as lower priority.
+- Rebuilt Coming Soon silhouettes from a new page-specific 18-animal ImageGen
+  source sheet at
+  `docs/art-source/one-frame-method-fullrun-20260627/page-coming-soon/coming-soon-eighteen-animals-imagegen-source.png`.
+  `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, and both
+  Pages workflows now verify the 18-card order.
