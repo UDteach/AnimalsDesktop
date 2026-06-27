@@ -10,7 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "docs" / "index.html"
-WINDOWS_ASSET = "AnimalsDesktop-windows-amd64.zip"
+MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
+MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 
 
 def fail(message: str) -> None:
@@ -33,33 +34,28 @@ def one(pattern: str, html: str, label: str) -> str:
 def main() -> None:
     html = INDEX.read_text(encoding="utf-8")
 
-    if "Windows版 Windows 10/11" not in html:
-        fail("missing Windows download label")
-    if WINDOWS_ASSET not in html:
-        fail(f"missing {WINDOWS_ASSET}")
+    for term in [
+        "AnimalsDesktop-windows",
+        "releases/download/v0.2.0",
+        "SHA256SUMS.txt",
+    ]:
+        if term in html:
+            fail(f"blocked public Windows v0.2.0 release link remains: {term}")
 
-    windows_tag = one(
-        rf'releases/download/(v[0-9][^"/]*)/{re.escape(WINDOWS_ASSET)}',
+    mac_arm64_tag = one(
+        rf'releases/download/(v[0-9][^"/]*)/{re.escape(MAC_ARM64_ASSET)}',
         html,
-        "Windows download version tag",
+        "macOS arm64 download version tag",
     )
-    windows_badge = one(
-        r"<span>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
+    mac_amd64_tag = one(
+        rf'releases/download/(v[0-9][^"/]*)/{re.escape(MAC_AMD64_ASSET)}',
         html,
-        "visible Windows version badge",
+        "macOS amd64 download version tag",
     )
-    release_badge = one(
-        r"<strong data-release-version>(v[0-9][^<]*)</strong>",
-        html,
-        "public release version badge",
-    )
+    if mac_arm64_tag != mac_amd64_tag:
+        fail(f"macOS download tags differ: {mac_arm64_tag} != {mac_amd64_tag}")
 
-    if windows_badge != windows_tag:
-        fail(f"Windows badge {windows_badge} does not match download tag {windows_tag}")
-    if release_badge != windows_tag:
-        fail(f"release badge {release_badge} does not match Windows download tag {windows_tag}")
-
-    print(f"Windows page release verified: {windows_tag}")
+    print(f"Pages release links verified: macOS {mac_arm64_tag}, Windows v0.2.0 hidden")
 
 
 if __name__ == "__main__":
