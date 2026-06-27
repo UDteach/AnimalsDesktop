@@ -16,6 +16,23 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
+EXPECTED_UPCOMING = [
+    "chipmunk",
+    "whites_tree_frog",
+    "leopard_gecko",
+    "budgerigar",
+    "cockatiel",
+    "java_sparrow",
+    "lovebird",
+    "parrotlet",
+    "scottish_fold",
+    "mixed_cat",
+    "munchkin",
+    "ragdoll",
+    "minuet",
+    "toy_poodle",
+    "chihuahua",
+]
 
 
 def fail(message: str) -> None:
@@ -67,6 +84,27 @@ def current_page_variant_ids(html: str) -> list[str]:
     return ids
 
 
+def upcoming_page_ids(html: str) -> list[str]:
+    block = one(
+        r'<div class="future-grid">(.*?)</div>\s*</section>',
+        html,
+        "upcoming animal grid",
+    )
+    ids = re.findall(r'assets/upcoming-silhouettes/([a-z0-9_]+)\.png', block)
+    if not ids:
+        fail("upcoming animal grid has no silhouettes")
+    return ids
+
+
+def verify_asset_refs(html: str) -> None:
+    refs = sorted(set(re.findall(r'(?:src|href)="(assets/[^"]+)"', html)))
+    if not refs:
+        fail("no local asset references found")
+    missing = [ref for ref in refs if not (ROOT / "docs" / ref).exists()]
+    if missing:
+        fail(f"missing local page assets: {missing}")
+
+
 def main() -> None:
     html = INDEX.read_text(encoding="utf-8")
 
@@ -107,7 +145,16 @@ def main() -> None:
     if page_ids != runtime_ids:
         fail(f"current animal grid {page_ids} does not match runtime variants {runtime_ids}")
 
-    print(f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}, current animals {len(page_ids)}")
+    upcoming_ids = upcoming_page_ids(html)
+    if upcoming_ids != EXPECTED_UPCOMING:
+        fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
+
+    verify_asset_refs(html)
+
+    print(
+        f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}, "
+        f"current animals {len(page_ids)}, upcoming silhouettes {len(upcoming_ids)}"
+    )
 
 
 if __name__ == "__main__":
