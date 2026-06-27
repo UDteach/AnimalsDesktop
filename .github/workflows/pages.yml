@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".github/workflows/pages.yml"
+      - "docs/index.html"
+      - "docs/robots.txt"
+      - "docs/assets/**"
+      - "docs/previews/**"
+      - "scripts/verify_page_release.py"
   workflow_dispatch:
 
 permissions:
@@ -20,9 +27,7 @@ jobs:
           SPRITE_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
-          grep -q "v0.1.5" docs/index.html
-          grep -q "Windows版 Windows 10/11" docs/index.html
-          grep -q "AnimalsDesktop-windows-amd64.zip" docs/index.html
+          python3 scripts/verify_page_release.py
           grep -q "Mac版 Apple Silicon" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
           grep -q "この版について" docs/index.html
@@ -90,6 +95,11 @@ jobs:
           mkdir -p "public-site/assets"
           mkdir -p "public-site/assets/animal-icons"
           mkdir -p "public-site/assets/upcoming-silhouettes"
+          if find docs -name '._*' -print -quit | grep -q .; then
+            echo "AppleDouble sidecars must not be published from docs/." >&2
+            find docs -name '._*' -print >&2
+            exit 1
+          fi
           cp docs/index.html public-site/index.html
           cp docs/robots.txt public-site/robots.txt
           cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
@@ -102,6 +112,11 @@ jobs:
             cp "docs/$preview/index.html" "public-site/$preview/index.html"
             cp -R "docs/$preview/assets" "public-site/$preview/assets"
           done
+          if find public-site -name '._*' -print -quit | grep -q .; then
+            echo "AppleDouble sidecars must not be included in the Pages artifact." >&2
+            find public-site -name '._*' -print >&2
+            exit 1
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: animalsdesktop-site

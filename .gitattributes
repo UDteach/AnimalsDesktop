@@ -1,5 +1,12 @@
 * text=auto
 
+.DS_Store export-ignore
+._* export-ignore
+**/.DS_Store export-ignore
+**/._* export-ignore
+.AppleDouble/ export-ignore
+__MACOSX/ export-ignore
+
 *.go text eol=lf
 *.html text eol=lf
 *.json text eol=lf
