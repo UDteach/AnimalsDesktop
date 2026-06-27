@@ -152,6 +152,7 @@ const (
 	menuInstallUpdate uint16 = 151
 	menuLangJapanese  uint16 = 160
 	menuLangEnglish   uint16 = 161
+	menuHideToggle    uint16 = 170
 	menuVariantBase   uint16 = 200
 )
 
@@ -368,6 +369,7 @@ type petApp struct {
 	displaySpanEnd     int
 	walkRangeStart     int
 	walkRangeEnd       int
+	overlayHidden      bool
 	settingsHwnd       win.HWND
 	settingsTab        settingsTab
 	lang               language
@@ -1038,6 +1040,9 @@ func (a *petApp) chooseRandomAction(p *desktopPet) {
 }
 
 func (a *petApp) render() {
+	if a.overlayHidden {
+		return
+	}
 	overlay := a.overlayRect()
 	a.syncScene(overlay)
 	canvas := image.NewRGBA(image.Rect(0, 0, a.sceneW, sceneH))
@@ -1189,6 +1194,9 @@ func (a *petApp) onTyping() {
 }
 
 func (a *petApp) onMouseClick(screenX, screenY int) {
+	if a.overlayHidden {
+		return
+	}
 	index := a.petAtScreenPoint(screenX, screenY)
 	if index < 0 {
 		return
@@ -1244,6 +1252,11 @@ func scenePointInPet(p desktopPet, sceneX, sceneY int, w int, h int) bool {
 }
 
 func (a *petApp) updateHoverName() {
+	if a.overlayHidden {
+		a.hoverPet = -1
+		a.hideNameWindow()
+		return
+	}
 	if !a.nameLabels {
 		a.hoverPet = -1
 		a.hideNameWindow()
@@ -1312,6 +1325,33 @@ func (a *petApp) hideNameWindow() {
 	if a.nameHwnd != 0 {
 		win.ShowWindow(a.nameHwnd, win.SW_HIDE)
 	}
+}
+
+func (a *petApp) temporaryVisibilityLabel() string {
+	if a.overlayHidden {
+		return a.localText("表示する", "Show")
+	}
+	return a.localText("一時的に非表示", "Hide temporarily")
+}
+
+func (a *petApp) setOverlayHidden(hidden bool) {
+	a.overlayHidden = hidden
+	if hidden {
+		a.hideNameWindow()
+	}
+	a.applyOverlayVisibility()
+}
+
+func (a *petApp) applyOverlayVisibility() {
+	if a.hwnd == 0 {
+		return
+	}
+	if a.overlayHidden {
+		win.ShowWindow(a.hwnd, win.SW_HIDE)
+		return
+	}
+	win.ShowWindow(a.hwnd, win.SW_SHOWNOACTIVATE)
+	a.render()
 }
 
 func (a *petApp) nameWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
@@ -4955,6 +4995,7 @@ func (a *petApp) showTrayMenu() {
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(countMenu), syscall.StringToUTF16Ptr(a.txt("petCount")))
 
 	appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
+	appendMenu(menu, win.MF_STRING, uintptr(menuHideToggle), syscall.StringToUTF16Ptr(a.temporaryVisibilityLabel()))
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 	languageMenu := win.CreatePopupMenu()
 	appendChecked(languageMenu, menuLangJapanese, "日本語", a.lang == langJapanese)
@@ -4994,6 +5035,9 @@ func appendChecked(menu win.HMENU, id uint16, label string, checked bool) {
 
 func (a *petApp) handleMenu(id uint16) {
 	if !a.handleMenuCommand(id) {
+		return
+	}
+	if id == menuHideToggle {
 		return
 	}
 	a.syncSettingsWindow()
@@ -5051,6 +5095,8 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 				a.leaveWheel(i, &a.pets[i])
 			}
 		}
+	case id == menuHideToggle:
+		a.setOverlayHidden(!a.overlayHidden)
 	case id == menuCoatFixed:
 		a.setCoatMode(coatFixed)
 	case id == menuCoatSelected:

@@ -410,6 +410,42 @@ func TestTrayMenuLanguageCommandPersistsSelection(t *testing.T) {
 	}
 }
 
+func TestTrayMenuTemporaryHideCommandDoesNotPersist(t *testing.T) {
+	configRoot := t.TempDir()
+	t.Setenv("APPDATA", configRoot)
+
+	a := &petApp{lang: langJapanese}
+	if got := a.temporaryVisibilityLabel(); got != "一時的に非表示" {
+		t.Fatalf("visible temporary label = %q, want hide label", got)
+	}
+
+	a.handleMenu(menuHideToggle)
+	if !a.overlayHidden {
+		t.Fatalf("temporary hide menu command should hide overlay")
+	}
+	if got := a.temporaryVisibilityLabel(); got != "表示する" {
+		t.Fatalf("hidden temporary label = %q, want show label", got)
+	}
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	if _, err := os.Stat(path); err == nil {
+		t.Fatalf("temporary hide command should not persist settings")
+	} else if !os.IsNotExist(err) {
+		t.Fatalf("checking settings file after temporary hide: %v", err)
+	}
+
+	a.lang = langEnglish
+	if got := a.temporaryVisibilityLabel(); got != "Show" {
+		t.Fatalf("hidden English temporary label = %q, want Show", got)
+	}
+	a.handleMenu(menuHideToggle)
+	if a.overlayHidden {
+		t.Fatalf("second temporary hide menu command should show overlay")
+	}
+	if got := a.temporaryVisibilityLabel(); got != "Hide temporarily" {
+		t.Fatalf("visible English temporary label = %q, want Hide temporarily", got)
+	}
+}
+
 func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)

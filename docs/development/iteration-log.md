@@ -159,3 +159,11 @@
   `docs/art-source/one-frame-method-fullrun-20260627/page-coming-soon/coming-soon-eighteen-animals-imagegen-source.png`.
   `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, and both
   Pages workflows now verify the 18-card order.
+- Added a Windows tray-menu temporary visibility toggle for `v0.2.2` follow-up
+  testing. The right-click menu now offers `Hide temporarily` / `Show` (and the
+  Japanese equivalents), hides only the transparent pet overlay, suppresses
+  hover names and click reactions while hidden, and deliberately does not
+  persist the hidden state to `settings.json`. Verified
+  `go test -buildvcs=false ./cmd/animalsdesktop`, `go test -buildvcs=false
+  ./...`, `git diff --check`, and a local Windows GUI build launched from
+  `dist/AnimalsDesktop.exe` with `main.appVersion=v0.2.2`.
