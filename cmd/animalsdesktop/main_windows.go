@@ -4010,7 +4010,7 @@ func (a *petApp) txt(key string) string {
 	case "coatNote":
 		return "「ランダム」では、完成済みのペットから1匹ごとに選ばれます。正式リリースまでは完成したペットだけを表示します。"
 	case "language":
-		return "表示言語"
+		return "Language"
 	case "mode":
 		return "モード"
 	case "modeKeyboard":

@@ -344,6 +344,9 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 	}
 
 	a.lang = langJapanese
+	if got := a.txt("language"); got != "Language" {
+		t.Fatalf("Japanese language label = %q, want Language", got)
+	}
 	if got := a.settingsButtonLabel(ctrlLanguageCombo); got == "English" || got == "" {
 		t.Fatalf("Japanese language button should be a non-English label, got %q", got)
 	}
