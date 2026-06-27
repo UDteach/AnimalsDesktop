@@ -172,3 +172,8 @@
   and `manifest.json`. The exporter uses connected-component extraction instead
   of equal grid cells so animals remain complete even when the ImageGen sheet
   is not a strict grid.
+- Checked current ranking sources and recorded the implementation priority
+  evidence in `docs/development/popularity-priority-sources-20260627.md`. Bird
+  production keeps the user's explicit order of budgerigar, cockatiel, and Java
+  sparrow before later lovebird/parrotlet work; cat and dog queues are recorded
+  as breed-specific candidates for later lanes.
