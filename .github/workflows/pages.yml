@@ -65,7 +65,11 @@ jobs:
             java_sparrow \
             lovebird \
             parrotlet \
+            scottish_fold \
             mixed_cat \
+            munchkin \
+            ragdoll \
+            minuet \
             toy_poodle \
             chihuahua
           do

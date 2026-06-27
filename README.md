@@ -11,7 +11,7 @@ Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 ## Current Status
 
-`v0.1.5` is an early public test release prep for sixteen accepted initial
+`v0.1.5` is an early public test release for sixteen accepted initial
 62-frame ImageGen motion animals:
 
 - chinchilla standard gray
@@ -37,12 +37,24 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.1.5 preview prep intentionally exposes only the sixteen accepted initial
+The v0.1.5 preview intentionally exposes only the sixteen accepted initial
 runtime animals listed above. Unverified candidate species should not appear in
 the runtime picker until their source art and motion behavior pass the release QA
 loop. As animals graduate into a release, remove them from the future queue and
 move them into the current-animal page section. Coming-soon silhouettes should be
 page-specific generated art, not repurposed runtime/prototype images.
+
+Future queue candidates use current popular-pet signals, then get verified per
+animal before production starts. The current page queue starts with leopard
+gecko, blue White's tree frog, and striped chipmunk, then prioritizes
+budgerigar, cockatiel, and Java sparrow. The cat-breed page queue follows
+Anicom Sompo's 2026 cat breed ranking top five: Scottish Fold, mixed cat,
+Munchkin, Ragdoll, and Minuet. Re-check ranking sources before starting a cat
+runtime lane.
+
+Each animal promoted into the current runtime/page list should move the preview
+version forward by a small patch bump, with page text, workflow checks, and
+download artifacts kept in sync for that version.
 
 The typing wheel is intentionally limited to chinchilla and hamster. Other
 runtime animals continue to react to typing with movement, but do not enter the
@@ -64,8 +76,8 @@ A full animal-family release is ready only when it has:
 - updated public page
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
-`v0.1.5` is an explicit test-preview exception prep for the sixteen
-initial-motion animals plus Mac distribution. Future full-content releases should
+`v0.1.5` is an explicit test-preview exception for the sixteen initial-motion
+animals plus Mac distribution. Future full-content releases should
 still satisfy the full gate unless a new preview exception is documented.
 
 ## Development
