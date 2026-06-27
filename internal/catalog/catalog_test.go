@@ -11,11 +11,11 @@ import (
 )
 
 func TestCatalogInvariants(t *testing.T) {
-	if len(Variants) != 106 {
-		t.Fatalf("variants = %d, want exactly 106", len(Variants))
+	if len(Variants) != 109 {
+		t.Fatalf("variants = %d, want exactly 109", len(Variants))
 	}
-	if got := len(SeedVariants()); got != 95 {
-		t.Fatalf("seed variants = %d, want 95", got)
+	if got := len(SeedVariants()); got != 98 {
+		t.Fatalf("seed variants = %d, want 98", got)
 	}
 	if got := len(DeguVariantIDs()); got != 11 {
 		t.Fatalf("degu variants = %d, want 11", got)
@@ -266,6 +266,7 @@ func TestMotionProfilesCoverCatalog(t *testing.T) {
 		MotionProfileSnakeSlither:       true,
 		MotionProfileDragonPlod:         true,
 		MotionProfileFrogHop:            true,
+		MotionProfileBirdHop:            true,
 	}
 	for _, variant := range Variants {
 		if !known[MotionProfileForVariant(variant)] {
