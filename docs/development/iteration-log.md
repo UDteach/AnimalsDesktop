@@ -112,3 +112,18 @@
   menu and the settings Motion tab. Local installed app
   `/Users/kyota/Applications/AnimalsDesktop.app` was checked and is still the
   published `v0.2.1` arm64 build until explicitly replaced.
+- Strengthened macOS release QA for `v0.2.2`: Darwin tests now require the
+  exact 16 release-scoped runtime animals, exercise every animal through fixed
+  and per-pet selection, and verify every visible size step from 70% through
+  120%. `scripts/verify_page_release.py` now also checks that the Pages current
+  animal grid matches `catalog.RuntimeVariants()` exactly.
+- Prepared the `v0.2.2` release docs and Pages copy for the Mac parity release.
+  This release keeps leopard gecko, blue White's tree frog, and normal striped
+  chipmunk in Coming Soon until their runtime assets are promoted in a later
+  animal-addition lane. Verified `go run ./cmd/importanimals`,
+  `python3 scripts/verify_page_release.py`, `go run ./cmd/validatemotion
+  -runtime-only -require-accepted`, `go test -buildvcs=false ./...`,
+  `go vet -buildvcs=false ./...`, `git diff --check`, and macOS arm64/amd64
+  `VERSION=v0.2.2` ZIP builds. The motion validator remains `release_ready=false`
+  for all runtime animals because this is a one-set preview, not the full
+  10-set release gate.

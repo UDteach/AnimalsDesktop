@@ -103,17 +103,86 @@ func TestDarwinRandomPauseAvoidsWeakNibbleFrames(t *testing.T) {
 }
 
 func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
+	wantIDs := []string{
+		"chinchilla_standard_gray",
+		"hamster_golden_syrian",
+		"djungarian_hamster",
+		"campbell_hamster",
+		"macaroni_mouse_tan",
+		"sugar_glider_gray",
+		"rabbit_chestnut_agouti",
+		"holland_lop_broken_orange",
+		"netherland_dwarf_chestnut",
+		"himalayan_rabbit",
+		"gecko_gray_brown",
+		"guinea_pig_tricolor",
+		"fancy_rat_hooded",
+		"albino_chipmunk",
+		"richardsons_ground_squirrel",
+		"yorkshire_terrier_longcoat",
+	}
 	runtimeVariants := catalog.RuntimeVariants()
-	if len(runtimeVariants) < 16 {
-		t.Fatalf("catalog runtime variants = %d, want at least 16 selectable animals", len(runtimeVariants))
+	if len(runtimeVariants) != len(wantIDs) {
+		t.Fatalf("catalog runtime variants = %d, want %d selectable animals", len(runtimeVariants), len(wantIDs))
 	}
 	if len(darwinVariants) != len(runtimeVariants) {
 		t.Fatalf("darwinVariants = %d, want catalog runtime count %d", len(darwinVariants), len(runtimeVariants))
 	}
 	for i, want := range runtimeVariants {
+		if want.ID != wantIDs[i] {
+			t.Fatalf("catalog runtime variant[%d] = %q, want release-scoped %q", i, want.ID, wantIDs[i])
+		}
 		got := darwinVariants[i]
 		if got.ID != want.ID || got.SpriteBase != want.SpriteBase || got.LabelJA != want.LabelJA || got.LabelEN != want.LabelEN {
 			t.Fatalf("darwinVariants[%d] = %+v, want catalog variant %+v", i, got, want)
+		}
+		if got.LabelJA == "" || got.LabelEN == "" {
+			t.Fatalf("darwinVariants[%d] has empty labels: %+v", i, got)
+		}
+	}
+}
+
+func TestDarwinCanSelectEveryRuntimeVariant(t *testing.T) {
+	a := &darwinPetApp{
+		sceneW:        900,
+		speed:         darwinSpeedNormal,
+		petCount:      maxPetCount,
+		coatMode:      darwinCoatFixed,
+		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
+		wheelEnabled:  true,
+	}
+	a.resetPets()
+	if len(darwinVariants) != 16 {
+		t.Fatalf("darwinVariants = %d, want 16 release-scoped selectable animals", len(darwinVariants))
+	}
+
+	for i, variant := range darwinVariants {
+		a.setCoatMode(int(darwinCoatFixed))
+		a.setFixedVariant(i)
+		if got := a.variant; got != i {
+			t.Fatalf("fixed variant index = %d, want %d", got, i)
+		}
+		for petIndex, pet := range a.pets {
+			if pet.variant != i {
+				t.Fatalf("fixed variant %q pet %d = %d, want %d", variant.ID, petIndex, pet.variant, i)
+			}
+		}
+		if got := a.variantID(a.variant); got != variant.ID {
+			t.Fatalf("fixed variant ID = %q, want %q", got, variant.ID)
+		}
+		if got := darwinVariantLabel(i, darwinLangJapanese); got == "" {
+			t.Fatalf("Japanese label for %q is empty", variant.ID)
+		}
+		if got := darwinVariantLabel(i, darwinLangEnglish); got == "" {
+			t.Fatalf("English label for %q is empty", variant.ID)
+		}
+
+		a.setCoatMode(int(darwinCoatSelected))
+		petIndex := i % maxPetCount
+		a.setSelectedVariant(petIndex, i)
+		if a.selectedCoats[petIndex] != i || a.pets[petIndex].variant != i {
+			t.Fatalf("selected variant %q pet %d = selected:%d pet:%d, want %d", variant.ID, petIndex, a.selectedCoats[petIndex], a.pets[petIndex].variant, i)
 		}
 	}
 }
@@ -398,6 +467,36 @@ func TestDarwinPetSizeAffectsBoundsAndHitTesting(t *testing.T) {
 	}
 	if wantX := a.sceneW - w; a.pets[0].x != wantX {
 		t.Fatalf("small pet x = %d, want clamped %d", a.pets[0].x, wantX)
+	}
+}
+
+func TestDarwinPetSizeSupportsEveryVisibleStep(t *testing.T) {
+	a := &darwinPetApp{
+		sceneW:   300,
+		petSizes: defaultDarwinPetSizes(),
+		pets: []darwinPet{
+			{x: 250, lane: 0, dir: 1},
+		},
+	}
+
+	lastW := 0
+	lastH := 0
+	for _, size := range []int{70, 80, 90, 100, 110, 120} {
+		a.setPetSize(0, size)
+		if got := a.petSizePercent(0); got != size {
+			t.Fatalf("pet size percent = %d, want %d", got, size)
+		}
+		w, h := a.petSpriteSize(0)
+		if wantW, wantH := frameW*size/100, frameH*size/100; w != wantW || h != wantH {
+			t.Fatalf("%d%% sprite size = %dx%d, want %dx%d", size, w, h, wantW, wantH)
+		}
+		if w <= lastW || h <= lastH {
+			t.Fatalf("%d%% sprite size = %dx%d, want larger than previous %dx%d", size, w, h, lastW, lastH)
+		}
+		if a.pets[0].x > a.sceneW-w {
+			t.Fatalf("%d%% pet x = %d, want clamped to <= %d", size, a.pets[0].x, a.sceneW-w)
+		}
+		lastW, lastH = w, h
 	}
 }
 
