@@ -162,25 +162,12 @@ func TestForageItemsStayHidden(t *testing.T) {
 	}
 }
 
-func TestRuntimeCatalogIncludesActiveAnimals(t *testing.T) {
-	wantIDs := []string{
-		"chinchilla_standard_gray",
-		"chinchilla_beige",
-		"chinchilla_ebony",
-		"chinchilla_white_mosaic",
-		"chinchilla_violet_sapphire",
-		"sugar_glider_gray",
-		"hamster_golden_syrian",
-		"rabbit_chestnut_agouti",
-		"gecko_gray_brown",
+func TestRuntimeCatalogIsReleaseScopedToChinchilla(t *testing.T) {
+	if got := len(variants); got != 1 {
+		t.Fatalf("runtime variants = %d, want 1", got)
 	}
-	if got := len(variants); got != len(wantIDs) {
-		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
-	}
-	for i, want := range wantIDs {
-		if got := variants[i].ID; got != want {
-			t.Fatalf("runtime variant %d = %q, want %q", i, got, want)
-		}
+	if got := variants[0].ID; got != "chinchilla_standard_gray" {
+		t.Fatalf("runtime variant = %q, want chinchilla_standard_gray", got)
 	}
 	for _, variant := range variants {
 		if variant.SpeciesID == "degu" {
