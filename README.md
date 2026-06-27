@@ -47,8 +47,8 @@ page-specific generated art, not repurposed runtime/prototype images.
 Future queue candidates use current popular-pet signals, then get verified per
 animal before production starts. The current page queue starts with leopard
 gecko, blue White's tree frog, and striped chipmunk, then prioritizes
-budgerigar, cockatiel, and Java sparrow. The cat-breed page queue follows
-Anicom Sompo's 2026 cat breed ranking top five: Scottish Fold, mixed cat,
+budgerigar, cockatiel, and Java sparrow. The cat-breed page queue follows the
+2026 iPet/Nyanpedia cat breed ranking top five: mixed cat, Scottish Fold,
 Munchkin, Ragdoll, and Minuet. Re-check ranking sources before starting a cat
 runtime lane.
 
