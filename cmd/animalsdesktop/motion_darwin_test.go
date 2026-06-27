@@ -186,6 +186,7 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	a.setPetName(0, "  モカ  ")
 	a.setPetName(2, "abcdefghijklmnopqrstuvwxyz")
 	a.lang = darwinLangEnglish
+	a.setDisplayID(123456789)
 
 	a.saveSettings()
 	b := &darwinPetApp{
@@ -199,8 +200,8 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 		lang:          darwinLangJapanese,
 	}
 	b.loadSettings()
-	if b.speed != darwinSpeedFast || b.petCount != 3 || b.lang != darwinLangEnglish || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 7 || b.wheelEnabled {
-		t.Fatalf("loaded settings = speed:%d count:%d lang:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 english keyboard selected variant 7 wheel:false", b.speed, b.petCount, b.lang, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
+	if b.speed != darwinSpeedFast || b.petCount != 3 || b.lang != darwinLangEnglish || b.displayID != 123456789 || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 7 || b.wheelEnabled {
+		t.Fatalf("loaded settings = speed:%d count:%d lang:%d display:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 english display 123456789 keyboard selected variant 7 wheel:false", b.speed, b.petCount, b.lang, b.displayID, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
 	}
 	if b.petSizePercent(1) != 120 || b.petSizePercent(2) != 70 {
 		t.Fatalf("loaded pet sizes = %d/%d, want 120/70", b.petSizePercent(1), b.petSizePercent(2))
@@ -231,6 +232,28 @@ func TestDarwinLanguageDefaultsAndNormalizes(t *testing.T) {
 	a.lang = darwinLangEnglish
 	if got := a.petDisplayName(2); got != "Animal 3" {
 		t.Fatalf("English default display name = %q, want Animal 3", got)
+	}
+}
+
+func TestDarwinDisplayIDDefaultsAndNormalizes(t *testing.T) {
+	if got := normalizeDarwinDisplayID(-1); got != 0 {
+		t.Fatalf("normalizeDarwinDisplayID(-1) = %d, want 0", got)
+	}
+	if got := normalizeDarwinDisplayID(0); got != 0 {
+		t.Fatalf("normalizeDarwinDisplayID(0) = %d, want 0", got)
+	}
+	if got := normalizeDarwinDisplayID(42); got != 42 {
+		t.Fatalf("normalizeDarwinDisplayID(42) = %d, want 42", got)
+	}
+
+	a := &darwinPetApp{}
+	a.setDisplayID(-10)
+	if a.displayID != 0 {
+		t.Fatalf("negative display id = %d, want 0", a.displayID)
+	}
+	a.setDisplayID(98765)
+	if a.displayID != 98765 {
+		t.Fatalf("display id = %d, want 98765", a.displayID)
 	}
 }
 

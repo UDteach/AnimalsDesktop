@@ -9,6 +9,7 @@ extern void goAnimalsDesktopSetPetCount(int count);
 extern void goAnimalsDesktopSetWheelEnabled(int enabled);
 extern void goAnimalsDesktopSetMode(int mode);
 extern void goAnimalsDesktopSetLanguage(int language);
+extern void goAnimalsDesktopSetDisplayID(long long displayID);
 extern void goAnimalsDesktopSetCoatMode(int mode);
 extern void goAnimalsDesktopSetVariant(int variant);
 extern void goAnimalsDesktopSetSelectedCoat(int index, int variant);
@@ -22,6 +23,7 @@ extern int goAnimalsDesktopGetPetCount(void);
 extern int goAnimalsDesktopGetWheelEnabled(void);
 extern int goAnimalsDesktopGetMode(void);
 extern int goAnimalsDesktopGetLanguage(void);
+extern long long goAnimalsDesktopGetDisplayID(void);
 extern int goAnimalsDesktopGetCoatMode(void);
 extern int goAnimalsDesktopGetVariant(void);
 extern int goAnimalsDesktopGetSelectedCoat(int index);
@@ -47,6 +49,7 @@ enum {
 	AnimalsMenuCoatRandom = 1503,
 	AnimalsMenuModeKeyboard = 1601,
 	AnimalsMenuModeRandom = 1602,
+	AnimalsMenuDisplayBase = 1700,
 	AnimalsMenuVariantBase = 2000,
 };
 
@@ -70,6 +73,32 @@ static NSString *AnimalsPetSizeLabel(NSInteger percent) {
 	return [NSString stringWithFormat:@"%ld%%", (long)percent];
 }
 
+static long long AnimalsScreenID(NSScreen *screen) {
+	NSNumber *number = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
+	return number != nil ? [number longLongValue] : 0;
+}
+
+static NSScreen *AnimalsScreenForDisplayID(long long displayID) {
+	NSArray *screens = [NSScreen screens];
+	if ([screens count] == 0) {
+		return [NSScreen mainScreen];
+	}
+	if (displayID > 0) {
+		for (NSScreen *screen in screens) {
+			if (AnimalsScreenID(screen) == displayID) {
+				return screen;
+			}
+		}
+	}
+	NSScreen *main = [NSScreen mainScreen];
+	return main != nil ? main : [screens objectAtIndex:0];
+}
+
+static long long AnimalsActiveDisplayID(void) {
+	long long displayID = goAnimalsDesktopGetDisplayID();
+	return AnimalsScreenID(AnimalsScreenForDisplayID(displayID));
+}
+
 static NSString *AnimalsText(NSString *key) {
 	BOOL english = goAnimalsDesktopGetLanguage() == 1;
 	NSDictionary *ja = @{
@@ -82,6 +111,7 @@ static NSString *AnimalsText(NSString *key) {
 		@"petCountUnit": @"匹",
 		@"keyboardReaction": @"キーボード反応",
 		@"language": @"Language",
+		@"display": @"表示先ディスプレイ",
 		@"quit": @"終了",
 		@"settingsTitle": @"Animals Desktop 設定",
 		@"support": @"対応OS: macOS 12 Monterey 以降 / Intel・Apple Silicon",
@@ -118,6 +148,7 @@ static NSString *AnimalsText(NSString *key) {
 		@"petCountUnit": @" pets",
 		@"keyboardReaction": @"Keyboard reaction",
 		@"language": @"Language",
+		@"display": @"Display",
 		@"quit": @"Quit",
 		@"settingsTitle": @"Animals Desktop Settings",
 		@"support": @"Supported OS: macOS 12 Monterey or later / Intel and Apple Silicon",
@@ -146,6 +177,20 @@ static NSString *AnimalsText(NSString *key) {
 	};
 	NSString *value = (english ? [en objectForKey:key] : [ja objectForKey:key]);
 	return value != nil ? value : key;
+}
+
+static NSString *AnimalsDisplayLabel(NSInteger index, NSScreen *screen) {
+	NSRect visible = [screen visibleFrame];
+	BOOL english = goAnimalsDesktopGetLanguage() == 1;
+	NSString *base = english
+		? [NSString stringWithFormat:@"Display %ld", (long)index + 1]
+		: [NSString stringWithFormat:@"ディスプレイ %ld", (long)index + 1];
+	if (screen == [NSScreen mainScreen]) {
+		base = english
+			? [base stringByAppendingString:@" (Main)"]
+			: [base stringByAppendingString:@" (メイン)"];
+	}
+	return [NSString stringWithFormat:@"%@ %.0fx%.0f", base, visible.size.width, visible.size.height];
 }
 
 @interface AnimalsView : NSView
@@ -229,6 +274,7 @@ static NSString *AnimalsText(NSString *key) {
 @property(nonatomic, retain) NSWindow *settingsWindow;
 @property(nonatomic, retain) NSPopUpButton *countPopup;
 @property(nonatomic, retain) NSPopUpButton *languagePopup;
+@property(nonatomic, retain) NSPopUpButton *displayPopup;
 @property(nonatomic, retain) NSPopUpButton *modePopup;
 @property(nonatomic, retain) NSPopUpButton *speedPopup;
 @property(nonatomic, retain) NSPopUpButton *coatModePopup;
@@ -259,7 +305,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-	NSScreen *screen = [NSScreen mainScreen];
+	NSScreen *screen = AnimalsScreenForDisplayID(goAnimalsDesktopGetDisplayID());
 	NSRect visible = [screen visibleFrame];
 	CGFloat width = visible.size.width;
 	if (width < 320.0) {
@@ -287,6 +333,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self.window setContentView:self.view];
 	[self.window orderFrontRegardless];
 	goAnimalsDesktopSetSceneWidth((int)width);
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID(screen));
 
 	self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	if (self.statusIcon != nil) {
@@ -324,6 +371,10 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	                                                               handler:^(NSEvent *event) {
 		[self updateHoverFromMouseLocation:[NSEvent mouseLocation]];
 	}];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(screenParametersChanged:)
+	                                             name:NSApplicationDidChangeScreenParametersNotification
+	                                           object:nil];
 }
 
 - (void)installStatusMenu {
@@ -345,6 +396,17 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	NSMenuItem *languageRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"language") action:nil keyEquivalent:@""] autorelease];
 	[languageRoot setSubmenu:languageMenu];
 	[menu addItem:languageRoot];
+
+	NSMenu *displayMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"display")] autorelease];
+	[displayMenu setDelegate:self];
+	NSArray *screens = [NSScreen screens];
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		NSScreen *screen = [screens objectAtIndex:i];
+		[displayMenu addItem:[self menuItemWithTitle:AnimalsDisplayLabel(i, screen) action:@selector(setDisplayFromMenu:) tag:AnimalsMenuDisplayBase + i]];
+	}
+	NSMenuItem *displayRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"display") action:nil keyEquivalent:@""] autorelease];
+	[displayRoot setSubmenu:displayMenu];
+	[menu addItem:displayRoot];
 
 	NSMenu *variantMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"fixedAnimal")] autorelease];
 	[variantMenu setDelegate:self];
@@ -418,6 +480,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		[NSEvent removeMonitor:self.mouseMoveMonitor];
 		self.mouseMoveMonitor = nil;
 	}
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.timer invalidate];
 }
 
@@ -444,11 +507,12 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	if (self.statusItem == nil || self.statusItem.menu == nil) {
 		return;
 	}
-	[self refreshMenuState:self.statusItem.menu speed:goAnimalsDesktopGetSpeed() count:goAnimalsDesktopGetPetCount() wheelEnabled:goAnimalsDesktopGetWheelEnabled() language:goAnimalsDesktopGetLanguage() coatMode:goAnimalsDesktopGetCoatMode() variant:goAnimalsDesktopGetVariant() mode:goAnimalsDesktopGetMode()];
+	[self refreshMenuState:self.statusItem.menu speed:goAnimalsDesktopGetSpeed() count:goAnimalsDesktopGetPetCount() wheelEnabled:goAnimalsDesktopGetWheelEnabled() language:goAnimalsDesktopGetLanguage() displayID:AnimalsActiveDisplayID() coatMode:goAnimalsDesktopGetCoatMode() variant:goAnimalsDesktopGetVariant() mode:goAnimalsDesktopGetMode()];
 	[self refreshSettingsControls];
 }
 
-- (void)refreshMenuState:(NSMenu *)menu speed:(int)speed count:(int)count wheelEnabled:(int)wheelEnabled language:(int)language coatMode:(int)coatMode variant:(int)variant mode:(int)mode {
+- (void)refreshMenuState:(NSMenu *)menu speed:(int)speed count:(int)count wheelEnabled:(int)wheelEnabled language:(int)language displayID:(long long)displayID coatMode:(int)coatMode variant:(int)variant mode:(int)mode {
+	NSArray *screens = [NSScreen screens];
 	for (NSMenuItem *item in [menu itemArray]) {
 		NSInteger tag = [item tag];
 		if (tag == AnimalsMenuSpeedSlow || tag == AnimalsMenuSpeedNormal || tag == AnimalsMenuSpeedFast) {
@@ -468,6 +532,9 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 			[item setState:(language == 0) ? NSControlStateValueOn : NSControlStateValueOff];
 		} else if (tag == AnimalsMenuLanguageEN) {
 			[item setState:(language == 1) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag >= AnimalsMenuDisplayBase && tag < AnimalsMenuDisplayBase + [screens count]) {
+			NSScreen *screen = [screens objectAtIndex:(tag - AnimalsMenuDisplayBase)];
+			[item setState:(AnimalsScreenID(screen) == displayID) ? NSControlStateValueOn : NSControlStateValueOff];
 		} else if (tag == AnimalsMenuCoatFixed) {
 			[item setState:(coatMode == 0) ? NSControlStateValueOn : NSControlStateValueOff];
 		} else if (tag == AnimalsMenuCoatSelected) {
@@ -482,9 +549,46 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 			[item setState:((int)(tag - AnimalsMenuVariantBase) == variant) ? NSControlStateValueOn : NSControlStateValueOff];
 		}
 		if ([item submenu] != nil) {
-			[self refreshMenuState:[item submenu] speed:speed count:count wheelEnabled:wheelEnabled language:language coatMode:coatMode variant:variant mode:mode];
+			[self refreshMenuState:[item submenu] speed:speed count:count wheelEnabled:wheelEnabled language:language displayID:displayID coatMode:coatMode variant:variant mode:mode];
 		}
 	}
+}
+
+- (void)applyDisplaySelection {
+	if (self.window == nil) {
+		return;
+	}
+	NSScreen *screen = AnimalsScreenForDisplayID(goAnimalsDesktopGetDisplayID());
+	long long displayID = AnimalsScreenID(screen);
+	if (displayID != goAnimalsDesktopGetDisplayID()) {
+		goAnimalsDesktopSetDisplayID(displayID);
+	}
+	NSRect visible = [screen visibleFrame];
+	CGFloat width = visible.size.width;
+	if (width < 320.0) {
+		width = 320.0;
+	}
+	NSRect frame = NSMakeRect(visible.origin.x, visible.origin.y, width, self.sceneHeight);
+	[self.window setFrame:frame display:YES];
+	[self.view setFrame:NSMakeRect(0, 0, width, self.sceneHeight)];
+	goAnimalsDesktopSetSceneWidth((int)width);
+	[self updateHoverFromMouseLocation:[NSEvent mouseLocation]];
+}
+
+- (void)screenParametersChanged:(NSNotification *)notification {
+	(void)notification;
+	[self applyDisplaySelection];
+	[self installStatusMenu];
+	if (self.settingsWindow != nil) {
+		BOOL visible = [self.settingsWindow isVisible];
+		[self.settingsWindow close];
+		self.settingsWindow = nil;
+		if (visible) {
+			[self ensureSettingsWindow];
+			[self.settingsWindow makeKeyAndOrderFront:nil];
+		}
+	}
+	[self refreshMenuState];
 }
 
 - (void)setLanguage:(id)sender {
@@ -497,6 +601,18 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		[self ensureSettingsWindow];
 		[self.settingsWindow makeKeyAndOrderFront:nil];
 	}
+	[self refreshMenuState];
+}
+
+- (void)setDisplayFromMenu:(id)sender {
+	NSInteger screenIndex = [sender tag] - AnimalsMenuDisplayBase;
+	NSArray *screens = [NSScreen screens];
+	if (screenIndex < 0 || screenIndex >= [screens count]) {
+		return;
+	}
+	NSScreen *screen = [screens objectAtIndex:screenIndex];
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID(screen));
+	[self applyDisplaySelection];
 	[self refreshMenuState];
 }
 
@@ -742,7 +858,13 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	}
 	[motionView addSubview:self.speedPopup];
 
+	[motionView addSubview:[self labelWithTitle:AnimalsText(@"display") frame:NSMakeRect(22, 256, 120, 24)]];
+	self.displayPopup = [self popupWithFrame:NSMakeRect(150, 252, 260, 28) action:@selector(settingsDisplayChanged:)];
+	[self populateDisplayPopup:self.displayPopup];
+	[motionView addSubview:self.displayPopup];
+
 	self.wheelCheckbox = [[[NSButton alloc] initWithFrame:NSMakeRect(150, 248, 260, 28)] autorelease];
+	[self.wheelCheckbox setFrame:NSMakeRect(150, 206, 260, 28)];
 	[self.wheelCheckbox setButtonType:NSButtonTypeSwitch];
 	[self.wheelCheckbox setTitle:AnimalsText(@"typingWheel")];
 	[self.wheelCheckbox setTarget:self];
@@ -817,6 +939,15 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	}
 }
 
+- (void)populateDisplayPopup:(NSPopUpButton *)popup {
+	[popup removeAllItems];
+	NSArray *screens = [NSScreen screens];
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		NSScreen *screen = [screens objectAtIndex:i];
+		[popup addItemWithTitle:AnimalsDisplayLabel(i, screen)];
+	}
+}
+
 - (void)refreshSettingsControls {
 	if (self.settingsWindow == nil) {
 		return;
@@ -829,6 +960,21 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self.modePopup selectItemAtIndex:goAnimalsDesktopGetMode()];
 	NSInteger speed = goAnimalsDesktopGetSpeed();
 	[self.speedPopup selectItemAtIndex:(speed == 2 ? 0 : (speed == 5 ? 2 : 1))];
+	NSArray *screens = [NSScreen screens];
+	long long displayID = AnimalsActiveDisplayID();
+	NSInteger selectedDisplayIndex = 0;
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		if (AnimalsScreenID([screens objectAtIndex:i]) == displayID) {
+			selectedDisplayIndex = i;
+			break;
+		}
+	}
+	if ([self.displayPopup numberOfItems] != [screens count]) {
+		[self populateDisplayPopup:self.displayPopup];
+	}
+	if ([self.displayPopup numberOfItems] > 0) {
+		[self.displayPopup selectItemAtIndex:MAX(0, MIN([self.displayPopup numberOfItems] - 1, selectedDisplayIndex))];
+	}
 	[self.wheelCheckbox setState:goAnimalsDesktopGetWheelEnabled() ? NSControlStateValueOn : NSControlStateValueOff];
 	for (NSInteger i = 0; i < [self.selectedCoatPopups count]; i++) {
 		NSPopUpButton *popup = [self.selectedCoatPopups objectAtIndex:i];
@@ -899,6 +1045,17 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	NSInteger index = [sender indexOfSelectedItem];
 	int values[] = {2, 3, 5};
 	goAnimalsDesktopSetSpeed(values[index]);
+	[self refreshMenuState];
+}
+
+- (void)settingsDisplayChanged:(id)sender {
+	NSArray *screens = [NSScreen screens];
+	NSInteger index = [sender indexOfSelectedItem];
+	if (index < 0 || index >= [screens count]) {
+		return;
+	}
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID([screens objectAtIndex:index]));
+	[self applyDisplaySelection];
 	[self refreshMenuState];
 }
 

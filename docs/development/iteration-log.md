@@ -106,3 +106,9 @@
   runtime catalog, added fixed/selected/random animal menus in the status item,
   added per-pet size controls, and corrected the macOS bundle identifier to
   `com.udteach.animalsdesktop`.
+- Added first-pass macOS multi-monitor support. The Mac overlay now persists a
+  display ID, starts on the saved screen when it is available, falls back to the
+  main screen when it is not, and exposes the display selector in both the status
+  menu and the settings Motion tab. Local installed app
+  `/Users/kyota/Applications/AnimalsDesktop.app` was checked and is still the
+  published `v0.2.1` arm64 build until explicitly replaced.

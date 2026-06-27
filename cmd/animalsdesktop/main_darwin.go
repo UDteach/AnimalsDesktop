@@ -126,6 +126,7 @@ type darwinPetApp struct {
 	speed         int
 	petCount      int
 	lang          darwinLanguage
+	displayID     int64
 	mode          darwinBehaviorMode
 	coatMode      darwinCoatMode
 	variant       int
@@ -164,6 +165,7 @@ type darwinSettings struct {
 	SelectedCoats []int    `json:"selectedCoats,omitempty"`
 	Speed         int      `json:"speed"`
 	Language      int      `json:"language,omitempty"`
+	DisplayID     int64    `json:"displayID,omitempty"`
 	Mode          *int     `json:"mode,omitempty"`
 	PetSizes      []int    `json:"petSizes,omitempty"`
 	PetCount      int      `json:"petCount"`
@@ -317,6 +319,17 @@ func goAnimalsDesktopSetLanguage(lang C.int) {
 	darwinApp.mu.Unlock()
 }
 
+//export goAnimalsDesktopSetDisplayID
+func goAnimalsDesktopSetDisplayID(displayID C.longlong) {
+	if darwinApp == nil {
+		return
+	}
+	darwinApp.mu.Lock()
+	darwinApp.setDisplayID(int64(displayID))
+	darwinApp.saveSettings()
+	darwinApp.mu.Unlock()
+}
+
 //export goAnimalsDesktopSetCoatMode
 func goAnimalsDesktopSetCoatMode(mode C.int) {
 	if darwinApp == nil {
@@ -461,6 +474,16 @@ func goAnimalsDesktopGetLanguage() C.int {
 	darwinApp.mu.Lock()
 	defer darwinApp.mu.Unlock()
 	return C.int(darwinApp.lang)
+}
+
+//export goAnimalsDesktopGetDisplayID
+func goAnimalsDesktopGetDisplayID() C.longlong {
+	if darwinApp == nil {
+		return C.longlong(0)
+	}
+	darwinApp.mu.Lock()
+	defer darwinApp.mu.Unlock()
+	return C.longlong(darwinApp.displayID)
 }
 
 //export goAnimalsDesktopGetCoatMode
@@ -648,6 +671,7 @@ func (a *darwinPetApp) loadSettings() {
 		a.petCount = normalizeDarwinPetCount(settings.PetCount)
 	}
 	a.lang = normalizeDarwinLanguage(settings.Language)
+	a.displayID = normalizeDarwinDisplayID(settings.DisplayID)
 	if settings.Version >= darwinSettingsVersion {
 		if settings.Variant != nil {
 			a.variant = normalizeDarwinVariant(*settings.Variant)
@@ -716,6 +740,7 @@ func (a *darwinPetApp) saveSettings() {
 		SelectedCoats: selectedCoats,
 		Speed:         normalizeDarwinSpeed(a.speed),
 		Language:      int(normalizeDarwinLanguage(int(a.lang))),
+		DisplayID:     normalizeDarwinDisplayID(a.displayID),
 		Mode:          &mode,
 		PetSizes:      petSizes,
 		PetCount:      normalizeDarwinPetCount(a.petCount),
@@ -834,6 +859,10 @@ func (a *darwinPetApp) setPetSize(index int, percent int) {
 		w, _ := a.petSpriteSize(index)
 		a.pets[index].x = clamp(a.pets[index].x, 0, max(0, a.sceneW-w))
 	}
+}
+
+func (a *darwinPetApp) setDisplayID(displayID int64) {
+	a.displayID = normalizeDarwinDisplayID(displayID)
 }
 
 func (a *darwinPetApp) petDisplayName(index int) string {
@@ -961,6 +990,13 @@ func normalizeDarwinLanguage(lang int) darwinLanguage {
 	default:
 		return darwinLangJapanese
 	}
+}
+
+func normalizeDarwinDisplayID(displayID int64) int64 {
+	if displayID < 0 {
+		return 0
+	}
+	return displayID
 }
 
 func normalizeDarwinVariant(variant int) int {
