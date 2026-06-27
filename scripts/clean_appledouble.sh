@@ -6,7 +6,8 @@ usage() {
 Usage: scripts/clean_appledouble.sh [--check] [--include-git]
 
 Deletes macOS AppleDouble sidecars (._*) and .DS_Store files from the repo.
-Delete mode includes .git so transient sidecars cannot break git commands.
+Delete mode includes the Git common directory so transient sidecars cannot
+break git commands, including when running from a linked worktree.
 Check mode scans the working tree by default; use --include-git for a full scan.
 EOF
 }
@@ -42,13 +43,22 @@ if [[ "$include_git" == "auto" ]]; then
 fi
 
 root="$(git rev-parse --show-toplevel)"
+git_common_dir="$(git rev-parse --git-common-dir)"
+case "$git_common_dir" in
+  /*) ;;
+  *) git_common_dir="$root/$git_common_dir" ;;
+esac
 tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
 if [[ "$include_git" == "yes" ]]; then
-  find "$root" \
+  scan_paths=("$root")
+  if [[ -d "$git_common_dir" ]]; then
+    scan_paths+=("$git_common_dir")
+  fi
+  find "${scan_paths[@]}" \
     \( -name '._*' -o -name '.DS_Store' \) \
     -type f \
-    -print >"$tmp"
+    -print | sort -u >"$tmp"
 else
   find "$root" \
     \( -path "$root/.git" -o -path "$root/.git/*" \) -prune \

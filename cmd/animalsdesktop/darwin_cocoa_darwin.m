@@ -8,21 +8,28 @@ extern void goAnimalsDesktopSetSpeed(int speed);
 extern void goAnimalsDesktopSetPetCount(int count);
 extern void goAnimalsDesktopSetWheelEnabled(int enabled);
 extern void goAnimalsDesktopSetMode(int mode);
+extern void goAnimalsDesktopSetLanguage(int language);
+extern void goAnimalsDesktopSetDisplayID(long long displayID);
 extern void goAnimalsDesktopSetCoatMode(int mode);
 extern void goAnimalsDesktopSetVariant(int variant);
 extern void goAnimalsDesktopSetSelectedCoat(int index, int variant);
 extern void goAnimalsDesktopSetNameLabels(int enabled);
 extern void goAnimalsDesktopSetPetName(int index, char *value);
+extern void goAnimalsDesktopSetPetSize(int index, int percent);
 extern int goAnimalsDesktopClick(int x, int y);
 extern int goAnimalsDesktopPetAt(int x, int y);
 extern int goAnimalsDesktopGetSpeed(void);
 extern int goAnimalsDesktopGetPetCount(void);
 extern int goAnimalsDesktopGetWheelEnabled(void);
 extern int goAnimalsDesktopGetMode(void);
+extern int goAnimalsDesktopGetLanguage(void);
+extern long long goAnimalsDesktopGetDisplayID(void);
 extern int goAnimalsDesktopGetCoatMode(void);
 extern int goAnimalsDesktopGetVariant(void);
 extern int goAnimalsDesktopGetSelectedCoat(int index);
 extern int goAnimalsDesktopGetVariantCount(void);
+extern int goAnimalsDesktopCopyVariantLabel(int index, char *buffer, int length);
+extern int goAnimalsDesktopGetPetSize(int index);
 extern int goAnimalsDesktopGetNameLabels(void);
 extern int goAnimalsDesktopCopyPetName(int index, char *buffer, int length);
 extern int goAnimalsDesktopGetPetDrawX(int index);
@@ -35,19 +42,156 @@ enum {
 	AnimalsMenuSpeedFast = 1105,
 	AnimalsMenuCountBase = 1200,
 	AnimalsMenuWheelEnabled = 1301,
-};
-
-static NSString *AnimalsVariantLabels[] = {
-	@"チンチラ",
-	@"ハムスター",
-	@"マカロニマウス",
-	@"モモンガ",
-	@"うさぎ",
+	AnimalsMenuLanguageJA = 1401,
+	AnimalsMenuLanguageEN = 1402,
+	AnimalsMenuCoatFixed = 1501,
+	AnimalsMenuCoatSelected = 1502,
+	AnimalsMenuCoatRandom = 1503,
+	AnimalsMenuModeKeyboard = 1601,
+	AnimalsMenuModeRandom = 1602,
+	AnimalsMenuDisplayBase = 1700,
+	AnimalsMenuVariantBase = 2000,
 };
 
 static const NSInteger AnimalsMaxPetCount = 10;
-static const NSInteger AnimalsVariantLabelCount = sizeof(AnimalsVariantLabels) / sizeof(AnimalsVariantLabels[0]);
 static const CGFloat AnimalsSpriteWidth = 96.0;
+static const NSInteger AnimalsMinPetSize = 70;
+static const NSInteger AnimalsMaxPetSize = 120;
+static const NSInteger AnimalsPetSizeStep = 10;
+
+static NSString *AnimalsVariantLabel(NSInteger index) {
+	char buffer[256] = {0};
+	int copied = goAnimalsDesktopCopyVariantLabel((int)index, buffer, (int)sizeof(buffer));
+	if (copied <= 0) {
+		return [NSString stringWithFormat:@"Animal %ld", (long)index + 1];
+	}
+	NSString *label = [NSString stringWithUTF8String:buffer];
+	return label != nil ? label : [NSString stringWithFormat:@"Animal %ld", (long)index + 1];
+}
+
+static NSString *AnimalsPetSizeLabel(NSInteger percent) {
+	return [NSString stringWithFormat:@"%ld%%", (long)percent];
+}
+
+static long long AnimalsScreenID(NSScreen *screen) {
+	NSNumber *number = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
+	return number != nil ? [number longLongValue] : 0;
+}
+
+static NSScreen *AnimalsScreenForDisplayID(long long displayID) {
+	NSArray *screens = [NSScreen screens];
+	if ([screens count] == 0) {
+		return [NSScreen mainScreen];
+	}
+	if (displayID > 0) {
+		for (NSScreen *screen in screens) {
+			if (AnimalsScreenID(screen) == displayID) {
+				return screen;
+			}
+		}
+	}
+	NSScreen *main = [NSScreen mainScreen];
+	return main != nil ? main : [screens objectAtIndex:0];
+}
+
+static long long AnimalsActiveDisplayID(void) {
+	long long displayID = goAnimalsDesktopGetDisplayID();
+	return AnimalsScreenID(AnimalsScreenForDisplayID(displayID));
+}
+
+static NSString *AnimalsText(NSString *key) {
+	BOOL english = goAnimalsDesktopGetLanguage() == 1;
+	NSDictionary *ja = @{
+		@"settingsOpen": @"設定を開く...",
+		@"speed": @"速さ",
+		@"speedSlow": @"ゆっくり",
+		@"speedNormal": @"ふつう",
+		@"speedFast": @"はやい",
+		@"petCount": @"表示数",
+		@"petCountUnit": @"匹",
+		@"keyboardReaction": @"キーボード反応",
+		@"language": @"Language",
+		@"display": @"表示先ディスプレイ",
+		@"quit": @"終了",
+		@"settingsTitle": @"Animals Desktop 設定",
+		@"support": @"対応OS: macOS 12 Monterey 以降 / Intel・Apple Silicon",
+		@"tabAnimals": @"動物",
+		@"tabMotion": @"動き",
+		@"tabNames": @"名前",
+		@"visibleCount": @"出現数",
+		@"animalMode": @"動物の決め方",
+		@"coatFixed": @"固定",
+		@"coatSelected": @"1匹ずつ選ぶ",
+		@"coatRandom": @"ランダム",
+		@"fixedAnimal": @"固定する動物",
+		@"perPetAnimal": @"1匹ごとの動物",
+		@"petIndexSuffix": @"匹目",
+		@"mode": @"モード",
+		@"modeKeyboard": @"キーボード反応",
+		@"modeRandom": @"ランダム散歩",
+		@"speedLabel": @"速度",
+		@"typingWheel": @"チンチラ/ハムスター回し車",
+		@"petSize": @"サイズ",
+		@"nameLabels": @"名前を表示",
+		@"nameHint": @"ONのとき、動物にカーソルを乗せると名前が表示されます。",
+		@"defaultPetName": @"どうぶつ",
+		@"macNote": @"Mac版はメニューバー常駐です。Dockアイコンは通常表示しません。",
+		@"close": @"閉じる",
+	};
+	NSDictionary *en = @{
+		@"settingsOpen": @"Open Settings...",
+		@"speed": @"Speed",
+		@"speedSlow": @"Slow",
+		@"speedNormal": @"Normal",
+		@"speedFast": @"Fast",
+		@"petCount": @"Visible pets",
+		@"petCountUnit": @" pets",
+		@"keyboardReaction": @"Keyboard reaction",
+		@"language": @"Language",
+		@"display": @"Display",
+		@"quit": @"Quit",
+		@"settingsTitle": @"Animals Desktop Settings",
+		@"support": @"Supported OS: macOS 12 Monterey or later / Intel and Apple Silicon",
+		@"tabAnimals": @"Animals",
+		@"tabMotion": @"Motion",
+		@"tabNames": @"Names",
+		@"visibleCount": @"Visible pets",
+		@"animalMode": @"Animal selection",
+		@"coatFixed": @"Fixed",
+		@"coatSelected": @"Choose each",
+		@"coatRandom": @"Random",
+		@"fixedAnimal": @"Fixed animal",
+		@"perPetAnimal": @"Per-pet animals",
+		@"petIndexSuffix": @"",
+		@"mode": @"Mode",
+		@"modeKeyboard": @"Keyboard reaction",
+		@"modeRandom": @"Random stroll",
+		@"speedLabel": @"Speed",
+		@"typingWheel": @"Chinchilla/hamster wheel",
+		@"petSize": @"Size",
+		@"nameLabels": @"Show names",
+		@"nameHint": @"When enabled, names appear while the pointer is over an animal.",
+		@"defaultPetName": @"Animal ",
+		@"macNote": @"The Mac app stays in the menu bar and normally does not show a Dock icon.",
+		@"close": @"Close",
+	};
+	NSString *value = (english ? [en objectForKey:key] : [ja objectForKey:key]);
+	return value != nil ? value : key;
+}
+
+static NSString *AnimalsDisplayLabel(NSInteger index, NSScreen *screen) {
+	NSRect visible = [screen visibleFrame];
+	BOOL english = goAnimalsDesktopGetLanguage() == 1;
+	NSString *base = english
+		? [NSString stringWithFormat:@"Display %ld", (long)index + 1]
+		: [NSString stringWithFormat:@"ディスプレイ %ld", (long)index + 1];
+	if (screen == [NSScreen mainScreen]) {
+		base = english
+			? [base stringByAppendingString:@" (Main)"]
+			: [base stringByAppendingString:@" (メイン)"];
+	}
+	return [NSString stringWithFormat:@"%@ %.0fx%.0f", base, visible.size.width, visible.size.height];
+}
 
 @interface AnimalsView : NSView
 @property(nonatomic, retain) NSImage *image;
@@ -87,7 +231,7 @@ static const CGFloat AnimalsSpriteWidth = 96.0;
 		name = [NSString stringWithUTF8String:buffer];
 	}
 	if (name == nil || [name length] == 0) {
-		name = [NSString stringWithFormat:@"どうぶつ%ld", (long)self.hoverPet + 1];
+		name = [NSString stringWithFormat:@"%@%ld", AnimalsText(@"defaultPetName"), (long)self.hoverPet + 1];
 	}
 
 	NSMutableParagraphStyle *style = [[[NSMutableParagraphStyle alloc] init] autorelease];
@@ -105,7 +249,8 @@ static const CGFloat AnimalsSpriteWidth = 96.0;
 	CGFloat labelH = 24.0;
 	CGFloat petX = (CGFloat)goAnimalsDesktopGetPetDrawX((int)self.hoverPet);
 	CGFloat petY = (CGFloat)goAnimalsDesktopGetPetDrawY((int)self.hoverPet);
-	CGFloat x = MIN(MAX(2.0, petX + AnimalsSpriteWidth / 2.0 - labelW / 2.0), MAX(2.0, self.bounds.size.width - labelW - 2.0));
+	CGFloat petW = AnimalsSpriteWidth * (CGFloat)goAnimalsDesktopGetPetSize((int)self.hoverPet) / 100.0;
+	CGFloat x = MIN(MAX(2.0, petX + petW / 2.0 - labelW / 2.0), MAX(2.0, self.bounds.size.width - labelW - 2.0));
 	CGFloat y = MAX(0.0, petY - labelH - 4.0);
 	NSRect labelRect = NSMakeRect(x, y, labelW, labelH);
 	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:9.0 yRadius:9.0];
@@ -128,12 +273,15 @@ static const CGFloat AnimalsSpriteWidth = 96.0;
 @property(nonatomic, retain) id mouseMoveMonitor;
 @property(nonatomic, retain) NSWindow *settingsWindow;
 @property(nonatomic, retain) NSPopUpButton *countPopup;
+@property(nonatomic, retain) NSPopUpButton *languagePopup;
+@property(nonatomic, retain) NSPopUpButton *displayPopup;
 @property(nonatomic, retain) NSPopUpButton *modePopup;
 @property(nonatomic, retain) NSPopUpButton *speedPopup;
 @property(nonatomic, retain) NSPopUpButton *coatModePopup;
 @property(nonatomic, retain) NSPopUpButton *fixedCoatPopup;
 @property(nonatomic, retain) NSMutableArray *selectedCoatPopups;
 @property(nonatomic, retain) NSMutableArray *petNameFields;
+@property(nonatomic, retain) NSMutableArray *petSizePopups;
 @property(nonatomic, retain) NSButton *wheelCheckbox;
 @property(nonatomic, retain) NSButton *nameLabelsCheckbox;
 - (instancetype)initWithSceneHeight:(CGFloat)sceneHeight iconBytes:(const unsigned char *)iconBytes iconLength:(int)iconLength;
@@ -157,7 +305,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-	NSScreen *screen = [NSScreen mainScreen];
+	NSScreen *screen = AnimalsScreenForDisplayID(goAnimalsDesktopGetDisplayID());
 	NSRect visible = [screen visibleFrame];
 	CGFloat width = visible.size.width;
 	if (width < 320.0) {
@@ -185,6 +333,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self.window setContentView:self.view];
 	[self.window orderFrontRegardless];
 	goAnimalsDesktopSetSceneWidth((int)width);
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID(screen));
 
 	self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	if (self.statusIcon != nil) {
@@ -195,43 +344,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	}
 	self.statusItem.button.toolTip = @"Animals Desktop";
 
-	NSMenu *menu = [[[NSMenu alloc] initWithTitle:@"Animals Desktop"] autorelease];
-	[menu setDelegate:self];
-	NSMenuItem *title = [[[NSMenuItem alloc] initWithTitle:@"Animals Desktop" action:nil keyEquivalent:@""] autorelease];
-	[title setEnabled:NO];
-	[menu addItem:title];
-	[menu addItem:[NSMenuItem separatorItem]];
-
-	NSMenuItem *settings = [self menuItemWithTitle:@"設定を開く..." action:@selector(showSettings:) tag:AnimalsMenuSettings];
-	[menu addItem:settings];
-	[menu addItem:[NSMenuItem separatorItem]];
-
-	NSMenu *speedMenu = [[[NSMenu alloc] initWithTitle:@"速さ"] autorelease];
-	[speedMenu setDelegate:self];
-	[speedMenu addItem:[self menuItemWithTitle:@"ゆっくり" action:@selector(setSpeed:) tag:AnimalsMenuSpeedSlow]];
-	[speedMenu addItem:[self menuItemWithTitle:@"ふつう" action:@selector(setSpeed:) tag:AnimalsMenuSpeedNormal]];
-	[speedMenu addItem:[self menuItemWithTitle:@"はやい" action:@selector(setSpeed:) tag:AnimalsMenuSpeedFast]];
-	NSMenuItem *speedRoot = [[[NSMenuItem alloc] initWithTitle:@"速さ" action:nil keyEquivalent:@""] autorelease];
-	[speedRoot setSubmenu:speedMenu];
-	[menu addItem:speedRoot];
-
-	NSMenu *countMenu = [[[NSMenu alloc] initWithTitle:@"表示数"] autorelease];
-	[countMenu setDelegate:self];
-	for (NSInteger i = 1; i <= AnimalsMaxPetCount; i++) {
-		[countMenu addItem:[self menuItemWithTitle:[NSString stringWithFormat:@"%ld匹", (long)i] action:@selector(setPetCount:) tag:AnimalsMenuCountBase + i]];
-	}
-	NSMenuItem *countRoot = [[[NSMenuItem alloc] initWithTitle:@"表示数" action:nil keyEquivalent:@""] autorelease];
-	[countRoot setSubmenu:countMenu];
-	[menu addItem:countRoot];
-
-	NSMenuItem *wheel = [self menuItemWithTitle:@"キーボード反応" action:@selector(toggleWheelEnabled:) tag:AnimalsMenuWheelEnabled];
-	[menu addItem:wheel];
-	[menu addItem:[NSMenuItem separatorItem]];
-
-	NSMenuItem *quit = [[[NSMenuItem alloc] initWithTitle:@"終了" action:@selector(quit:) keyEquivalent:@"q"] autorelease];
-	[quit setTarget:self];
-	[menu addItem:quit];
-	self.statusItem.menu = menu;
+	[self installStatusMenu];
 	[self refreshMenuState];
 
 	self.timer = [NSTimer timerWithTimeInterval:0.055
@@ -258,6 +371,96 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	                                                               handler:^(NSEvent *event) {
 		[self updateHoverFromMouseLocation:[NSEvent mouseLocation]];
 	}];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(screenParametersChanged:)
+	                                             name:NSApplicationDidChangeScreenParametersNotification
+	                                           object:nil];
+}
+
+- (void)installStatusMenu {
+	NSMenu *menu = [[[NSMenu alloc] initWithTitle:@"Animals Desktop"] autorelease];
+	[menu setDelegate:self];
+	NSMenuItem *title = [[[NSMenuItem alloc] initWithTitle:@"Animals Desktop" action:nil keyEquivalent:@""] autorelease];
+	[title setEnabled:NO];
+	[menu addItem:title];
+	[menu addItem:[NSMenuItem separatorItem]];
+
+	NSMenuItem *settings = [self menuItemWithTitle:AnimalsText(@"settingsOpen") action:@selector(showSettings:) tag:AnimalsMenuSettings];
+	[menu addItem:settings];
+	[menu addItem:[NSMenuItem separatorItem]];
+
+	NSMenu *languageMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"language")] autorelease];
+	[languageMenu setDelegate:self];
+	[languageMenu addItem:[self menuItemWithTitle:@"日本語" action:@selector(setLanguage:) tag:AnimalsMenuLanguageJA]];
+	[languageMenu addItem:[self menuItemWithTitle:@"English" action:@selector(setLanguage:) tag:AnimalsMenuLanguageEN]];
+	NSMenuItem *languageRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"language") action:nil keyEquivalent:@""] autorelease];
+	[languageRoot setSubmenu:languageMenu];
+	[menu addItem:languageRoot];
+
+	NSMenu *displayMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"display")] autorelease];
+	[displayMenu setDelegate:self];
+	NSArray *screens = [NSScreen screens];
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		NSScreen *screen = [screens objectAtIndex:i];
+		[displayMenu addItem:[self menuItemWithTitle:AnimalsDisplayLabel(i, screen) action:@selector(setDisplayFromMenu:) tag:AnimalsMenuDisplayBase + i]];
+	}
+	NSMenuItem *displayRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"display") action:nil keyEquivalent:@""] autorelease];
+	[displayRoot setSubmenu:displayMenu];
+	[menu addItem:displayRoot];
+
+	NSMenu *variantMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"fixedAnimal")] autorelease];
+	[variantMenu setDelegate:self];
+	for (NSInteger i = 0; i < goAnimalsDesktopGetVariantCount(); i++) {
+		[variantMenu addItem:[self menuItemWithTitle:AnimalsVariantLabel(i) action:@selector(setVariantFromMenu:) tag:AnimalsMenuVariantBase + i]];
+	}
+	NSMenuItem *variantRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"fixedAnimal") action:nil keyEquivalent:@""] autorelease];
+	[variantRoot setSubmenu:variantMenu];
+	[menu addItem:variantRoot];
+
+	NSMenu *coatModeMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"animalMode")] autorelease];
+	[coatModeMenu setDelegate:self];
+	[coatModeMenu addItem:[self menuItemWithTitle:AnimalsText(@"coatFixed") action:@selector(setCoatModeFromMenu:) tag:AnimalsMenuCoatFixed]];
+	[coatModeMenu addItem:[self menuItemWithTitle:AnimalsText(@"coatSelected") action:@selector(setCoatModeFromMenu:) tag:AnimalsMenuCoatSelected]];
+	[coatModeMenu addItem:[self menuItemWithTitle:AnimalsText(@"coatRandom") action:@selector(setCoatModeFromMenu:) tag:AnimalsMenuCoatRandom]];
+	NSMenuItem *coatModeRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"animalMode") action:nil keyEquivalent:@""] autorelease];
+	[coatModeRoot setSubmenu:coatModeMenu];
+	[menu addItem:coatModeRoot];
+
+	NSMenu *modeMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"mode")] autorelease];
+	[modeMenu setDelegate:self];
+	[modeMenu addItem:[self menuItemWithTitle:AnimalsText(@"modeKeyboard") action:@selector(setModeFromMenu:) tag:AnimalsMenuModeKeyboard]];
+	[modeMenu addItem:[self menuItemWithTitle:AnimalsText(@"modeRandom") action:@selector(setModeFromMenu:) tag:AnimalsMenuModeRandom]];
+	NSMenuItem *modeRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"mode") action:nil keyEquivalent:@""] autorelease];
+	[modeRoot setSubmenu:modeMenu];
+	[menu addItem:modeRoot];
+
+	NSMenu *speedMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"speed")] autorelease];
+	[speedMenu setDelegate:self];
+	[speedMenu addItem:[self menuItemWithTitle:AnimalsText(@"speedSlow") action:@selector(setSpeed:) tag:AnimalsMenuSpeedSlow]];
+	[speedMenu addItem:[self menuItemWithTitle:AnimalsText(@"speedNormal") action:@selector(setSpeed:) tag:AnimalsMenuSpeedNormal]];
+	[speedMenu addItem:[self menuItemWithTitle:AnimalsText(@"speedFast") action:@selector(setSpeed:) tag:AnimalsMenuSpeedFast]];
+	NSMenuItem *speedRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"speed") action:nil keyEquivalent:@""] autorelease];
+	[speedRoot setSubmenu:speedMenu];
+	[menu addItem:speedRoot];
+
+	NSMenu *countMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"petCount")] autorelease];
+	[countMenu setDelegate:self];
+	for (NSInteger i = 1; i <= AnimalsMaxPetCount; i++) {
+		NSString *label = [NSString stringWithFormat:@"%ld%@", (long)i, AnimalsText(@"petCountUnit")];
+		[countMenu addItem:[self menuItemWithTitle:label action:@selector(setPetCount:) tag:AnimalsMenuCountBase + i]];
+	}
+	NSMenuItem *countRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"petCount") action:nil keyEquivalent:@""] autorelease];
+	[countRoot setSubmenu:countMenu];
+	[menu addItem:countRoot];
+
+	NSMenuItem *wheel = [self menuItemWithTitle:AnimalsText(@"typingWheel") action:@selector(toggleWheelEnabled:) tag:AnimalsMenuWheelEnabled];
+	[menu addItem:wheel];
+	[menu addItem:[NSMenuItem separatorItem]];
+
+	NSMenuItem *quit = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"quit") action:@selector(quit:) keyEquivalent:@"q"] autorelease];
+	[quit setTarget:self];
+	[menu addItem:quit];
+	self.statusItem.menu = menu;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification {
@@ -277,6 +480,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		[NSEvent removeMonitor:self.mouseMoveMonitor];
 		self.mouseMoveMonitor = nil;
 	}
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[self.timer invalidate];
 }
 
@@ -303,11 +507,12 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	if (self.statusItem == nil || self.statusItem.menu == nil) {
 		return;
 	}
-	[self refreshMenuState:self.statusItem.menu speed:goAnimalsDesktopGetSpeed() count:goAnimalsDesktopGetPetCount() wheelEnabled:goAnimalsDesktopGetWheelEnabled()];
+	[self refreshMenuState:self.statusItem.menu speed:goAnimalsDesktopGetSpeed() count:goAnimalsDesktopGetPetCount() wheelEnabled:goAnimalsDesktopGetWheelEnabled() language:goAnimalsDesktopGetLanguage() displayID:AnimalsActiveDisplayID() coatMode:goAnimalsDesktopGetCoatMode() variant:goAnimalsDesktopGetVariant() mode:goAnimalsDesktopGetMode()];
 	[self refreshSettingsControls];
 }
 
-- (void)refreshMenuState:(NSMenu *)menu speed:(int)speed count:(int)count wheelEnabled:(int)wheelEnabled {
+- (void)refreshMenuState:(NSMenu *)menu speed:(int)speed count:(int)count wheelEnabled:(int)wheelEnabled language:(int)language displayID:(long long)displayID coatMode:(int)coatMode variant:(int)variant mode:(int)mode {
+	NSArray *screens = [NSScreen screens];
 	for (NSMenuItem *item in [menu itemArray]) {
 		NSInteger tag = [item tag];
 		if (tag == AnimalsMenuSpeedSlow || tag == AnimalsMenuSpeedNormal || tag == AnimalsMenuSpeedFast) {
@@ -323,11 +528,115 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 			[item setState:(itemCount == count) ? NSControlStateValueOn : NSControlStateValueOff];
 		} else if (tag == AnimalsMenuWheelEnabled) {
 			[item setState:wheelEnabled ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuLanguageJA) {
+			[item setState:(language == 0) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuLanguageEN) {
+			[item setState:(language == 1) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag >= AnimalsMenuDisplayBase && tag < AnimalsMenuDisplayBase + [screens count]) {
+			NSScreen *screen = [screens objectAtIndex:(tag - AnimalsMenuDisplayBase)];
+			[item setState:(AnimalsScreenID(screen) == displayID) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuCoatFixed) {
+			[item setState:(coatMode == 0) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuCoatSelected) {
+			[item setState:(coatMode == 1) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuCoatRandom) {
+			[item setState:(coatMode == 2) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuModeKeyboard) {
+			[item setState:(mode == 0) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag == AnimalsMenuModeRandom) {
+			[item setState:(mode == 1) ? NSControlStateValueOn : NSControlStateValueOff];
+		} else if (tag >= AnimalsMenuVariantBase && tag < AnimalsMenuVariantBase + goAnimalsDesktopGetVariantCount()) {
+			[item setState:((int)(tag - AnimalsMenuVariantBase) == variant) ? NSControlStateValueOn : NSControlStateValueOff];
 		}
 		if ([item submenu] != nil) {
-			[self refreshMenuState:[item submenu] speed:speed count:count wheelEnabled:wheelEnabled];
+			[self refreshMenuState:[item submenu] speed:speed count:count wheelEnabled:wheelEnabled language:language displayID:displayID coatMode:coatMode variant:variant mode:mode];
 		}
 	}
+}
+
+- (void)applyDisplaySelection {
+	if (self.window == nil) {
+		return;
+	}
+	NSScreen *screen = AnimalsScreenForDisplayID(goAnimalsDesktopGetDisplayID());
+	long long displayID = AnimalsScreenID(screen);
+	if (displayID != goAnimalsDesktopGetDisplayID()) {
+		goAnimalsDesktopSetDisplayID(displayID);
+	}
+	NSRect visible = [screen visibleFrame];
+	CGFloat width = visible.size.width;
+	if (width < 320.0) {
+		width = 320.0;
+	}
+	NSRect frame = NSMakeRect(visible.origin.x, visible.origin.y, width, self.sceneHeight);
+	[self.window setFrame:frame display:YES];
+	[self.view setFrame:NSMakeRect(0, 0, width, self.sceneHeight)];
+	goAnimalsDesktopSetSceneWidth((int)width);
+	[self updateHoverFromMouseLocation:[NSEvent mouseLocation]];
+}
+
+- (void)screenParametersChanged:(NSNotification *)notification {
+	(void)notification;
+	[self applyDisplaySelection];
+	[self installStatusMenu];
+	if (self.settingsWindow != nil) {
+		BOOL visible = [self.settingsWindow isVisible];
+		[self.settingsWindow close];
+		self.settingsWindow = nil;
+		if (visible) {
+			[self ensureSettingsWindow];
+			[self.settingsWindow makeKeyAndOrderFront:nil];
+		}
+	}
+	[self refreshMenuState];
+}
+
+- (void)setLanguage:(id)sender {
+	NSInteger tag = [sender tag];
+	goAnimalsDesktopSetLanguage(tag == AnimalsMenuLanguageEN ? 1 : 0);
+	[self installStatusMenu];
+	if (self.settingsWindow != nil) {
+		[self.settingsWindow close];
+		self.settingsWindow = nil;
+		[self ensureSettingsWindow];
+		[self.settingsWindow makeKeyAndOrderFront:nil];
+	}
+	[self refreshMenuState];
+}
+
+- (void)setDisplayFromMenu:(id)sender {
+	NSInteger screenIndex = [sender tag] - AnimalsMenuDisplayBase;
+	NSArray *screens = [NSScreen screens];
+	if (screenIndex < 0 || screenIndex >= [screens count]) {
+		return;
+	}
+	NSScreen *screen = [screens objectAtIndex:screenIndex];
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID(screen));
+	[self applyDisplaySelection];
+	[self refreshMenuState];
+}
+
+- (void)setVariantFromMenu:(id)sender {
+	goAnimalsDesktopSetVariant((int)([sender tag] - AnimalsMenuVariantBase));
+	goAnimalsDesktopSetCoatMode(0);
+	[self refreshMenuState];
+}
+
+- (void)setCoatModeFromMenu:(id)sender {
+	NSInteger tag = [sender tag];
+	if (tag == AnimalsMenuCoatFixed) {
+		goAnimalsDesktopSetCoatMode(0);
+	} else if (tag == AnimalsMenuCoatSelected) {
+		goAnimalsDesktopSetCoatMode(1);
+	} else {
+		goAnimalsDesktopSetCoatMode(2);
+	}
+	[self refreshMenuState];
+}
+
+- (void)setModeFromMenu:(id)sender {
+	goAnimalsDesktopSetMode(([sender tag] == AnimalsMenuModeKeyboard) ? 0 : 1);
+	[self refreshMenuState];
 }
 
 - (void)setSpeed:(id)sender {
@@ -449,7 +758,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	                                                   styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
 	                                                     backing:NSBackingStoreBuffered
 	                                                       defer:NO] autorelease];
-	[self.settingsWindow setTitle:@"Animals Desktop 設定"];
+	[self.settingsWindow setTitle:AnimalsText(@"settingsTitle")];
 	[self.settingsWindow setReleasedWhenClosed:NO];
 	[self.settingsWindow center];
 
@@ -457,11 +766,11 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[content setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[self.settingsWindow setContentView:content];
 
-	NSTextField *title = [self labelWithTitle:@"Animals Desktop 設定" frame:NSMakeRect(24, 516, 360, 24)];
+	NSTextField *title = [self labelWithTitle:AnimalsText(@"settingsTitle") frame:NSMakeRect(24, 516, 360, 24)];
 	[title setFont:[NSFont boldSystemFontOfSize:18.0]];
 	[content addSubview:title];
 
-	NSTextField *support = [self labelWithTitle:@"対応OS: macOS 12 Monterey 以降 / Intel・Apple Silicon" frame:NSMakeRect(24, 492, 480, 20)];
+	NSTextField *support = [self labelWithTitle:AnimalsText(@"support") frame:NSMakeRect(24, 492, 540, 20)];
 	[support setTextColor:[NSColor secondaryLabelColor]];
 	[content addSubview:support];
 
@@ -469,43 +778,52 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[content addSubview:tabs];
 
 	NSTabViewItem *animals = [[[NSTabViewItem alloc] initWithIdentifier:@"animals"] autorelease];
-	[animals setLabel:@"動物"];
+	[animals setLabel:AnimalsText(@"tabAnimals")];
 	NSView *animalView = [[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 580, 392)] autorelease];
 	[animals setView:animalView];
 	[tabs addTabViewItem:animals];
 
 	NSTabViewItem *motion = [[[NSTabViewItem alloc] initWithIdentifier:@"motion"] autorelease];
-	[motion setLabel:@"動き"];
+	[motion setLabel:AnimalsText(@"tabMotion")];
 	NSView *motionView = [[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 580, 392)] autorelease];
 	[motion setView:motionView];
 	[tabs addTabViewItem:motion];
 
 	NSTabViewItem *names = [[[NSTabViewItem alloc] initWithIdentifier:@"names"] autorelease];
-	[names setLabel:@"名前"];
+	[names setLabel:AnimalsText(@"tabNames")];
 	NSView *namesView = [[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 580, 392)] autorelease];
 	[names setView:namesView];
 	[tabs addTabViewItem:names];
 
-	[animalView addSubview:[self labelWithTitle:@"出現数" frame:NSMakeRect(22, 340, 120, 24)]];
+	[animalView addSubview:[self labelWithTitle:AnimalsText(@"visibleCount") frame:NSMakeRect(22, 340, 120, 24)]];
 	self.countPopup = [self popupWithFrame:NSMakeRect(150, 336, 180, 28) action:@selector(settingsCountChanged:)];
 	for (NSInteger i = 1; i <= AnimalsMaxPetCount; i++) {
-		[self.countPopup addItemWithTitle:[NSString stringWithFormat:@"%ld匹", (long)i]];
+		[self.countPopup addItemWithTitle:[NSString stringWithFormat:@"%ld%@", (long)i, AnimalsText(@"petCountUnit")]];
 	}
 	[animalView addSubview:self.countPopup];
 
-	[animalView addSubview:[self labelWithTitle:@"動物の決め方" frame:NSMakeRect(22, 298, 120, 24)]];
+	[animalView addSubview:[self labelWithTitle:AnimalsText(@"language") frame:NSMakeRect(22, 298, 120, 24)]];
+	self.languagePopup = [self popupWithFrame:NSMakeRect(150, 294, 180, 28) action:@selector(settingsLanguageChanged:)];
+	for (NSString *label in @[@"日本語", @"English"]) {
+		[self.languagePopup addItemWithTitle:label];
+	}
+	[animalView addSubview:self.languagePopup];
+
+	[animalView addSubview:[self labelWithTitle:AnimalsText(@"animalMode") frame:NSMakeRect(22, 256, 120, 24)]];
 	self.coatModePopup = [self popupWithFrame:NSMakeRect(150, 294, 180, 28) action:@selector(settingsCoatModeChanged:)];
-	for (NSString *label in @[@"固定", @"1匹ずつ選ぶ", @"ランダム"]) {
+	[self.coatModePopup setFrame:NSMakeRect(150, 252, 180, 28)];
+	for (NSString *label in @[AnimalsText(@"coatFixed"), AnimalsText(@"coatSelected"), AnimalsText(@"coatRandom")]) {
 		[self.coatModePopup addItemWithTitle:label];
 	}
 	[animalView addSubview:self.coatModePopup];
 
-	[animalView addSubview:[self labelWithTitle:@"固定する動物" frame:NSMakeRect(22, 256, 120, 24)]];
+	[animalView addSubview:[self labelWithTitle:AnimalsText(@"fixedAnimal") frame:NSMakeRect(22, 214, 120, 24)]];
 	self.fixedCoatPopup = [self popupWithFrame:NSMakeRect(150, 252, 260, 28) action:@selector(settingsFixedCoatChanged:)];
+	[self.fixedCoatPopup setFrame:NSMakeRect(150, 210, 260, 28)];
 	[self populateVariantPopup:self.fixedCoatPopup];
 	[animalView addSubview:self.fixedCoatPopup];
 
-	NSTextField *perPet = [self labelWithTitle:@"1匹ごとの動物" frame:NSMakeRect(22, 214, 160, 24)];
+	NSTextField *perPet = [self labelWithTitle:AnimalsText(@"perPetAnimal") frame:NSMakeRect(22, 172, 160, 24)];
 	[perPet setFont:[NSFont boldSystemFontOfSize:12.0]];
 	[animalView addSubview:perPet];
 
@@ -514,8 +832,11 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		NSInteger column = i / 5;
 		NSInteger row = i % 5;
 		CGFloat x = 22 + column * 270;
-		CGFloat y = 174 - row * 34;
-		[animalView addSubview:[self labelWithTitle:[NSString stringWithFormat:@"%ld匹目", (long)i + 1] frame:NSMakeRect(x, y + 4, 58, 22)]];
+		CGFloat y = 132 - row * 30;
+		NSString *petLabel = (goAnimalsDesktopGetLanguage() == 1)
+			? [NSString stringWithFormat:@"%ld", (long)i + 1]
+			: [NSString stringWithFormat:@"%ld%@", (long)i + 1, AnimalsText(@"petIndexSuffix")];
+		[animalView addSubview:[self labelWithTitle:petLabel frame:NSMakeRect(x, y + 4, 58, 22)]];
 		NSPopUpButton *popup = [self popupWithFrame:NSMakeRect(x + 62, y, 190, 28) action:@selector(settingsSelectedCoatChanged:)];
 		[popup setTag:i];
 		[self populateVariantPopup:popup];
@@ -523,61 +844,80 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		[self.selectedCoatPopups addObject:popup];
 	}
 
-	[motionView addSubview:[self labelWithTitle:@"モード" frame:NSMakeRect(22, 340, 120, 24)]];
+	[motionView addSubview:[self labelWithTitle:AnimalsText(@"mode") frame:NSMakeRect(22, 340, 120, 24)]];
 	self.modePopup = [self popupWithFrame:NSMakeRect(150, 336, 220, 28) action:@selector(settingsModeChanged:)];
-	for (NSString *label in @[@"キーボード反応", @"ランダム散歩"]) {
+	for (NSString *label in @[AnimalsText(@"modeKeyboard"), AnimalsText(@"modeRandom")]) {
 		[self.modePopup addItemWithTitle:label];
 	}
 	[motionView addSubview:self.modePopup];
 
-	[motionView addSubview:[self labelWithTitle:@"速度" frame:NSMakeRect(22, 298, 120, 24)]];
+	[motionView addSubview:[self labelWithTitle:AnimalsText(@"speedLabel") frame:NSMakeRect(22, 298, 120, 24)]];
 	self.speedPopup = [self popupWithFrame:NSMakeRect(150, 294, 180, 28) action:@selector(settingsSpeedChanged:)];
-	for (NSString *label in @[@"ゆっくり", @"ふつう", @"はやい"]) {
+	for (NSString *label in @[AnimalsText(@"speedSlow"), AnimalsText(@"speedNormal"), AnimalsText(@"speedFast")]) {
 		[self.speedPopup addItemWithTitle:label];
 	}
 	[motionView addSubview:self.speedPopup];
 
+	[motionView addSubview:[self labelWithTitle:AnimalsText(@"display") frame:NSMakeRect(22, 256, 120, 24)]];
+	self.displayPopup = [self popupWithFrame:NSMakeRect(150, 252, 260, 28) action:@selector(settingsDisplayChanged:)];
+	[self populateDisplayPopup:self.displayPopup];
+	[motionView addSubview:self.displayPopup];
+
 	self.wheelCheckbox = [[[NSButton alloc] initWithFrame:NSMakeRect(150, 248, 260, 28)] autorelease];
+	[self.wheelCheckbox setFrame:NSMakeRect(150, 206, 260, 28)];
 	[self.wheelCheckbox setButtonType:NSButtonTypeSwitch];
-	[self.wheelCheckbox setTitle:@"入力中だけ回し車"];
+	[self.wheelCheckbox setTitle:AnimalsText(@"typingWheel")];
 	[self.wheelCheckbox setTarget:self];
 	[self.wheelCheckbox setAction:@selector(settingsWheelChanged:)];
 	[motionView addSubview:self.wheelCheckbox];
 
 	self.nameLabelsCheckbox = [[[NSButton alloc] initWithFrame:NSMakeRect(22, 340, 240, 28)] autorelease];
 	[self.nameLabelsCheckbox setButtonType:NSButtonTypeSwitch];
-	[self.nameLabelsCheckbox setTitle:@"名前を表示"];
+	[self.nameLabelsCheckbox setTitle:AnimalsText(@"nameLabels")];
 	[self.nameLabelsCheckbox setTarget:self];
 	[self.nameLabelsCheckbox setAction:@selector(settingsNameLabelsChanged:)];
 	[namesView addSubview:self.nameLabelsCheckbox];
 
-	NSTextField *nameHint = [self labelWithTitle:@"ONのとき、動物にカーソルを乗せると名前が表示されます。" frame:NSMakeRect(22, 312, 480, 22)];
+	NSTextField *nameHint = [self labelWithTitle:AnimalsText(@"nameHint") frame:NSMakeRect(22, 312, 520, 22)];
 	[nameHint setTextColor:[NSColor secondaryLabelColor]];
 	[namesView addSubview:nameHint];
 
 	self.petNameFields = [NSMutableArray arrayWithCapacity:AnimalsMaxPetCount];
+	self.petSizePopups = [NSMutableArray arrayWithCapacity:AnimalsMaxPetCount];
+	[namesView addSubview:[self labelWithTitle:AnimalsText(@"petSize") frame:NSMakeRect(216, 286, 72, 22)]];
+	[namesView addSubview:[self labelWithTitle:AnimalsText(@"petSize") frame:NSMakeRect(486, 286, 72, 22)]];
 	for (NSInteger i = 0; i < AnimalsMaxPetCount; i++) {
 		NSInteger column = i / 5;
 		NSInteger row = i % 5;
 		CGFloat x = 22 + column * 270;
 		CGFloat y = 262 - row * 42;
-		[namesView addSubview:[self labelWithTitle:[NSString stringWithFormat:@"%ld匹目", (long)i + 1] frame:NSMakeRect(x, y + 4, 58, 24)]];
+		NSString *petLabel = (goAnimalsDesktopGetLanguage() == 1)
+			? [NSString stringWithFormat:@"%ld", (long)i + 1]
+			: [NSString stringWithFormat:@"%ld%@", (long)i + 1, AnimalsText(@"petIndexSuffix")];
+		[namesView addSubview:[self labelWithTitle:petLabel frame:NSMakeRect(x, y + 4, 58, 24)]];
 		NSTextField *field = [[[NSTextField alloc] initWithFrame:NSMakeRect(x + 62, y, 190, 28)] autorelease];
 		[field setTag:i];
 		[field setTarget:self];
 		[field setAction:@selector(settingsPetNameChanged:)];
 		[field setDelegate:self];
-		[field setPlaceholderString:[NSString stringWithFormat:@"どうぶつ%ld", (long)i + 1]];
+		[field setFrame:NSMakeRect(x + 62, y, 126, 28)];
+		[field setPlaceholderString:[NSString stringWithFormat:@"%@%ld", AnimalsText(@"defaultPetName"), (long)i + 1]];
 		[namesView addSubview:field];
 		[self.petNameFields addObject:field];
+
+		NSPopUpButton *sizePopup = [self popupWithFrame:NSMakeRect(x + 194, y, 72, 28) action:@selector(settingsPetSizeChanged:)];
+		[sizePopup setTag:i];
+		[self populatePetSizePopup:sizePopup];
+		[namesView addSubview:sizePopup];
+		[self.petSizePopups addObject:sizePopup];
 	}
 
-	NSTextField *note = [self labelWithTitle:@"Mac版はメニューバー常駐です。Dockアイコンは通常表示しません。" frame:NSMakeRect(24, 28, 440, 20)];
+	NSTextField *note = [self labelWithTitle:AnimalsText(@"macNote") frame:NSMakeRect(24, 28, 480, 20)];
 	[note setTextColor:[NSColor secondaryLabelColor]];
 	[content addSubview:note];
 
 	NSButton *close = [[[NSButton alloc] initWithFrame:NSMakeRect(492, 20, 92, 32)] autorelease];
-	[close setTitle:@"閉じる"];
+	[close setTitle:AnimalsText(@"close")];
 	[close setBezelStyle:NSBezelStyleRounded];
 	[close setTarget:self];
 	[close setAction:@selector(closeSettings:)];
@@ -586,9 +926,25 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 
 - (void)populateVariantPopup:(NSPopUpButton *)popup {
 	[popup removeAllItems];
-	NSInteger count = MIN((NSInteger)goAnimalsDesktopGetVariantCount(), AnimalsVariantLabelCount);
+	NSInteger count = (NSInteger)goAnimalsDesktopGetVariantCount();
 	for (NSInteger i = 0; i < count; i++) {
-		[popup addItemWithTitle:AnimalsVariantLabels[i]];
+		[popup addItemWithTitle:AnimalsVariantLabel(i)];
+	}
+}
+
+- (void)populatePetSizePopup:(NSPopUpButton *)popup {
+	[popup removeAllItems];
+	for (NSInteger percent = AnimalsMinPetSize; percent <= AnimalsMaxPetSize; percent += AnimalsPetSizeStep) {
+		[popup addItemWithTitle:AnimalsPetSizeLabel(percent)];
+	}
+}
+
+- (void)populateDisplayPopup:(NSPopUpButton *)popup {
+	[popup removeAllItems];
+	NSArray *screens = [NSScreen screens];
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		NSScreen *screen = [screens objectAtIndex:i];
+		[popup addItemWithTitle:AnimalsDisplayLabel(i, screen)];
 	}
 }
 
@@ -598,11 +954,27 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	}
 	NSInteger count = goAnimalsDesktopGetPetCount();
 	[self.countPopup selectItemAtIndex:MAX(0, MIN(AnimalsMaxPetCount - 1, count - 1))];
+	[self.languagePopup selectItemAtIndex:goAnimalsDesktopGetLanguage() == 1 ? 1 : 0];
 	[self.coatModePopup selectItemAtIndex:goAnimalsDesktopGetCoatMode()];
 	[self.fixedCoatPopup selectItemAtIndex:goAnimalsDesktopGetVariant()];
 	[self.modePopup selectItemAtIndex:goAnimalsDesktopGetMode()];
 	NSInteger speed = goAnimalsDesktopGetSpeed();
 	[self.speedPopup selectItemAtIndex:(speed == 2 ? 0 : (speed == 5 ? 2 : 1))];
+	NSArray *screens = [NSScreen screens];
+	long long displayID = AnimalsActiveDisplayID();
+	NSInteger selectedDisplayIndex = 0;
+	for (NSInteger i = 0; i < [screens count]; i++) {
+		if (AnimalsScreenID([screens objectAtIndex:i]) == displayID) {
+			selectedDisplayIndex = i;
+			break;
+		}
+	}
+	if ([self.displayPopup numberOfItems] != [screens count]) {
+		[self populateDisplayPopup:self.displayPopup];
+	}
+	if ([self.displayPopup numberOfItems] > 0) {
+		[self.displayPopup selectItemAtIndex:MAX(0, MIN([self.displayPopup numberOfItems] - 1, selectedDisplayIndex))];
+	}
 	[self.wheelCheckbox setState:goAnimalsDesktopGetWheelEnabled() ? NSControlStateValueOn : NSControlStateValueOff];
 	for (NSInteger i = 0; i < [self.selectedCoatPopups count]; i++) {
 		NSPopUpButton *popup = [self.selectedCoatPopups objectAtIndex:i];
@@ -622,6 +994,25 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 		}
 		[field setEnabled:(goAnimalsDesktopGetNameLabels() != 0 && i < count)];
 	}
+	for (NSInteger i = 0; i < [self.petSizePopups count]; i++) {
+		NSPopUpButton *popup = [self.petSizePopups objectAtIndex:i];
+		NSInteger percent = goAnimalsDesktopGetPetSize((int)i);
+		NSInteger index = (percent - AnimalsMinPetSize) / AnimalsPetSizeStep;
+		[popup selectItemAtIndex:MAX(0, MIN([popup numberOfItems] - 1, index))];
+		[popup setEnabled:(i < count)];
+	}
+}
+
+- (void)settingsLanguageChanged:(id)sender {
+	goAnimalsDesktopSetLanguage((int)[sender indexOfSelectedItem]);
+	[self installStatusMenu];
+	if (self.settingsWindow != nil) {
+		[self.settingsWindow close];
+		self.settingsWindow = nil;
+		[self ensureSettingsWindow];
+		[self.settingsWindow makeKeyAndOrderFront:nil];
+	}
+	[self refreshMenuState];
 }
 
 - (void)settingsCountChanged:(id)sender {
@@ -657,6 +1048,17 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self refreshMenuState];
 }
 
+- (void)settingsDisplayChanged:(id)sender {
+	NSArray *screens = [NSScreen screens];
+	NSInteger index = [sender indexOfSelectedItem];
+	if (index < 0 || index >= [screens count]) {
+		return;
+	}
+	goAnimalsDesktopSetDisplayID(AnimalsScreenID([screens objectAtIndex:index]));
+	[self applyDisplaySelection];
+	[self refreshMenuState];
+}
+
 - (void)settingsWheelChanged:(id)sender {
 	goAnimalsDesktopSetWheelEnabled([sender state] == NSControlStateValueOn ? 1 : 0);
 	[self refreshMenuState];
@@ -674,6 +1076,13 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 
 - (void)settingsPetNameChanged:(id)sender {
 	goAnimalsDesktopSetPetName((int)[sender tag], (char *)[[sender stringValue] UTF8String]);
+	[self.view setNeedsDisplay:YES];
+	[self refreshMenuState];
+}
+
+- (void)settingsPetSizeChanged:(id)sender {
+	NSInteger percent = AnimalsMinPetSize + [sender indexOfSelectedItem] * AnimalsPetSizeStep;
+	goAnimalsDesktopSetPetSize((int)[sender tag], (int)percent);
 	[self.view setNeedsDisplay:YES];
 	[self refreshMenuState];
 }

@@ -88,7 +88,42 @@
   mixed cat, Scottish Fold, Munchkin, Ragdoll, and Minuet. The parent release
   policy is to bump preview versions in small increments as each animal
   graduates into the current runtime/page list.
-- Kept the deployable public Pages links on the existing `v0.1.5` release
-  because GitHub Release `v0.1.6` does not exist yet. Leopard gecko, blue
-  White's tree frog, and striped chipmunk are shown as Coming Soon silhouettes
-  until their release artifacts and version links are aligned.
+- Updated the deployable public Pages links to the published `v0.2.1` Windows
+  and Mac release assets. Leopard gecko, blue White's tree frog, and striped
+  chipmunk are shown as Coming Soon silhouettes until their release artifacts
+  and version links are aligned.
+- Added JP/EN language switching for the static GitHub Pages site without a
+  frontend framework. The page uses JP/EN buttons, saves the selection in
+  `localStorage`, updates page metadata, navigation, download copy, animal
+  names, upcoming names, feature copy, version notes,
+  and keeps the release-verifier-sensitive Windows badge source markup intact.
+- Added macOS JP/EN language persistence and menu/settings switching. The
+  existing JSON settings now stores `language`, the Cocoa status menu can switch
+  between Japanese and English, and the settings window is rebuilt after a
+  language change so labels, tabs, option titles, animal names, and placeholders
+  refresh consistently. Windows code and runtime assets were not changed.
+- Expanded the macOS animal picker from the old five hardcoded labels to the
+  runtime catalog, added fixed/selected/random animal menus in the status item,
+  added per-pet size controls, and corrected the macOS bundle identifier to
+  `com.udteach.animalsdesktop`.
+- Added first-pass macOS multi-monitor support. The Mac overlay now persists a
+  display ID, starts on the saved screen when it is available, falls back to the
+  main screen when it is not, and exposes the display selector in both the status
+  menu and the settings Motion tab. Local installed app
+  `/Users/kyota/Applications/AnimalsDesktop.app` was checked and is still the
+  published `v0.2.1` arm64 build until explicitly replaced.
+- Strengthened macOS release QA for `v0.2.2`: Darwin tests now require the
+  exact 16 release-scoped runtime animals, exercise every animal through fixed
+  and per-pet selection, and verify every visible size step from 70% through
+  120%. `scripts/verify_page_release.py` now also checks that the Pages current
+  animal grid matches `catalog.RuntimeVariants()` exactly.
+- Prepared the `v0.2.2` release docs and Pages copy for the Mac parity release.
+  This release keeps leopard gecko, blue White's tree frog, and normal striped
+  chipmunk in Coming Soon until their runtime assets are promoted in a later
+  animal-addition lane. Verified `go run ./cmd/importanimals`,
+  `python3 scripts/verify_page_release.py`, `go run ./cmd/validatemotion
+  -runtime-only -require-accepted`, `go test -buildvcs=false ./...`,
+  `go vet -buildvcs=false ./...`, `git diff --check`, and macOS arm64/amd64
+  `VERSION=v0.2.2` ZIP builds. The motion validator remains `release_ready=false`
+  for all runtime animals because this is a one-set preview, not the full
+  10-set release gate.

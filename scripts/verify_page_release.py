@@ -15,6 +15,7 @@ WINDOWS_386_ASSET = "AnimalsDesktop-windows-386.zip"
 MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
+CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
 
 
 def fail(message: str) -> None:
@@ -41,6 +42,30 @@ def release_tag(asset: str, html: str, label: str) -> str:
         label,
     )
 
+def runtime_variant_ids() -> list[str]:
+    catalog = CATALOG.read_text(encoding="utf-8")
+    block = one(
+        r"var runtimeVariantIDs = \[\]string\{(.*?)\}",
+        catalog,
+        "runtime variant list",
+    )
+    ids = re.findall(r'"([^"]+)"', block)
+    if not ids:
+        fail("runtime variant list is empty")
+    return ids
+
+
+def current_page_variant_ids(html: str) -> list[str]:
+    block = one(
+        r'<div class="current-grid">(.*?)</div>\s*</section>',
+        html,
+        "current animal grid",
+    )
+    ids = re.findall(r'assets/animal-icons/current-([a-z0-9_]+)\.png', block)
+    if not ids:
+        fail("current animal grid has no icons")
+    return ids
+
 
 def main() -> None:
     html = INDEX.read_text(encoding="utf-8")
@@ -55,7 +80,7 @@ def main() -> None:
     mac_amd64_tag = release_tag(MAC_AMD64_ASSET, html, "macOS amd64 download version tag")
 
     windows_badge = one(
-        r"<span>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
+        r"<span[^>]*>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
         html,
         "visible Windows version badge",
     )
@@ -77,7 +102,12 @@ def main() -> None:
     if mac_arm64_tag != mac_amd64_tag:
         fail(f"macOS download tags differ: {mac_arm64_tag} != {mac_amd64_tag}")
 
-    print(f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}")
+    runtime_ids = runtime_variant_ids()
+    page_ids = current_page_variant_ids(html)
+    if page_ids != runtime_ids:
+        fail(f"current animal grid {page_ids} does not match runtime variants {runtime_ids}")
+
+    print(f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}, current animals {len(page_ids)}")
 
 
 if __name__ == "__main__":
