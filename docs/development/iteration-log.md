@@ -165,3 +165,10 @@
   release boundary, queues cockatiel and Java sparrow accepted-source promotion
   before a new lovebird source lane, and records parallelization boundaries for
   later bird, cat, and dog work.
+- Redirected the current phase from a Pages-specific goal to reusable asset
+  output. Added `scripts/export_upcoming_asset_pack.py` and exported the current
+  18 upcoming animals to `assets/source/upcoming/20260627/` as transparent color
+  cutouts, normalized black silhouettes, copied source sheet, contact sheets,
+  and `manifest.json`. The exporter uses connected-component extraction instead
+  of equal grid cells so animals remain complete even when the ImageGen sheet
+  is not a strict grid.
