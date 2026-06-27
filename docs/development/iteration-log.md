@@ -78,3 +78,17 @@
 - Extended `scripts/build_page_assets.py` and both Pages workflows so upcoming
   silhouette PNGs are generated, verified, copied into the Pages artifact, and
   kept separate from runtime/accepted source frames.
+- Corrected the GitHub Pages Coming Soon silhouette flow so it no longer uses
+  deterministic hand-drawn silhouettes. `scripts/build_page_assets.py` now
+  requires the page-specific ImageGen source sheet at
+  `docs/art-source/one-frame-method-fullrun-20260627/page-coming-soon/coming-soon-fifteen-animals-imagegen-source.png`
+  and extracts black silhouettes from that generated source only.
+- Simplified the Coming Soon cards to name plus silhouette only. Added cat
+  breed candidates from Anicom Sompo's 2026 cat breed ranking top five:
+  Scottish Fold, mixed cat, Munchkin, Ragdoll, and Minuet. The parent release
+  policy is to bump preview versions in small increments as each animal
+  graduates into the current runtime/page list.
+- Kept the deployable public Pages links on the existing `v0.1.5` release
+  because GitHub Release `v0.1.6` does not exist yet. Leopard gecko, blue
+  White's tree frog, and striped chipmunk are shown as Coming Soon silhouettes
+  until their release artifacts and version links are aligned.
