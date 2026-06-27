@@ -159,3 +159,9 @@
   `docs/art-source/one-frame-method-fullrun-20260627/page-coming-soon/coming-soon-eighteen-animals-imagegen-source.png`.
   `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, and both
   Pages workflows now verify the 18-card order.
+- Prepared a bounded post-budgerigar asset planning lane in
+  `docs/development/post-budgerigar-asset-queue-20260627.md`. The prep keeps
+  Lane A's budgerigar run untouched, preserves the 16-animal runtime/public
+  release boundary, queues cockatiel and Java sparrow accepted-source promotion
+  before a new lovebird source lane, and records parallelization boundaries for
+  later bird, cat, and dog work.
