@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>AnimalsDesktop.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.udteach.degudesktop</string>
+	<string>com.udteach.animalsdesktop</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

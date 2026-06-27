@@ -28,6 +28,7 @@ import (
 	"unsafe"
 
 	appassets "animals-desktop/assets"
+	"animals-desktop/internal/catalog"
 )
 
 const (
@@ -43,6 +44,11 @@ const (
 	wheelKeyHold  = 18
 	reactionTicks = 54
 	maxPetNameLen = 24
+
+	defaultPetSizePercent = 100
+	minPetSizePercent     = 70
+	maxPetSizePercent     = 120
+	petSizeStepPercent    = 10
 )
 
 const (
@@ -62,7 +68,7 @@ const (
 	settingsDirName  = "AnimalsDesktop"
 	settingsFileName = "settings.json"
 
-	darwinSettingsVersion = 2
+	darwinSettingsVersion = 3
 
 	darwinSpeedSlow   = 2
 	darwinSpeedNormal = 3
@@ -84,6 +90,13 @@ const (
 	darwinCoatRandom
 )
 
+type darwinLanguage int
+
+const (
+	darwinLangJapanese darwinLanguage = iota
+	darwinLangEnglish
+)
+
 var (
 	idleFrameSeq   = []int{idleStart, idleStart + 1, idleStart + 3, idleStart + 1}
 	walkFrameSeq   = []int{walkStart, walkStart + 1, walkStart + 3, walkStart + 1}
@@ -92,17 +105,14 @@ var (
 )
 
 type darwinCoatVariant struct {
-	ID      string
-	LabelJA string
+	ID           string
+	SpriteBase   string
+	LabelJA      string
+	LabelEN      string
+	WheelCapable bool
 }
 
-var darwinVariants = []darwinCoatVariant{
-	{ID: "chinchilla_standard_gray", LabelJA: "チンチラ"},
-	{ID: "hamster_golden_syrian", LabelJA: "ハムスター"},
-	{ID: "macaroni_mouse_tan", LabelJA: "マカロニマウス"},
-	{ID: "sugar_glider_gray", LabelJA: "モモンガ"},
-	{ID: "rabbit_chestnut_agouti", LabelJA: "うさぎ"},
-}
+var darwinVariants = darwinRuntimeVariants()
 
 var appVersion = "dev"
 
@@ -115,11 +125,13 @@ type darwinPetApp struct {
 	keyHold       int
 	speed         int
 	petCount      int
+	lang          darwinLanguage
 	mode          darwinBehaviorMode
 	coatMode      darwinCoatMode
 	variant       int
 	selectedCoats [maxPetCount]int
 	petNames      [maxPetCount]string
+	petSizes      [maxPetCount]int
 	nameLabels    bool
 	wheelEnabled  bool
 	reactions     []darwinReaction
@@ -151,7 +163,9 @@ type darwinSettings struct {
 	CoatMode      *int     `json:"coatMode,omitempty"`
 	SelectedCoats []int    `json:"selectedCoats,omitempty"`
 	Speed         int      `json:"speed"`
+	Language      int      `json:"language,omitempty"`
 	Mode          *int     `json:"mode,omitempty"`
+	PetSizes      []int    `json:"petSizes,omitempty"`
 	PetCount      int      `json:"petCount"`
 	WheelEnabled  *bool    `json:"wheelEnabled,omitempty"`
 	NameLabels    bool     `json:"nameLabels"`
@@ -159,6 +173,43 @@ type darwinSettings struct {
 }
 
 var darwinSettingsPath = defaultDarwinSettingsPath
+
+func darwinRuntimeVariants() []darwinCoatVariant {
+	runtimeVariants := catalog.RuntimeVariants()
+	out := make([]darwinCoatVariant, 0, len(runtimeVariants))
+	for _, variant := range runtimeVariants {
+		spriteBase := variant.SpriteBase
+		if spriteBase == "" {
+			spriteBase = variant.ID
+		}
+		labelJA := variant.LabelJA
+		if labelJA == "" {
+			labelJA = variant.LabelEN
+		}
+		labelEN := variant.LabelEN
+		if labelEN == "" {
+			labelEN = labelJA
+		}
+		out = append(out, darwinCoatVariant{
+			ID:           variant.ID,
+			SpriteBase:   spriteBase,
+			LabelJA:      labelJA,
+			LabelEN:      labelEN,
+			WheelCapable: catalog.WheelCapableVariant(variant),
+		})
+	}
+	return out
+}
+
+func darwinVariantLabel(index int, lang darwinLanguage) string {
+	if index < 0 || index >= len(darwinVariants) {
+		return ""
+	}
+	if lang == darwinLangEnglish {
+		return darwinVariants[index].LabelEN
+	}
+	return darwinVariants[index].LabelJA
+}
 
 func main() {
 	runtime.LockOSThread()
@@ -178,9 +229,11 @@ func newDarwinPetApp() *darwinPetApp {
 		sceneW:        900,
 		speed:         darwinSpeedNormal,
 		petCount:      5,
+		lang:          darwinLangJapanese,
 		mode:          darwinModeRandom,
 		coatMode:      darwinCoatSelected,
 		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
 		wheelEnabled:  true,
 		frames:        loadDarwinSprites(),
 		wheel:         loadDarwinWheel(),
@@ -253,6 +306,17 @@ func goAnimalsDesktopSetMode(mode C.int) {
 	darwinApp.mu.Unlock()
 }
 
+//export goAnimalsDesktopSetLanguage
+func goAnimalsDesktopSetLanguage(lang C.int) {
+	if darwinApp == nil {
+		return
+	}
+	darwinApp.mu.Lock()
+	darwinApp.lang = normalizeDarwinLanguage(int(lang))
+	darwinApp.saveSettings()
+	darwinApp.mu.Unlock()
+}
+
 //export goAnimalsDesktopSetCoatMode
 func goAnimalsDesktopSetCoatMode(mode C.int) {
 	if darwinApp == nil {
@@ -308,6 +372,17 @@ func goAnimalsDesktopSetPetName(index C.int, value *C.char) {
 	}
 	darwinApp.mu.Lock()
 	darwinApp.setPetName(int(index), name)
+	darwinApp.saveSettings()
+	darwinApp.mu.Unlock()
+}
+
+//export goAnimalsDesktopSetPetSize
+func goAnimalsDesktopSetPetSize(index C.int, percent C.int) {
+	if darwinApp == nil {
+		return
+	}
+	darwinApp.mu.Lock()
+	darwinApp.setPetSize(int(index), int(percent))
 	darwinApp.saveSettings()
 	darwinApp.mu.Unlock()
 }
@@ -378,6 +453,16 @@ func goAnimalsDesktopGetMode() C.int {
 	return C.int(darwinApp.mode)
 }
 
+//export goAnimalsDesktopGetLanguage
+func goAnimalsDesktopGetLanguage() C.int {
+	if darwinApp == nil {
+		return C.int(darwinLangJapanese)
+	}
+	darwinApp.mu.Lock()
+	defer darwinApp.mu.Unlock()
+	return C.int(darwinApp.lang)
+}
+
 //export goAnimalsDesktopGetCoatMode
 func goAnimalsDesktopGetCoatMode() C.int {
 	if darwinApp == nil {
@@ -417,6 +502,27 @@ func goAnimalsDesktopGetVariantCount() C.int {
 	return C.int(len(darwinVariants))
 }
 
+//export goAnimalsDesktopCopyVariantLabel
+func goAnimalsDesktopCopyVariantLabel(index C.int, buffer *C.char, length C.int) C.int {
+	lang := darwinLangJapanese
+	if darwinApp != nil {
+		darwinApp.mu.Lock()
+		lang = darwinApp.lang
+		darwinApp.mu.Unlock()
+	}
+	return copyDarwinCString(darwinVariantLabel(int(index), lang), buffer, length)
+}
+
+//export goAnimalsDesktopGetPetSize
+func goAnimalsDesktopGetPetSize(index C.int) C.int {
+	if darwinApp == nil {
+		return C.int(defaultPetSizePercent)
+	}
+	darwinApp.mu.Lock()
+	defer darwinApp.mu.Unlock()
+	return C.int(darwinApp.petSizePercent(int(index)))
+}
+
 //export goAnimalsDesktopGetNameLabels
 func goAnimalsDesktopGetNameLabels() C.int {
 	if darwinApp == nil {
@@ -442,7 +548,14 @@ func goAnimalsDesktopCopyPetName(index C.int, buffer *C.char, length C.int) C.in
 		return C.int(0)
 	}
 	name := sanitizeDarwinPetName(darwinApp.petNames[i])
-	data := []byte(name)
+	return copyDarwinCString(name, buffer, length)
+}
+
+func copyDarwinCString(value string, buffer *C.char, length C.int) C.int {
+	if buffer == nil || length <= 0 {
+		return C.int(0)
+	}
+	data := []byte(value)
 	maxLen := int(length) - 1
 	if maxLen < 0 {
 		return C.int(0)
@@ -481,7 +594,8 @@ func goAnimalsDesktopGetPetDrawY(index C.int) C.int {
 	if i < 0 || i >= len(darwinApp.pets) {
 		return C.int(0)
 	}
-	return C.int(sceneH - spriteH - darwinApp.pets[i].lane)
+	_, h := darwinApp.petSpriteSize(i)
+	return C.int(sceneH - h - darwinApp.pets[i].lane)
 }
 
 //export goAnimalsDesktopTick
@@ -533,6 +647,7 @@ func (a *darwinPetApp) loadSettings() {
 	if settings.PetCount != 0 {
 		a.petCount = normalizeDarwinPetCount(settings.PetCount)
 	}
+	a.lang = normalizeDarwinLanguage(settings.Language)
 	if settings.Version >= darwinSettingsVersion {
 		if settings.Variant != nil {
 			a.variant = normalizeDarwinVariant(*settings.Variant)
@@ -546,6 +661,14 @@ func (a *darwinPetApp) loadSettings() {
 					break
 				}
 				a.selectedCoats[i] = normalizeDarwinVariant(variant)
+			}
+		}
+		if len(settings.PetSizes) > 0 {
+			for i, size := range settings.PetSizes {
+				if i >= maxPetCount {
+					break
+				}
+				a.petSizes[i] = normalizeDarwinPetSizePercent(size)
 			}
 		}
 	}
@@ -575,6 +698,10 @@ func (a *darwinPetApp) saveSettings() {
 	wheelEnabled := a.wheelEnabled
 	selectedCoats := make([]int, maxPetCount)
 	copy(selectedCoats, a.selectedCoats[:])
+	petSizes := make([]int, maxPetCount)
+	for i := range a.petSizes {
+		petSizes[i] = normalizeDarwinPetSizePercent(a.petSizes[i])
+	}
 	petNames := make([]string, maxPetCount)
 	for i := range a.petNames {
 		petNames[i] = sanitizeDarwinPetName(a.petNames[i])
@@ -588,7 +715,9 @@ func (a *darwinPetApp) saveSettings() {
 		CoatMode:      &coatMode,
 		SelectedCoats: selectedCoats,
 		Speed:         normalizeDarwinSpeed(a.speed),
+		Language:      int(normalizeDarwinLanguage(int(a.lang))),
 		Mode:          &mode,
+		PetSizes:      petSizes,
 		PetCount:      normalizeDarwinPetCount(a.petCount),
 		WheelEnabled:  &wheelEnabled,
 		NameLabels:    a.nameLabels,
@@ -611,7 +740,8 @@ func (a *darwinPetApp) setSceneWidth(width int) {
 		return
 	}
 	for i := range a.pets {
-		a.pets[i].x = clamp(a.pets[i].x, 0, max(0, a.sceneW-spriteW))
+		w, _ := a.petSpriteSize(i)
+		a.pets[i].x = clamp(a.pets[i].x, 0, max(0, a.sceneW-w))
 	}
 }
 
@@ -624,8 +754,9 @@ func (a *darwinPetApp) resetPets() {
 		if i%2 == 1 {
 			dir = -1
 		}
+		w, _ := a.petSpriteSize(i)
 		a.pets[i] = darwinPet{
-			x:         clamp(spacing*(i+1)-spriteW/2, 0, max(0, a.sceneW-spriteW)),
+			x:         clamp(spacing*(i+1)-w/2, 0, max(0, a.sceneW-w)),
 			lane:      (i % 3) * 7,
 			dir:       dir,
 			speed:     a.petSpeed(i),
@@ -694,12 +825,26 @@ func (a *darwinPetApp) setPetName(index int, name string) {
 	a.petNames[index] = sanitizeDarwinPetName(name)
 }
 
+func (a *darwinPetApp) setPetSize(index int, percent int) {
+	if index < 0 || index >= maxPetCount {
+		return
+	}
+	a.petSizes[index] = normalizeDarwinPetSizePercent(percent)
+	if index < len(a.pets) {
+		w, _ := a.petSpriteSize(index)
+		a.pets[index].x = clamp(a.pets[index].x, 0, max(0, a.sceneW-w))
+	}
+}
+
 func (a *darwinPetApp) petDisplayName(index int) string {
 	if index < 0 || index >= maxPetCount {
 		return ""
 	}
 	if name := sanitizeDarwinPetName(a.petNames[index]); name != "" {
 		return name
+	}
+	if a.lang == darwinLangEnglish {
+		return fmt.Sprintf("Animal %d", index+1)
 	}
 	return fmt.Sprintf("どうぶつ%d", index+1)
 }
@@ -734,8 +879,48 @@ func (a *darwinPetApp) variantID(index int) string {
 	return darwinVariants[index].ID
 }
 
+func (a *darwinPetApp) petWheelCapable(index int) bool {
+	if index < 0 || index >= len(a.pets) || len(darwinVariants) == 0 {
+		return false
+	}
+	variant := normalizeDarwinVariant(a.pets[index].variant)
+	return darwinVariants[variant].WheelCapable
+}
+
 func defaultDarwinSelectedCoats() [maxPetCount]int {
-	return [maxPetCount]int{0, 1, 2, 3, 4, 0, 1, 2, 3, 4}
+	return [maxPetCount]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+}
+
+func defaultDarwinPetSizes() [maxPetCount]int {
+	var sizes [maxPetCount]int
+	for i := range sizes {
+		sizes[i] = defaultPetSizePercent
+	}
+	return sizes
+}
+
+func normalizeDarwinPetSizePercent(size int) int {
+	if size == 0 {
+		return defaultPetSizePercent
+	}
+	size = clamp(size, minPetSizePercent, maxPetSizePercent)
+	return ((size + petSizeStepPercent/2) / petSizeStepPercent) * petSizeStepPercent
+}
+
+func darwinPetSpriteSizeForPercent(percent int) (int, int) {
+	percent = normalizeDarwinPetSizePercent(percent)
+	return max(1, frameW*percent/100), max(1, frameH*percent/100)
+}
+
+func (a *darwinPetApp) petSizePercent(index int) int {
+	if index < 0 || index >= len(a.petSizes) {
+		return defaultPetSizePercent
+	}
+	return normalizeDarwinPetSizePercent(a.petSizes[index])
+}
+
+func (a *darwinPetApp) petSpriteSize(index int) (int, int) {
+	return darwinPetSpriteSizeForPercent(a.petSizePercent(index))
 }
 
 func normalizeDarwinSpeed(speed int) int {
@@ -769,6 +954,15 @@ func normalizeDarwinCoatMode(mode int) darwinCoatMode {
 	}
 }
 
+func normalizeDarwinLanguage(lang int) darwinLanguage {
+	switch darwinLanguage(lang) {
+	case darwinLangJapanese, darwinLangEnglish:
+		return darwinLanguage(lang)
+	default:
+		return darwinLangJapanese
+	}
+}
+
 func normalizeDarwinVariant(variant int) int {
 	return clamp(variant, 0, max(0, len(darwinVariants)-1))
 }
@@ -783,13 +977,24 @@ func sanitizeDarwinPetName(name string) string {
 }
 
 func (a *darwinPetApp) movePet(p *darwinPet, speed int) {
+	index := -1
+	for i := range a.pets {
+		if &a.pets[i] == p {
+			index = i
+			break
+		}
+	}
+	w := spriteW
+	if index >= 0 {
+		w, _ = a.petSpriteSize(index)
+	}
 	p.x += p.dir * max(1, speed)
 	if p.x <= 0 {
 		p.x = 0
 		p.dir = 1
 	}
-	if p.x >= max(0, a.sceneW-spriteW) {
-		p.x = max(0, a.sceneW-spriteW)
+	if p.x >= max(0, a.sceneW-w) {
+		p.x = max(0, a.sceneW-w)
 		p.dir = -1
 	}
 }
@@ -804,7 +1009,7 @@ func (a *darwinPetApp) tickPets() {
 		p := &a.pets[i]
 		if a.keyHold > 0 && i == 0 {
 			p.frame = seqFrameFrom(walkFrameSeq, a.tick, 1)
-			if !a.wheelEnabled {
+			if !a.wheelEnabled || !a.petWheelCapable(i) {
 				a.movePet(p, p.speed+1)
 			}
 			continue
@@ -863,14 +1068,18 @@ func (a *darwinPetApp) petAtScenePoint(sceneX, sceneY int) int {
 	if sceneX < 0 || sceneX >= a.sceneW || sceneY < 0 || sceneY >= sceneH {
 		return -1
 	}
-	wheelActive := a.wheelEnabled && a.keyHold > 0 && len(a.pets) > 0
+	wheelActive := a.wheelEnabled && a.keyHold > 0 && len(a.pets) > 0 && a.petWheelCapable(0)
 	for i := len(a.pets) - 1; i >= 0; i-- {
 		if wheelActive && i == 0 {
 			continue
 		}
 		p := a.pets[i]
-		y := sceneH - spriteH - p.lane
-		if sceneX >= p.x+6 && sceneX <= p.x+spriteW-6 && sceneY >= y+8 && sceneY <= y+spriteH-4 {
+		w, h := a.petSpriteSize(i)
+		y := sceneH - h - p.lane
+		insetX := max(2, w/14)
+		insetTop := max(2, h/8)
+		insetBottom := max(2, h/16)
+		if sceneX >= p.x+insetX && sceneX <= p.x+w-insetX && sceneY >= y+insetTop && sceneY <= y+h-insetBottom {
 			return i
 		}
 	}
@@ -882,7 +1091,7 @@ func (a *darwinPetApp) render() *image.RGBA {
 	canvas := image.NewRGBA(image.Rect(0, 0, w, sceneH))
 	draw.Draw(canvas, canvas.Bounds(), image.Transparent, image.Point{}, draw.Src)
 
-	wheelActive := a.wheelEnabled && a.keyHold > 0 && len(a.pets) > 0
+	wheelActive := a.wheelEnabled && a.keyHold > 0 && len(a.pets) > 0 && a.petWheelCapable(0)
 	if wheelActive {
 		wheelX := clamp(w-116, 8, max(8, w-wheelSize-8))
 		wheelY := sceneH - wheelSize - 4
@@ -906,8 +1115,9 @@ func (a *darwinPetApp) render() *image.RGBA {
 		if len(frames) <= p.frame {
 			continue
 		}
-		y := sceneH - spriteH - p.lane
-		drawFacingImage(canvas, frames[p.frame], image.Rect(p.x, y, p.x+spriteW, y+spriteH), darwinDrawDirection(p.dir, variantID))
+		w, h := a.petSpriteSize(i)
+		y := sceneH - h - p.lane
+		drawFacingImage(canvas, frames[p.frame], image.Rect(p.x, y, p.x+w, y+h), darwinDrawDirection(p.dir, variantID))
 	}
 	a.drawReactions(canvas)
 	return canvas
@@ -918,13 +1128,14 @@ func (a *darwinPetApp) drawReactions(dst *image.RGBA) {
 		if reaction.pet < 0 || reaction.pet >= len(a.pets) {
 			continue
 		}
-		wheelActive := a.wheelEnabled && a.keyHold > 0 && reaction.pet == 0
+		wheelActive := a.wheelEnabled && a.keyHold > 0 && reaction.pet == 0 && a.petWheelCapable(0)
 		if wheelActive {
 			continue
 		}
 		p := a.pets[reaction.pet]
-		baseY := sceneH - spriteH - p.lane
-		x := clamp(p.x+spriteW/2-18, 2, max(2, a.sceneW-42))
+		w, h := a.petSpriteSize(reaction.pet)
+		baseY := sceneH - h - p.lane
+		x := clamp(p.x+w/2-18, 2, max(2, a.sceneW-42))
 		y := clamp(baseY-26-(reactionTicks-reaction.ticks)/8, 0, sceneH-32)
 		drawReactionBubble(dst, x, y, reaction.kind, reaction.ticks)
 	}
@@ -998,7 +1209,7 @@ func darwinNibbleLikeSequence(variantID string) ([]int, int) {
 func loadDarwinSprites() map[string][]*image.RGBA {
 	out := make(map[string][]*image.RGBA, len(darwinVariants))
 	for _, variant := range darwinVariants {
-		name := fmt.Sprintf("sprites/%s_set00.png", variant.ID)
+		name := fmt.Sprintf("sprites/%s_set00.png", variant.SpriteBase)
 		data, err := fs.ReadFile(appassets.FS, name)
 		if err != nil {
 			panic(err)

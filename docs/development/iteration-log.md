@@ -88,7 +88,21 @@
   mixed cat, Scottish Fold, Munchkin, Ragdoll, and Minuet. The parent release
   policy is to bump preview versions in small increments as each animal
   graduates into the current runtime/page list.
-- Kept the deployable public Pages links on the existing `v0.1.5` release
-  because GitHub Release `v0.1.6` does not exist yet. Leopard gecko, blue
-  White's tree frog, and striped chipmunk are shown as Coming Soon silhouettes
-  until their release artifacts and version links are aligned.
+- Updated the deployable public Pages links to the published `v0.2.1` Windows
+  and Mac release assets. Leopard gecko, blue White's tree frog, and striped
+  chipmunk are shown as Coming Soon silhouettes until their release artifacts
+  and version links are aligned.
+- Added JP/EN language switching for the static GitHub Pages site without a
+  frontend framework. The page uses JP/EN buttons, saves the selection in
+  `localStorage`, updates page metadata, navigation, download copy, animal
+  names, upcoming names, feature copy, version notes,
+  and keeps the release-verifier-sensitive Windows badge source markup intact.
+- Added macOS JP/EN language persistence and menu/settings switching. The
+  existing JSON settings now stores `language`, the Cocoa status menu can switch
+  between Japanese and English, and the settings window is rebuilt after a
+  language change so labels, tabs, option titles, animal names, and placeholders
+  refresh consistently. Windows code and runtime assets were not changed.
+- Expanded the macOS animal picker from the old five hardcoded labels to the
+  runtime catalog, added fixed/selected/random animal menus in the status item,
+  added per-pet size controls, and corrected the macOS bundle identifier to
+  `com.udteach.animalsdesktop`.

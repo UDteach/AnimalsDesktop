@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"animals-desktop/internal/catalog"
 )
 
 func TestDarwinHorizontalMotionFramesUseStableSequence(t *testing.T) {
@@ -100,6 +102,22 @@ func TestDarwinRandomPauseAvoidsWeakNibbleFrames(t *testing.T) {
 	}
 }
 
+func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
+	runtimeVariants := catalog.RuntimeVariants()
+	if len(runtimeVariants) < 16 {
+		t.Fatalf("catalog runtime variants = %d, want at least 16 selectable animals", len(runtimeVariants))
+	}
+	if len(darwinVariants) != len(runtimeVariants) {
+		t.Fatalf("darwinVariants = %d, want catalog runtime count %d", len(darwinVariants), len(runtimeVariants))
+	}
+	for i, want := range runtimeVariants {
+		got := darwinVariants[i]
+		if got.ID != want.ID || got.SpriteBase != want.SpriteBase || got.LabelJA != want.LabelJA || got.LabelEN != want.LabelEN {
+			t.Fatalf("darwinVariants[%d] = %+v, want catalog variant %+v", i, got, want)
+		}
+	}
+}
+
 func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	oldSettingsPath := darwinSettingsPath
 	settingsPath := filepath.Join(t.TempDir(), "settings.json")
@@ -147,8 +165,13 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	}
 	a.setCoatMode(int(darwinCoatSelected))
 	a.setSelectedVariant(1, 7)
-	if a.coatMode != darwinCoatSelected || a.selectedCoats[1] != 4 || a.pets[1].variant != 4 {
-		t.Fatalf("selected coat state = mode:%d selected:%d pet:%d, want selected mode and clamped variant 4", a.coatMode, a.selectedCoats[1], a.pets[1].variant)
+	if a.coatMode != darwinCoatSelected || a.selectedCoats[1] != 7 || a.pets[1].variant != 7 {
+		t.Fatalf("selected coat state = mode:%d selected:%d pet:%d, want selected mode and variant 7", a.coatMode, a.selectedCoats[1], a.pets[1].variant)
+	}
+	a.setPetSize(1, 117)
+	a.setPetSize(2, 60)
+	if a.petSizePercent(1) != 120 || a.petSizePercent(2) != 70 {
+		t.Fatalf("pet sizes = %d/%d, want rounded 120 and clamped 70", a.petSizePercent(1), a.petSizePercent(2))
 	}
 
 	a.keyHold = wheelKeyHold
@@ -162,6 +185,7 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	a.nameLabels = true
 	a.setPetName(0, "  モカ  ")
 	a.setPetName(2, "abcdefghijklmnopqrstuvwxyz")
+	a.lang = darwinLangEnglish
 
 	a.saveSettings()
 	b := &darwinPetApp{
@@ -170,21 +194,47 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 		mode:          darwinModeRandom,
 		coatMode:      darwinCoatRandom,
 		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
 		wheelEnabled:  true,
+		lang:          darwinLangJapanese,
 	}
 	b.loadSettings()
-	if b.speed != darwinSpeedFast || b.petCount != 3 || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 4 || b.wheelEnabled {
-		t.Fatalf("loaded settings = speed:%d count:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 keyboard selected variant 4 wheel:false", b.speed, b.petCount, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
+	if b.speed != darwinSpeedFast || b.petCount != 3 || b.lang != darwinLangEnglish || b.mode != darwinModeKeyboard || b.coatMode != darwinCoatSelected || b.selectedCoats[1] != 7 || b.wheelEnabled {
+		t.Fatalf("loaded settings = speed:%d count:%d lang:%d mode:%d coat:%d selected:%d wheel:%v, want speed:%d count:3 english keyboard selected variant 7 wheel:false", b.speed, b.petCount, b.lang, b.mode, b.coatMode, b.selectedCoats[1], b.wheelEnabled, darwinSpeedFast)
+	}
+	if b.petSizePercent(1) != 120 || b.petSizePercent(2) != 70 {
+		t.Fatalf("loaded pet sizes = %d/%d, want 120/70", b.petSizePercent(1), b.petSizePercent(2))
 	}
 	if !b.nameLabels || b.petNames[0] != "モカ" || b.petNames[2] != "abcdefghijklmnopqrstuvwx" {
 		t.Fatalf("loaded names = labels:%v names:%#v", b.nameLabels, b.petNames[:3])
 	}
-	if got := b.petDisplayName(1); got != "どうぶつ2" {
-		t.Fatalf("default display name = %q, want どうぶつ2", got)
+	if got := b.petDisplayName(1); got != "Animal 2" {
+		t.Fatalf("default display name = %q, want Animal 2", got)
 	}
 }
 
-func TestDarwinLoadsVersionOneSettingsWithoutOldAnimalSelection(t *testing.T) {
+func TestDarwinLanguageDefaultsAndNormalizes(t *testing.T) {
+	if got := normalizeDarwinLanguage(-1); got != darwinLangJapanese {
+		t.Fatalf("normalizeDarwinLanguage(-1) = %d, want Japanese", got)
+	}
+	if got := normalizeDarwinLanguage(1); got != darwinLangEnglish {
+		t.Fatalf("normalizeDarwinLanguage(1) = %d, want English", got)
+	}
+	if got := normalizeDarwinLanguage(99); got != darwinLangJapanese {
+		t.Fatalf("normalizeDarwinLanguage(99) = %d, want Japanese", got)
+	}
+
+	a := &darwinPetApp{lang: darwinLangJapanese}
+	if got := a.petDisplayName(2); got != "どうぶつ3" {
+		t.Fatalf("Japanese default display name = %q, want どうぶつ3", got)
+	}
+	a.lang = darwinLangEnglish
+	if got := a.petDisplayName(2); got != "Animal 3" {
+		t.Fatalf("English default display name = %q, want Animal 3", got)
+	}
+}
+
+func TestDarwinLoadsVersionTwoSettingsWithoutOldAnimalSelection(t *testing.T) {
 	oldSettingsPath := darwinSettingsPath
 	settingsPath := filepath.Join(t.TempDir(), "settings.json")
 	darwinSettingsPath = func() (string, error) {
@@ -195,12 +245,14 @@ func TestDarwinLoadsVersionOneSettingsWithoutOldAnimalSelection(t *testing.T) {
 	})
 
 	data := []byte(`{
-  "version": 1,
+  "version": 2,
   "variant": 8,
   "coatMode": 2,
   "selectedCoats": [8, 7, 6, 5, 4, 3, 2, 1, 0, 9],
   "speed": 5,
+  "language": 1,
   "mode": 0,
+  "petSizes": [120, 120, 120, 120, 120, 120, 120, 120, 120, 120],
   "petCount": 4,
   "wheelEnabled": false,
   "nameLabels": true,
@@ -216,14 +268,18 @@ func TestDarwinLoadsVersionOneSettingsWithoutOldAnimalSelection(t *testing.T) {
 		mode:          darwinModeRandom,
 		coatMode:      darwinCoatSelected,
 		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
 		wheelEnabled:  true,
 	}
 	a.loadSettings()
-	if a.speed != darwinSpeedFast || a.petCount != 4 || a.mode != darwinModeKeyboard || a.wheelEnabled {
-		t.Fatalf("loaded preserved settings = speed:%d count:%d mode:%d wheel:%v", a.speed, a.petCount, a.mode, a.wheelEnabled)
+	if a.speed != darwinSpeedFast || a.petCount != 4 || a.lang != darwinLangEnglish || a.mode != darwinModeKeyboard || a.wheelEnabled {
+		t.Fatalf("loaded preserved settings = speed:%d count:%d lang:%d mode:%d wheel:%v", a.speed, a.petCount, a.lang, a.mode, a.wheelEnabled)
 	}
 	if a.coatMode != darwinCoatSelected || a.variant != 0 || a.selectedCoats != defaultDarwinSelectedCoats() {
 		t.Fatalf("old animal selection was not reset: variant:%d coat:%d selected:%v", a.variant, a.coatMode, a.selectedCoats)
+	}
+	if got := a.petSizePercent(0); got != defaultPetSizePercent {
+		t.Fatalf("old pet size = %d, want default %d", got, defaultPetSizePercent)
 	}
 	if !a.nameLabels || a.petNames[0] != "モカ" {
 		t.Fatalf("loaded name settings = labels:%v names:%v", a.nameLabels, a.petNames[:1])
@@ -282,6 +338,43 @@ func TestDarwinClickReactionHitTestsPet(t *testing.T) {
 	a.pets = []darwinPet{{x: 50, lane: 0}}
 	if index := a.petAtScenePoint(90, 40); index != -1 {
 		t.Fatalf("wheel runner hit = %d, want ignored", index)
+	}
+}
+
+func TestDarwinPetSizeAffectsBoundsAndHitTesting(t *testing.T) {
+	a := &darwinPetApp{
+		sceneW:   220,
+		petSizes: defaultDarwinPetSizes(),
+		pets: []darwinPet{
+			{x: 200, lane: 0, dir: 1},
+		},
+	}
+
+	a.setPetSize(0, 117)
+	w, h := a.petSpriteSize(0)
+	if w != 115 || h != 76 {
+		t.Fatalf("120%% sprite size = %dx%d, want 115x76", w, h)
+	}
+	if wantX := a.sceneW - w; a.pets[0].x != wantX {
+		t.Fatalf("large pet x = %d, want clamped %d", a.pets[0].x, wantX)
+	}
+	centerX := a.pets[0].x + w/2
+	centerY := sceneH - h + h/2
+	if got := a.petAtScenePoint(centerX, centerY); got != 0 {
+		t.Fatalf("large pet hit = %d, want 0", got)
+	}
+	if got := a.petAtScenePoint(a.pets[0].x+w+2, centerY); got != -1 {
+		t.Fatalf("outside large pet hit = %d, want -1", got)
+	}
+
+	a.pets[0].x = 200
+	a.setPetSize(0, 60)
+	w, h = a.petSpriteSize(0)
+	if w != 67 || h != 44 {
+		t.Fatalf("70%% sprite size = %dx%d, want 67x44", w, h)
+	}
+	if wantX := a.sceneW - w; a.pets[0].x != wantX {
+		t.Fatalf("small pet x = %d, want clamped %d", a.pets[0].x, wantX)
 	}
 }
 

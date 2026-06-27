@@ -55,7 +55,7 @@ def main() -> None:
     mac_amd64_tag = release_tag(MAC_AMD64_ASSET, html, "macOS amd64 download version tag")
 
     windows_badge = one(
-        r"<span>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
+        r"<span[^>]*>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
         html,
         "visible Windows version badge",
     )
