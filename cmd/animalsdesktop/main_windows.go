@@ -150,6 +150,8 @@ const (
 	menuSettings      uint16 = 140
 	menuCheckUpdate   uint16 = 150
 	menuInstallUpdate uint16 = 151
+	menuLangJapanese  uint16 = 160
+	menuLangEnglish   uint16 = 161
 	menuVariantBase   uint16 = 200
 )
 
@@ -4954,6 +4956,11 @@ func (a *petApp) showTrayMenu() {
 
 	appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
+	languageMenu := win.CreatePopupMenu()
+	appendChecked(languageMenu, menuLangJapanese, "日本語", a.lang == langJapanese)
+	appendChecked(languageMenu, menuLangEnglish, "English", a.lang == langEnglish)
+	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(languageMenu), syscall.StringToUTF16Ptr(a.txt("language")))
+	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 	updateFlags := uint32(win.MF_STRING)
 	if a.updateChecking() {
 		updateFlags |= win.MF_GRAYED
@@ -5050,6 +5057,10 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 		a.setCoatMode(coatSelected)
 	case id == menuCoatRandom:
 		a.setCoatMode(coatRandom)
+	case id == menuLangJapanese:
+		a.lang = langJapanese
+	case id == menuLangEnglish:
+		a.lang = langEnglish
 	case id >= menuVariantBase && int(id-menuVariantBase) < len(variants):
 		a.setFixedVariant(int(id - menuVariantBase))
 		a.setCoatMode(coatFixed)

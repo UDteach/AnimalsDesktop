@@ -349,6 +349,58 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 	}
 }
 
+func TestTrayMenuLanguageCommandPersistsSelection(t *testing.T) {
+	configRoot := t.TempDir()
+	t.Setenv("APPDATA", configRoot)
+
+	a := &petApp{
+		coatMode:       coatSelected,
+		selectedCoats:  defaultSelectedCoats(),
+		petSizes:       defaultPetSizes(),
+		speed:          3,
+		mode:           modeRandom,
+		petCount:       1,
+		bidirectional:  true,
+		positionMode:   positionTaskbarEdge,
+		displayScope:   displayScopeSingle,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+		lang:           langJapanese,
+	}
+
+	a.handleMenu(menuLangEnglish)
+	if a.lang != langEnglish {
+		t.Fatalf("language after English menu command = %d, want English", a.lang)
+	}
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("settings file after English menu command was not written: %v", err)
+	}
+	var saved appSettings
+	if err := json.Unmarshal(data, &saved); err != nil {
+		t.Fatalf("settings json after English menu command is invalid: %v", err)
+	}
+	if saved.Language != int(langEnglish) {
+		t.Fatalf("saved Language after English menu command = %d, want English", saved.Language)
+	}
+
+	a.handleMenu(menuLangJapanese)
+	if a.lang != langJapanese {
+		t.Fatalf("language after Japanese menu command = %d, want Japanese", a.lang)
+	}
+	data, err = os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("settings file after Japanese menu command was not written: %v", err)
+	}
+	if err := json.Unmarshal(data, &saved); err != nil {
+		t.Fatalf("settings json after Japanese menu command is invalid: %v", err)
+	}
+	if saved.Language != int(langJapanese) {
+		t.Fatalf("saved Language after Japanese menu command = %d, want Japanese", saved.Language)
+	}
+}
+
 func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
