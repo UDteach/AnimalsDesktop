@@ -66,6 +66,17 @@
 
 ## 2026-06-27
 
+- Promoted five completed priority-animal one-frame runs to parent-owned
+  accepted `set00` source assets without adding them to `runtimeVariantIDs`:
+  `chipmunk_striped`, `gecko_leopard`, `whites_tree_frog_blue`,
+  `cockatiel_normal_gray`, and `java_sparrow_normal`. Each has 62 accepted
+  frames, an assembled source sheet, copied one-frame review JSON, contact
+  sheet, and branch-local `auditframes` / `assemblemotion` reports.
+- Added catalog metadata for those five accepted sources and introduced the
+  `bird-hop` motion profile for cockatiel / Java sparrow source variants. The
+  public v0.2.2 runtime list and Pages current-animal list remain at 16 animals;
+  the next version bump/release lane should decide when to move accepted
+  sources into runtime. Budgerigar remains in-progress and was not promoted.
 - Reordered the GitHub Pages Coming Soon grid for the next animal wave while
   keeping the public downloads on `v0.2.2`. The display priority is now striped
   chipmunk, blue White's tree frog, leopard gecko, then the bird wave, followed

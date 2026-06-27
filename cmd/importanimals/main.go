@@ -590,7 +590,7 @@ func profileFor(profileOrSpecies string) renderProfile {
 	switch profile {
 	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileOtterSlide, catalog.MotionProfileTortoisePlod, catalog.MotionProfileSnakeSlither, catalog.MotionProfileDragonPlod:
 		return renderProfile{targetW: 90, targetH: 30, baseline: 59, low: true}
-	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop:
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileBirdHop:
 		return renderProfile{targetW: 82, targetH: 56, baseline: 60}
 	case catalog.MotionProfileDogTrot, catalog.MotionProfileCatStalk, catalog.MotionProfileFoxTrot, catalog.MotionProfileRedPandaAmble:
 		return renderProfile{targetW: 84, targetH: 54, baseline: 59}
@@ -719,7 +719,7 @@ func walkOffset(local int, phase int, profile string) (int, int) {
 		return step, []int{0, 0, -1, 0}[(local+phase)%4]
 	case catalog.MotionProfileDogTrot, catalog.MotionProfileFoxTrot:
 		return step, []int{0, -2, 0, -1}[(local+phase)%4]
-	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound, catalog.MotionProfileBirdHop:
 		return step, []int{0, -2, -3, -1}[(local+phase)%4]
 	case catalog.MotionProfileSnakeSlither:
 		return []int{-3, -1, 1, 3, 2, 0, -2, -3}[(local+phase)%8], 0
@@ -741,7 +741,7 @@ func fastOffset(local int, phase int, profile string) (int, int) {
 		return []int{-4, -2, 1, 4, 3, 0, -2, -4}[(local+phase)%8], 0
 	case catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod, catalog.MotionProfileOtterSlide:
 		return step, 0
-	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound, catalog.MotionProfileBirdHop:
 		return step, []int{0, -3, -6, -3}[(local+phase)%4]
 	case catalog.MotionProfileDogTrot, catalog.MotionProfileFoxTrot:
 		return step, []int{0, -2, 0, -2}[(local+phase)%4]
@@ -767,7 +767,7 @@ func feedOffset(local int, phase int, profile string) (int, int) {
 
 func actionOffset(local int, phase int, profile string) (int, int) {
 	switch profile {
-	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound:
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileSquirrelBound, catalog.MotionProfileBirdHop:
 		return 0, []int{0, -2, -5, -4, -1, 0}[(local+phase)%6]
 	case catalog.MotionProfileSnakeSlither:
 		return []int{-2, -1, 1, 2, 1, -1}[(local+phase)%6], 0
@@ -819,7 +819,7 @@ func alertOffset(local int, phase int, profile string) (int, int) {
 	switch profile {
 	case catalog.MotionProfileSnakeSlither, catalog.MotionProfileGeckoCrawl, catalog.MotionProfileTortoisePlod, catalog.MotionProfileDragonPlod:
 		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], 0
-	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop:
+	case catalog.MotionProfileRabbitHop, catalog.MotionProfileFrogHop, catalog.MotionProfileBirdHop:
 		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], []int{0, -2, -1, 1, 0, -1}[(local+phase)%6]
 	default:
 		return []int{-2, 0, 2, 1, -1, -2}[(local+phase)%6], []int{0, -1, 0, 1, 0, -1}[(local+phase)%6]

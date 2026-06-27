@@ -814,23 +814,26 @@
   {
     "variant": "gecko_leopard",
     "species": "gecko",
-    "breed_or_morph": "Gecko - leopard",
-    "color": "Gecko - leopard",
-    "popularity_tier": 3,
+    "breed_or_morph": "Leopard gecko",
+    "color": "yellow tan spotted",
+    "popularity_tier": 2,
     "motion_profile": "gecko-crawl",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/gecko/gecko-source-truth.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/gecko_leopard-source.png",
+    "motion_source": "docs/art-source/leopard-gecko/motion-source/sheets/leopard-gecko-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "gecko_leopard",
-    "tint_hex": "c99b4a",
-    "accent_hex": "4d3a22",
-    "source_width": 1717,
-    "source_height": 916,
+    "tint_hex": "d9a83c",
+    "accent_hex": "2f2418",
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 55,
-      "y": 368,
-      "w": 1553,
-      "h": 283
+      "x": 6,
+      "y": 39,
+      "w": 84,
+      "h": 19
     },
     "outputs": [
       "assets/sprites/gecko_leopard_set00.png",
@@ -843,6 +846,9 @@
       "assets/sprites/gecko_leopard_set07.png",
       "assets/sprites/gecko_leopard_set08.png",
       "assets/sprites/gecko_leopard_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3163,20 +3169,22 @@
     "color": "striped",
     "popularity_tier": 3,
     "motion_profile": "squirrel-bound",
-    "source_status": "prototype_only",
-    "source": "procedural:chipmunk",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/chipmunk/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/chipmunk_striped-source.png",
+    "motion_source": "docs/art-source/chipmunk/motion-source/sheets/chipmunk-striped-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "chipmunk_striped",
-    "shape": "chipmunk",
     "tint_hex": "a06a3a",
     "accent_hex": "2f241e",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 70,
-      "y": 88,
-      "w": 261,
-      "h": 188
+      "x": 6,
+      "y": 21,
+      "w": 84,
+      "h": 37
     },
     "outputs": [
       "assets/sprites/chipmunk_striped_set00.png",
@@ -3191,7 +3199,7 @@
       "assets/sprites/chipmunk_striped_set09.png"
     ],
     "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3380,6 +3388,126 @@
     ],
     "warnings": [
       "procedural source seed; replace with ImageGen source-truth before final animation import"
+    ]
+  },
+  {
+    "variant": "whites_tree_frog_blue",
+    "species": "whites_tree_frog",
+    "breed_or_morph": "White's tree frog",
+    "color": "blue",
+    "popularity_tier": 2,
+    "motion_profile": "frog-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/whites-tree-frog-blue/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/whites_tree_frog_blue-source.png",
+    "motion_source": "docs/art-source/whites-tree-frog-blue/motion-source/sheets/whites-tree-frog-blue-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "whites_tree_frog_blue",
+    "tint_hex": "17b8e8",
+    "accent_hex": "e8dcc7",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 10,
+      "w": 84,
+      "h": 48
+    },
+    "outputs": [
+      "assets/sprites/whites_tree_frog_blue_set00.png",
+      "assets/sprites/whites_tree_frog_blue_set01.png",
+      "assets/sprites/whites_tree_frog_blue_set02.png",
+      "assets/sprites/whites_tree_frog_blue_set03.png",
+      "assets/sprites/whites_tree_frog_blue_set04.png",
+      "assets/sprites/whites_tree_frog_blue_set05.png",
+      "assets/sprites/whites_tree_frog_blue_set06.png",
+      "assets/sprites/whites_tree_frog_blue_set07.png",
+      "assets/sprites/whites_tree_frog_blue_set08.png",
+      "assets/sprites/whites_tree_frog_blue_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "cockatiel_normal_gray",
+    "species": "cockatiel",
+    "breed_or_morph": "Cockatiel",
+    "color": "normal gray",
+    "popularity_tier": 1,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/cockatiel/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/cockatiel_normal_gray-source.png",
+    "motion_source": "docs/art-source/cockatiel/motion-source/sheets/cockatiel-normal-gray-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "cockatiel_normal_gray",
+    "tint_hex": "8d8a86",
+    "accent_hex": "f3d35c",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 21,
+      "y": 4,
+      "w": 53,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/cockatiel_normal_gray_set00.png",
+      "assets/sprites/cockatiel_normal_gray_set01.png",
+      "assets/sprites/cockatiel_normal_gray_set02.png",
+      "assets/sprites/cockatiel_normal_gray_set03.png",
+      "assets/sprites/cockatiel_normal_gray_set04.png",
+      "assets/sprites/cockatiel_normal_gray_set05.png",
+      "assets/sprites/cockatiel_normal_gray_set06.png",
+      "assets/sprites/cockatiel_normal_gray_set07.png",
+      "assets/sprites/cockatiel_normal_gray_set08.png",
+      "assets/sprites/cockatiel_normal_gray_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "java_sparrow_normal",
+    "species": "java_sparrow",
+    "breed_or_morph": "Java sparrow",
+    "color": "normal",
+    "popularity_tier": 1,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/java-sparrow/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/java_sparrow_normal-source.png",
+    "motion_source": "docs/art-source/java-sparrow/motion-source/sheets/java-sparrow-normal-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "java_sparrow_normal",
+    "tint_hex": "8f7b83",
+    "accent_hex": "d44848",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 17,
+      "y": 4,
+      "w": 61,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/java_sparrow_normal_set00.png",
+      "assets/sprites/java_sparrow_normal_set01.png",
+      "assets/sprites/java_sparrow_normal_set02.png",
+      "assets/sprites/java_sparrow_normal_set03.png",
+      "assets/sprites/java_sparrow_normal_set04.png",
+      "assets/sprites/java_sparrow_normal_set05.png",
+      "assets/sprites/java_sparrow_normal_set06.png",
+      "assets/sprites/java_sparrow_normal_set07.png",
+      "assets/sprites/java_sparrow_normal_set08.png",
+      "assets/sprites/java_sparrow_normal_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   }
 ]
