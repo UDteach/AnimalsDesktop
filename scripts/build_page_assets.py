@@ -88,10 +88,30 @@ PREVIEW_POSES = {
     "yorkshire_terrier_longcoat": 14,
 }
 
-UPCOMING_SILHOUETTES = [
+# The page-specific ImageGen source sheet was generated in this cell order.
+# Keep this separate so the public display order can follow product priority.
+UPCOMING_SOURCE_LAYOUT = [
     "leopard_gecko",
     "whites_tree_frog",
     "chipmunk",
+    "budgerigar",
+    "cockatiel",
+    "java_sparrow",
+    "lovebird",
+    "parrotlet",
+    "scottish_fold",
+    "mixed_cat",
+    "munchkin",
+    "ragdoll",
+    "minuet",
+    "toy_poodle",
+    "chihuahua",
+]
+
+UPCOMING_SILHOUETTES = [
+    "chipmunk",
+    "whites_tree_frog",
+    "leopard_gecko",
     "budgerigar",
     "cockatiel",
     "java_sparrow",
@@ -335,9 +355,9 @@ def write_upcoming_silhouettes() -> None:
         raise SystemExit(f"missing page-specific ImageGen source: {UPCOMING_SOURCE}")
     source = Image.open(UPCOMING_SOURCE).convert("RGBA")
     source_slots = UPCOMING_SOURCE_COLS * UPCOMING_SOURCE_ROWS
-    if len(UPCOMING_SILHOUETTES) > source_slots:
+    if len(UPCOMING_SOURCE_LAYOUT) > source_slots:
         raise SystemExit(
-            f"too many upcoming silhouettes ({len(UPCOMING_SILHOUETTES)}) for "
+            f"too many source layout silhouettes ({len(UPCOMING_SOURCE_LAYOUT)}) for "
             f"{UPCOMING_SOURCE_COLS}x{UPCOMING_SOURCE_ROWS} source sheet"
         )
 
@@ -350,8 +370,11 @@ def write_upcoming_silhouettes() -> None:
         if stale.name not in expected:
             stale.unlink()
     silhouettes: list[Image.Image] = []
-    for i, kind in enumerate(UPCOMING_SILHOUETTES):
-        cell = _crop_upcoming_source_cell(source, i)
+    source_indices = {kind: i for i, kind in enumerate(UPCOMING_SOURCE_LAYOUT)}
+    for kind in UPCOMING_SILHOUETTES:
+        if kind not in source_indices:
+            raise SystemExit(f"missing upcoming silhouette source cell for {kind}")
+        cell = _crop_upcoming_source_cell(source, source_indices[kind])
         img = _silhouette_from_source_cell(cell, kind)
         img.save(out_dir / f"{kind}.png")
         silhouettes.append(img)

@@ -66,6 +66,16 @@
 
 ## 2026-06-27
 
+- Reordered the GitHub Pages Coming Soon grid for the next animal wave while
+  keeping the public downloads on `v0.2.2`. The display priority is now striped
+  chipmunk, blue White's tree frog, leopard gecko, then the bird wave, followed
+  by popular cat and dog candidates already covered by the page-specific
+  silhouette source sheet.
+- Split `scripts/build_page_assets.py` upcoming silhouette handling into the
+  ImageGen source-sheet layout and the public display order, so future Pages
+  ordering changes do not accidentally crop the wrong source cell. Strengthened
+  `scripts/verify_page_release.py` to verify the Coming Soon priority order and
+  all local `assets/...` references.
 - Updated the public GitHub Pages Coming Soon section with page-only silhouette
   cards. The first cards are quick release candidates for
   `gecko_leopard`, `whites_tree_frog_blue`, and `chipmunk_striped`; the next
