@@ -349,6 +349,12 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 	}
 }
 
+func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
+	if appVersion != "v0.2.2" {
+		t.Fatalf("appVersion = %q, want v0.2.2", appVersion)
+	}
+}
+
 func TestTrayMenuLanguageCommandPersistsSelection(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
@@ -926,6 +932,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"./cmd/animalsdesktop",
 		"body_path: dist/RELEASE_NOTES.md",
 		"github.ref_name == 'v0.2.1'",
+		"github.ref_name == 'v0.2.2'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {

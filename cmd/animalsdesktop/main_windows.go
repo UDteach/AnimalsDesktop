@@ -202,7 +202,7 @@ const (
 	ctrlDisplaySpanMore  int32 = 1137
 )
 
-var appVersion = "v0.2.1"
+var appVersion = "v0.2.2"
 
 type behaviorMode int
 
