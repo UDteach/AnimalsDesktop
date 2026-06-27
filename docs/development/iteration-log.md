@@ -84,8 +84,8 @@
   `docs/art-source/one-frame-method-fullrun-20260627/page-coming-soon/coming-soon-fifteen-animals-imagegen-source.png`
   and extracts black silhouettes from that generated source only.
 - Simplified the Coming Soon cards to name plus silhouette only. Added cat
-  breed candidates from Anicom Sompo's 2026 cat breed ranking top five:
-  Scottish Fold, mixed cat, Munchkin, Ragdoll, and Minuet. The parent release
+  breed candidates from the 2026 iPet/Nyanpedia cat breed ranking top five:
+  mixed cat, Scottish Fold, Munchkin, Ragdoll, and Minuet. The parent release
   policy is to bump preview versions in small increments as each animal
   graduates into the current runtime/page list.
 - Kept the deployable public Pages links on the existing `v0.1.5` release
