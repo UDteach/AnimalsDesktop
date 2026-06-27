@@ -5,6 +5,8 @@
 *.log
 dist/
 build/
+cmd/degu/rsrc_windows_*.syso
+winres/icon.png
 .agents/
 .codex/
 .wrangler/
