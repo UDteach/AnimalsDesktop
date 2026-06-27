@@ -250,6 +250,9 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if saved.Version != settingsVersion || saved.PetCount != 10 || saved.Mode != int(modeKeyboard) {
 		t.Fatalf("saved settings = %+v, want version %d petCount 10 keyboard mode", saved, settingsVersion)
 	}
+	if saved.Language != int(langEnglish) {
+		t.Fatalf("saved Language = %d, want English", saved.Language)
+	}
 	if !saved.NameLabels {
 		t.Fatalf("saved NameLabels = false, want true")
 	}
@@ -325,6 +328,24 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 		if got := b.petSizes[i]; got != want {
 			t.Fatalf("loaded petSizes[%d] = %d, want %d", i, got, want)
 		}
+	}
+}
+
+func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
+	a := &petApp{lang: langEnglish}
+	if got := a.txt("settingsTitle"); got != "Animals Desktop Settings" {
+		t.Fatalf("English settings title = %q", got)
+	}
+	if got := a.txt("language"); got != "Language" {
+		t.Fatalf("English language label = %q", got)
+	}
+	if got := a.settingsButtonLabel(ctrlLanguageCombo); got != "English" {
+		t.Fatalf("English language button = %q", got)
+	}
+
+	a.lang = langJapanese
+	if got := a.settingsButtonLabel(ctrlLanguageCombo); got == "English" || got == "" {
+		t.Fatalf("Japanese language button should be a non-English label, got %q", got)
 	}
 }
 
