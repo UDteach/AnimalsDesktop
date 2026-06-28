@@ -989,3 +989,13 @@
   arm64/amd64 ZIP builds, and `COPYFILE_DISABLE=1 git diff --check`. Playwright
   browser QA confirmed the JP and EN Pages views, 35 animal cards, 12 upcoming
   cards, v0.2.4 version history, and future roadmap text render.
+- Added `lionhead_rabbit` and `shoebill` as explicit public Upcoming cards after
+  the v0.2.4 release. Both use page-only ImageGen source art under
+  `docs/art-source/*/page-coming-soon/`, black silhouettes under
+  `docs/assets/upcoming-silhouettes/`, and do not touch runtime sprite truth.
+  The public Upcoming contract is now 14 silhouettes: the 12 remaining Pages
+  candidates, the user-specified white lionhead-pattern lion rabbit, and the
+  special low-motion shoebill. Local validation passed with
+  `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, JS syntax
+  check, workflow silhouette existence check, `git diff --check`, and
+  Playwright JP/EN card/image-load QA.
