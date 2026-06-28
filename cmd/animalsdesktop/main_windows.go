@@ -77,6 +77,8 @@ const (
 	reactionTicks               = 54
 	settingsClientW       int32 = 760
 	settingsClientH       int32 = 620
+	renameDialogClientW   int32 = 360
+	renameDialogClientH   int32 = 158
 	settingsDirName             = "AnimalsDesktop"
 	settingsFileName            = "settings.json"
 	settingsVersion             = 2
@@ -152,6 +154,7 @@ const (
 	menuInstallUpdate uint16 = 151
 	menuLangJapanese  uint16 = 160
 	menuLangEnglish   uint16 = 161
+	menuHideToggle    uint16 = 170
 	menuVariantBase   uint16 = 200
 )
 
@@ -368,6 +371,7 @@ type petApp struct {
 	displaySpanEnd     int
 	walkRangeStart     int
 	walkRangeEnd       int
+	overlayHidden      bool
 	settingsHwnd       win.HWND
 	settingsTab        settingsTab
 	lang               language
@@ -430,6 +434,7 @@ var (
 	procCallNextHookExProc  = user32.NewProc("CallNextHookEx")
 	procUpdateLayeredWin    = user32.NewProc("UpdateLayeredWindow")
 	procEnumDisplayMonitors = user32.NewProc("EnumDisplayMonitors")
+	procAdjustWindowRectEx  = user32.NewProc("AdjustWindowRectEx")
 	procRtlMoveMemory       = ntdll.NewProc("RtlMoveMemory")
 )
 
@@ -1038,6 +1043,9 @@ func (a *petApp) chooseRandomAction(p *desktopPet) {
 }
 
 func (a *petApp) render() {
+	if a.overlayHidden {
+		return
+	}
 	overlay := a.overlayRect()
 	a.syncScene(overlay)
 	canvas := image.NewRGBA(image.Rect(0, 0, a.sceneW, sceneH))
@@ -1189,6 +1197,9 @@ func (a *petApp) onTyping() {
 }
 
 func (a *petApp) onMouseClick(screenX, screenY int) {
+	if a.overlayHidden {
+		return
+	}
 	index := a.petAtScreenPoint(screenX, screenY)
 	if index < 0 {
 		return
@@ -1244,6 +1255,11 @@ func scenePointInPet(p desktopPet, sceneX, sceneY int, w int, h int) bool {
 }
 
 func (a *petApp) updateHoverName() {
+	if a.overlayHidden {
+		a.hoverPet = -1
+		a.hideNameWindow()
+		return
+	}
 	if !a.nameLabels {
 		a.hoverPet = -1
 		a.hideNameWindow()
@@ -1312,6 +1328,33 @@ func (a *petApp) hideNameWindow() {
 	if a.nameHwnd != 0 {
 		win.ShowWindow(a.nameHwnd, win.SW_HIDE)
 	}
+}
+
+func (a *petApp) temporaryVisibilityLabel() string {
+	if a.overlayHidden {
+		return a.localText("表示する", "Show")
+	}
+	return a.localText("一時的に非表示", "Hide temporarily")
+}
+
+func (a *petApp) setOverlayHidden(hidden bool) {
+	a.overlayHidden = hidden
+	if hidden {
+		a.hideNameWindow()
+	}
+	a.applyOverlayVisibility()
+}
+
+func (a *petApp) applyOverlayVisibility() {
+	if a.hwnd == 0 {
+		return
+	}
+	if a.overlayHidden {
+		win.ShowWindow(a.hwnd, win.SW_HIDE)
+		return
+	}
+	win.ShowWindow(a.hwnd, win.SW_SHOWNOACTIVATE)
+	a.render()
 }
 
 func (a *petApp) nameWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
@@ -3764,14 +3807,16 @@ func (a *petApp) showRenameDialog(index int) {
 	a.ensureSettingsFonts()
 	var parentRect win.RECT
 	win.GetWindowRect(a.settingsHwnd, &parentRect)
-	w, h := int32(336), int32(158)
+	style := renameDialogStyle()
+	exStyle := uint32(win.WS_EX_TOOLWINDOW)
+	w, h := windowSizeForClient(renameDialogClientW, renameDialogClientH, style, exStyle)
 	x := parentRect.Left + (parentRect.Right-parentRect.Left-w)/2
 	y := parentRect.Top + (parentRect.Bottom-parentRect.Top-h)/2
 	hwnd := win.CreateWindowEx(
-		win.WS_EX_TOOLWINDOW,
+		exStyle,
 		syscall.StringToUTF16Ptr(windowClass),
 		syscall.StringToUTF16Ptr(a.localText("名前を変更", "Rename pet")),
-		win.WS_POPUP|win.WS_CAPTION|win.WS_SYSMENU|win.WS_VISIBLE|win.WS_CLIPCHILDREN,
+		style,
 		x, y, w, h,
 		a.settingsHwnd, 0, a.hinst, nil,
 	)
@@ -3780,11 +3825,55 @@ func (a *petApp) showRenameDialog(index int) {
 	}
 	a.renameHwnd = hwnd
 	a.renameIndex = index
-	a.renameEdit = a.createEdit(hwnd, ctrlRenameEdit, a.petDisplayName(index), 24, 56, 288, 28)
-	a.createButton(hwnd, ctrlRenameOK, "", 144, 104, 78, 30, 0)
-	a.createButton(hwnd, ctrlRenameCancel, "", 234, 104, 78, 30, 0)
+	editRect, okRect, cancelRect := renameDialogLayoutRects()
+	a.renameEdit = a.createEdit(hwnd, ctrlRenameEdit, a.petDisplayName(index), editRect.Left, editRect.Top, rectWidth(editRect), rectHeight(editRect))
+	a.createButton(hwnd, ctrlRenameOK, "", okRect.Left, okRect.Top, rectWidth(okRect), rectHeight(okRect), 0)
+	a.createButton(hwnd, ctrlRenameCancel, "", cancelRect.Left, cancelRect.Top, rectWidth(cancelRect), rectHeight(cancelRect), 0)
 	win.SetForegroundWindow(hwnd)
 	win.SetFocus(a.renameEdit)
+}
+
+func renameDialogStyle() uint32 {
+	return win.WS_POPUP | win.WS_CAPTION | win.WS_SYSMENU | win.WS_VISIBLE | win.WS_CLIPCHILDREN
+}
+
+func renameDialogLayoutRects() (editRect, okRect, cancelRect win.RECT) {
+	return win.RECT{Left: 24, Top: 56, Right: 336, Bottom: 84},
+		win.RECT{Left: 144, Top: 104, Right: 222, Bottom: 134},
+		win.RECT{Left: 234, Top: 104, Right: 336, Bottom: 134}
+}
+
+func windowSizeForClient(clientW, clientH int32, style, exStyle uint32) (int32, int32) {
+	rect := win.RECT{Left: 0, Top: 0, Right: clientW, Bottom: clientH}
+	if adjustWindowRectEx(&rect, style, false, exStyle) {
+		return rect.Right - rect.Left, rect.Bottom - rect.Top
+	}
+	return clientW, clientH
+}
+
+func adjustWindowRectEx(rect *win.RECT, style uint32, menu bool, exStyle uint32) bool {
+	if rect == nil {
+		return false
+	}
+	hasMenu := uintptr(0)
+	if menu {
+		hasMenu = 1
+	}
+	ret, _, _ := procAdjustWindowRectEx.Call(
+		uintptr(unsafe.Pointer(rect)),
+		uintptr(style),
+		hasMenu,
+		uintptr(exStyle),
+	)
+	return ret != 0
+}
+
+func rectWidth(rect win.RECT) int32 {
+	return rect.Right - rect.Left
+}
+
+func rectHeight(rect win.RECT) int32 {
+	return rect.Bottom - rect.Top
 }
 
 func (a *petApp) renameWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
@@ -4955,6 +5044,7 @@ func (a *petApp) showTrayMenu() {
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(countMenu), syscall.StringToUTF16Ptr(a.txt("petCount")))
 
 	appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
+	appendMenu(menu, win.MF_STRING, uintptr(menuHideToggle), syscall.StringToUTF16Ptr(a.temporaryVisibilityLabel()))
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 	languageMenu := win.CreatePopupMenu()
 	appendChecked(languageMenu, menuLangJapanese, "日本語", a.lang == langJapanese)
@@ -4994,6 +5084,9 @@ func appendChecked(menu win.HMENU, id uint16, label string, checked bool) {
 
 func (a *petApp) handleMenu(id uint16) {
 	if !a.handleMenuCommand(id) {
+		return
+	}
+	if id == menuHideToggle {
 		return
 	}
 	a.syncSettingsWindow()
@@ -5051,6 +5144,8 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 				a.leaveWheel(i, &a.pets[i])
 			}
 		}
+	case id == menuHideToggle:
+		a.setOverlayHidden(!a.overlayHidden)
 	case id == menuCoatFixed:
 		a.setCoatMode(coatFixed)
 	case id == menuCoatSelected:

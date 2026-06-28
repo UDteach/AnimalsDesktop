@@ -465,6 +465,42 @@ func TestTrayMenuLanguageCommandPersistsSelection(t *testing.T) {
 	}
 }
 
+func TestTrayMenuTemporaryHideCommandDoesNotPersist(t *testing.T) {
+	configRoot := t.TempDir()
+	t.Setenv("APPDATA", configRoot)
+
+	a := &petApp{lang: langJapanese}
+	if got := a.temporaryVisibilityLabel(); got != "一時的に非表示" {
+		t.Fatalf("visible temporary label = %q, want hide label", got)
+	}
+
+	a.handleMenu(menuHideToggle)
+	if !a.overlayHidden {
+		t.Fatalf("temporary hide menu command should hide overlay")
+	}
+	if got := a.temporaryVisibilityLabel(); got != "表示する" {
+		t.Fatalf("hidden temporary label = %q, want show label", got)
+	}
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	if _, err := os.Stat(path); err == nil {
+		t.Fatalf("temporary hide command should not persist settings")
+	} else if !os.IsNotExist(err) {
+		t.Fatalf("checking settings file after temporary hide: %v", err)
+	}
+
+	a.lang = langEnglish
+	if got := a.temporaryVisibilityLabel(); got != "Show" {
+		t.Fatalf("hidden English temporary label = %q, want Show", got)
+	}
+	a.handleMenu(menuHideToggle)
+	if a.overlayHidden {
+		t.Fatalf("second temporary hide menu command should show overlay")
+	}
+	if got := a.temporaryVisibilityLabel(); got != "Hide temporarily" {
+		t.Fatalf("visible English temporary label = %q, want Hide temporarily", got)
+	}
+}
+
 func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
@@ -765,6 +801,52 @@ func TestPetNameRectsFitTenPetsWithCoatPicker(t *testing.T) {
 		if numberRect.Left < 238 || nameRect.Left <= numberRect.Right || sizeRect.Right > 708 || nameRect.Bottom > 562 || sizeRect.Bottom > 562 {
 			t.Fatalf("pet %d name/coat/size row escapes panel: number=%+v name=%+v coat=%+v size=%+v", i, numberRect, nameRect, coatRect, sizeRect)
 		}
+	}
+}
+
+func TestRenameDialogControlsFitClientArea(t *testing.T) {
+	editRect, okRect, cancelRect := renameDialogLayoutRects()
+	rects := map[string]win.RECT{
+		"edit":   editRect,
+		"save":   okRect,
+		"cancel": cancelRect,
+	}
+	for name, rect := range rects {
+		if rect.Left < 24 || rect.Top < 20 || rect.Right > renameDialogClientW-24 || rect.Bottom > renameDialogClientH-24 {
+			t.Fatalf("%s rect escapes rename dialog client area: %+v", name, rect)
+		}
+		if rectWidth(rect) <= 0 || rectHeight(rect) <= 0 {
+			t.Fatalf("%s rect has invalid size: %+v", name, rect)
+		}
+	}
+	if okRect.Right >= cancelRect.Left {
+		t.Fatalf("rename action buttons overlap: save=%+v cancel=%+v", okRect, cancelRect)
+	}
+}
+
+func TestCaptionedRenameDialogExpandsOuterWindowForClientArea(t *testing.T) {
+	w, h := windowSizeForClient(renameDialogClientW, renameDialogClientH, renameDialogStyle(), uint32(win.WS_EX_TOOLWINDOW))
+	if w <= renameDialogClientW || h <= renameDialogClientH {
+		t.Fatalf("captioned rename dialog outer size = %dx%d, want larger than client %dx%d", w, h, renameDialogClientW, renameDialogClientH)
+	}
+}
+
+func TestSettingsFooterControlsFitClientArea(t *testing.T) {
+	rects := map[string]win.RECT{
+		"language": {Left: 322, Top: 574, Right: 502, Bottom: 608},
+		"reset":    {Left: 534, Top: 576, Right: 634, Bottom: 608},
+		"close":    {Left: 646, Top: 576, Right: 724, Bottom: 608},
+	}
+	for name, rect := range rects {
+		if rect.Left < 204 || rect.Right > settingsClientW-24 || rect.Bottom > settingsClientH-12 {
+			t.Fatalf("%s footer control escapes settings client area: %+v", name, rect)
+		}
+		if rectWidth(rect) <= 0 || rectHeight(rect) <= 0 {
+			t.Fatalf("%s footer control has invalid size: %+v", name, rect)
+		}
+	}
+	if rects["reset"].Right >= rects["close"].Left {
+		t.Fatalf("settings footer buttons overlap: reset=%+v close=%+v", rects["reset"], rects["close"])
 	}
 }
 

@@ -944,6 +944,20 @@
   `validatemotion -require-accepted`, `go run ./cmd/importanimals` imported
   `105` seed variants, and `go test -buildvcs=false ./cmd/auditframes
   ./cmd/importanimals ./internal/catalog` passed.
+- Added a Windows tray-menu temporary visibility toggle for `v0.2.2` follow-up
+  testing. The right-click menu now offers `Hide temporarily` / `Show` (and the
+  Japanese equivalents), hides only the transparent pet overlay, suppresses
+  hover names and click reactions while hidden, and deliberately does not
+  persist the hidden state to `settings.json`. Verified
+  `go test -buildvcs=false ./cmd/animalsdesktop`, `go test -buildvcs=false
+  ./...`, `git diff --check`, and a local Windows GUI build launched from
+  `dist/AnimalsDesktop.exe` with `main.appVersion=v0.2.2`.
+- Prepared `v0.2.3` as a Windows UI hotfix after the name-change dialog showed
+  clipped Save / Cancel buttons. The dialog now creates a captioned window from
+  a fixed client area instead of treating the outer window size as the client
+  size. Added regression coverage for rename-dialog controls and settings
+  footer controls, updated Pages/Release metadata to `v0.2.3`, and kept the
+  runtime animal scope unchanged from `v0.2.2`.
 - Completed the 19/19 accepted-source wave by promoting `quokka`. Parent final
   `auditframes -strict -artifact-warnings -motion-warnings` passed with
   `valid=62 missing=0 invalid=0 warnings=90`; frame `57` needed two rejected
