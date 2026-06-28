@@ -353,8 +353,8 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 }
 
 func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
-	if appVersion != "v0.2.2" {
-		t.Fatalf("appVersion = %q, want v0.2.2", appVersion)
+	if appVersion != "v0.2.3" {
+		t.Fatalf("appVersion = %q, want v0.2.3", appVersion)
 	}
 }
 
@@ -749,6 +749,52 @@ func TestPetNameRectsFitTenPetsWithCoatPicker(t *testing.T) {
 	}
 }
 
+func TestRenameDialogControlsFitClientArea(t *testing.T) {
+	editRect, okRect, cancelRect := renameDialogLayoutRects()
+	rects := map[string]win.RECT{
+		"edit":   editRect,
+		"save":   okRect,
+		"cancel": cancelRect,
+	}
+	for name, rect := range rects {
+		if rect.Left < 24 || rect.Top < 20 || rect.Right > renameDialogClientW-24 || rect.Bottom > renameDialogClientH-24 {
+			t.Fatalf("%s rect escapes rename dialog client area: %+v", name, rect)
+		}
+		if rectWidth(rect) <= 0 || rectHeight(rect) <= 0 {
+			t.Fatalf("%s rect has invalid size: %+v", name, rect)
+		}
+	}
+	if okRect.Right >= cancelRect.Left {
+		t.Fatalf("rename action buttons overlap: save=%+v cancel=%+v", okRect, cancelRect)
+	}
+}
+
+func TestCaptionedRenameDialogExpandsOuterWindowForClientArea(t *testing.T) {
+	w, h := windowSizeForClient(renameDialogClientW, renameDialogClientH, renameDialogStyle(), uint32(win.WS_EX_TOOLWINDOW))
+	if w <= renameDialogClientW || h <= renameDialogClientH {
+		t.Fatalf("captioned rename dialog outer size = %dx%d, want larger than client %dx%d", w, h, renameDialogClientW, renameDialogClientH)
+	}
+}
+
+func TestSettingsFooterControlsFitClientArea(t *testing.T) {
+	rects := map[string]win.RECT{
+		"language": {Left: 322, Top: 574, Right: 502, Bottom: 608},
+		"reset":    {Left: 534, Top: 576, Right: 634, Bottom: 608},
+		"close":    {Left: 646, Top: 576, Right: 724, Bottom: 608},
+	}
+	for name, rect := range rects {
+		if rect.Left < 204 || rect.Right > settingsClientW-24 || rect.Bottom > settingsClientH-12 {
+			t.Fatalf("%s footer control escapes settings client area: %+v", name, rect)
+		}
+		if rectWidth(rect) <= 0 || rectHeight(rect) <= 0 {
+			t.Fatalf("%s footer control has invalid size: %+v", name, rect)
+		}
+	}
+	if rects["reset"].Right >= rects["close"].Left {
+		t.Fatalf("settings footer buttons overlap: reset=%+v close=%+v", rects["reset"], rects["close"])
+	}
+}
+
 func TestUpdateVersionComparison(t *testing.T) {
 	tests := []struct {
 		latest  string
@@ -972,6 +1018,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"body_path: dist/RELEASE_NOTES.md",
 		"github.ref_name == 'v0.2.1'",
 		"github.ref_name == 'v0.2.2'",
+		"github.ref_name == 'v0.2.3'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {

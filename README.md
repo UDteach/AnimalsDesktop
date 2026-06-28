@@ -9,7 +9,7 @@ Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
-Current app version: `v0.2.2`
+Current app version: `v0.2.3`
 
 ## Current Status
 
@@ -94,7 +94,7 @@ go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go run ./cmd/winresicon -src docs/assets/animalsdesktop-preview.png -out winres/icon.png
-go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.2 --product-version v0.2.2
+go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.3 --product-version v0.2.3
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
@@ -113,8 +113,8 @@ Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\A
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.2.2 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.2.2 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.2.3 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.2.3 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.
@@ -158,6 +158,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows UI hotfix for the name-change dialog action buttons.
 
 Do not create a stable/final release tag until the current animal target is complete.

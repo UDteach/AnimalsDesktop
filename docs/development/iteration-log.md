@@ -167,3 +167,9 @@
   `go test -buildvcs=false ./cmd/animalsdesktop`, `go test -buildvcs=false
   ./...`, `git diff --check`, and a local Windows GUI build launched from
   `dist/AnimalsDesktop.exe` with `main.appVersion=v0.2.2`.
+- Prepared `v0.2.3` as a Windows UI hotfix after the name-change dialog showed
+  clipped Save / Cancel buttons. The dialog now creates a captioned window from
+  a fixed client area instead of treating the outer window size as the client
+  size. Added regression coverage for rename-dialog controls and settings
+  footer controls, updated Pages/Release metadata to `v0.2.3`, and kept the
+  runtime animal scope unchanged from `v0.2.2`.
