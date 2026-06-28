@@ -999,3 +999,13 @@
   `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, JS syntax
   check, workflow silhouette existence check, `git diff --check`, and
   Playwright JP/EN card/image-load QA.
+- Started the post-Pages production queue with `leucistic_sugar_glider` as a
+  parent-gated color-only candidate from accepted `sugar_glider_gray` source
+  frames. The lane first passed frames `00-04` with `valid=5 missing=57
+  invalid=0 warnings=0`, then expanded the same v3 transform to all `00-61`.
+  Full strict audit reports `valid=62 missing=0 invalid=0 warnings=79`, matching
+  the accepted source warning count under the same flags, and `assemblemotion`
+  produced `leucistic-sugar-glider-source-set00.png`. Earlier v1/v2 attempts
+  are preserved as rejected because v1 was too pink and v2 retained too much
+  dark source marking. The remaining visual promotion risk is whether the
+  visible facial line is acceptable for a leucistic read.

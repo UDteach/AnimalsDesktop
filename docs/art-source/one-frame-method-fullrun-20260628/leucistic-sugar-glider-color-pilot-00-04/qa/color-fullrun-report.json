@@ -1,0 +1,814 @@
+{
+  "variant": "leucistic_sugar_glider",
+  "source_variant": "sugar_glider_gray",
+  "frames": [
+    {
+      "frame": 0,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-00.png",
+      "alpha_bbox": [
+        6,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2230,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 1,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-01.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-01.png",
+      "alpha_bbox": [
+        6,
+        22,
+        91,
+        59
+      ],
+      "visible_pixels": 1785,
+      "kept_dark_eye_pixels": 11
+    },
+    {
+      "frame": 2,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-02.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-02.png",
+      "alpha_bbox": [
+        5,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2259,
+      "kept_dark_eye_pixels": 18
+    },
+    {
+      "frame": 3,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-03.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-03.png",
+      "alpha_bbox": [
+        5,
+        10,
+        91,
+        59
+      ],
+      "visible_pixels": 2251,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 4,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-04.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-04.png",
+      "alpha_bbox": [
+        5,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1757,
+      "kept_dark_eye_pixels": 22
+    },
+    {
+      "frame": 5,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-05.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-05.png",
+      "alpha_bbox": [
+        5,
+        27,
+        91,
+        59
+      ],
+      "visible_pixels": 1607,
+      "kept_dark_eye_pixels": 19
+    },
+    {
+      "frame": 6,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-06.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-06.png",
+      "alpha_bbox": [
+        6,
+        29,
+        91,
+        59
+      ],
+      "visible_pixels": 1581,
+      "kept_dark_eye_pixels": 12
+    },
+    {
+      "frame": 7,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-07.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-07.png",
+      "alpha_bbox": [
+        6,
+        25,
+        91,
+        59
+      ],
+      "visible_pixels": 1670,
+      "kept_dark_eye_pixels": 23
+    },
+    {
+      "frame": 8,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-08.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-08.png",
+      "alpha_bbox": [
+        5,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1693,
+      "kept_dark_eye_pixels": 30
+    },
+    {
+      "frame": 9,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-09.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-09.png",
+      "alpha_bbox": [
+        6,
+        26,
+        91,
+        59
+      ],
+      "visible_pixels": 1620,
+      "kept_dark_eye_pixels": 19
+    },
+    {
+      "frame": 10,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-10.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-10.png",
+      "alpha_bbox": [
+        6,
+        30,
+        91,
+        59
+      ],
+      "visible_pixels": 1328,
+      "kept_dark_eye_pixels": 9
+    },
+    {
+      "frame": 11,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-11.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-11.png",
+      "alpha_bbox": [
+        6,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1802,
+      "kept_dark_eye_pixels": 41
+    },
+    {
+      "frame": 12,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-12.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-12.png",
+      "alpha_bbox": [
+        5,
+        38,
+        91,
+        59
+      ],
+      "visible_pixels": 1172,
+      "kept_dark_eye_pixels": 14
+    },
+    {
+      "frame": 13,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-13.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-13.png",
+      "alpha_bbox": [
+        5,
+        34,
+        91,
+        59
+      ],
+      "visible_pixels": 1174,
+      "kept_dark_eye_pixels": 13
+    },
+    {
+      "frame": 14,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-14.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-14.png",
+      "alpha_bbox": [
+        6,
+        33,
+        91,
+        59
+      ],
+      "visible_pixels": 1348,
+      "kept_dark_eye_pixels": 16
+    },
+    {
+      "frame": 15,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-15.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-15.png",
+      "alpha_bbox": [
+        5,
+        33,
+        91,
+        59
+      ],
+      "visible_pixels": 1244,
+      "kept_dark_eye_pixels": 28
+    },
+    {
+      "frame": 16,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-16.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-16.png",
+      "alpha_bbox": [
+        5,
+        39,
+        91,
+        59
+      ],
+      "visible_pixels": 1054,
+      "kept_dark_eye_pixels": 10
+    },
+    {
+      "frame": 17,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-17.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-17.png",
+      "alpha_bbox": [
+        5,
+        32,
+        91,
+        59
+      ],
+      "visible_pixels": 1147,
+      "kept_dark_eye_pixels": 16
+    },
+    {
+      "frame": 18,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-18.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-18.png",
+      "alpha_bbox": [
+        5,
+        34,
+        91,
+        59
+      ],
+      "visible_pixels": 1269,
+      "kept_dark_eye_pixels": 34
+    },
+    {
+      "frame": 19,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-19.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-19.png",
+      "alpha_bbox": [
+        5,
+        36,
+        91,
+        59
+      ],
+      "visible_pixels": 1163,
+      "kept_dark_eye_pixels": 12
+    },
+    {
+      "frame": 20,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-20.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-20.png",
+      "alpha_bbox": [
+        6,
+        22,
+        91,
+        59
+      ],
+      "visible_pixels": 1821,
+      "kept_dark_eye_pixels": 46
+    },
+    {
+      "frame": 21,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-21.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-21.png",
+      "alpha_bbox": [
+        5,
+        35,
+        91,
+        59
+      ],
+      "visible_pixels": 1205,
+      "kept_dark_eye_pixels": 23
+    },
+    {
+      "frame": 22,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-22.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-22.png",
+      "alpha_bbox": [
+        7,
+        5,
+        88,
+        59
+      ],
+      "visible_pixels": 2311,
+      "kept_dark_eye_pixels": 64
+    },
+    {
+      "frame": 23,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-23.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-23.png",
+      "alpha_bbox": [
+        6,
+        19,
+        91,
+        59
+      ],
+      "visible_pixels": 1746,
+      "kept_dark_eye_pixels": 46
+    },
+    {
+      "frame": 24,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-24.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-24.png",
+      "alpha_bbox": [
+        6,
+        26,
+        91,
+        59
+      ],
+      "visible_pixels": 1601,
+      "kept_dark_eye_pixels": 26
+    },
+    {
+      "frame": 25,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-25.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-25.png",
+      "alpha_bbox": [
+        6,
+        19,
+        91,
+        59
+      ],
+      "visible_pixels": 1610,
+      "kept_dark_eye_pixels": 31
+    },
+    {
+      "frame": 26,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-26.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-26.png",
+      "alpha_bbox": [
+        6,
+        13,
+        91,
+        59
+      ],
+      "visible_pixels": 2017,
+      "kept_dark_eye_pixels": 71
+    },
+    {
+      "frame": 27,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-27.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-27.png",
+      "alpha_bbox": [
+        5,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1795,
+      "kept_dark_eye_pixels": 51
+    },
+    {
+      "frame": 28,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-28.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-28.png",
+      "alpha_bbox": [
+        6,
+        14,
+        91,
+        59
+      ],
+      "visible_pixels": 2280,
+      "kept_dark_eye_pixels": 88
+    },
+    {
+      "frame": 29,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-29.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-29.png",
+      "alpha_bbox": [
+        6,
+        19,
+        91,
+        59
+      ],
+      "visible_pixels": 2221,
+      "kept_dark_eye_pixels": 60
+    },
+    {
+      "frame": 30,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-30.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-30.png",
+      "alpha_bbox": [
+        5,
+        17,
+        91,
+        59
+      ],
+      "visible_pixels": 1491,
+      "kept_dark_eye_pixels": 39
+    },
+    {
+      "frame": 31,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-31.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-31.png",
+      "alpha_bbox": [
+        5,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1586,
+      "kept_dark_eye_pixels": 32
+    },
+    {
+      "frame": 32,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-32.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-32.png",
+      "alpha_bbox": [
+        5,
+        9,
+        91,
+        59
+      ],
+      "visible_pixels": 2541,
+      "kept_dark_eye_pixels": 56
+    },
+    {
+      "frame": 33,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-33.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-33.png",
+      "alpha_bbox": [
+        5,
+        7,
+        91,
+        59
+      ],
+      "visible_pixels": 2569,
+      "kept_dark_eye_pixels": 45
+    },
+    {
+      "frame": 34,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-34.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-34.png",
+      "alpha_bbox": [
+        13,
+        5,
+        82,
+        59
+      ],
+      "visible_pixels": 2047,
+      "kept_dark_eye_pixels": 70
+    },
+    {
+      "frame": 35,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-35.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-35.png",
+      "alpha_bbox": [
+        11,
+        5,
+        85,
+        59
+      ],
+      "visible_pixels": 2471,
+      "kept_dark_eye_pixels": 92
+    },
+    {
+      "frame": 36,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-36.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-36.png",
+      "alpha_bbox": [
+        13,
+        5,
+        83,
+        59
+      ],
+      "visible_pixels": 1839,
+      "kept_dark_eye_pixels": 38
+    },
+    {
+      "frame": 37,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-37.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-37.png",
+      "alpha_bbox": [
+        6,
+        27,
+        91,
+        59
+      ],
+      "visible_pixels": 1616,
+      "kept_dark_eye_pixels": 62
+    },
+    {
+      "frame": 38,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-38.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-38.png",
+      "alpha_bbox": [
+        5,
+        5,
+        90,
+        59
+      ],
+      "visible_pixels": 2230,
+      "kept_dark_eye_pixels": 60
+    },
+    {
+      "frame": 39,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-39.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-39.png",
+      "alpha_bbox": [
+        6,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1698,
+      "kept_dark_eye_pixels": 47
+    },
+    {
+      "frame": 40,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-40.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-40.png",
+      "alpha_bbox": [
+        17,
+        5,
+        79,
+        59
+      ],
+      "visible_pixels": 1788,
+      "kept_dark_eye_pixels": 68
+    },
+    {
+      "frame": 41,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-41.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-41.png",
+      "alpha_bbox": [
+        17,
+        5,
+        79,
+        59
+      ],
+      "visible_pixels": 1779,
+      "kept_dark_eye_pixels": 50
+    },
+    {
+      "frame": 42,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-42.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-42.png",
+      "alpha_bbox": [
+        9,
+        5,
+        87,
+        59
+      ],
+      "visible_pixels": 2321,
+      "kept_dark_eye_pixels": 68
+    },
+    {
+      "frame": 43,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-43.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-43.png",
+      "alpha_bbox": [
+        10,
+        5,
+        86,
+        59
+      ],
+      "visible_pixels": 2221,
+      "kept_dark_eye_pixels": 84
+    },
+    {
+      "frame": 44,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-44.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-44.png",
+      "alpha_bbox": [
+        6,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1786,
+      "kept_dark_eye_pixels": 52
+    },
+    {
+      "frame": 45,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-45.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-45.png",
+      "alpha_bbox": [
+        6,
+        20,
+        91,
+        59
+      ],
+      "visible_pixels": 1955,
+      "kept_dark_eye_pixels": 61
+    },
+    {
+      "frame": 46,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-46.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-46.png",
+      "alpha_bbox": [
+        5,
+        13,
+        91,
+        59
+      ],
+      "visible_pixels": 2391,
+      "kept_dark_eye_pixels": 85
+    },
+    {
+      "frame": 47,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-47.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-47.png",
+      "alpha_bbox": [
+        6,
+        15,
+        91,
+        59
+      ],
+      "visible_pixels": 2013,
+      "kept_dark_eye_pixels": 69
+    },
+    {
+      "frame": 48,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-48.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-48.png",
+      "alpha_bbox": [
+        22,
+        5,
+        75,
+        59
+      ],
+      "visible_pixels": 1511,
+      "kept_dark_eye_pixels": 29
+    },
+    {
+      "frame": 49,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-49.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-49.png",
+      "alpha_bbox": [
+        23,
+        5,
+        74,
+        59
+      ],
+      "visible_pixels": 1387,
+      "kept_dark_eye_pixels": 37
+    },
+    {
+      "frame": 50,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-50.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-50.png",
+      "alpha_bbox": [
+        7,
+        10,
+        91,
+        59
+      ],
+      "visible_pixels": 2195,
+      "kept_dark_eye_pixels": 56
+    },
+    {
+      "frame": 51,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-51.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-51.png",
+      "alpha_bbox": [
+        6,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2329,
+      "kept_dark_eye_pixels": 74
+    },
+    {
+      "frame": 52,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-52.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-52.png",
+      "alpha_bbox": [
+        12,
+        5,
+        84,
+        59
+      ],
+      "visible_pixels": 2053,
+      "kept_dark_eye_pixels": 71
+    },
+    {
+      "frame": 53,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-53.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-53.png",
+      "alpha_bbox": [
+        13,
+        5,
+        82,
+        59
+      ],
+      "visible_pixels": 2032,
+      "kept_dark_eye_pixels": 42
+    },
+    {
+      "frame": 54,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-54.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-54.png",
+      "alpha_bbox": [
+        14,
+        5,
+        82,
+        59
+      ],
+      "visible_pixels": 1964,
+      "kept_dark_eye_pixels": 19
+    },
+    {
+      "frame": 55,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-55.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-55.png",
+      "alpha_bbox": [
+        12,
+        5,
+        84,
+        59
+      ],
+      "visible_pixels": 2032,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 56,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-56.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-56.png",
+      "alpha_bbox": [
+        6,
+        5,
+        89,
+        59
+      ],
+      "visible_pixels": 2204,
+      "kept_dark_eye_pixels": 61
+    },
+    {
+      "frame": 57,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-57.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-57.png",
+      "alpha_bbox": [
+        5,
+        5,
+        90,
+        59
+      ],
+      "visible_pixels": 2386,
+      "kept_dark_eye_pixels": 44
+    },
+    {
+      "frame": 58,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-58.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-58.png",
+      "alpha_bbox": [
+        10,
+        5,
+        86,
+        59
+      ],
+      "visible_pixels": 2070,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 59,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-59.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-59.png",
+      "alpha_bbox": [
+        9,
+        14,
+        91,
+        59
+      ],
+      "visible_pixels": 2172,
+      "kept_dark_eye_pixels": 89
+    },
+    {
+      "frame": 60,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-60.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-60.png",
+      "alpha_bbox": [
+        7,
+        5,
+        88,
+        59
+      ],
+      "visible_pixels": 2367,
+      "kept_dark_eye_pixels": 53
+    },
+    {
+      "frame": 61,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-61.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-61.png",
+      "alpha_bbox": [
+        6,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2160,
+      "kept_dark_eye_pixels": 96
+    }
+  ],
+  "method": "deterministic color-only v3 fullrun preserving alpha, bbox, scale, baseline, and pose from accepted sugar_glider_gray set00 frames 00-61",
+  "status": "full 62-frame review candidate, not accepted source"
+}

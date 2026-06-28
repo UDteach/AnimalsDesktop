@@ -1,0 +1,73 @@
+{
+  "variant": "leucistic_sugar_glider",
+  "source_variant": "sugar_glider_gray",
+  "frames": [
+    {
+      "frame": 0,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-00.png",
+      "alpha_bbox": [
+        6,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2230,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 1,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-01.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-01.png",
+      "alpha_bbox": [
+        6,
+        22,
+        91,
+        59
+      ],
+      "visible_pixels": 1785,
+      "kept_dark_eye_pixels": 11
+    },
+    {
+      "frame": 2,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-02.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-02.png",
+      "alpha_bbox": [
+        5,
+        12,
+        91,
+        59
+      ],
+      "visible_pixels": 2259,
+      "kept_dark_eye_pixels": 18
+    },
+    {
+      "frame": 3,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-03.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-03.png",
+      "alpha_bbox": [
+        5,
+        10,
+        91,
+        59
+      ],
+      "visible_pixels": 2251,
+      "kept_dark_eye_pixels": 40
+    },
+    {
+      "frame": 4,
+      "source": "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-04.png",
+      "out": "docs/art-source/one-frame-method-fullrun-20260628/leucistic-sugar-glider-color-pilot-00-04/frames/frame-04.png",
+      "alpha_bbox": [
+        5,
+        21,
+        91,
+        59
+      ],
+      "visible_pixels": 1757,
+      "kept_dark_eye_pixels": 22
+    }
+  ],
+  "method": "deterministic color-only v3 pilot preserving alpha, bbox, scale, baseline, and pose; v1 rejected for pink overcast, v2 rejected for dark source markings remaining too strong",
+  "status": "parent-review pilot, not accepted source"
+}
