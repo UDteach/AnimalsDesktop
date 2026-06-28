@@ -120,6 +120,25 @@ func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
 		"albino_chipmunk",
 		"richardsons_ground_squirrel",
 		"yorkshire_terrier_longcoat",
+		"chipmunk_striped",
+		"gecko_leopard",
+		"whites_tree_frog_blue",
+		"budgerigar_green_yellow",
+		"cockatiel_normal_gray",
+		"java_sparrow_normal",
+		"parrotlet_green",
+		"lovebird_peach_faced",
+		"ragdoll_seal_bicolor",
+		"scottish_fold_silver_tabby",
+		"french_bulldog_fawn",
+		"maine_coon_brown_tabby",
+		"domestic_shorthair_calico",
+		"british_shorthair_blue",
+		"toy_poodle_apricot",
+		"munchkin_brown_tabby",
+		"roborovski_hamster",
+		"guinea_pig_russian_smoke_white",
+		"quokka",
 	}
 	runtimeVariants := catalog.RuntimeVariants()
 	if len(runtimeVariants) != len(wantIDs) {
@@ -153,8 +172,8 @@ func TestDarwinCanSelectEveryRuntimeVariant(t *testing.T) {
 		wheelEnabled:  true,
 	}
 	a.resetPets()
-	if len(darwinVariants) != 16 {
-		t.Fatalf("darwinVariants = %d, want 16 release-scoped selectable animals", len(darwinVariants))
+	if len(darwinVariants) != len(catalog.RuntimeVariants()) {
+		t.Fatalf("darwinVariants = %d, want %d release-scoped selectable animals", len(darwinVariants), len(catalog.RuntimeVariants()))
 	}
 
 	for i, variant := range darwinVariants {

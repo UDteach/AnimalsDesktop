@@ -45,12 +45,13 @@ type setReport struct {
 }
 
 type frameReport struct {
-	Frame    int      `json:"frame"`
-	Path     string   `json:"path"`
-	Status   string   `json:"status"`
-	Content  rectJSON `json:"content,omitempty"`
-	Error    string   `json:"error,omitempty"`
-	Warnings []string `json:"warnings,omitempty"`
+	Frame    int          `json:"frame"`
+	Path     string       `json:"path"`
+	Status   string       `json:"status"`
+	Content  rectJSON     `json:"content,omitempty"`
+	Body     *bodyMetrics `json:"body,omitempty"`
+	Error    string       `json:"error,omitempty"`
+	Warnings []string     `json:"warnings,omitempty"`
 }
 
 type rectJSON struct {
@@ -60,6 +61,11 @@ type rectJSON struct {
 	H int `json:"h"`
 }
 
+type bodyMetrics struct {
+	AlphaPixels  int `json:"alpha_pixels"`
+	FillPermille int `json:"fill_per_mille"`
+}
+
 func main() {
 	root := flag.String("root", "", "optional root containing set00 through set09 frame directories")
 	framesDir := flag.String("frames-dir", "", "single set directory containing frame PNGs")
@@ -67,13 +73,14 @@ func main() {
 	reportPath := flag.String("report", "", "optional JSON report path")
 	strict := flag.Bool("strict", false, "exit non-zero unless every expected frame is valid")
 	artifactWarnings := flag.Bool("artifact-warnings", false, "warn about likely visual artifacts such as long low horizontal alpha runs")
+	motionWarnings := flag.Bool("motion-warnings", false, "warn about abrupt frame-to-frame bbox, baseline, alpha-area, and body-fill changes")
 	flag.Parse()
 
 	if (*root == "") == (*framesDir == "") {
 		fatalf("provide exactly one of -root or -frames-dir")
 	}
 
-	report, err := audit(*root, *framesDir, *pattern, *strict, *artifactWarnings)
+	report, err := audit(*root, *framesDir, *pattern, *strict, *artifactWarnings, *motionWarnings)
 	if err != nil {
 		fatalf("%v", err)
 	}
@@ -88,7 +95,7 @@ func main() {
 	}
 }
 
-func audit(root string, framesDir string, pattern string, strict bool, artifactWarnings bool) (auditReport, error) {
+func audit(root string, framesDir string, pattern string, strict bool, artifactWarnings bool, motionWarnings bool) (auditReport, error) {
 	report := auditReport{
 		Root:        filepath.ToSlash(root),
 		FramesDir:   filepath.ToSlash(framesDir),
@@ -102,12 +109,12 @@ func audit(root string, framesDir string, pattern string, strict bool, artifactW
 		for set := 0; set < motionSets; set++ {
 			setName := fmt.Sprintf("set%02d", set)
 			setDir := filepath.Join(root, setName)
-			setReport := auditSet(setName, setDir, pattern, artifactWarnings)
+			setReport := auditSet(setName, setDir, pattern, artifactWarnings, motionWarnings)
 			addSet(&report, setReport)
 		}
 		return report, nil
 	}
-	setReport := auditSet(filepath.Base(framesDir), framesDir, pattern, artifactWarnings)
+	setReport := auditSet(filepath.Base(framesDir), framesDir, pattern, artifactWarnings, motionWarnings)
 	addSet(&report, setReport)
 	return report, nil
 }
@@ -122,7 +129,7 @@ func addSet(report *auditReport, set setReport) {
 	report.Sets = append(report.Sets, set)
 }
 
-func auditSet(setName string, framesDir string, pattern string, artifactWarnings bool) setReport {
+func auditSet(setName string, framesDir string, pattern string, artifactWarnings bool, motionWarnings bool) setReport {
 	report := setReport{
 		Set:    setName,
 		Dir:    filepath.ToSlash(framesDir),
@@ -139,8 +146,13 @@ func auditSet(setName string, framesDir string, pattern string, artifactWarnings
 		default:
 			report.Invalid++
 		}
-		report.Warnings += len(frameReport.Warnings)
 		report.Frames = append(report.Frames, frameReport)
+	}
+	if motionWarnings {
+		addMotionWarnings(&report)
+	}
+	for _, frameReport := range report.Frames {
+		report.Warnings += len(frameReport.Warnings)
 	}
 	report.Completed = report.Valid == totalFrames && report.Missing == 0 && report.Invalid == 0
 	return report
@@ -188,7 +200,12 @@ func auditFrame(frame int, path string, artifactWarnings bool) frameReport {
 		report.Error = "no transparent background"
 		return report
 	}
+	alphaPixels := alphaPixelCount(img, content)
 	report.Content = rectToJSON(content)
+	report.Body = &bodyMetrics{
+		AlphaPixels:  alphaPixels,
+		FillPermille: alphaPixels * 1000 / maxInt(1, content.Dx()*content.Dy()),
+	}
 	report.Warnings = frameWarnings(img, content, bounds, artifactWarnings)
 	return report
 }
@@ -223,6 +240,19 @@ func alphaBounds(img image.Image, rect image.Rectangle) image.Rectangle {
 	return image.Rect(minX, minY, maxX, maxY)
 }
 
+func alphaPixelCount(img image.Image, rect image.Rectangle) int {
+	count := 0
+	rect = rect.Intersect(img.Bounds())
+	for y := rect.Min.Y; y < rect.Max.Y; y++ {
+		for x := rect.Min.X; x < rect.Max.X; x++ {
+			if alphaVisible(img, x, y) {
+				count++
+			}
+		}
+	}
+	return count
+}
+
 func frameWarnings(img image.Image, content image.Rectangle, bounds image.Rectangle, artifactWarnings bool) []string {
 	warnings := []string{}
 	if content.Min.X <= bounds.Min.X || content.Max.X >= bounds.Max.X {
@@ -235,6 +265,106 @@ func frameWarnings(img image.Image, content image.Rectangle, bounds image.Rectan
 		warnings = append(warnings, artifactWarningsForFrame(img, content)...)
 	}
 	return warnings
+}
+
+type motionMetric struct {
+	frame        int
+	width        int
+	height       int
+	bottom       int
+	alphaPixels  int
+	fillPermille int
+}
+
+func addMotionWarnings(set *setReport) {
+	metrics := make([]*motionMetric, len(set.Frames))
+	for i := range set.Frames {
+		frame := &set.Frames[i]
+		if frame.Status != "valid" || frame.Body == nil || frame.Content.W <= 0 || frame.Content.H <= 0 {
+			continue
+		}
+		metrics[i] = &motionMetric{
+			frame:        frame.Frame,
+			width:        frame.Content.W,
+			height:       frame.Content.H,
+			bottom:       frame.Content.Y + frame.Content.H,
+			alphaPixels:  frame.Body.AlphaPixels,
+			fillPermille: frame.Body.FillPermille,
+		}
+	}
+	for i := range set.Frames {
+		curr := metrics[i]
+		if curr == nil {
+			continue
+		}
+		if i > 0 && metrics[i-1] != nil {
+			addAdjacentMotionWarnings(&set.Frames[i], metrics[i-1], curr)
+		}
+		if i > 0 && i+1 < len(metrics) && metrics[i-1] != nil && metrics[i+1] != nil {
+			addIsolatedMotionWarnings(&set.Frames[i], metrics[i-1], curr, metrics[i+1])
+		}
+	}
+}
+
+func addAdjacentMotionWarnings(frame *frameReport, prev *motionMetric, curr *motionMetric) {
+	if absInt(curr.bottom-prev.bottom) > 4 {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: contact baseline shifts from previous frame %02d to %02d (%d -> %d)", prev.frame, curr.frame, prev.bottom, curr.bottom))
+	}
+	if significantDelta(prev.width, curr.width, 14, 300) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: bbox width jumps from previous frame %02d to %02d (%d -> %d)", prev.frame, curr.frame, prev.width, curr.width))
+	}
+	if significantDelta(prev.height, curr.height, 12, 300) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: bbox height jumps from previous frame %02d to %02d (%d -> %d)", prev.frame, curr.frame, prev.height, curr.height))
+	}
+	if significantDelta(prev.alphaPixels, curr.alphaPixels, 260, 350) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: body alpha area jumps from previous frame %02d to %02d (%d -> %d)", prev.frame, curr.frame, prev.alphaPixels, curr.alphaPixels))
+	}
+	if significantDelta(prev.fillPermille, curr.fillPermille, 180, 300) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: body fill ratio jumps from previous frame %02d to %02d (%d -> %d permille)", prev.frame, curr.frame, prev.fillPermille, curr.fillPermille))
+	}
+}
+
+func addIsolatedMotionWarnings(frame *frameReport, prev *motionMetric, curr *motionMetric, next *motionMetric) {
+	avgBottom := roundedAverage(prev.bottom, next.bottom)
+	avgWidth := roundedAverage(prev.width, next.width)
+	avgHeight := roundedAverage(prev.height, next.height)
+	avgAlpha := roundedAverage(prev.alphaPixels, next.alphaPixels)
+	avgFill := roundedAverage(prev.fillPermille, next.fillPermille)
+	if absInt(curr.bottom-avgBottom) > 4 {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: isolated contact baseline outlier at frame %02d (%d vs neighbor avg %d)", curr.frame, curr.bottom, avgBottom))
+	}
+	if significantDelta(avgWidth, curr.width, 12, 250) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: isolated bbox width outlier at frame %02d (%d vs neighbor avg %d)", curr.frame, curr.width, avgWidth))
+	}
+	if significantDelta(avgHeight, curr.height, 10, 250) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: isolated bbox height outlier at frame %02d (%d vs neighbor avg %d)", curr.frame, curr.height, avgHeight))
+	}
+	if significantDelta(avgAlpha, curr.alphaPixels, 220, 300) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: isolated body alpha area outlier at frame %02d (%d vs neighbor avg %d)", curr.frame, curr.alphaPixels, avgAlpha))
+	}
+	if significantDelta(avgFill, curr.fillPermille, 160, 260) {
+		frame.Warnings = append(frame.Warnings, fmt.Sprintf("motion consistency: isolated body fill ratio outlier at frame %02d (%d vs neighbor avg %d permille)", curr.frame, curr.fillPermille, avgFill))
+	}
+}
+
+func significantDelta(a int, b int, minAbs int, minRelPermille int) bool {
+	delta := absInt(a - b)
+	if delta < minAbs {
+		return false
+	}
+	avg := maxInt(1, roundedAverage(absInt(a), absInt(b)))
+	return delta*1000 >= minRelPermille*avg
+}
+
+func roundedAverage(a int, b int) int {
+	return (a + b + 1) / 2
+}
+
+func absInt(v int) int {
+	if v < 0 {
+		return -v
+	}
+	return v
 }
 
 func artifactWarningsForFrame(img image.Image, content image.Rectangle) []string {

@@ -16,7 +16,7 @@ func TestAuditReportsPartialFrameSet(t *testing.T) {
 	writeFrame(t, filepath.Join(framesDir, "frame-00.png"), frameW, frameH, false)
 	writeFrame(t, filepath.Join(framesDir, "frame-01.png"), frameW+1, frameH, false)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, false)
+	report, err := audit("", framesDir, "frame-%02d.png", false, false, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -33,7 +33,7 @@ func TestAuditRejectsOpaqueFrame(t *testing.T) {
 	framesDir := filepath.Join(root, "set00")
 	writeFrame(t, filepath.Join(framesDir, "frame-00.png"), frameW, frameH, true)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, false)
+	report, err := audit("", framesDir, "frame-%02d.png", false, false, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -47,7 +47,7 @@ func TestAuditRootScansTenSets(t *testing.T) {
 	root := t.TempDir()
 	writeFrame(t, filepath.Join(root, "set03", "frame-12.png"), frameW, frameH, false)
 
-	report, err := audit(root, "", "frame-%02d.png", false, false)
+	report, err := audit(root, "", "frame-%02d.png", false, false, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -66,7 +66,7 @@ func TestAuditArtifactWarningsDetectsLowHorizontalRun(t *testing.T) {
 	writeFrame(t, path, frameW, frameH, false)
 	addHorizontalRun(t, path, 16, 55, 64)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, true)
+	report, err := audit("", framesDir, "frame-%02d.png", false, true, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -86,7 +86,7 @@ func TestAuditArtifactWarningsDetectsDisconnectedComponents(t *testing.T) {
 	writeFrame(t, path, frameW, frameH, false)
 	addDetachedBlock(t, path, 8, 57, 4, 4)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, true)
+	report, err := audit("", framesDir, "frame-%02d.png", false, true, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -104,7 +104,7 @@ func TestAuditArtifactWarningsDetectsTransparentPinholes(t *testing.T) {
 	writeFrame(t, path, frameW, frameH, false)
 	addTransparentHole(t, path, 42, 36, 2, 2)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, true)
+	report, err := audit("", framesDir, "frame-%02d.png", false, true, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -122,7 +122,7 @@ func TestAuditArtifactWarningsDetectsLowerShelf(t *testing.T) {
 	writeFrame(t, path, frameW, frameH, false)
 	addLowerShelf(t, path)
 
-	report, err := audit("", framesDir, "frame-%02d.png", false, true)
+	report, err := audit("", framesDir, "frame-%02d.png", false, true, false)
 	if err != nil {
 		t.Fatalf("audit() error = %v", err)
 	}
@@ -130,6 +130,25 @@ func TestAuditArtifactWarningsDetectsLowerShelf(t *testing.T) {
 	warnings := strings.Join(frame.Warnings, "\n")
 	if !strings.Contains(warnings, "possible lower ledge/shelf artifact") {
 		t.Fatalf("warnings = %q, want lower shelf artifact warning", warnings)
+	}
+}
+
+func TestAuditMotionWarningsDetectsSizeJump(t *testing.T) {
+	root := t.TempDir()
+	framesDir := filepath.Join(root, "set00")
+	writeRectFrame(t, filepath.Join(framesDir, "frame-00.png"), 30, 24, 28, 24)
+	writeRectFrame(t, filepath.Join(framesDir, "frame-01.png"), 10, 10, 70, 48)
+
+	report, err := audit("", framesDir, "frame-%02d.png", false, false, true)
+	if err != nil {
+		t.Fatalf("audit() error = %v", err)
+	}
+	frame := report.Sets[0].Frames[1]
+	warnings := strings.Join(frame.Warnings, "\n")
+	if !strings.Contains(warnings, "motion consistency: bbox width jumps") ||
+		!strings.Contains(warnings, "motion consistency: bbox height jumps") ||
+		!strings.Contains(warnings, "motion consistency: body alpha area jumps") {
+		t.Fatalf("warnings = %q, want size and body-area motion warnings", warnings)
 	}
 }
 
@@ -150,6 +169,27 @@ func writeFrame(t *testing.T, path string, w int, h int, opaque bool) {
 			for x := 20; x < minInt(76, w); x++ {
 				img.SetRGBA(x, y, color.RGBA{R: 130, G: 130, B: 130, A: 255})
 			}
+		}
+	}
+	f, err := os.Create(path)
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+	defer f.Close()
+	if err := png.Encode(f, img); err != nil {
+		t.Fatalf("encode: %v", err)
+	}
+}
+
+func writeRectFrame(t *testing.T, path string, x int, y int, w int, h int) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	img := image.NewRGBA(image.Rect(0, 0, frameW, frameH))
+	for py := y; py < y+h; py++ {
+		for px := x; px < x+w; px++ {
+			img.SetRGBA(px, py, color.RGBA{R: 130, G: 130, B: 130, A: 255})
 		}
 	}
 	f, err := os.Create(path)

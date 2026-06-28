@@ -35,8 +35,8 @@ UPCOMING_SOURCE_ROWS = 3
 SILHOUETTE_INK = (14, 18, 15, 255)
 
 CURRENT_VARIANTS = [
-    "chinchilla_standard_gray",
-    "hamster_golden_syrian",
+	"chinchilla_standard_gray",
+	"hamster_golden_syrian",
     "djungarian_hamster",
     "campbell_hamster",
     "macaroni_mouse_tan",
@@ -47,10 +47,29 @@ CURRENT_VARIANTS = [
     "himalayan_rabbit",
     "gecko_gray_brown",
     "guinea_pig_tricolor",
-    "fancy_rat_hooded",
-    "albino_chipmunk",
-    "richardsons_ground_squirrel",
-    "yorkshire_terrier_longcoat",
+	"fancy_rat_hooded",
+	"albino_chipmunk",
+	"richardsons_ground_squirrel",
+	"yorkshire_terrier_longcoat",
+	"chipmunk_striped",
+	"gecko_leopard",
+	"whites_tree_frog_blue",
+	"budgerigar_green_yellow",
+	"cockatiel_normal_gray",
+	"java_sparrow_normal",
+	"parrotlet_green",
+	"lovebird_peach_faced",
+	"ragdoll_seal_bicolor",
+	"scottish_fold_silver_tabby",
+	"french_bulldog_fawn",
+	"maine_coon_brown_tabby",
+	"domestic_shorthair_calico",
+	"british_shorthair_blue",
+	"toy_poodle_apricot",
+	"munchkin_brown_tabby",
+	"roborovski_hamster",
+	"guinea_pig_russian_smoke_white",
+	"quokka",
 ]
 
 PAGE_RIGHT_FACING_VARIANTS = {
@@ -59,11 +78,18 @@ PAGE_RIGHT_FACING_VARIANTS = {
 
 ICON_FRAMES = {
     "macaroni_mouse_tan": 4,
-    "sugar_glider_gray": 4,
-    "gecko_gray_brown": 4,
-    "gecko_leopard": 4,
-    "whites_tree_frog_blue": 19,
-    "yorkshire_terrier_longcoat": 4,
+	"sugar_glider_gray": 4,
+	"gecko_gray_brown": 4,
+	"gecko_leopard": 4,
+	"whites_tree_frog_blue": 19,
+	"yorkshire_terrier_longcoat": 4,
+	"budgerigar_green_yellow": 4,
+	"cockatiel_normal_gray": 4,
+	"java_sparrow_normal": 4,
+	"parrotlet_green": 4,
+	"lovebird_peach_faced": 4,
+	"roborovski_hamster": 4,
+	"quokka": 58,
 }
 
 PREVIEW_POSES = {
@@ -82,10 +108,26 @@ PREVIEW_POSES = {
     "whites_tree_frog_blue": 19,
     "guinea_pig_tricolor": 10,
     "fancy_rat_hooded": 12,
-    "chipmunk_striped": 16,
-    "albino_chipmunk": 16,
-    "richardsons_ground_squirrel": 20,
-    "yorkshire_terrier_longcoat": 14,
+	"chipmunk_striped": 16,
+	"albino_chipmunk": 16,
+	"richardsons_ground_squirrel": 20,
+	"yorkshire_terrier_longcoat": 14,
+	"budgerigar_green_yellow": 4,
+	"cockatiel_normal_gray": 4,
+	"java_sparrow_normal": 4,
+	"parrotlet_green": 4,
+	"lovebird_peach_faced": 4,
+	"ragdoll_seal_bicolor": 8,
+	"scottish_fold_silver_tabby": 8,
+	"french_bulldog_fawn": 4,
+	"maine_coon_brown_tabby": 8,
+	"domestic_shorthair_calico": 4,
+	"british_shorthair_blue": 4,
+	"toy_poodle_apricot": 4,
+	"munchkin_brown_tabby": 4,
+	"roborovski_hamster": 4,
+	"guinea_pig_russian_smoke_white": 4,
+	"quokka": 58,
 }
 
 # The page-specific ImageGen source sheet was generated in this cell order.
@@ -112,24 +154,18 @@ UPCOMING_SOURCE_LAYOUT = [
 ]
 
 UPCOMING_SILHOUETTES = [
-    "chipmunk",
-    "leucistic_sugar_glider",
-    "african_dormouse",
-    "netherland_dwarf_himalayan",
+	"leucistic_sugar_glider",
+	"african_dormouse",
+	"netherland_dwarf_himalayan",
     "american_flying_squirrel",
     "longhair_hamster_black_white",
     "djungarian_hamster_yellow",
     "djungarian_hamster_pearl_white",
     "fancy_rat_blue_hooded",
-    "fancy_rat_chocolate_self",
-    "fancy_rat_cream_agouti",
-    "rabbit_gray",
-    "whites_tree_frog",
-    "leopard_gecko",
-    "budgerigar",
-    "cockatiel",
-    "java_sparrow",
-    "african_fat_tailed_gecko",
+	"fancy_rat_chocolate_self",
+	"fancy_rat_cream_agouti",
+	"rabbit_gray",
+	"african_fat_tailed_gecko",
 ]
 
 
@@ -191,6 +227,29 @@ def draw_soft_shadow(canvas: Image.Image, cx: int, cy: int, w: int, h: int) -> N
     canvas.alpha_composite(shadow)
 
 
+def preview_positions(count: int) -> list[tuple[int, int, int, int]]:
+    rows = 3 if count > 24 else 2
+    row_counts = [count // rows] * rows
+    for i in range(count % rows):
+        row_counts[i] += 1
+    base_ys = [346, 400, 448] if rows == 3 else [372, 430]
+    positions: list[tuple[int, int, int, int]] = []
+    for row, row_count in enumerate(row_counts):
+        if row_count == 0:
+            continue
+        left = 28
+        right = PREVIEW_W - 76
+        gap = (right - left) / max(1, row_count - 1)
+        max_w = 58 if rows == 3 else 84
+        max_h = 42 if rows == 3 else 58
+        for col in range(row_count):
+            x = round(left + col * gap)
+            if row % 2 == 1:
+                x += round(gap / 2)
+            positions.append((min(x, PREVIEW_W - max_w - 22), base_ys[row], max_w, max_h))
+    return positions
+
+
 def write_preview() -> None:
     canvas = Image.new("RGBA", (PREVIEW_W, PREVIEW_H), (252, 253, 250, 255))
     d = ImageDraw.Draw(canvas)
@@ -202,30 +261,10 @@ def write_preview() -> None:
         d.rounded_rectangle((x, 474, x + 24, 498), radius=6, fill=(222, 228, 233, 255))
     d.rounded_rectangle((720, 475, 918, 498), radius=10, fill=(247, 249, 250, 255))
 
-    positions = [
-        (42, 362, 1.08),
-        (112, 384, 1.05),
-        (178, 344, 1.02),
-        (246, 386, 1.02),
-        (314, 352, 1.05),
-        (382, 388, 1.03),
-        (450, 344, 1.05),
-        (520, 386, 1.0),
-        (586, 352, 1.02),
-        (654, 388, 1.02),
-        (720, 352, 1.05),
-        (790, 386, 1.02),
-        (858, 350, 1.0),
-        (72, 424, 1.0),
-        (368, 424, 0.96),
-        (500, 424, 0.98),
-        (610, 424, 0.98),
-        (710, 424, 0.98),
-        (820, 424, 0.98),
-    ]
-    for variant, (x, base_y, scale_factor) in zip(CURRENT_VARIANTS, positions):
+    positions = preview_positions(len(CURRENT_VARIANTS))
+    for variant, (x, base_y, max_w, max_h) in zip(CURRENT_VARIANTS, positions):
         sprite = frame_for_variant(variant, PREVIEW_POSES.get(variant, 0))
-        animal = scaled(sprite, round(90 * scale_factor), round(62 * scale_factor))
+        animal = scaled(sprite, max_w, max_h)
         draw_soft_shadow(canvas, x + animal.width // 2, base_y + 4, max(34, animal.width - 18), 10)
         canvas.alpha_composite(animal, (x, base_y - animal.height))
 

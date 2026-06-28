@@ -193,6 +193,25 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"albino_chipmunk",
 		"richardsons_ground_squirrel",
 		"yorkshire_terrier_longcoat",
+		"chipmunk_striped",
+		"gecko_leopard",
+		"whites_tree_frog_blue",
+		"budgerigar_green_yellow",
+		"cockatiel_normal_gray",
+		"java_sparrow_normal",
+		"parrotlet_green",
+		"lovebird_peach_faced",
+		"ragdoll_seal_bicolor",
+		"scottish_fold_silver_tabby",
+		"french_bulldog_fawn",
+		"maine_coon_brown_tabby",
+		"domestic_shorthair_calico",
+		"british_shorthair_blue",
+		"toy_poodle_apricot",
+		"munchkin_brown_tabby",
+		"roborovski_hamster",
+		"guinea_pig_russian_smoke_white",
+		"quokka",
 	}
 	if got := len(variants); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
@@ -203,6 +222,42 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		}
 		if variant.SpeciesID == "degu" {
 			t.Fatalf("runtime variants include degu: %+v", variant)
+		}
+	}
+}
+
+func TestSettingsVariantSelectionCoversEveryRuntimeVariant(t *testing.T) {
+	a := &petApp{
+		pets:          make([]desktopPet, maxPetCount),
+		selectedCoats: defaultSelectedCoats(),
+	}
+
+	for i, variant := range variants {
+		a.lang = langJapanese
+		if got := a.variantLabel(i); got == "" {
+			t.Fatalf("Japanese label for %q is empty", variant.ID)
+		}
+		a.lang = langEnglish
+		if got := a.variantLabel(i); got == "" {
+			t.Fatalf("English label for %q is empty", variant.ID)
+		}
+
+		a.setCoatMode(coatFixed)
+		a.setFixedVariant(i)
+		if got := a.variant; got != i {
+			t.Fatalf("fixed variant index = %d, want %d", got, i)
+		}
+		for petIndex, pet := range a.pets {
+			if pet.variant != i {
+				t.Fatalf("fixed variant %q pet %d = %d, want %d", variant.ID, petIndex, pet.variant, i)
+			}
+		}
+
+		a.setCoatMode(coatSelected)
+		petIndex := i % maxPetCount
+		a.setSelectedVariant(petIndex, i)
+		if a.selectedCoats[petIndex] != i || a.pets[petIndex].variant != i {
+			t.Fatalf("selected variant %q pet %d = selected:%d pet:%d, want %d", variant.ID, petIndex, a.selectedCoats[petIndex], a.pets[petIndex].variant, i)
 		}
 	}
 }
@@ -353,8 +408,8 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 }
 
 func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
-	if appVersion != "v0.2.2" {
-		t.Fatalf("appVersion = %q, want v0.2.2", appVersion)
+	if appVersion != "v0.2.4" {
+		t.Fatalf("appVersion = %q, want v0.2.4", appVersion)
 	}
 }
 
@@ -936,6 +991,8 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"body_path: dist/RELEASE_NOTES.md",
 		"github.ref_name == 'v0.2.1'",
 		"github.ref_name == 'v0.2.2'",
+		"github.ref_name == 'v0.2.3'",
+		"github.ref_name == 'v0.2.4'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {
