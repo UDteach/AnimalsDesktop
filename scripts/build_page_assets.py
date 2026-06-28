@@ -153,6 +153,25 @@ UPCOMING_SOURCE_LAYOUT = [
     "african_fat_tailed_gecko",
 ]
 
+UPCOMING_INDIVIDUAL_SOURCES = {
+    "lionhead_rabbit": (
+        ROOT
+        / "docs"
+        / "art-source"
+        / "lionhead-rabbit"
+        / "page-coming-soon"
+        / "lionhead-rabbit-page-source.png"
+    ),
+    "shoebill": (
+        ROOT
+        / "docs"
+        / "art-source"
+        / "shoebill"
+        / "page-coming-soon"
+        / "shoebill-page-source.png"
+    ),
+}
+
 UPCOMING_SILHOUETTES = [
 	"leucistic_sugar_glider",
 	"african_dormouse",
@@ -165,7 +184,9 @@ UPCOMING_SILHOUETTES = [
 	"fancy_rat_chocolate_self",
 	"fancy_rat_cream_agouti",
 	"rabbit_gray",
+	"lionhead_rabbit",
 	"african_fat_tailed_gecko",
+	"shoebill",
 ]
 
 
@@ -417,9 +438,15 @@ def write_upcoming_silhouettes() -> None:
     silhouettes: list[Image.Image] = []
     source_indices = {kind: i for i, kind in enumerate(UPCOMING_SOURCE_LAYOUT)}
     for kind in UPCOMING_SILHOUETTES:
-        if kind not in source_indices:
+        if kind in source_indices:
+            cell = _crop_upcoming_source_cell(source, source_indices[kind])
+        elif kind in UPCOMING_INDIVIDUAL_SOURCES:
+            source_path = UPCOMING_INDIVIDUAL_SOURCES[kind]
+            if not source_path.exists():
+                raise SystemExit(f"missing page-specific ImageGen source: {source_path}")
+            cell = Image.open(source_path).convert("RGBA")
+        else:
             raise SystemExit(f"missing upcoming silhouette source cell for {kind}")
-        cell = _crop_upcoming_source_cell(source, source_indices[kind])
         img = _silhouette_from_source_cell(cell, kind)
         img.save(out_dir / f"{kind}.png")
         silhouettes.append(img)

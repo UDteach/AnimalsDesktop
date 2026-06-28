@@ -29,7 +29,9 @@ EXPECTED_UPCOMING = [
     "fancy_rat_chocolate_self",
     "fancy_rat_cream_agouti",
     "rabbit_gray",
+    "lionhead_rabbit",
     "african_fat_tailed_gecko",
+    "shoebill",
 ]
 
 
