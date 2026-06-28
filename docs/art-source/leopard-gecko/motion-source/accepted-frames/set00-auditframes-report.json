@@ -9,7 +9,7 @@
   "valid": 62,
   "missing": 0,
   "invalid": 0,
-  "warnings": 11,
+  "warnings": 15,
   "sets": [
     {
       "set": "set00",
@@ -17,7 +17,7 @@
       "valid": 62,
       "missing": 0,
       "invalid": 0,
-      "warnings": 11,
+      "warnings": 15,
       "frames": [
         {
           "frame": 0,
@@ -28,6 +28,10 @@
             "y": 39,
             "w": 84,
             "h": 19
+          },
+          "body": {
+            "alpha_pixels": 1014,
+            "fill_per_mille": 635
           },
           "warnings": [
             "possible floor/shadow artifact: alpha run length 36 at y=55 near lower content"
@@ -43,6 +47,10 @@
             "w": 84,
             "h": 18
           },
+          "body": {
+            "alpha_pixels": 937,
+            "fill_per_mille": 619
+          },
           "warnings": [
             "transparent pinholes: holes=1 area=2 largest=2"
           ]
@@ -56,6 +64,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 929,
+            "fill_per_mille": 650
           }
         },
         {
@@ -67,6 +79,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 861,
+            "fill_per_mille": 640
           },
           "warnings": [
             "possible floor/shadow artifact: alpha run length 33 at y=55 near lower content"
@@ -81,6 +97,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 915,
+            "fill_per_mille": 680
           }
         },
         {
@@ -92,6 +112,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 907,
+            "fill_per_mille": 635
           }
         },
         {
@@ -103,6 +127,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 850,
+            "fill_per_mille": 674
           }
         },
         {
@@ -114,6 +142,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 841,
+            "fill_per_mille": 667
           }
         },
         {
@@ -125,6 +157,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 847,
+            "fill_per_mille": 630
           }
         },
         {
@@ -136,6 +172,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 858,
+            "fill_per_mille": 638
           }
         },
         {
@@ -147,6 +187,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 847,
+            "fill_per_mille": 630
           }
         },
         {
@@ -158,6 +202,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 841,
+            "fill_per_mille": 625
           }
         },
         {
@@ -169,6 +217,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 837,
+            "fill_per_mille": 622
           },
           "warnings": [
             "transparent pinholes: holes=1 area=2 largest=2"
@@ -184,6 +236,10 @@
             "w": 84,
             "h": 15
           },
+          "body": {
+            "alpha_pixels": 807,
+            "fill_per_mille": 640
+          },
           "warnings": [
             "transparent pinholes: holes=1 area=1 largest=1"
           ]
@@ -197,6 +253,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 815,
+            "fill_per_mille": 646
           }
         },
         {
@@ -208,6 +268,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 813,
+            "fill_per_mille": 645
           }
         },
         {
@@ -219,6 +283,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 800,
+            "fill_per_mille": 634
           }
         },
         {
@@ -230,6 +298,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 874,
+            "fill_per_mille": 650
           }
         },
         {
@@ -241,6 +313,10 @@
             "y": 44,
             "w": 84,
             "h": 14
+          },
+          "body": {
+            "alpha_pixels": 791,
+            "fill_per_mille": 672
           }
         },
         {
@@ -252,6 +328,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 824,
+            "fill_per_mille": 653
           }
         },
         {
@@ -263,6 +343,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 848,
+            "fill_per_mille": 593
           }
         },
         {
@@ -274,6 +358,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 854,
+            "fill_per_mille": 598
           }
         },
         {
@@ -285,6 +373,10 @@
             "y": 40,
             "w": 84,
             "h": 18
+          },
+          "body": {
+            "alpha_pixels": 878,
+            "fill_per_mille": 580
           }
         },
         {
@@ -296,6 +388,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 803,
+            "fill_per_mille": 637
           }
         },
         {
@@ -307,6 +403,10 @@
             "y": 39,
             "w": 84,
             "h": 19
+          },
+          "body": {
+            "alpha_pixels": 840,
+            "fill_per_mille": 526
           }
         },
         {
@@ -318,6 +418,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 818,
+            "fill_per_mille": 649
           }
         },
         {
@@ -329,6 +433,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 842,
+            "fill_per_mille": 589
           }
         },
         {
@@ -340,6 +448,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 872,
+            "fill_per_mille": 610
           }
         },
         {
@@ -351,6 +463,10 @@
             "y": 44,
             "w": 84,
             "h": 14
+          },
+          "body": {
+            "alpha_pixels": 749,
+            "fill_per_mille": 636
           },
           "warnings": [
             "transparent pinholes: holes=1 area=1 largest=1"
@@ -365,6 +481,10 @@
             "y": 39,
             "w": 84,
             "h": 19
+          },
+          "body": {
+            "alpha_pixels": 949,
+            "fill_per_mille": 594
           }
         },
         {
@@ -376,6 +496,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 850,
+            "fill_per_mille": 595
           }
         },
         {
@@ -387,6 +511,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 827,
+            "fill_per_mille": 615
           }
         },
         {
@@ -398,6 +526,10 @@
             "y": 35,
             "w": 84,
             "h": 23
+          },
+          "body": {
+            "alpha_pixels": 1169,
+            "fill_per_mille": 605
           }
         },
         {
@@ -405,13 +537,18 @@
           "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-33.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
+            "x": 15,
+            "y": 28,
+            "w": 66,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 1207,
+            "fill_per_mille": 609
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 30 at y=55 near lower content"
+            "possible floor/shadow artifact: alpha run length 26 at y=55 near lower content",
+            "transparent pinholes: holes=1 area=2 largest=2"
           ]
         },
         {
@@ -419,10 +556,14 @@
           "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-34.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 18,
-            "w": 84,
-            "h": 40
+            "x": 16,
+            "y": 28,
+            "w": 63,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 925,
+            "fill_per_mille": 489
           }
         },
         {
@@ -430,14 +571,19 @@
           "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-35.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 23,
-            "w": 84,
-            "h": 35
+            "x": 13,
+            "y": 29,
+            "w": 70,
+            "h": 29
+          },
+          "body": {
+            "alpha_pixels": 1221,
+            "fill_per_mille": 601
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 30 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=1 largest=1"
+            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1",
+            "motion consistency: isolated body alpha area outlier at frame 35 (1221 vs neighbor avg 866)"
           ]
         },
         {
@@ -449,7 +595,15 @@
             "y": 43,
             "w": 84,
             "h": 15
-          }
+          },
+          "body": {
+            "alpha_pixels": 806,
+            "fill_per_mille": 639
+          },
+          "warnings": [
+            "motion consistency: bbox height jumps from previous frame 35 to 36 (29 -\u003e 15)",
+            "motion consistency: body alpha area jumps from previous frame 35 to 36 (1221 -\u003e 806)"
+          ]
         },
         {
           "frame": 37,
@@ -460,6 +614,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 919,
+            "fill_per_mille": 643
           }
         },
         {
@@ -471,6 +629,10 @@
             "y": 38,
             "w": 84,
             "h": 20
+          },
+          "body": {
+            "alpha_pixels": 1008,
+            "fill_per_mille": 600
           }
         },
         {
@@ -482,6 +644,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 839,
+            "fill_per_mille": 624
           },
           "warnings": [
             "transparent pinholes: holes=1 area=1 largest=1"
@@ -496,6 +662,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 864,
+            "fill_per_mille": 605
           }
         },
         {
@@ -507,6 +677,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 801,
+            "fill_per_mille": 635
           }
         },
         {
@@ -518,6 +692,10 @@
             "y": 40,
             "w": 84,
             "h": 18
+          },
+          "body": {
+            "alpha_pixels": 874,
+            "fill_per_mille": 578
           },
           "warnings": [
             "transparent pinholes: holes=1 area=3 largest=3"
@@ -532,6 +710,10 @@
             "y": 40,
             "w": 84,
             "h": 18
+          },
+          "body": {
+            "alpha_pixels": 872,
+            "fill_per_mille": 576
           }
         },
         {
@@ -543,6 +725,10 @@
             "y": 39,
             "w": 84,
             "h": 19
+          },
+          "body": {
+            "alpha_pixels": 900,
+            "fill_per_mille": 563
           }
         },
         {
@@ -554,6 +740,10 @@
             "y": 40,
             "w": 84,
             "h": 18
+          },
+          "body": {
+            "alpha_pixels": 871,
+            "fill_per_mille": 576
           }
         },
         {
@@ -565,6 +755,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 805,
+            "fill_per_mille": 638
           }
         },
         {
@@ -576,6 +770,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 832,
+            "fill_per_mille": 619
           }
         },
         {
@@ -587,6 +785,10 @@
             "y": 40,
             "w": 84,
             "h": 18
+          },
+          "body": {
+            "alpha_pixels": 841,
+            "fill_per_mille": 556
           }
         },
         {
@@ -598,6 +800,10 @@
             "y": 38,
             "w": 84,
             "h": 20
+          },
+          "body": {
+            "alpha_pixels": 857,
+            "fill_per_mille": 510
           }
         },
         {
@@ -609,6 +815,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 848,
+            "fill_per_mille": 593
           }
         },
         {
@@ -620,6 +830,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 837,
+            "fill_per_mille": 622
           }
         },
         {
@@ -631,6 +845,10 @@
             "y": 43,
             "w": 84,
             "h": 15
+          },
+          "body": {
+            "alpha_pixels": 816,
+            "fill_per_mille": 647
           }
         },
         {
@@ -642,6 +860,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 860,
+            "fill_per_mille": 639
           }
         },
         {
@@ -653,6 +875,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 854,
+            "fill_per_mille": 635
           }
         },
         {
@@ -664,6 +890,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 875,
+            "fill_per_mille": 612
           }
         },
         {
@@ -675,6 +905,10 @@
             "y": 37,
             "w": 84,
             "h": 21
+          },
+          "body": {
+            "alpha_pixels": 845,
+            "fill_per_mille": 479
           }
         },
         {
@@ -686,6 +920,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 847,
+            "fill_per_mille": 630
           }
         },
         {
@@ -697,6 +935,10 @@
             "y": 41,
             "w": 84,
             "h": 17
+          },
+          "body": {
+            "alpha_pixels": 845,
+            "fill_per_mille": 591
           }
         },
         {
@@ -708,6 +950,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 828,
+            "fill_per_mille": 616
           }
         },
         {
@@ -719,6 +965,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 810,
+            "fill_per_mille": 602
           }
         },
         {
@@ -730,6 +980,10 @@
             "y": 42,
             "w": 84,
             "h": 16
+          },
+          "body": {
+            "alpha_pixels": 818,
+            "fill_per_mille": 608
           }
         }
       ],

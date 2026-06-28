@@ -16,8 +16,8 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
+EXPECTED_RELEASE = "v0.2.4"
 EXPECTED_UPCOMING = [
-    "chipmunk",
     "leucistic_sugar_glider",
     "african_dormouse",
     "netherland_dwarf_himalayan",
@@ -29,11 +29,6 @@ EXPECTED_UPCOMING = [
     "fancy_rat_chocolate_self",
     "fancy_rat_cream_agouti",
     "rabbit_gray",
-    "whites_tree_frog",
-    "leopard_gecko",
-    "budgerigar",
-    "cockatiel",
-    "java_sparrow",
     "african_fat_tailed_gecko",
 ]
 
@@ -119,6 +114,8 @@ def main() -> None:
     checksum_tag = release_tag(CHECKSUM_ASSET, html, "SHA256SUMS download version tag")
     mac_arm64_tag = release_tag(MAC_ARM64_ASSET, html, "macOS arm64 download version tag")
     mac_amd64_tag = release_tag(MAC_AMD64_ASSET, html, "macOS amd64 download version tag")
+    if windows_tag != EXPECTED_RELEASE:
+        fail(f"Windows amd64 download tag {windows_tag} does not match expected {EXPECTED_RELEASE}")
 
     windows_badge = one(
         r"<span[^>]*>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
@@ -151,6 +148,19 @@ def main() -> None:
     upcoming_ids = upcoming_page_ids(html)
     if upcoming_ids != EXPECTED_UPCOMING:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
+
+    for required in ("ライオンラビット", "ハシビロコウ", "低モーション", "lionhead", "shoebill", "low-motion"):
+        if required not in html:
+            fail(f"missing future roadmap text: {required}")
+    for required in (
+        'data-i18n="versions.v024.title"',
+        "v0.2.4 / 2026-06-28",
+        "v0.2.4 / June 28, 2026",
+        "v0.2.3 / 2026-06-28",
+        "v0.2.3 / June 28, 2026",
+    ):
+        if required not in html:
+            fail(f"missing version history text: {required}")
 
     verify_asset_refs(html)
 

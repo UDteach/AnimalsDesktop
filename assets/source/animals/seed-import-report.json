@@ -412,6 +412,46 @@
     ]
   },
   {
+    "variant": "quokka",
+    "species": "quokka",
+    "breed_or_morph": "Quokka",
+    "color": "warm brown",
+    "popularity_tier": 2,
+    "motion_profile": "rabbit-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/quokka/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/quokka-source.png",
+    "motion_source": "docs/art-source/quokka/motion-source/sheets/quokka-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "quokka",
+    "tint_hex": "a65f25",
+    "accent_hex": "d48a3d",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 11,
+      "w": 84,
+      "h": 47
+    },
+    "outputs": [
+      "assets/sprites/quokka_set00.png",
+      "assets/sprites/quokka_set01.png",
+      "assets/sprites/quokka_set02.png",
+      "assets/sprites/quokka_set03.png",
+      "assets/sprites/quokka_set04.png",
+      "assets/sprites/quokka_set05.png",
+      "assets/sprites/quokka_set06.png",
+      "assets/sprites/quokka_set07.png",
+      "assets/sprites/quokka_set08.png",
+      "assets/sprites/quokka_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "dog_cream_tan",
     "species": "dog",
     "breed_or_morph": "Small dog - cream and tan",
@@ -1069,6 +1109,46 @@
     ]
   },
   {
+    "variant": "roborovski_hamster",
+    "species": "hamster",
+    "breed_or_morph": "Roborovski hamster",
+    "color": "sandy white",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/roborovski-hamster/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/roborovski_hamster-source.png",
+    "motion_source": "docs/art-source/roborovski-hamster/motion-source/sheets/roborovski-hamster-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "roborovski_hamster",
+    "tint_hex": "d7ad73",
+    "accent_hex": "f3eadc",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 9,
+      "y": 4,
+      "w": 77,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/roborovski_hamster_set00.png",
+      "assets/sprites/roborovski_hamster_set01.png",
+      "assets/sprites/roborovski_hamster_set02.png",
+      "assets/sprites/roborovski_hamster_set03.png",
+      "assets/sprites/roborovski_hamster_set04.png",
+      "assets/sprites/roborovski_hamster_set05.png",
+      "assets/sprites/roborovski_hamster_set06.png",
+      "assets/sprites/roborovski_hamster_set07.png",
+      "assets/sprites/roborovski_hamster_set08.png",
+      "assets/sprites/roborovski_hamster_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "hamster_cream",
     "species": "hamster",
     "breed_or_morph": "Hamster - cream",
@@ -1350,6 +1430,46 @@
       "assets/sprites/guinea_pig_tricolor_set07.png",
       "assets/sprites/guinea_pig_tricolor_set08.png",
       "assets/sprites/guinea_pig_tricolor_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "guinea_pig_russian_smoke_white",
+    "species": "guinea_pig",
+    "breed_or_morph": "Guinea pig",
+    "color": "Russian smoke white",
+    "popularity_tier": 2,
+    "motion_profile": "guinea-pig-waddle",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/guinea-pig-russian-smoke-white/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/guinea_pig_russian_smoke_white-source.png",
+    "motion_source": "docs/art-source/guinea-pig-russian-smoke-white/motion-source/sheets/guinea-pig-russian-smoke-white-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "guinea_pig_russian_smoke_white",
+    "tint_hex": "f1eee6",
+    "accent_hex": "8d8380",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 11,
+      "w": 84,
+      "h": 47
+    },
+    "outputs": [
+      "assets/sprites/guinea_pig_russian_smoke_white_set00.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set01.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set02.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set03.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set04.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set05.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set06.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set07.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set08.png",
+      "assets/sprites/guinea_pig_russian_smoke_white_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -2012,19 +2132,22 @@
     "color": "fawn",
     "popularity_tier": 1,
     "motion_profile": "dog-trot",
-    "source_status": "prototype_only",
-    "source": "docs/art-intake/dog/dog-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/french-bulldog/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/french_bulldog_fawn-source.png",
+    "motion_source": "docs/art-source/french-bulldog/motion-source/sheets/french-bulldog-fawn-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "french_bulldog_fawn",
     "tint_hex": "c49a6c",
     "accent_hex": "3a3026",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 269,
-      "y": 91,
-      "w": 1228,
-      "h": 841
+      "x": 19,
+      "y": 6,
+      "w": 57,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/french_bulldog_fawn_set00.png",
@@ -2037,6 +2160,49 @@
       "assets/sprites/french_bulldog_fawn_set07.png",
       "assets/sprites/french_bulldog_fawn_set08.png",
       "assets/sprites/french_bulldog_fawn_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "toy_poodle_apricot",
+    "species": "dog",
+    "breed_or_morph": "Toy Poodle",
+    "color": "apricot",
+    "popularity_tier": 1,
+    "motion_profile": "dog-trot",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/toy-poodle/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/toy_poodle_apricot-source.png",
+    "motion_source": "docs/art-source/toy-poodle/motion-source/sheets/toy-poodle-apricot-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "toy_poodle_apricot",
+    "tint_hex": "d98a3f",
+    "accent_hex": "5a3825",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 19,
+      "y": 6,
+      "w": 58,
+      "h": 52
+    },
+    "outputs": [
+      "assets/sprites/toy_poodle_apricot_set00.png",
+      "assets/sprites/toy_poodle_apricot_set01.png",
+      "assets/sprites/toy_poodle_apricot_set02.png",
+      "assets/sprites/toy_poodle_apricot_set03.png",
+      "assets/sprites/toy_poodle_apricot_set04.png",
+      "assets/sprites/toy_poodle_apricot_set05.png",
+      "assets/sprites/toy_poodle_apricot_set06.png",
+      "assets/sprites/toy_poodle_apricot_set07.png",
+      "assets/sprites/toy_poodle_apricot_set08.png",
+      "assets/sprites/toy_poodle_apricot_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2456,19 +2622,22 @@
     "color": "brown tabby",
     "popularity_tier": 1,
     "motion_profile": "cat-stalk",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/maine-coon/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/maine_coon_brown_tabby-source.png",
+    "motion_source": "docs/art-source/maine-coon/motion-source/sheets/maine-coon-brown-tabby-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "maine_coon_brown_tabby",
     "tint_hex": "6e5239",
     "accent_hex": "a88457",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 187,
-      "y": 111,
-      "w": 1138,
-      "h": 775
+      "x": 9,
+      "y": 6,
+      "w": 76,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/maine_coon_brown_tabby_set00.png",
@@ -2481,6 +2650,9 @@
       "assets/sprites/maine_coon_brown_tabby_set07.png",
       "assets/sprites/maine_coon_brown_tabby_set08.png",
       "assets/sprites/maine_coon_brown_tabby_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2490,19 +2662,22 @@
     "color": "seal bicolor",
     "popularity_tier": 1,
     "motion_profile": "cat-stalk",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/ragdoll/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/ragdoll_seal_bicolor-source.png",
+    "motion_source": "docs/art-source/ragdoll/motion-source/sheets/ragdoll-seal-bicolor-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "ragdoll_seal_bicolor",
     "tint_hex": "e7ddca",
     "accent_hex": "594333",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 187,
-      "y": 111,
-      "w": 1138,
-      "h": 775
+      "x": 4,
+      "y": 10,
+      "w": 85,
+      "h": 48
     },
     "outputs": [
       "assets/sprites/ragdoll_seal_bicolor_set00.png",
@@ -2515,6 +2690,9 @@
       "assets/sprites/ragdoll_seal_bicolor_set07.png",
       "assets/sprites/ragdoll_seal_bicolor_set08.png",
       "assets/sprites/ragdoll_seal_bicolor_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2557,18 +2735,21 @@
     "color": "blue",
     "popularity_tier": 1,
     "motion_profile": "cat-stalk",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/british-shorthair/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/british_shorthair_blue-source.png",
+    "motion_source": "docs/art-source/british-shorthair/motion-source/sheets/british-shorthair-blue-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "british_shorthair_blue",
     "tint_hex": "737d84",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 187,
-      "y": 111,
-      "w": 1138,
-      "h": 775
+      "x": 10,
+      "y": 6,
+      "w": 76,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/british_shorthair_blue_set00.png",
@@ -2581,6 +2762,49 @@
       "assets/sprites/british_shorthair_blue_set07.png",
       "assets/sprites/british_shorthair_blue_set08.png",
       "assets/sprites/british_shorthair_blue_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "munchkin_brown_tabby",
+    "species": "cat",
+    "breed_or_morph": "Munchkin",
+    "color": "brown tabby",
+    "popularity_tier": 1,
+    "motion_profile": "cat-stalk",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/munchkin/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/munchkin_brown_tabby-source.png",
+    "motion_source": "docs/art-source/munchkin/motion-source/sheets/munchkin-brown-tabby-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "munchkin_brown_tabby",
+    "tint_hex": "8b542e",
+    "accent_hex": "2f241c",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 4,
+      "y": 17,
+      "w": 88,
+      "h": 41
+    },
+    "outputs": [
+      "assets/sprites/munchkin_brown_tabby_set00.png",
+      "assets/sprites/munchkin_brown_tabby_set01.png",
+      "assets/sprites/munchkin_brown_tabby_set02.png",
+      "assets/sprites/munchkin_brown_tabby_set03.png",
+      "assets/sprites/munchkin_brown_tabby_set04.png",
+      "assets/sprites/munchkin_brown_tabby_set05.png",
+      "assets/sprites/munchkin_brown_tabby_set06.png",
+      "assets/sprites/munchkin_brown_tabby_set07.png",
+      "assets/sprites/munchkin_brown_tabby_set08.png",
+      "assets/sprites/munchkin_brown_tabby_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2657,19 +2881,22 @@
     "color": "silver tabby",
     "popularity_tier": 2,
     "motion_profile": "cat-stalk",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/scottish-fold/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/scottish_fold_silver_tabby-source.png",
+    "motion_source": "docs/art-source/scottish-fold/motion-source/sheets/scottish-fold-silver-tabby-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "scottish_fold_silver_tabby",
     "tint_hex": "a7aaa5",
     "accent_hex": "5e625f",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 187,
-      "y": 111,
-      "w": 1138,
-      "h": 775
+      "x": 6,
+      "y": 13,
+      "w": 85,
+      "h": 47
     },
     "outputs": [
       "assets/sprites/scottish_fold_silver_tabby_set00.png",
@@ -2682,6 +2909,9 @@
       "assets/sprites/scottish_fold_silver_tabby_set07.png",
       "assets/sprites/scottish_fold_silver_tabby_set08.png",
       "assets/sprites/scottish_fold_silver_tabby_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2725,19 +2955,22 @@
     "color": "calico",
     "popularity_tier": 2,
     "motion_profile": "cat-stalk",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/cat/cat-kijitora-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/domestic-shorthair/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/domestic_shorthair_calico-source.png",
+    "motion_source": "docs/art-source/domestic-shorthair/motion-source/sheets/domestic-shorthair-calico-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "domestic_shorthair_calico",
     "tint_hex": "e8dfcd",
     "accent_hex": "bd6d2e",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 187,
-      "y": 111,
-      "w": 1138,
-      "h": 775
+      "x": 4,
+      "y": 6,
+      "w": 87,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/domestic_shorthair_calico_set00.png",
@@ -2750,6 +2983,9 @@
       "assets/sprites/domestic_shorthair_calico_set07.png",
       "assets/sprites/domestic_shorthair_calico_set08.png",
       "assets/sprites/domestic_shorthair_calico_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3431,6 +3667,46 @@
     ]
   },
   {
+    "variant": "budgerigar_green_yellow",
+    "species": "budgerigar",
+    "breed_or_morph": "Budgerigar",
+    "color": "green yellow",
+    "popularity_tier": 1,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/budgerigar/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/budgerigar_green_yellow-source.png",
+    "motion_source": "docs/art-source/budgerigar/motion-source/sheets/budgerigar-green-yellow-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "budgerigar_green_yellow",
+    "tint_hex": "75b64c",
+    "accent_hex": "f0da4d",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 4,
+      "w": 84,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/budgerigar_green_yellow_set00.png",
+      "assets/sprites/budgerigar_green_yellow_set01.png",
+      "assets/sprites/budgerigar_green_yellow_set02.png",
+      "assets/sprites/budgerigar_green_yellow_set03.png",
+      "assets/sprites/budgerigar_green_yellow_set04.png",
+      "assets/sprites/budgerigar_green_yellow_set05.png",
+      "assets/sprites/budgerigar_green_yellow_set06.png",
+      "assets/sprites/budgerigar_green_yellow_set07.png",
+      "assets/sprites/budgerigar_green_yellow_set08.png",
+      "assets/sprites/budgerigar_green_yellow_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "cockatiel_normal_gray",
     "species": "cockatiel",
     "breed_or_morph": "Cockatiel",
@@ -3505,6 +3781,86 @@
       "assets/sprites/java_sparrow_normal_set07.png",
       "assets/sprites/java_sparrow_normal_set08.png",
       "assets/sprites/java_sparrow_normal_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "parrotlet_green",
+    "species": "parrotlet",
+    "breed_or_morph": "Pacific parrotlet",
+    "color": "green",
+    "popularity_tier": 2,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/parrotlet/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/parrotlet_green-source.png",
+    "motion_source": "docs/art-source/parrotlet/motion-source/sheets/parrotlet-green-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "parrotlet_green",
+    "tint_hex": "80bd38",
+    "accent_hex": "d9e982",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 19,
+      "y": 7,
+      "w": 57,
+      "h": 52
+    },
+    "outputs": [
+      "assets/sprites/parrotlet_green_set00.png",
+      "assets/sprites/parrotlet_green_set01.png",
+      "assets/sprites/parrotlet_green_set02.png",
+      "assets/sprites/parrotlet_green_set03.png",
+      "assets/sprites/parrotlet_green_set04.png",
+      "assets/sprites/parrotlet_green_set05.png",
+      "assets/sprites/parrotlet_green_set06.png",
+      "assets/sprites/parrotlet_green_set07.png",
+      "assets/sprites/parrotlet_green_set08.png",
+      "assets/sprites/parrotlet_green_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "lovebird_peach_faced",
+    "species": "lovebird",
+    "breed_or_morph": "Peach-faced lovebird",
+    "color": "peach faced",
+    "popularity_tier": 2,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/lovebird_peach_faced-source.png",
+    "motion_source": "docs/art-source/lovebird/motion-source/sheets/lovebird-peach-faced-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "lovebird_peach_faced",
+    "tint_hex": "75b83e",
+    "accent_hex": "ef7944",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 25,
+      "y": 10,
+      "w": 45,
+      "h": 47
+    },
+    "outputs": [
+      "assets/sprites/lovebird_peach_faced_set00.png",
+      "assets/sprites/lovebird_peach_faced_set01.png",
+      "assets/sprites/lovebird_peach_faced_set02.png",
+      "assets/sprites/lovebird_peach_faced_set03.png",
+      "assets/sprites/lovebird_peach_faced_set04.png",
+      "assets/sprites/lovebird_peach_faced_set05.png",
+      "assets/sprites/lovebird_peach_faced_set06.png",
+      "assets/sprites/lovebird_peach_faced_set07.png",
+      "assets/sprites/lovebird_peach_faced_set08.png",
+      "assets/sprites/lovebird_peach_faced_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"

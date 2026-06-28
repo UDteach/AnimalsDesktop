@@ -1,20 +1,18 @@
 # AnimalsDesktop
 
-AnimalsDesktop is a small desktop pet app for Windows and macOS. Chinchilla,
-hamster, Djungarian hamster, Campbell hamster, macaroni mouse, sugar glider,
-rabbit, Holland Lop, Netherland Dwarf, Himalayan rabbit, gecko, guinea pig,
-fancy rat, albino chipmunk, Richardson's ground squirrel, and Yorkshire Terrier
-sprites walk near the Windows taskbar or along the bottom edge above the Mac
-Dock.
+AnimalsDesktop is a small desktop pet app for Windows and macOS. The current
+preview exposes 35 selectable animal sprites that walk near the Windows taskbar
+or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
-Current app version: `v0.2.3`
+Current app version: `v0.2.4`
 
 ## Current Status
 
-`v0.1.5` is an early public test release for sixteen accepted initial
-62-frame ImageGen motion animals:
+`v0.2.4` is an early public test release for 35 accepted 62-frame ImageGen
+motion animals. It keeps the original sixteen preview animals and adds the
+current GitHub Pages priority wave:
 
 - chinchilla standard gray
 - golden Syrian hamster
@@ -32,6 +30,25 @@ Current app version: `v0.2.3`
 - albino chipmunk
 - Richardson's ground squirrel
 - longcoat Yorkshire Terrier
+- striped chipmunk
+- leopard gecko
+- blue White's tree frog
+- green-yellow budgerigar
+- normal gray cockatiel
+- normal Java sparrow
+- green parrotlet
+- peach-faced lovebird
+- seal bicolor ragdoll
+- silver tabby Scottish Fold
+- fawn French Bulldog
+- brown tabby Maine Coon
+- calico domestic shorthair
+- blue British Shorthair
+- apricot Toy Poodle
+- brown tabby Munchkin
+- Roborovski hamster
+- Russian smoke white guinea pig
+- quokka
 
 This is not the final full-motion completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
@@ -39,20 +56,21 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.1.5 preview intentionally exposes only the sixteen accepted initial
-runtime animals listed above. Unverified candidate species should not appear in
+The v0.2.4 preview intentionally exposes only the 35 accepted runtime animals
+listed above. Unverified candidate species should not appear in
 the runtime picker until their source art and motion behavior pass the release QA
 loop. As animals graduate into a release, remove them from the future queue and
 move them into the current-animal page section. Coming-soon silhouettes should be
 page-specific generated art, not repurposed runtime/prototype images.
 
 Future queue candidates use current popular-pet signals, then get verified per
-animal before production starts. The current page queue starts with leopard
-gecko, blue White's tree frog, and striped chipmunk, then prioritizes
-budgerigar, cockatiel, and Java sparrow. The cat-breed page queue follows the
-2026 iPet/Nyanpedia cat breed ranking top five: mixed cat, Scottish Fold,
-Munchkin, Ragdoll, and Minuet. Re-check ranking sources before starting a cat
-runtime lane.
+animal before production starts. After the v0.2.4 release, the remaining Pages
+queue is leucistic sugar glider, African dormouse, Netherland Dwarf Himalayan,
+American flying squirrel, black-and-white long-haired hamster, yellow
+Djungarian hamster, pearl white Djungarian hamster, fancy rat blue hooded,
+fancy rat chocolate self, fancy rat cream agouti, gray rabbit, and African
+fat-tailed gecko. The next newly requested lanes are a white lionhead-pattern
+rabbit and a special low-motion shoebill.
 
 Each animal promoted into the current runtime/page list should move the preview
 version forward by a small patch bump, with page text, workflow checks, and
@@ -79,8 +97,10 @@ A full animal-family release is ready only when it has:
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
 `v0.1.5` is an explicit test-preview exception for the sixteen initial-motion
-animals plus Mac distribution. Future full-content releases should
-still satisfy the full gate unless a new preview exception is documented.
+animals plus Mac distribution. `v0.2.4` is an explicit test-preview exception
+for the thirty-five-animal runtime roster before the full 10-set motion gate.
+Future full-content releases should still satisfy the full gate unless a new
+preview exception is documented.
 
 ## Development
 
@@ -89,12 +109,12 @@ Useful checks during local development:
 ```powershell
 go run ./cmd/importsheet
 go run ./cmd/importanimals
-go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames
+go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames -artifact-warnings -motion-warnings
 go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go run ./cmd/winresicon -src docs/assets/animalsdesktop-preview.png -out winres/icon.png
-go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.3 --product-version v0.2.3
+go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.4 --product-version v0.2.4
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
@@ -113,8 +133,8 @@ Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\A
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.2.3 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.2.3 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.2.4 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.2.4 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.
@@ -129,7 +149,7 @@ go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.
 Run `cmd/assemblemotion` only for a set after `cmd/auditframes -strict` passes:
 
 ```powershell
-go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\<set-id> -strict
+go run ./cmd/auditframes -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\<set-id> -strict -artifact-warnings -motion-warnings
 go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source\accepted-frames\<set-id> -out docs\art-source\chinchilla\motion-source\sheets\chinchilla-standard-gray-source-<set-id>-draft.png
 ```
 
@@ -158,6 +178,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows UI hotfix for the name-change dialog action buttons.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35.
 
 Do not create a stable/final release tag until the current animal target is complete.

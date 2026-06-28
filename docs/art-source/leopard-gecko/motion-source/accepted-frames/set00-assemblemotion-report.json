@@ -342,30 +342,30 @@
       "frame": 33,
       "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-33.png",
       "content": {
-        "x": 6,
-        "y": 20,
-        "w": 84,
-        "h": 38
+        "x": 15,
+        "y": 28,
+        "w": 66,
+        "h": 30
       }
     },
     {
       "frame": 34,
       "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-34.png",
       "content": {
-        "x": 6,
-        "y": 18,
-        "w": 84,
-        "h": 40
+        "x": 16,
+        "y": 28,
+        "w": 63,
+        "h": 30
       }
     },
     {
       "frame": 35,
       "path": "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-35.png",
       "content": {
-        "x": 6,
-        "y": 23,
-        "w": 84,
-        "h": 35
+        "x": 13,
+        "y": 29,
+        "w": 70,
+        "h": 29
       }
     },
     {
