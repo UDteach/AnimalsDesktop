@@ -999,6 +999,8 @@
   `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, JS syntax
   check, workflow silhouette existence check, `git diff --check`, and
   Playwright JP/EN card/image-load QA.
+## 2026-06-29
+
 - Fixed Windows mixed-height multi-monitor overlay placement for 4K + 1080p
   spans. The Windows renderer now keeps one horizontal scene coordinate system
   but draws separate thin layered overlay strips per selected monitor, so each
@@ -1041,3 +1043,28 @@
   generation via `cmd/winresicon` and `go-winres`, `go build -buildvcs=false
   -ldflags="-H=windowsgui -X main.appVersion=v0.2.5"`, and a launch smoke test
   of `dist/AnimalsDesktop.exe`.
+
+## 2026-06-30
+
+- Prepared the v0.2.5 release lane by combining the mixed-DPI multi-monitor
+  hotfix with six additional selectable runtime variants:
+  `parrotlet_blue_green`, `true_albino_chipmunk`,
+  `miniature_schnauzer_salt_pepper`, `japanese_giant_salamander`,
+  `white_wagtail`, and `domestic_shorthair_tabby_white_stocky`. The earlier
+  `albino_chipmunk` label was corrected to black-eyed white chipmunk so the new
+  true albino chipmunk remains a separate no-stripe red-eyed asset.
+- Refreshed selected accepted assets for budgerigar, lovebird, quokka,
+  Roborovski hamster, Ragdoll, Scottish Fold, and Toy Poodle after comparing
+  local accepted sources against the v0.2.4 release state. The existing leopard
+  gecko source sheet was kept, and runtime-only render adjustments now scale
+  the middle turn frames instead of adopting the worse alternate sheet.
+- Updated GitHub Pages and release copy to v0.2.5, 41 current animals, and
+  retained the Upcoming contract as 14 cards: 12 remaining Pages candidates,
+  the white lionhead-pattern rabbit, and the special low-motion shoebill.
+- Local validation passed: `go run ./cmd/importsheet`, `go run
+  ./cmd/importanimals`, `python3 scripts/build_page_assets.py`, `python3
+  scripts/verify_page_release.py`, `go run ./cmd/validatemotion -runtime-only
+  -require-accepted`, `go test -buildvcs=false ./...`, `go vet
+  -buildvcs=false ./...`, `git diff --check`, macOS arm64/amd64 ZIP builds,
+  Windows amd64/386 cross-builds, and Playwright JP/EN Pages smoke checks.
+  Visual QA artifacts are under `.codex/qa/release-v025-visual/`.

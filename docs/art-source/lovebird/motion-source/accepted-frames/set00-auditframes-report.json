@@ -9,7 +9,7 @@
   "valid": 62,
   "missing": 0,
   "invalid": 0,
-  "warnings": 92,
+  "warnings": 73,
   "sets": [
     {
       "set": "set00",
@@ -17,21 +17,20 @@
       "valid": 62,
       "missing": 0,
       "invalid": 0,
-      "warnings": 92,
+      "warnings": 73,
       "frames": [
         {
           "frame": 0,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-00.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 45,
-            "h": 47
+            "x": 15,
+            "y": 4,
+            "w": 65,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 21 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=4 largest=4"
+            "possible floor/shadow artifact: alpha run length 21 at y=55 near lower content"
           ]
         },
         {
@@ -39,14 +38,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-01.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
+            "x": 15,
+            "y": 4,
+            "w": 66,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 21 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "possible floor/shadow artifact: alpha run length 22 at y=55 near lower content"
           ]
         },
         {
@@ -54,14 +52,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-02.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 16,
+            "y": 4,
+            "w": 64,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=9 largest=9"
+            "possible floor/shadow artifact: alpha run length 22 at y=55 near lower content"
           ]
         },
         {
@@ -69,14 +66,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-03.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 46,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 67,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 22 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=4 largest=4"
+            "possible floor/shadow artifact: alpha run length 23 at y=55 near lower content"
           ]
         },
         {
@@ -84,24 +80,28 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-04.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
-          }
+            "x": 10,
+            "y": 4,
+            "w": 76,
+            "h": 54
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 56 at y=48 with 33px row drop below"
+          ]
         },
         {
           "frame": 5,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-05.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 11,
+            "y": 4,
+            "w": 74,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 36 at y=49 with 18px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 56 at y=44 with 24px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -109,24 +109,28 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-06.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
-          }
+            "x": 12,
+            "y": 4,
+            "w": 72,
+            "h": 54
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 24 at y=56 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 51 at y=47 with 32px row drop below"
+          ]
         },
         {
           "frame": 7,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-07.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 13,
+            "y": 4,
+            "w": 69,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=49 with 20px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 51 at y=48 with 35px row drop below"
           ]
         },
         {
@@ -134,14 +138,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-08.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 46,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 68,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=6 largest=6"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -149,13 +153,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-09.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
+            "x": 11,
+            "y": 4,
+            "w": 74,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=49 with 22px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=46 with 24px row drop below"
           ]
         },
         {
@@ -163,13 +167,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-10.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 67,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 36 at y=49 with 21px row drop below"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -177,14 +181,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-11.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 68,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=6 largest=6"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -192,13 +195,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-12.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 10,
-            "w": 53,
-            "h": 47
+            "x": 9,
+            "y": 24,
+            "w": 78,
+            "h": 34
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 41 at y=47 with 21px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 66 at y=46 with 29px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -206,13 +210,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-13.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 11,
-            "w": 54,
-            "h": 46
+            "x": 9,
+            "y": 17,
+            "w": 78,
+            "h": 41
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 39 at y=47 with 21px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=45 with 26px row drop below"
           ]
         },
         {
@@ -220,27 +224,24 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-14.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
-          },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 36 at y=49 with 21px row drop below"
-          ]
+            "x": 9,
+            "y": 6,
+            "w": 78,
+            "h": 52
+          }
         },
         {
           "frame": 15,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-15.png",
           "status": "valid",
           "content": {
-            "x": 22,
-            "y": 10,
-            "w": 51,
-            "h": 47
+            "x": 9,
+            "y": 24,
+            "w": 78,
+            "h": 34
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 39 at y=48 with 22px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=47 with 29px row drop below"
           ]
         },
         {
@@ -248,21 +249,24 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-16.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
-          }
+            "x": 9,
+            "y": 15,
+            "w": 78,
+            "h": 43
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=43 with 28px row drop below"
+          ]
         },
         {
           "frame": 17,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-17.png",
           "status": "valid",
           "content": {
-            "x": 24,
-            "y": 10,
-            "w": 47,
-            "h": 47
+            "x": 9,
+            "y": 13,
+            "w": 78,
+            "h": 45
           }
         },
         {
@@ -270,13 +274,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-18.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
+            "x": 9,
+            "y": 5,
+            "w": 78,
+            "h": 53
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 38 at y=48 with 22px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 62 at y=48 with 39px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -284,14 +289,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-19.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 46,
-            "h": 47
+            "x": 13,
+            "y": 4,
+            "w": 70,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 49 at y=49 with 30px row drop below"
           ]
         },
         {
@@ -299,13 +304,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-20.png",
           "status": "valid",
           "content": {
-            "x": 21,
+            "x": 9,
             "y": 28,
-            "w": 54,
-            "h": 29
+            "w": 78,
+            "h": 30
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 53 at y=47 with 25px row drop below"
+            "possible floor/shadow artifact: alpha run length 26 at y=55 near lower content"
           ]
         },
         {
@@ -313,25 +318,21 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-21.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 30,
-            "w": 54,
-            "h": 27
-          },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 51 at y=48 with 20px row drop below",
-            "transparent pinholes: holes=1 area=2 largest=2"
-          ]
+            "x": 9,
+            "y": 24,
+            "w": 78,
+            "h": 34
+          }
         },
         {
           "frame": 22,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-22.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 29,
-            "w": 54,
-            "h": 28
+            "x": 9,
+            "y": 25,
+            "w": 78,
+            "h": 33
           }
         },
         {
@@ -339,15 +340,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-23.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 33,
-            "w": 54,
-            "h": 24
+            "x": 9,
+            "y": 26,
+            "w": 78,
+            "h": 32
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 53 at y=49 with 20px row drop below",
-            "transparent pinholes: holes=1 area=1 largest=1"
+            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content"
           ]
         },
         {
@@ -355,14 +354,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-24.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 30,
-            "w": 54,
-            "h": 27
+            "x": 9,
+            "y": 24,
+            "w": 78,
+            "h": 34
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 52 at y=48 with 20px row drop below",
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "possible lower ledge/shelf artifact: alpha run length 63 at y=46 with 34px row drop below"
           ]
         },
         {
@@ -370,14 +368,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-25.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 30,
-            "w": 54,
-            "h": 27
+            "x": 14,
+            "y": 4,
+            "w": 68,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 54 at y=48 with 18px row drop below",
-            "transparent pinholes: holes=1 area=1 largest=1"
+            "possible floor/shadow artifact: alpha run length 23 at y=56 near lower content"
           ]
         },
         {
@@ -385,13 +382,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-26.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 21,
-            "w": 54,
-            "h": 36
+            "x": 14,
+            "y": 4,
+            "w": 68,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 41 at y=47 with 21px row drop below"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -399,15 +396,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-27.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 13,
+            "y": 4,
+            "w": 69,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 35 at y=47 with 23px row drop below",
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content"
           ]
         },
         {
@@ -415,15 +410,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-28.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 10,
-            "w": 53,
-            "h": 47
+            "x": 13,
+            "y": 4,
+            "w": 69,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=48 with 25px row drop below",
-            "transparent pinholes: holes=1 area=7 largest=7"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content"
           ]
         },
         {
@@ -431,24 +424,28 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-29.png",
           "status": "valid",
           "content": {
-            "x": 22,
-            "y": 10,
-            "w": 51,
-            "h": 47
-          }
+            "x": 10,
+            "y": 4,
+            "w": 75,
+            "h": 54
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
+          ]
         },
         {
           "frame": 30,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-30.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 46,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 67,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 33 at y=48 with 21px row drop below"
+            "possible floor/shadow artifact: alpha run length 23 at y=56 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 49 at y=51 with 27px row drop below"
           ]
         },
         {
@@ -456,13 +453,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-31.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 14,
+            "y": 4,
+            "w": 68,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 35 at y=48 with 24px row drop below"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -470,14 +467,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-32.png",
           "status": "valid",
           "content": {
-            "x": 27,
-            "y": 10,
-            "w": 41,
-            "h": 47
+            "x": 19,
+            "y": 4,
+            "w": 57,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=11 largest=11"
+            "possible floor/shadow artifact: alpha run length 22 at y=55 near lower content"
           ]
         },
         {
@@ -485,28 +481,25 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-33.png",
           "status": "valid",
           "content": {
-            "x": 24,
-            "y": 10,
-            "w": 47,
-            "h": 47
-          },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=49 with 18px row drop below"
-          ]
+            "x": 30,
+            "y": 4,
+            "w": 35,
+            "h": 54
+          }
         },
         {
           "frame": 34,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-34.png",
           "status": "valid",
           "content": {
-            "x": 26,
-            "y": 10,
-            "w": 44,
-            "h": 47
+            "x": 30,
+            "y": 4,
+            "w": 36,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 22 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible floor/shadow artifact: alpha run length 25 at y=55 near lower content",
+            "transparent pinholes: holes=2 area=16 largest=15"
           ]
         },
         {
@@ -514,36 +507,37 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-35.png",
           "status": "valid",
           "content": {
-            "x": 24,
-            "y": 10,
-            "w": 47,
-            "h": 47
-          }
+            "x": 20,
+            "y": 4,
+            "w": 55,
+            "h": 54
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 26 at y=55 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 40 at y=53 with 22px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
+          ]
         },
         {
           "frame": 36,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-36.png",
           "status": "valid",
           "content": {
-            "x": 26,
-            "y": 10,
-            "w": 43,
-            "h": 47
-          },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=9 largest=9"
-          ]
+            "x": 28,
+            "y": 4,
+            "w": 40,
+            "h": 54
+          }
         },
         {
           "frame": 37,
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-37.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 31,
-            "w": 54,
-            "h": 26
+            "x": 32,
+            "y": 4,
+            "w": 32,
+            "h": 54
           }
         },
         {
@@ -551,13 +545,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-38.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 24,
-            "w": 54,
-            "h": 33
+            "x": 28,
+            "y": 4,
+            "w": 39,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 43 at y=46 with 21px row drop below"
+            "possible floor/shadow artifact: alpha run length 23 at y=55 near lower content",
+            "transparent pinholes: holes=1 area=7 largest=7"
           ]
         },
         {
@@ -565,13 +560,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-39.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 27,
-            "w": 54,
-            "h": 30
+            "x": 20,
+            "y": 4,
+            "w": 56,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 39 at y=47 with 20px row drop below"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -579,13 +574,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-40.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 23,
-            "w": 54,
-            "h": 34
+            "x": 19,
+            "y": 4,
+            "w": 58,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 39 at y=47 with 20px row drop below"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 38 at y=53 with 20px row drop below"
           ]
         },
         {
@@ -593,14 +589,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-41.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 30,
-            "w": 54,
-            "h": 27
+            "x": 16,
+            "y": 4,
+            "w": 64,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 54 at y=48 with 23px row drop below",
-            "transparent pinholes: holes=2 area=11 largest=8"
+            "possible floor/shadow artifact: alpha run length 28 at y=56 near lower content"
           ]
         },
         {
@@ -608,13 +603,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-42.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 29,
-            "w": 54,
-            "h": 28
+            "x": 18,
+            "y": 4,
+            "w": 60,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 54 at y=47 with 30px row drop below"
+            "possible floor/shadow artifact: alpha run length 26 at y=55 near lower content"
           ]
         },
         {
@@ -622,13 +617,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-43.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 30,
-            "w": 54,
-            "h": 27
+            "x": 19,
+            "y": 4,
+            "w": 57,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 54 at y=48 with 23px row drop below"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content"
           ]
         },
         {
@@ -636,13 +631,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-44.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 29,
-            "w": 54,
-            "h": 28
+            "x": 9,
+            "y": 25,
+            "w": 78,
+            "h": 33
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 53 at y=47 with 20px row drop below"
+            "possible floor/shadow artifact: alpha run length 30 at y=56 near lower content"
           ]
         },
         {
@@ -650,14 +645,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-45.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 31,
-            "w": 54,
-            "h": 26
+            "x": 9,
+            "y": 22,
+            "w": 78,
+            "h": 36
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 53 at y=48 with 22px row drop below",
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -665,13 +659,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-46.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 24,
-            "w": 54,
-            "h": 33
+            "x": 9,
+            "y": 20,
+            "w": 78,
+            "h": 38
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 42 at y=46 with 22px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 76 at y=45 with 26px row drop below"
           ]
         },
         {
@@ -679,13 +673,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-47.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 50,
-            "h": 47
+            "x": 18,
+            "y": 4,
+            "w": 59,
+            "h": 54
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=48 with 22px row drop below"
+            "possible floor/shadow artifact: alpha run length 28 at y=56 near lower content"
           ]
         },
         {
@@ -694,13 +688,13 @@
           "status": "valid",
           "content": {
             "x": 25,
-            "y": 10,
-            "w": 45,
-            "h": 47
+            "y": 4,
+            "w": 46,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible floor/shadow artifact: alpha run length 23 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -709,13 +703,12 @@
           "status": "valid",
           "content": {
             "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "y": 4,
+            "w": 50,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 25 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible floor/shadow artifact: alpha run length 24 at y=56 near lower content"
           ]
         },
         {
@@ -723,14 +716,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-50.png",
           "status": "valid",
           "content": {
-            "x": 24,
-            "y": 10,
-            "w": 47,
-            "h": 47
+            "x": 23,
+            "y": 4,
+            "w": 50,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 26 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=9 largest=9"
+            "possible floor/shadow artifact: alpha run length 24 at y=56 near lower content"
           ]
         },
         {
@@ -738,14 +730,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-51.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 45,
-            "h": 47
+            "x": 23,
+            "y": 4,
+            "w": 50,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 26 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=6 largest=6"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -753,14 +745,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-52.png",
           "status": "valid",
           "content": {
-            "x": 26,
-            "y": 10,
-            "w": 44,
-            "h": 47
+            "x": 24,
+            "y": 4,
+            "w": 47,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 22 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=6 largest=6"
+            "possible floor/shadow artifact: alpha run length 24 at y=55 near lower content"
           ]
         },
         {
@@ -768,15 +759,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-53.png",
           "status": "valid",
           "content": {
-            "x": 23,
-            "y": 10,
-            "w": 49,
-            "h": 47
+            "x": 24,
+            "y": 4,
+            "w": 48,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 25 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 37 at y=48 with 20px row drop below",
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -784,15 +774,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-54.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 45,
-            "h": 47
+            "x": 23,
+            "y": 4,
+            "w": 49,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 24 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 35 at y=49 with 18px row drop below",
-            "transparent pinholes: holes=1 area=6 largest=6"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -801,14 +789,13 @@
           "status": "valid",
           "content": {
             "x": 24,
-            "y": 10,
-            "w": 48,
-            "h": 47
+            "y": 4,
+            "w": 47,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 25 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 35 at y=49 with 18px row drop below",
-            "transparent pinholes: holes=1 area=12 largest=12"
+            "possible floor/shadow artifact: alpha run length 24 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -816,14 +803,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-56.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 46,
-            "h": 47
+            "x": 22,
+            "y": 4,
+            "w": 52,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible lower ledge/shelf artifact: alpha run length 36 at y=49 with 18px row drop below"
           ]
         },
         {
@@ -831,14 +817,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-57.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 10,
-            "w": 54,
-            "h": 47
+            "x": 26,
+            "y": 4,
+            "w": 44,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 26 at y=54 near lower content",
-            "transparent pinholes: holes=2 area=8 largest=7"
+            "possible floor/shadow artifact: alpha run length 23 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -846,14 +832,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-58.png",
           "status": "valid",
           "content": {
-            "x": 24,
-            "y": 10,
-            "w": 47,
-            "h": 47
+            "x": 18,
+            "y": 4,
+            "w": 59,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 25 at y=54 near lower content",
-            "transparent pinholes: holes=1 area=7 largest=7"
+            "possible floor/shadow artifact: alpha run length 27 at y=56 near lower content"
           ]
         },
         {
@@ -861,15 +846,13 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-59.png",
           "status": "valid",
           "content": {
-            "x": 21,
-            "y": 10,
-            "w": 53,
-            "h": 47
+            "x": 23,
+            "y": 4,
+            "w": 50,
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 26 at y=54 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 39 at y=48 with 25px row drop below",
-            "transparent pinholes: holes=1 area=10 largest=10"
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
           ]
         },
         {
@@ -878,14 +861,13 @@
           "status": "valid",
           "content": {
             "x": 21,
-            "y": 10,
+            "y": 4,
             "w": 53,
-            "h": 47
+            "h": 54
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 27 at y=55 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 38 at y=49 with 20px row drop below",
-            "transparent pinholes: holes=1 area=12 largest=12"
+            "possible floor/shadow artifact: alpha run length 26 at y=56 near lower content",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -893,11 +875,14 @@
           "path": "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-61.png",
           "status": "valid",
           "content": {
-            "x": 25,
-            "y": 10,
-            "w": 45,
-            "h": 47
-          }
+            "x": 21,
+            "y": 4,
+            "w": 53,
+            "h": 54
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 25 at y=56 near lower content"
+          ]
         }
       ],
       "completed": true

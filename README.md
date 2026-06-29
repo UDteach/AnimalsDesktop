@@ -1,7 +1,7 @@
 # AnimalsDesktop
 
 AnimalsDesktop is a small desktop pet app for Windows and macOS. The current
-preview exposes 35 selectable animal sprites that walk near the Windows taskbar
+preview exposes 41 selectable animal sprites that walk near the Windows taskbar
 or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
@@ -10,10 +10,10 @@ Current app version: `v0.2.5`
 
 ## Current Status
 
-`v0.2.5` is a Windows mixed-DPI multi-monitor hotfix on top of the `v0.2.4`
-early public test release for 35 accepted 62-frame ImageGen motion animals. It
-keeps the original sixteen preview animals and the current GitHub Pages priority
-wave:
+`v0.2.5` is an early public test release for 41 accepted 62-frame ImageGen
+motion animals and a Windows mixed-DPI multi-monitor hotfix. It keeps the
+original sixteen preview animals, the current GitHub Pages priority wave, and
+the latest accepted asset lanes:
 
 - chinchilla standard gray
 - golden Syrian hamster
@@ -28,7 +28,7 @@ wave:
 - gray-brown gecko
 - tricolor guinea pig
 - hooded fancy rat
-- albino chipmunk
+- black-eyed white chipmunk
 - Richardson's ground squirrel
 - longcoat Yorkshire Terrier
 - striped chipmunk
@@ -38,6 +38,7 @@ wave:
 - normal gray cockatiel
 - normal Java sparrow
 - green parrotlet
+- blue-green parrotlet
 - peach-faced lovebird
 - seal bicolor ragdoll
 - silver tabby Scottish Fold
@@ -50,6 +51,11 @@ wave:
 - Roborovski hamster
 - Russian smoke white guinea pig
 - quokka
+- true albino chipmunk
+- Miniature Schnauzer
+- Japanese giant salamander
+- white wagtail
+- tabby-white domestic shorthair
 
 This is not the final full-motion completion gate. The test release is for
 checking desktop behavior, scale, direction handling, and click interaction
@@ -57,7 +63,7 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.2.4 preview intentionally exposes only the 35 accepted runtime animals
+The v0.2.5 preview intentionally exposes only the 41 accepted runtime animals
 listed above. Unverified candidate species should not appear in
 the runtime picker until their source art and motion behavior pass the release QA
 loop. As animals graduate into a release, remove them from the future queue and
@@ -65,7 +71,7 @@ move them into the current-animal page section. Coming-soon silhouettes should b
 page-specific generated art, not repurposed runtime/prototype images.
 
 Future queue candidates use current popular-pet signals, then get verified per
-animal before production starts. After the v0.2.4 release, the remaining Pages
+animal before production starts. After the v0.2.5 release, the remaining Pages
 queue is leucistic sugar glider, African dormouse, Netherland Dwarf Himalayan,
 American flying squirrel, black-and-white long-haired hamster, yellow
 Djungarian hamster, pearl white Djungarian hamster, fancy rat blue hooded,
@@ -98,8 +104,8 @@ A full animal-family release is ready only when it has:
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
 `v0.1.5` is an explicit test-preview exception for the sixteen initial-motion
-animals plus Mac distribution. `v0.2.4` is an explicit test-preview exception
-for the thirty-five-animal runtime roster before the full 10-set motion gate.
+animals plus Mac distribution. `v0.2.5` is an explicit test-preview exception
+for the forty-one-animal runtime roster before the full 10-set motion gate.
 Future full-content releases should still satisfy the full gate unless a new
 preview exception is documented.
 
@@ -179,6 +185,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` fixes Windows mixed-DPI multi-monitor overlay size and placement.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` expands it to 41, adds true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, tabby-white cat, and blue-green parrotlet, fixes Windows mixed-DPI multi-monitor overlay size and placement, and keeps the remaining Pages queue plus lionhead-pattern rabbit and low-motion shoebill as the next lanes.
 
 Do not create a stable/final release tag until the current animal target is complete.

@@ -200,6 +200,7 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"cockatiel_normal_gray",
 		"java_sparrow_normal",
 		"parrotlet_green",
+		"parrotlet_blue_green",
 		"lovebird_peach_faced",
 		"ragdoll_seal_bicolor",
 		"scottish_fold_silver_tabby",
@@ -212,6 +213,11 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"roborovski_hamster",
 		"guinea_pig_russian_smoke_white",
 		"quokka",
+		"true_albino_chipmunk",
+		"miniature_schnauzer_salt_pepper",
+		"japanese_giant_salamander",
+		"white_wagtail",
+		"domestic_shorthair_tabby_white_stocky",
 	}
 	if got := len(variants); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))

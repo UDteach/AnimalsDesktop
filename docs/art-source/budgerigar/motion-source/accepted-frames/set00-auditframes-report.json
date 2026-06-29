@@ -9,7 +9,7 @@
   "valid": 62,
   "missing": 0,
   "invalid": 0,
-  "warnings": 50,
+  "warnings": 80,
   "sets": [
     {
       "set": "set00",
@@ -17,7 +17,7 @@
       "valid": 62,
       "missing": 0,
       "invalid": 0,
-      "warnings": 50,
+      "warnings": 80,
       "frames": [
         {
           "frame": 0,
@@ -275,7 +275,8 @@
             "h": 29
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 32 at y=55 near lower content"
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=51 with 38px row drop below",
+            "transparent pinholes: holes=5 area=11 largest=5"
           ]
         },
         {
@@ -284,12 +285,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 30,
+            "y": 33,
             "w": 84,
-            "h": 28
+            "h": 25
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content"
+            "possible lower ledge/shelf artifact: alpha run length 80 at y=51 with 42px row drop below"
           ]
         },
         {
@@ -298,12 +299,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 36,
+            "y": 31,
             "w": 84,
-            "h": 22
+            "h": 27
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 34 at y=55 near lower content"
+            "possible lower ledge/shelf artifact: alpha run length 76 at y=49 with 30px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -312,12 +314,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 37,
+            "y": 33,
             "w": 84,
-            "h": 21
+            "h": 25
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 39 at y=55 near lower content"
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -326,10 +328,14 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 30,
+            "y": 32,
             "w": 84,
-            "h": 28
-          }
+            "h": 26
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 76 at y=50 with 51px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
+          ]
         },
         {
           "frame": 24,
@@ -342,7 +348,7 @@
             "h": 36
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=8 largest=8"
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=50 with 37px row drop below"
           ]
         },
         {
@@ -351,10 +357,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 26,
+            "y": 33,
             "w": 84,
-            "h": 32
-          }
+            "h": 25
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 77 at y=50 with 37px row drop below"
+          ]
         },
         {
           "frame": 26,
@@ -362,13 +371,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 19,
+            "y": 33,
             "w": 84,
-            "h": 39
+            "h": 25
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 29 at y=56 near lower content",
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -377,12 +385,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 19,
+            "y": 31,
             "w": 84,
-            "h": 39
+            "h": 27
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 76 at y=49 with 31px row drop below"
           ]
         },
         {
@@ -391,12 +399,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 19,
+            "y": 17,
             "w": 84,
-            "h": 39
+            "h": 41
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "possible lower ledge/shelf artifact: alpha run length 64 at y=50 with 40px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -405,12 +414,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 20,
+            "y": 17,
             "w": 84,
-            "h": 38
+            "h": 41
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 60 at y=50 with 28px row drop below",
+            "possible lower ledge/shelf artifact: alpha run length 62 at y=50 with 38px row drop below",
             "transparent pinholes: holes=1 area=2 largest=2"
           ]
         },
@@ -420,12 +429,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 22,
+            "y": 23,
             "w": 84,
-            "h": 36
+            "h": 35
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 36px row drop below",
+            "transparent pinholes: holes=2 area=3 largest=2"
           ]
         },
         {
@@ -434,13 +444,10 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 20,
+            "y": 14,
             "w": 84,
-            "h": 38
-          },
-          "warnings": [
-            "transparent pinholes: holes=1 area=3 largest=3"
-          ]
+            "h": 44
+          }
         },
         {
           "frame": 32,
@@ -448,26 +455,23 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 13,
+            "y": 11,
             "w": 84,
-            "h": 45
-          },
-          "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+            "h": 47
+          }
         },
         {
           "frame": 33,
           "path": "docs/art-source/budgerigar/motion-source/accepted-frames/set00/frame-33.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 12,
-            "w": 84,
-            "h": 46
+            "x": 11,
+            "y": 4,
+            "w": 74,
+            "h": 54
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=3 largest=3"
+            "transparent pinholes: holes=2 area=2 largest=1"
           ]
         },
         {
@@ -476,9 +480,9 @@
           "status": "valid",
           "content": {
             "x": 12,
-            "y": 11,
-            "w": 71,
-            "h": 47
+            "y": 4,
+            "w": 72,
+            "h": 54
           }
         },
         {
@@ -486,13 +490,13 @@
           "path": "docs/art-source/budgerigar/motion-source/accepted-frames/set00/frame-35.png",
           "status": "valid",
           "content": {
-            "x": 13,
-            "y": 11,
-            "w": 69,
-            "h": 47
+            "x": 6,
+            "y": 18,
+            "w": 84,
+            "h": 40
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 23 at y=56 near lower content"
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=50 with 39px row drop below"
           ]
         },
         {
@@ -501,12 +505,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 17,
             "w": 84,
-            "h": 40
+            "h": 41
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
+            "possible lower ledge/shelf artifact: alpha run length 57 at y=50 with 35px row drop below",
+            "transparent pinholes: holes=1 area=10 largest=10"
           ]
         },
         {
@@ -515,12 +520,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 15,
             "w": 84,
-            "h": 40
+            "h": 43
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 57 at y=50 with 35px row drop below",
+            "transparent pinholes: holes=1 area=9 largest=9"
           ]
         },
         {
@@ -529,12 +535,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 21,
+            "y": 16,
             "w": 84,
-            "h": 37
+            "h": 42
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 60 at y=50 with 41px row drop below"
           ]
         },
         {
@@ -543,10 +549,14 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 17,
             "w": 84,
-            "h": 40
-          }
+            "h": 41
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=50 with 37px row drop below",
+            "transparent pinholes: holes=2 area=10 largest=9"
+          ]
         },
         {
           "frame": 40,
@@ -554,10 +564,14 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 33,
             "w": 84,
-            "h": 40
-          }
+            "h": 25
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 75 at y=50 with 32px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
+          ]
         },
         {
           "frame": 41,
@@ -565,10 +579,14 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 33,
             "w": 84,
-            "h": 40
-          }
+            "h": 25
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 77 at y=50 with 37px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
+          ]
         },
         {
           "frame": 42,
@@ -576,12 +594,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 18,
+            "y": 33,
             "w": 84,
-            "h": 40
+            "h": 25
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 77 at y=50 with 33px row drop below",
+            "transparent pinholes: holes=2 area=2 largest=1"
           ]
         },
         {
@@ -590,10 +609,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 19,
+            "y": 26,
             "w": 84,
-            "h": 39
-          }
+            "h": 32
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 30px row drop below"
+          ]
         },
         {
           "frame": 44,
@@ -601,12 +623,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 35,
+            "y": 32,
             "w": 84,
-            "h": 23
+            "h": 26
           },
           "warnings": [
-            "transparent pinholes: holes=4 area=10 largest=5"
+            "possible lower ledge/shelf artifact: alpha run length 78 at y=50 with 36px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -615,12 +638,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 31,
+            "y": 34,
             "w": 84,
-            "h": 27
+            "h": 24
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 63 at y=49 with 29px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 75 at y=50 with 32px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -629,12 +653,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 36,
+            "y": 23,
             "w": 84,
-            "h": 22
+            "h": 35
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 38 at y=55 near lower content"
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=50 with 30px row drop below",
+            "transparent pinholes: holes=2 area=2 largest=1"
           ]
         },
         {
@@ -643,10 +668,14 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 30,
+            "y": 22,
             "w": 84,
-            "h": 28
-          }
+            "h": 36
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=50 with 29px row drop below",
+            "transparent pinholes: holes=2 area=2 largest=1"
+          ]
         },
         {
           "frame": 48,
@@ -654,11 +683,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 35,
+            "y": 22,
             "w": 84,
-            "h": 23
+            "h": 36
           },
           "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=50 with 34px row drop below",
             "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
@@ -668,12 +698,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 15,
+            "y": 23,
             "w": 84,
-            "h": 43
+            "h": 35
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=12 largest=12"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 34px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -682,12 +713,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 12,
+            "y": 25,
             "w": 84,
-            "h": 46
+            "h": 33
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=9 largest=9"
+            "possible lower ledge/shelf artifact: alpha run length 65 at y=50 with 36px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -696,13 +728,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 29,
+            "y": 22,
             "w": 84,
-            "h": 29
+            "h": 36
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 58 at y=51 with 39px row drop below",
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible lower ledge/shelf artifact: alpha run length 62 at y=51 with 39px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -711,12 +743,12 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 10,
+            "y": 20,
             "w": 84,
-            "h": 48
+            "h": 38
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=9 largest=9"
+            "possible lower ledge/shelf artifact: alpha run length 62 at y=50 with 30px row drop below"
           ]
         },
         {
@@ -725,10 +757,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 11,
+            "y": 17,
             "w": 84,
-            "h": 47
-          }
+            "h": 41
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 66 at y=50 with 38px row drop below"
+          ]
         },
         {
           "frame": 54,
@@ -736,12 +771,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 14,
+            "y": 20,
             "w": 84,
-            "h": 44
+            "h": 38
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=7 largest=7"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 32px row drop below",
+            "transparent pinholes: holes=1 area=2 largest=2"
           ]
         },
         {
@@ -750,12 +786,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 16,
+            "y": 22,
             "w": 84,
-            "h": 42
+            "h": 36
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible lower ledge/shelf artifact: alpha run length 60 at y=50 with 29px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -764,12 +801,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 14,
+            "y": 28,
             "w": 84,
-            "h": 44
+            "h": 30
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=9 largest=9"
+            "possible lower ledge/shelf artifact: alpha run length 64 at y=50 with 35px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -778,12 +816,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 15,
+            "y": 25,
             "w": 84,
-            "h": 43
+            "h": 33
           },
           "warnings": [
-            "transparent pinholes: holes=2 area=10 largest=9"
+            "possible lower ledge/shelf artifact: alpha run length 62 at y=50 with 34px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -792,12 +831,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 15,
+            "y": 20,
             "w": 84,
-            "h": 43
+            "h": 38
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=7 largest=7"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 33px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -806,12 +846,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 13,
+            "y": 25,
             "w": 84,
-            "h": 45
+            "h": 33
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=10 largest=10"
+            "possible lower ledge/shelf artifact: alpha run length 61 at y=50 with 34px row drop below",
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -820,13 +861,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 13,
+            "y": 20,
             "w": 84,
-            "h": 45
+            "h": 38
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 56 at y=50 with 30px row drop below",
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible lower ledge/shelf artifact: alpha run length 60 at y=50 with 28px row drop below",
+            "transparent pinholes: holes=3 area=3 largest=1"
           ]
         },
         {
@@ -835,12 +876,13 @@
           "status": "valid",
           "content": {
             "x": 6,
-            "y": 16,
+            "y": 19,
             "w": 84,
-            "h": 42
+            "h": 39
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=5 largest=5"
+            "possible lower ledge/shelf artifact: alpha run length 60 at y=50 with 35px row drop below",
+            "transparent pinholes: holes=2 area=2 largest=1"
           ]
         }
       ],

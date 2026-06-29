@@ -1123,7 +1123,7 @@ func (a *petApp) renderOverlaySegment(segment overlaySegment) *image.RGBA {
 		w, h := a.petSpriteSize(i)
 		y := sceneH - h - p.laneOffset
 		localX := unscaleForDPI(p.x-segment.SceneLeft, segment.DPI)
-		drawPetSprite(canvas, src, p, variant, localX, y, w, h)
+		drawPetSprite(canvas, src, p, variant, frame, localX, y, w, h)
 		if foragePropsEnabled && p.state == stateCarry && p.carryKind != noItem {
 			propX := localX + w - 18
 			if p.dir < 0 {
@@ -4287,12 +4287,13 @@ func (a *petApp) drawForageProp(dst *image.RGBA, x, y, kind int) {
 	fillCircle(dst, x, y-2, 3, rgba(170, 150, 94, 220))
 }
 
-func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *desktopPet, variant coatVariant, x, y int, w int, h int) {
+func drawPetSprite(dst *image.RGBA, src *image.RGBA, p *desktopPet, variant coatVariant, frame int, x, y int, w int, h int) {
 	dir := normalizeDir(p.dir)
 	if p.state == stateTurn {
 		dir = turnDrawDirection(p.dir, p.nextDir)
 	}
-	drawFacingImage(dst, src, image.Rect(x, y, x+w, y+h), drawDirectionForVariant(dir, variant))
+	rect := renderAdjustmentForFrame(variant.ID, frame).adjustRect(image.Rect(x, y, x+w, y+h))
+	drawFacingImage(dst, src, rect, drawDirectionForVariant(dir, variant))
 }
 
 func turnDrawDirection(dir, nextDir int) int {

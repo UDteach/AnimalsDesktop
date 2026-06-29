@@ -156,8 +156,8 @@ def main() -> None:
             fail(f"missing future roadmap text: {required}")
     for required in (
         'data-i18n="versions.v025.title"',
-        "v0.2.5 / 2026-06-29",
-        "v0.2.5 / June 29, 2026",
+        "v0.2.5 / 2026-06-30",
+        "v0.2.5 / June 30, 2026",
         'data-i18n="versions.v024.title"',
         "v0.2.4 / 2026-06-28",
         "v0.2.4 / June 28, 2026",
