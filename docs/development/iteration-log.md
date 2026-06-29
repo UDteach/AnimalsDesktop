@@ -999,3 +999,45 @@
   `scripts/build_page_assets.py`, `scripts/verify_page_release.py`, JS syntax
   check, workflow silhouette existence check, `git diff --check`, and
   Playwright JP/EN card/image-load QA.
+- Fixed Windows mixed-height multi-monitor overlay placement for 4K + 1080p
+  spans. The Windows renderer now keeps one horizontal scene coordinate system
+  but draws separate thin layered overlay strips per selected monitor, so each
+  display uses its own taskbar/screen bottom instead of forcing the 4K display
+  to share the 1080p work-area bottom. Click, hover-name, forage, wheel, and
+  reaction drawing were adjusted to convert through the per-strip scene offset;
+  reaction bubbles are skipped outside their strip to avoid duplicate clamped
+  edge bubbles. Windows DPI awareness was raised from `system` to `per monitor
+  v2` in `winres/winres.json`, with a runtime `SetProcessDpiAwarenessContext`
+  fallback for local builds before a manifest is embedded. Validation passed:
+  `go test -buildvcs=false ./cmd/animalsdesktop`, `go test -buildvcs=false
+  ./...`, `go vet -buildvcs=false ./...`, `go build -buildvcs=false
+  -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop`,
+  `go run ./cmd/winresicon -src docs/assets/animalsdesktop-preview.png -out
+  winres/icon.png`, temp `go-winres` generation for the updated manifest,
+  smoke launching `dist\AnimalsDesktop.exe`, and `git diff --check`.
+  Follow-up live check after adding another low-resolution display detected
+  three screens (`1920x1080` primary, `1920x1080` left secondary, `1024x768`
+  right secondary); cache-bypassed multi-monitor tests passed and the rebuilt
+  `dist\AnimalsDesktop.exe` launched successfully.
+- Follow-up screenshot QA covered a left monitor set to 150% scaling. The first
+  PowerShell screenshot path was misleading because the capture process itself
+  was DPI-virtualized; after making the capture process per-monitor DPI aware,
+  screenshots confirmed animals render on all three displays and the 150%
+  display keeps the same apparent sprite size. The app process reported
+  per-monitor DPI awareness, and the Windows renderer now scales each segment's
+  logical 96dpi canvas to the target monitor DPI. Revalidation passed with
+  `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, and the
+  Windows GUI build; final `git diff --check` also passed. DPI-aware screenshot
+  evidence is stored under
+  `.codex/screenshots/mixed-dpi-20260629-195339/dpi-aware-capture-200839/`.
+- Prepared the mixed-DPI multi-monitor fix as `v0.2.5`, a preview hotfix on top
+  of the `v0.2.4` 35-animal roster. Updated the default Windows app version,
+  release workflow prerelease condition, release notes, README, Pages download
+  links, Pages version history, and Pages release verifier. Local release-prep
+  validation passed with `go run ./cmd/importsheet`, `go run ./cmd/importanimals`,
+  `py -3 scripts/build_page_assets.py`, `py -3 scripts/verify_page_release.py`,
+  `go run ./cmd/validatemotion -runtime-only -require-accepted`, `go test
+  -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, Windows resource
+  generation via `cmd/winresicon` and `go-winres`, `go build -buildvcs=false
+  -ldflags="-H=windowsgui -X main.appVersion=v0.2.5"`, and a launch smoke test
+  of `dist/AnimalsDesktop.exe`.

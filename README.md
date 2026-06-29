@@ -6,13 +6,14 @@ or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
-Current app version: `v0.2.4`
+Current app version: `v0.2.5`
 
 ## Current Status
 
-`v0.2.4` is an early public test release for 35 accepted 62-frame ImageGen
-motion animals. It keeps the original sixteen preview animals and adds the
-current GitHub Pages priority wave:
+`v0.2.5` is a Windows mixed-DPI multi-monitor hotfix on top of the `v0.2.4`
+early public test release for 35 accepted 62-frame ImageGen motion animals. It
+keeps the original sixteen preview animals and the current GitHub Pages priority
+wave:
 
 - chinchilla standard gray
 - golden Syrian hamster
@@ -114,7 +115,7 @@ go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go run ./cmd/winresicon -src docs/assets/animalsdesktop-preview.png -out winres/icon.png
-go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.4 --product-version v0.2.4
+go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.5 --product-version v0.2.5
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
@@ -126,15 +127,15 @@ same release tag as the Mac ZIPs when they are ready:
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.5" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.2.5" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.2.4 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.2.4 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.2.5 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.2.5 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.
@@ -178,6 +179,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` fixes Windows mixed-DPI multi-monitor overlay size and placement.
 
 Do not create a stable/final release tag until the current animal target is complete.

@@ -408,8 +408,8 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 }
 
 func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
-	if appVersion != "v0.2.4" {
-		t.Fatalf("appVersion = %q, want v0.2.4", appVersion)
+	if appVersion != "v0.2.5" {
+		t.Fatalf("appVersion = %q, want v0.2.5", appVersion)
 	}
 }
 
@@ -603,6 +603,158 @@ func TestOverlayRectForTaskbarOffsetStaysInsideScreen(t *testing.T) {
 	if got.Top != wantTop || got.Bottom != wantTop+sceneH {
 		t.Fatalf("overlay y = %d-%d, want %d-%d", got.Top, got.Bottom, wantTop, wantTop+sceneH)
 	}
+}
+
+func TestOverlaySegmentsUseEachMonitorBottomForMixedHeightSpan(t *testing.T) {
+	a := &petApp{
+		positionMode:   positionTaskbarEdge,
+		overlayOffsetY: defaultOverlayOffsetY,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+	}
+	areas := []displayArea{
+		{
+			Work:    win.RECT{Left: 0, Top: 0, Right: 3840, Bottom: 2080},
+			Screen:  win.RECT{Left: 0, Top: 0, Right: 3840, Bottom: 2160},
+			Primary: true,
+		},
+		{
+			Work:   win.RECT{Left: 3840, Top: 0, Right: 5760, Bottom: 1040},
+			Screen: win.RECT{Left: 3840, Top: 0, Right: 5760, Bottom: 1080},
+		},
+	}
+	combined := combineDisplayAreas(areas)
+	overlay := a.overlayRectFor(combined.Work, combined.Screen)
+	segments := a.overlaySegmentsForAreas(areas, overlay)
+	if len(segments) != 2 {
+		t.Fatalf("segments = %d, want 2: %+v", len(segments), segments)
+	}
+	if segments[0].SceneLeft != 0 || segments[0].SceneRight != 3840 ||
+		segments[1].SceneLeft != 3840 || segments[1].SceneRight != 5760 {
+		t.Fatalf("scene segments = %+v, want 0-3840 and 3840-5760", segments)
+	}
+	wantMainTop := int32(2080 - sceneH + defaultOverlayOffsetY)
+	wantSubTop := int32(1040 - sceneH + defaultOverlayOffsetY)
+	if segments[0].Rect.Top != wantMainTop || segments[0].Rect.Bottom != wantMainTop+sceneH {
+		t.Fatalf("main segment y = %d-%d, want %d-%d", segments[0].Rect.Top, segments[0].Rect.Bottom, wantMainTop, wantMainTop+sceneH)
+	}
+	if segments[1].Rect.Top != wantSubTop || segments[1].Rect.Bottom != wantSubTop+sceneH {
+		t.Fatalf("secondary segment y = %d-%d, want %d-%d", segments[1].Rect.Top, segments[1].Rect.Bottom, wantSubTop, wantSubTop+sceneH)
+	}
+	if segments[0].Rect.Top == segments[1].Rect.Top {
+		t.Fatalf("mixed-height displays should not share one overlay top: %+v", segments)
+	}
+}
+
+func TestOverlaySegmentsClampScreenBottomPerMonitor(t *testing.T) {
+	a := &petApp{
+		positionMode:   positionScreenBottom,
+		overlayOffsetY: 48,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+	}
+	areas := []displayArea{
+		{
+			Work:    win.RECT{Left: 0, Top: 0, Right: 3840, Bottom: 2080},
+			Screen:  win.RECT{Left: 0, Top: 0, Right: 3840, Bottom: 2160},
+			Primary: true,
+		},
+		{
+			Work:   win.RECT{Left: 3840, Top: 0, Right: 5760, Bottom: 1040},
+			Screen: win.RECT{Left: 3840, Top: 0, Right: 5760, Bottom: 1080},
+		},
+	}
+	combined := combineDisplayAreas(areas)
+	overlay := a.overlayRectFor(combined.Work, combined.Screen)
+	segments := a.overlaySegmentsForAreas(areas, overlay)
+	if len(segments) != 2 {
+		t.Fatalf("segments = %d, want 2: %+v", len(segments), segments)
+	}
+	if got, want := segments[0].Rect.Bottom, int32(2160); got != want {
+		t.Fatalf("main bottom = %d, want %d", got, want)
+	}
+	if got, want := segments[1].Rect.Bottom, int32(1080); got != want {
+		t.Fatalf("secondary bottom = %d, want %d", got, want)
+	}
+}
+
+func TestOverlaySegmentsScaleHeightForHighDPIMonitor(t *testing.T) {
+	a := &petApp{
+		positionMode:   positionTaskbarEdge,
+		overlayOffsetY: defaultOverlayOffsetY,
+		walkRangeStart: defaultWalkRangeStart,
+		walkRangeEnd:   defaultWalkRangeEnd,
+	}
+	areas := []displayArea{
+		{
+			Work:    win.RECT{Left: -2880, Top: 0, Right: -960, Bottom: 1032},
+			Screen:  win.RECT{Left: -2880, Top: 0, Right: -960, Bottom: 1080},
+			DPI:     144,
+			Primary: false,
+		},
+	}
+	overlay := a.overlayRectFor(areas[0].Work, areas[0].Screen)
+	segments := a.overlaySegmentsForAreas(areas, overlay)
+	if len(segments) != 1 {
+		t.Fatalf("segments = %d, want 1: %+v", len(segments), segments)
+	}
+	wantH := int32(scaleForDPI(sceneH, 144))
+	if got := segments[0].Rect.Bottom - segments[0].Rect.Top; got != wantH {
+		t.Fatalf("high-DPI segment height = %d, want %d", got, wantH)
+	}
+	wantTop := int32(1032 - int(wantH) + scaleForDPI(defaultOverlayOffsetY, 144))
+	if segments[0].Rect.Top != wantTop {
+		t.Fatalf("high-DPI segment top = %d, want %d", segments[0].Rect.Top, wantTop)
+	}
+}
+
+func TestRenderOverlaySegmentScalesCanvasForHighDPI(t *testing.T) {
+	a := &petApp{
+		sceneW:   1920,
+		petSizes: defaultPetSizes(),
+	}
+	segment := overlaySegment{
+		Rect:       win.RECT{Left: 0, Top: 0, Right: 1920, Bottom: int32(scaleForDPI(sceneH, 144))},
+		SceneLeft:  0,
+		SceneRight: 1920,
+		DPI:        144,
+	}
+	canvas := a.renderOverlaySegment(segment)
+	if canvas.Bounds().Dx() != 1920 || canvas.Bounds().Dy() != scaleForDPI(sceneH, 144) {
+		t.Fatalf("canvas bounds = %v, want 1920x%d", canvas.Bounds(), scaleForDPI(sceneH, 144))
+	}
+}
+
+func TestDrawReactionsSkipsPetsOutsideOverlaySegment(t *testing.T) {
+	a := &petApp{
+		sceneW: 200,
+		pets: []desktopPet{
+			{x: 150, state: stateIdle, dir: 1},
+		},
+		reactions: []petReaction{{pet: 0, kind: 0, ticks: reactionTicks}},
+		petSizes:  defaultPetSizes(),
+	}
+	leftCanvas := image.NewRGBA(image.Rect(0, 0, 100, sceneH))
+	a.drawReactions(leftCanvas, 0, 100, defaultDPI)
+	if got := alphaSum(leftCanvas); got != 0 {
+		t.Fatalf("left segment alpha = %d, want no reaction outside segment", got)
+	}
+
+	rightCanvas := image.NewRGBA(image.Rect(0, 0, 100, sceneH))
+	a.drawReactions(rightCanvas, 100, 200, defaultDPI)
+	if got := alphaSum(rightCanvas); got == 0 {
+		t.Fatalf("right segment alpha = 0, want reaction drawn inside segment")
+	}
+}
+
+func alphaSum(img *image.RGBA) int64 {
+	var sum int64
+	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+			sum += int64(img.RGBAAt(x, y).A)
+		}
+	}
+	return sum
 }
 
 func TestPetScenePositionsDistributeFivePetsAcrossTwoDisplays(t *testing.T) {
@@ -1075,6 +1227,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"github.ref_name == 'v0.2.2'",
 		"github.ref_name == 'v0.2.3'",
 		"github.ref_name == 'v0.2.4'",
+		"github.ref_name == 'v0.2.5'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {
