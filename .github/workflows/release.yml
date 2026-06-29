@@ -226,7 +226,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: dist/RELEASE_NOTES.md
-          prerelease: ${{ github.ref_name == 'v0.2.1' || github.ref_name == 'v0.2.2' || github.ref_name == 'v0.2.3' || github.ref_name == 'v0.2.4' || github.ref_name == 'v0.2.5' || contains(github.ref_name, '-preview') || contains(github.ref_name, '-rc') }}
+          prerelease: ${{ github.ref_name == 'v0.2.1' || github.ref_name == 'v0.2.2' || github.ref_name == 'v0.2.3' || github.ref_name == 'v0.2.4' || github.ref_name == 'v0.2.5' || github.ref_name == 'v0.2.6' || contains(github.ref_name, '-preview') || contains(github.ref_name, '-rc') }}
           overwrite_files: true
           files: |
             release-assets/**/*.zip

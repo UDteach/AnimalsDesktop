@@ -414,8 +414,8 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 }
 
 func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
-	if appVersion != "v0.2.5" {
-		t.Fatalf("appVersion = %q, want v0.2.5", appVersion)
+	if appVersion != "v0.2.6" {
+		t.Fatalf("appVersion = %q, want v0.2.6", appVersion)
 	}
 }
 
@@ -1233,7 +1233,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"github.ref_name == 'v0.2.2'",
 		"github.ref_name == 'v0.2.3'",
 		"github.ref_name == 'v0.2.4'",
-		"github.ref_name == 'v0.2.5'",
+		"github.ref_name == 'v0.2.6'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {

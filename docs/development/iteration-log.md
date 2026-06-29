@@ -1046,7 +1046,7 @@
 
 ## 2026-06-30
 
-- Prepared the v0.2.5 release lane by combining the mixed-DPI multi-monitor
+- Prepared the v0.2.6 release lane by combining the mixed-DPI multi-monitor
   hotfix with six additional selectable runtime variants:
   `parrotlet_blue_green`, `true_albino_chipmunk`,
   `miniature_schnauzer_salt_pepper`, `japanese_giant_salamander`,
@@ -1058,7 +1058,7 @@
   local accepted sources against the v0.2.4 release state. The existing leopard
   gecko source sheet was kept, and runtime-only render adjustments now scale
   the middle turn frames instead of adopting the worse alternate sheet.
-- Updated GitHub Pages and release copy to v0.2.5, 41 current animals, and
+- Updated GitHub Pages and release copy to v0.2.6, 41 current animals, and
   retained the Upcoming contract as 14 cards: 12 remaining Pages candidates,
   the white lionhead-pattern rabbit, and the special low-motion shoebill.
 - Local validation passed: `go run ./cmd/importsheet`, `go run
