@@ -1153,7 +1153,8 @@ func (a *darwinPetApp) render() *image.RGBA {
 		}
 		w, h := a.petSpriteSize(i)
 		y := sceneH - h - p.lane
-		drawFacingImage(canvas, frames[p.frame], image.Rect(p.x, y, p.x+w, y+h), darwinDrawDirection(p.dir, variantID))
+		rect := renderAdjustmentForFrame(variantID, p.frame).adjustRect(image.Rect(p.x, y, p.x+w, y+h))
+		drawFacingImage(canvas, frames[p.frame], rect, darwinDrawDirection(p.dir, variantID))
 	}
 	a.drawReactions(canvas)
 	return canvas

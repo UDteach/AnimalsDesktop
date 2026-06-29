@@ -2184,10 +2184,10 @@
     "source_width": 96,
     "source_height": 64,
     "content": {
-      "x": 19,
-      "y": 6,
-      "w": 58,
-      "h": 52
+      "x": 12,
+      "y": 4,
+      "w": 71,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/toy_poodle_apricot_set00.png",
@@ -2200,6 +2200,46 @@
       "assets/sprites/toy_poodle_apricot_set07.png",
       "assets/sprites/toy_poodle_apricot_set08.png",
       "assets/sprites/toy_poodle_apricot_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "miniature_schnauzer_salt_pepper",
+    "species": "dog",
+    "breed_or_morph": "Miniature Schnauzer",
+    "color": "salt and pepper",
+    "popularity_tier": 2,
+    "motion_profile": "dog-trot",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/miniature-schnauzer/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/miniature_schnauzer_salt_pepper-source.png",
+    "motion_source": "docs/art-source/miniature-schnauzer/motion-source/sheets/miniature-schnauzer-salt-pepper-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "miniature_schnauzer_salt_pepper",
+    "tint_hex": "8e8c86",
+    "accent_hex": "d8d0c4",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 15,
+      "y": 4,
+      "w": 66,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/miniature_schnauzer_salt_pepper_set00.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set01.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set02.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set03.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set04.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set05.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set06.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set07.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set08.png",
+      "assets/sprites/miniature_schnauzer_salt_pepper_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -2674,10 +2714,10 @@
     "source_width": 96,
     "source_height": 64,
     "content": {
-      "x": 4,
-      "y": 10,
-      "w": 85,
-      "h": 48
+      "x": 5,
+      "y": 4,
+      "w": 86,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/ragdoll_seal_bicolor_set00.png",
@@ -2893,10 +2933,10 @@
     "source_width": 96,
     "source_height": 64,
     "content": {
-      "x": 6,
-      "y": 13,
-      "w": 85,
-      "h": 47
+      "x": 11,
+      "y": 4,
+      "w": 74,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/scottish_fold_silver_tabby_set00.png",
@@ -2983,6 +3023,46 @@
       "assets/sprites/domestic_shorthair_calico_set07.png",
       "assets/sprites/domestic_shorthair_calico_set08.png",
       "assets/sprites/domestic_shorthair_calico_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "domestic_shorthair_tabby_white_stocky",
+    "species": "cat",
+    "breed_or_morph": "Domestic Shorthair",
+    "color": "tabby and white",
+    "popularity_tier": 2,
+    "motion_profile": "cat-stalk",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/domestic_shorthair_tabby_white_stocky-source.png",
+    "motion_source": "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/sheets/domestic-shorthair-tabby-white-stocky-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "domestic_shorthair_tabby_white_stocky",
+    "tint_hex": "5d5145",
+    "accent_hex": "f1ede4",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 9,
+      "w": 84,
+      "h": 49
+    },
+    "outputs": [
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set00.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set01.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set02.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set03.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set04.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set05.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set06.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set07.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set08.png",
+      "assets/sprites/domestic_shorthair_tabby_white_stocky_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -3442,7 +3522,7 @@
     "variant": "albino_chipmunk",
     "species": "chipmunk",
     "breed_or_morph": "Chipmunk",
-    "color": "albino cream",
+    "color": "black-eyed white",
     "popularity_tier": 3,
     "motion_profile": "squirrel-bound",
     "source_status": "motion_source_accepted",
@@ -3473,6 +3553,46 @@
       "assets/sprites/albino_chipmunk_set07.png",
       "assets/sprites/albino_chipmunk_set08.png",
       "assets/sprites/albino_chipmunk_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "true_albino_chipmunk",
+    "species": "chipmunk",
+    "breed_or_morph": "Chipmunk",
+    "color": "true albino",
+    "popularity_tier": 3,
+    "motion_profile": "squirrel-bound",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/true_albino_chipmunk-source.png",
+    "motion_source": "docs/art-source/true-albino-chipmunk/motion-source/sheets/true-albino-chipmunk-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "true_albino_chipmunk",
+    "tint_hex": "f7e9d6",
+    "accent_hex": "d98f8a",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 21,
+      "w": 84,
+      "h": 37
+    },
+    "outputs": [
+      "assets/sprites/true_albino_chipmunk_set00.png",
+      "assets/sprites/true_albino_chipmunk_set01.png",
+      "assets/sprites/true_albino_chipmunk_set02.png",
+      "assets/sprites/true_albino_chipmunk_set03.png",
+      "assets/sprites/true_albino_chipmunk_set04.png",
+      "assets/sprites/true_albino_chipmunk_set05.png",
+      "assets/sprites/true_albino_chipmunk_set06.png",
+      "assets/sprites/true_albino_chipmunk_set07.png",
+      "assets/sprites/true_albino_chipmunk_set08.png",
+      "assets/sprites/true_albino_chipmunk_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -3667,6 +3787,46 @@
     ]
   },
   {
+    "variant": "japanese_giant_salamander",
+    "species": "salamander",
+    "breed_or_morph": "Japanese giant salamander",
+    "color": "mottled brown",
+    "popularity_tier": 3,
+    "motion_profile": "gecko-crawl",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/japanese-giant-salamander/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/japanese_giant_salamander-source.png",
+    "motion_source": "docs/art-source/japanese-giant-salamander/motion-source/sheets/japanese-giant-salamander-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "japanese_giant_salamander",
+    "tint_hex": "5d4e43",
+    "accent_hex": "9f8f7c",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 41,
+      "w": 84,
+      "h": 17
+    },
+    "outputs": [
+      "assets/sprites/japanese_giant_salamander_set00.png",
+      "assets/sprites/japanese_giant_salamander_set01.png",
+      "assets/sprites/japanese_giant_salamander_set02.png",
+      "assets/sprites/japanese_giant_salamander_set03.png",
+      "assets/sprites/japanese_giant_salamander_set04.png",
+      "assets/sprites/japanese_giant_salamander_set05.png",
+      "assets/sprites/japanese_giant_salamander_set06.png",
+      "assets/sprites/japanese_giant_salamander_set07.png",
+      "assets/sprites/japanese_giant_salamander_set08.png",
+      "assets/sprites/japanese_giant_salamander_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "budgerigar_green_yellow",
     "species": "budgerigar",
     "breed_or_morph": "Budgerigar",
@@ -3827,6 +3987,46 @@
     ]
   },
   {
+    "variant": "parrotlet_blue_green",
+    "species": "parrotlet",
+    "breed_or_morph": "Pacific parrotlet",
+    "color": "blue green",
+    "popularity_tier": 2,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/parrotlet-blue-green/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/parrotlet_blue_green-source.png",
+    "motion_source": "docs/art-source/parrotlet-blue-green/motion-source/sheets/parrotlet-blue-green-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "parrotlet_blue_green",
+    "tint_hex": "28c2df",
+    "accent_hex": "136f78",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 16,
+      "y": 4,
+      "w": 64,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/parrotlet_blue_green_set00.png",
+      "assets/sprites/parrotlet_blue_green_set01.png",
+      "assets/sprites/parrotlet_blue_green_set02.png",
+      "assets/sprites/parrotlet_blue_green_set03.png",
+      "assets/sprites/parrotlet_blue_green_set04.png",
+      "assets/sprites/parrotlet_blue_green_set05.png",
+      "assets/sprites/parrotlet_blue_green_set06.png",
+      "assets/sprites/parrotlet_blue_green_set07.png",
+      "assets/sprites/parrotlet_blue_green_set08.png",
+      "assets/sprites/parrotlet_blue_green_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "lovebird_peach_faced",
     "species": "lovebird",
     "breed_or_morph": "Peach-faced lovebird",
@@ -3845,10 +4045,10 @@
     "source_width": 96,
     "source_height": 64,
     "content": {
-      "x": 25,
-      "y": 10,
-      "w": 45,
-      "h": 47
+      "x": 15,
+      "y": 4,
+      "w": 65,
+      "h": 54
     },
     "outputs": [
       "assets/sprites/lovebird_peach_faced_set00.png",
@@ -3861,6 +4061,46 @@
       "assets/sprites/lovebird_peach_faced_set07.png",
       "assets/sprites/lovebird_peach_faced_set08.png",
       "assets/sprites/lovebird_peach_faced_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "white_wagtail",
+    "species": "wagtail",
+    "breed_or_morph": "White wagtail",
+    "color": "black white gray",
+    "popularity_tier": 3,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/white-wagtail/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/white_wagtail-source.png",
+    "motion_source": "docs/art-source/white-wagtail/motion-source/sheets/white-wagtail-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "white_wagtail",
+    "tint_hex": "d8d8cf",
+    "accent_hex": "1d1d1f",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 5,
+      "w": 84,
+      "h": 53
+    },
+    "outputs": [
+      "assets/sprites/white_wagtail_set00.png",
+      "assets/sprites/white_wagtail_set01.png",
+      "assets/sprites/white_wagtail_set02.png",
+      "assets/sprites/white_wagtail_set03.png",
+      "assets/sprites/white_wagtail_set04.png",
+      "assets/sprites/white_wagtail_set05.png",
+      "assets/sprites/white_wagtail_set06.png",
+      "assets/sprites/white_wagtail_set07.png",
+      "assets/sprites/white_wagtail_set08.png",
+      "assets/sprites/white_wagtail_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
