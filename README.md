@@ -11,8 +11,9 @@ Current app version: `v0.2.5`
 ## Current Status
 
 `v0.2.5` is an early public test release for 41 accepted 62-frame ImageGen
-motion animals. It keeps the original sixteen preview animals and adds the
-current GitHub Pages priority wave plus the latest accepted asset lanes:
+motion animals and a Windows mixed-DPI multi-monitor hotfix. It keeps the
+original sixteen preview animals, the current GitHub Pages priority wave, and
+the latest accepted asset lanes:
 
 - chinchilla standard gray
 - golden Syrian hamster
@@ -132,7 +133,7 @@ same release tag as the Mac ZIPs when they are ready:
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.1.5" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.2.5" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 
@@ -184,6 +185,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` expands it to 41, adds true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, tabby-white cat, and blue-green parrotlet, and keeps the remaining Pages queue plus lionhead-pattern rabbit and low-motion shoebill as the next lanes.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` expands it to 41, adds true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, tabby-white cat, and blue-green parrotlet, fixes Windows mixed-DPI multi-monitor overlay size and placement, and keeps the remaining Pages queue plus lionhead-pattern rabbit and low-motion shoebill as the next lanes.
 
 Do not create a stable/final release tag until the current animal target is complete.

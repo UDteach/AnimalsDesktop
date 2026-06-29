@@ -532,7 +532,7 @@
             </a>
           </div>
           <p class="download-note" data-i18n-html="download.note">
-            v0.2.5 は、41種類の小動物と基本モーションを試せる先行お試し版です。今回追加した6種類も、Windows版とMac版の動物選択、1匹ごとのサイズ変更、表示数、言語切り替え、表示先ディスプレイ設定で選べます。
+            v0.2.5 は、41種類の小動物と基本モーションを試せる先行お試し版です。今回追加した6種類も、Windows版とMac版の動物選択、1匹ごとのサイズ変更、表示数、言語切り替え、表示先ディスプレイ設定で選べます。Windows版はDPIスケールが異なるマルチモニター環境の表示も修正しています。
             Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows版はZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
             <code>AnimalsDesktop.app</code> を起動してください。
           </p>
@@ -541,7 +541,7 @@
             <span data-i18n-html="meta.windowsBadge">Windows版 <strong>v0.2.5</strong></span>
             <span><span data-i18n="meta.mac">Mac版</span> <strong>v0.2.5</strong></span>
             <span><span data-i18n="meta.animals">小動物</span> <strong data-i18n="meta.animalCount">41種</strong></span>
-            <span><span data-i18n="meta.content">内容</span> <strong data-i18n="meta.contentValue">6種追加</strong></span>
+            <span><span data-i18n="meta.content">内容</span> <strong data-i18n="meta.contentValue">6種追加 + DPI修正</strong></span>
             <span><span data-i18n="meta.updated">更新日</span> <strong data-build-date>2026-06-30</strong></span>
           </div>
         </div>
@@ -842,7 +842,7 @@
           <article class="version-item">
             <h3 data-i18n="versions.v025.title">v0.2.5 / 2026-06-30</h3>
             <p data-i18n="versions.v025.body">
-              青緑マメルリハ、真のアルビノシマリス、ミニチュアシュナウザー、オオサンショウウオ、ハクセキレイ、キジ白猫を追加し、選べる動物を41種類に増やしました。既存のインコ、クアッカ、ロボロフスキー、猫・犬アセットも見直し、ヒョウモントカゲモドキのターン中のサイズを補正しています。
+              青緑マメルリハ、真のアルビノシマリス、ミニチュアシュナウザー、オオサンショウウオ、ハクセキレイ、キジ白猫を追加し、選べる動物を41種類に増やしました。既存のインコ、クアッカ、ロボロフスキー、猫・犬アセットも見直し、ヒョウモントカゲモドキのターン中のサイズを補正しています。Windowsのmixed-DPIマルチモニター表示も修正しました。
             </p>
           </article>
           <article class="version-item">
@@ -884,7 +884,7 @@
             <h2 id="scope-heading" data-i18n="scope.heading">この版について</h2>
             <p data-i18n="scope.body">
               v0.2.5 は、41種類の小動物を試せるWindows / Macプレビュー版です。
-              今回追加した動物も、動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定で選べます。
+              今回追加した動物も、動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定で選べます。Windows版はmixed-DPIマルチモニター表示も修正しています。
               Windows版はトレイから Language を切り替えられます。
               今後も、Pagesに残っている候補、白いライオンヘッド模様のライオンラビット、低モーション特別扱いのハシビロコウを順番に進めます。
               木、種、餌などの追加アイテムはこの版では表示しません。
@@ -911,7 +911,7 @@
             macArm: "Mac版 Apple Silicon macOS 12+",
             macIntel: "Mac版 Intel macOS 12+",
             note:
-              'v0.2.5 は、41種類の小動物と基本モーションを試せる先行お試し版です。今回追加した6種類も、Windows版とMac版の動物選択、1匹ごとのサイズ変更、表示数、言語切り替え、表示先ディスプレイ設定で選べます。Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows版はZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。',
+              'v0.2.5 は、41種類の小動物と基本モーションを試せる先行お試し版です。今回追加した6種類も、Windows版とMac版の動物選択、1匹ごとのサイズ変更、表示数、言語切り替え、表示先ディスプレイ設定で選べます。Windows版はDPIスケールが異なるマルチモニター環境の表示も修正しています。Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows版はZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。',
           },
           meta: {
             preview: "先行お試し版",
@@ -920,7 +920,7 @@
             animals: "小動物",
             animalCount: "41種",
             content: "内容",
-            contentValue: "6種追加",
+            contentValue: "6種追加 + DPI修正",
             updated: "更新日",
           },
           animals: { heading: "登場する動物", lead: "現在選べる動物は以下の41種類です。今回追加した鳥、猫、犬、爬虫類、小動物も選べます。" },
@@ -939,7 +939,7 @@
             lead: "公開中の主な変更点です。Windows版とMac版は現在 v0.2.5 です。",
             v025: {
               title: "v0.2.5 / 2026-06-30",
-              body: "青緑マメルリハ、真のアルビノシマリス、ミニチュアシュナウザー、オオサンショウウオ、ハクセキレイ、キジ白猫を追加し、選べる動物を41種類に増やしました。既存のインコ、クアッカ、ロボロフスキー、猫・犬アセットも見直し、ヒョウモントカゲモドキのターン中のサイズを補正しています。",
+              body: "青緑マメルリハ、真のアルビノシマリス、ミニチュアシュナウザー、オオサンショウウオ、ハクセキレイ、キジ白猫を追加し、選べる動物を41種類に増やしました。既存のインコ、クアッカ、ロボロフスキー、猫・犬アセットも見直し、ヒョウモントカゲモドキのターン中のサイズを補正しています。Windowsのmixed-DPIマルチモニター表示も修正しました。",
             },
             v024: {
               title: "v0.2.4 / 2026-06-28",
@@ -964,7 +964,7 @@
           },
           scope: {
             heading: "この版について",
-            body: "v0.2.5 は、41種類の小動物を試せるWindows / Macプレビュー版です。今回追加した動物も、動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定で選べます。Windows版はトレイから Language を切り替えられます。今後も、Pagesに残っている候補、白いライオンヘッド模様のライオンラビット、低モーション特別扱いのハシビロコウを順番に進めます。木、種、餌などの追加アイテムはこの版では表示しません。",
+            body: "v0.2.5 は、41種類の小動物を試せるWindows / Macプレビュー版です。今回追加した動物も、動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定で選べます。Windows版はmixed-DPIマルチモニター表示も修正し、トレイから Language を切り替えられます。今後も、Pagesに残っている候補、白いライオンヘッド模様のライオンラビット、低モーション特別扱いのハシビロコウを順番に進めます。木、種、餌などの追加アイテムはこの版では表示しません。",
           },
         },
         en: {
@@ -982,7 +982,7 @@
             macArm: "Mac Apple Silicon macOS 12+",
             macIntel: "Mac Intel macOS 12+",
             note:
-              'v0.2.5 is an early preview with forty-one small animals and core motion, including six newly selectable animals, Mac controls for animal selection, per-pet size, visible count, language, and display selection, plus a Windows tray Language menu. For Windows, extract the ZIP and run <code>AnimalsDesktop.exe</code>. For Mac, extract the ZIP and run <code>AnimalsDesktop.app</code>.',
+              'v0.2.5 is an early preview with forty-one small animals and core motion, including six newly selectable animals, Mac controls for animal selection, per-pet size, visible count, language, and display selection, plus a Windows tray Language menu. It also fixes Windows mixed-DPI multi-monitor display behavior. For Windows, extract the ZIP and run <code>AnimalsDesktop.exe</code>. For Mac, extract the ZIP and run <code>AnimalsDesktop.app</code>.',
           },
           meta: {
             preview: "Preview",
@@ -991,7 +991,7 @@
             animals: "Animals",
             animalCount: "41",
             content: "Focus",
-            contentValue: "6 new animals",
+            contentValue: "6 new animals + DPI fix",
             updated: "Updated",
           },
           animals: { heading: "Available animals", lead: "The current preview includes these forty-one animals, including the newly added birds, cats, dog breeds, reptiles, and small mammals." },
@@ -1010,7 +1010,7 @@
             lead: "Main changes in the public downloads. Windows and Mac are currently on v0.2.5.",
             v025: {
               title: "v0.2.5 / June 30, 2026",
-              body: "Adds blue-green parrotlet, true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, and a tabby-white domestic shorthair, expanding the selectable roster to forty-one. It also refreshes selected bird, quokka, Roborovski hamster, cat, and dog assets, and corrects leopard gecko turn-frame sizing.",
+              body: "Adds blue-green parrotlet, true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, and a tabby-white domestic shorthair, expanding the selectable roster to forty-one. It also refreshes selected bird, quokka, Roborovski hamster, cat, and dog assets, corrects leopard gecko turn-frame sizing, and fixes Windows mixed-DPI multi-monitor display behavior.",
             },
             v024: {
               title: "v0.2.4 / June 28, 2026",
@@ -1035,7 +1035,7 @@
           },
           scope: {
             heading: "About this version",
-            body: "v0.2.5 is a Windows and Mac preview for trying forty-one small animals. The newly added animals work with animal selection, size changes, visible count, language, and display settings. Upcoming lanes include the remaining GitHub Pages candidates, a white lionhead-pattern rabbit, and a special low-motion shoebill. Extra props such as trees, seeds, and food are not shown in this version.",
+            body: "v0.2.5 is a Windows and Mac preview for trying forty-one small animals. The newly added animals work with animal selection, size changes, visible count, language, and display settings. Windows mixed-DPI multi-monitor display behavior is also fixed. Upcoming lanes include the remaining GitHub Pages candidates, a white lionhead-pattern rabbit, and a special low-motion shoebill. Extra props such as trees, seeds, and food are not shown in this version.",
           },
         },
       };
