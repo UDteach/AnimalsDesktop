@@ -60,6 +60,8 @@ jobs:
           test -f docs/assets/animal-icons/current-albino_chipmunk.png
           test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
           test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
+          test -f docs/assets/animal-icons/current-lionhead_rabbit_brown_white.png
+          test -f docs/assets/animal-icons/current-shoebill_stork.png
           test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
           for silhouette in \
             leucistic_sugar_glider \
@@ -73,9 +75,7 @@ jobs:
             fancy_rat_chocolate_self \
             fancy_rat_cream_agouti \
             rabbit_gray \
-            lionhead_rabbit \
-            african_fat_tailed_gecko \
-            shoebill
+            african_fat_tailed_gecko
           do
             test -f "docs/assets/upcoming-silhouettes/$silhouette.png"
           done
