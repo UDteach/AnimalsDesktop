@@ -16,7 +16,7 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
-EXPECTED_RELEASE = "v0.2.6"
+EXPECTED_RELEASE = "v0.2.7"
 EXPECTED_UPCOMING = [
     "leucistic_sugar_glider",
     "african_dormouse",
@@ -155,6 +155,9 @@ def main() -> None:
         if required not in html:
             fail(f"missing future roadmap text: {required}")
     for required in (
+        'data-i18n="versions.v027.title"',
+        "v0.2.7 / 2026-07-01",
+        "v0.2.7 / July 1, 2026",
         'data-i18n="versions.v026.title"',
         "v0.2.6 / 2026-06-30",
         "v0.2.6 / June 30, 2026",

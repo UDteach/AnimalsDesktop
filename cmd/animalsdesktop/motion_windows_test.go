@@ -213,7 +213,6 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"roborovski_hamster",
 		"guinea_pig_russian_smoke_white",
 		"quokka",
-		"true_albino_chipmunk",
 		"miniature_schnauzer_salt_pepper",
 		"japanese_giant_salamander",
 		"white_wagtail",
@@ -414,8 +413,8 @@ func TestSettingsLanguageLabelsSwitchToEnglish(t *testing.T) {
 }
 
 func TestWindowsDefaultAppVersionTracksCurrentRelease(t *testing.T) {
-	if appVersion != "v0.2.6" {
-		t.Fatalf("appVersion = %q, want v0.2.6", appVersion)
+	if appVersion != "v0.2.7" {
+		t.Fatalf("appVersion = %q, want v0.2.7", appVersion)
 	}
 }
 
@@ -1234,6 +1233,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"github.ref_name == 'v0.2.3'",
 		"github.ref_name == 'v0.2.4'",
 		"github.ref_name == 'v0.2.6'",
+		"github.ref_name == 'v0.2.7'",
 		"docs/releases/${version}.md",
 		"release-assets/**/SHA256SUMS.txt",
 	} {

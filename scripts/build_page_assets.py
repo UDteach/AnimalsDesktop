@@ -71,7 +71,6 @@ CURRENT_VARIANTS = [
     "roborovski_hamster",
     "guinea_pig_russian_smoke_white",
     "quokka",
-    "true_albino_chipmunk",
     "miniature_schnauzer_salt_pepper",
     "japanese_giant_salamander",
     "white_wagtail",
@@ -97,7 +96,6 @@ ICON_FRAMES = {
     "lovebird_peach_faced": 4,
     "roborovski_hamster": 4,
     "quokka": 58,
-    "true_albino_chipmunk": 16,
     "miniature_schnauzer_salt_pepper": 4,
     "japanese_giant_salamander": 6,
     "white_wagtail": 4,
@@ -141,7 +139,6 @@ PREVIEW_POSES = {
     "roborovski_hamster": 4,
     "guinea_pig_russian_smoke_white": 4,
     "quokka": 58,
-    "true_albino_chipmunk": 16,
     "miniature_schnauzer_salt_pepper": 4,
     "japanese_giant_salamander": 6,
     "white_wagtail": 4,
@@ -248,6 +245,12 @@ def scaled(sprite: Image.Image, max_w: int, max_h: int) -> Image.Image:
 def write_icons() -> None:
     out_dir = ROOT / "docs" / "assets" / "animal-icons"
     out_dir.mkdir(parents=True, exist_ok=True)
+    expected = {f"current-{variant}.png" for variant in CURRENT_VARIANTS}
+    for sidecar in out_dir.glob("._*.png"):
+        sidecar.unlink()
+    for stale in out_dir.glob("current-*.png"):
+        if stale.name not in expected:
+            stale.unlink()
     for variant in CURRENT_VARIANTS:
         sprite = frame_for_variant(variant, ICON_FRAMES.get(variant, 0))
         animal = scaled(sprite, 150, 118)
