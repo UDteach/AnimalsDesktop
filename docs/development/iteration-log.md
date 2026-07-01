@@ -1068,3 +1068,19 @@
   -buildvcs=false ./...`, `git diff --check`, macOS arm64/amd64 ZIP builds,
   Windows amd64/386 cross-builds, and Playwright JP/EN Pages smoke checks.
   Visual QA artifacts are under `.codex/qa/release-v025-visual/`.
+
+## 2026-07-01
+
+- Prepared the v0.2.8 release lane on top of published v0.2.7 by promoting the
+  two complete unpublished ImageGen accepted sources into runtime and Pages:
+  `lionhead_rabbit_brown_white` and `shoebill_stork`. Both source directories
+  were copied from the asset-production worktree with accepted frames, source
+  sheets, contact sheets, and QA reports; large raw/fullrun generation
+  directories stayed out of the release commit.
+- Catalog/runtime scope now exposes 42 animals. `true_albino_chipmunk` remains
+  excluded from the public runtime under the ImageGen-only constraint until a
+  new ImageGen repair or edit lane passes white-background readability review.
+- Rebuilt runtime sprites and public Pages assets with 42 current animal icons,
+  12 remaining upcoming silhouettes, v0.2.8 download links, and v0.2.8 version
+  copy. `lionhead_rabbit_brown_white` and `shoebill_stork` moved from Upcoming
+  to current animals.

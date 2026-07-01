@@ -16,7 +16,7 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
-EXPECTED_RELEASE = "v0.2.7"
+EXPECTED_RELEASE = "v0.2.8"
 EXPECTED_UPCOMING = [
     "leucistic_sugar_glider",
     "african_dormouse",
@@ -29,9 +29,7 @@ EXPECTED_UPCOMING = [
     "fancy_rat_chocolate_self",
     "fancy_rat_cream_agouti",
     "rabbit_gray",
-    "lionhead_rabbit",
     "african_fat_tailed_gecko",
-    "shoebill",
 ]
 
 
@@ -151,10 +149,10 @@ def main() -> None:
     if upcoming_ids != EXPECTED_UPCOMING:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
 
-    for required in ("ライオンラビット", "ハシビロコウ", "低モーション", "lionhead", "shoebill", "low-motion"):
-        if required not in html:
-            fail(f"missing future roadmap text: {required}")
     for required in (
+        'data-i18n="versions.v028.title"',
+        "v0.2.8 / 2026-07-01",
+        "v0.2.8 / July 1, 2026",
         'data-i18n="versions.v027.title"',
         "v0.2.7 / 2026-07-01",
         "v0.2.7 / July 1, 2026",

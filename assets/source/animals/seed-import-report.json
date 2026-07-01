@@ -3223,6 +3223,46 @@
     ]
   },
   {
+    "variant": "lionhead_rabbit_brown_white",
+    "species": "rabbit",
+    "breed_or_morph": "Lionhead rabbit",
+    "color": "brown white",
+    "popularity_tier": 2,
+    "motion_profile": "rabbit-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/lionhead-rabbit-brown-white/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/lionhead_rabbit_brown_white-source.png",
+    "motion_source": "docs/art-source/lionhead-rabbit-brown-white/motion-source/sheets/lionhead-rabbit-brown-white-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "lionhead_rabbit_brown_white",
+    "tint_hex": "f1ede4",
+    "accent_hex": "9a6845",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 16,
+      "y": 4,
+      "w": 64,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/lionhead_rabbit_brown_white_set00.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set01.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set02.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set03.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set04.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set05.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set06.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set07.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set08.png",
+      "assets/sprites/lionhead_rabbit_brown_white_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "mini_rex_black_otter",
     "species": "rabbit",
     "breed_or_morph": "Mini Rex",
@@ -4101,6 +4141,46 @@
       "assets/sprites/white_wagtail_set07.png",
       "assets/sprites/white_wagtail_set08.png",
       "assets/sprites/white_wagtail_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "shoebill_stork",
+    "species": "shoebill",
+    "breed_or_morph": "Shoebill",
+    "color": "gray blue",
+    "popularity_tier": 3,
+    "motion_profile": "bird-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/shoebill-stork/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/shoebill_stork-source.png",
+    "motion_source": "docs/art-source/shoebill-stork/motion-source/sheets/shoebill-stork-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "shoebill_stork",
+    "tint_hex": "7f8f91",
+    "accent_hex": "c8b894",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 32,
+      "y": 3,
+      "w": 31,
+      "h": 58
+    },
+    "outputs": [
+      "assets/sprites/shoebill_stork_set00.png",
+      "assets/sprites/shoebill_stork_set01.png",
+      "assets/sprites/shoebill_stork_set02.png",
+      "assets/sprites/shoebill_stork_set03.png",
+      "assets/sprites/shoebill_stork_set04.png",
+      "assets/sprites/shoebill_stork_set05.png",
+      "assets/sprites/shoebill_stork_set06.png",
+      "assets/sprites/shoebill_stork_set07.png",
+      "assets/sprites/shoebill_stork_set08.png",
+      "assets/sprites/shoebill_stork_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"

@@ -217,6 +217,8 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"japanese_giant_salamander",
 		"white_wagtail",
 		"domestic_shorthair_tabby_white_stocky",
+		"lionhead_rabbit_brown_white",
+		"shoebill_stork",
 	}
 	if got := len(variants); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))

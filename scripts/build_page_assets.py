@@ -75,6 +75,8 @@ CURRENT_VARIANTS = [
     "japanese_giant_salamander",
     "white_wagtail",
     "domestic_shorthair_tabby_white_stocky",
+    "lionhead_rabbit_brown_white",
+    "shoebill_stork",
 ]
 
 PAGE_RIGHT_FACING_VARIANTS = {
@@ -100,6 +102,8 @@ ICON_FRAMES = {
     "japanese_giant_salamander": 6,
     "white_wagtail": 4,
     "domestic_shorthair_tabby_white_stocky": 4,
+    "lionhead_rabbit_brown_white": 4,
+    "shoebill_stork": 4,
 }
 
 PREVIEW_POSES = {
@@ -143,6 +147,8 @@ PREVIEW_POSES = {
     "japanese_giant_salamander": 6,
     "white_wagtail": 4,
     "domestic_shorthair_tabby_white_stocky": 4,
+    "lionhead_rabbit_brown_white": 4,
+    "shoebill_stork": 4,
 }
 
 # The page-specific ImageGen source sheet was generated in this cell order.
@@ -199,9 +205,7 @@ UPCOMING_SILHOUETTES = [
 	"fancy_rat_chocolate_self",
 	"fancy_rat_cream_agouti",
 	"rabbit_gray",
-	"lionhead_rabbit",
 	"african_fat_tailed_gecko",
-	"shoebill",
 ]
 
 

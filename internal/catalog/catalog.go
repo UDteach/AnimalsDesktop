@@ -91,6 +91,7 @@ var SpeciesList = []Species{
 	{ID: "parrotlet", Label: "Parrotlet", Profile: "bird"},
 	{ID: "lovebird", Label: "Lovebird", Profile: "bird"},
 	{ID: "wagtail", Label: "Wagtail", Profile: "bird"},
+	{ID: "shoebill", Label: "Shoebill", Profile: "bird"},
 }
 
 const (
@@ -104,6 +105,8 @@ const (
 	srcQuokkaMotion                  = "docs/art-source/quokka/motion-source/sheets/quokka-source-set00.png"
 	srcHimalayanRabbit               = "docs/art-source/himalayan-rabbit/motion-source/accepted-frames/set00/frame-00.png"
 	srcHimalayanRabbitMotion         = "docs/art-source/himalayan-rabbit/motion-source/sheets/himalayan-rabbit-source-set00.png"
+	srcLionheadRabbit                = "docs/art-source/lionhead-rabbit-brown-white/motion-source/accepted-frames/set00/frame-00.png"
+	srcLionheadRabbitMotion          = "docs/art-source/lionhead-rabbit-brown-white/motion-source/sheets/lionhead-rabbit-brown-white-source-set00.png"
 	srcHollandLop                    = "docs/art-source/holland-lop/motion-source/accepted-frames/set00/frame-00.png"
 	srcHollandLopMotion              = "docs/art-source/holland-lop/motion-source/sheets/holland-lop-broken-orange-source-set00.png"
 	srcNetherlandDwarf               = "docs/art-source/netherland-dwarf/motion-source/accepted-frames/set00/frame-00.png"
@@ -178,6 +181,8 @@ const (
 	srcJapaneseGiantSalamanderMotion = "docs/art-source/japanese-giant-salamander/motion-source/sheets/japanese-giant-salamander-source-set00.png"
 	srcWhiteWagtail                  = "docs/art-source/white-wagtail/motion-source/accepted-frames/set00/frame-00.png"
 	srcWhiteWagtailMotion            = "docs/art-source/white-wagtail/motion-source/sheets/white-wagtail-source-set00.png"
+	srcShoebill                      = "docs/art-source/shoebill-stork/motion-source/accepted-frames/set00/frame-00.png"
+	srcShoebillMotion                = "docs/art-source/shoebill-stork/motion-source/sheets/shoebill-stork-source-set00.png"
 )
 
 var Variants = []Variant{
@@ -292,6 +297,7 @@ var Variants = []Variant{
 	acceptedMotionVariant("holland_lop_broken_orange", "rabbit", "Holland Lop - broken orange", "ホーランドロップ", "holland_lop_broken_orange", srcHollandLop, srcHollandLopMotion, "e6d8c3", "c97833", "Holland Lop", "broken orange", 1),
 	acceptedMotionVariant("netherland_dwarf_chestnut", "rabbit", "Netherland Dwarf - chestnut", "ネザーランドドワーフ", "netherland_dwarf_chestnut", srcNetherlandDwarf, srcNetherlandDwarfMotion, "8c633d", "d3b17a", "Netherland Dwarf", "chestnut", 1),
 	acceptedMotionVariant("himalayan_rabbit", "rabbit", "Himalayan Rabbit", "ヒマラヤンうさぎ", "himalayan_rabbit", srcHimalayanRabbit, srcHimalayanRabbitMotion, "f3e5c8", "5b3b2d", "Himalayan rabbit", "seal point", 1),
+	acceptedMotionVariant("lionhead_rabbit_brown_white", "rabbit", "Lionhead rabbit - brown white", "ライオンラビット（白茶）", "lionhead_rabbit_brown_white", srcLionheadRabbit, srcLionheadRabbitMotion, "f1ede4", "9a6845", "Lionhead rabbit", "brown white", 2),
 	sourceVariantMeta("mini_rex_black_otter", "rabbit", "Mini Rex - black otter", "mini_rex_black_otter", srcRabbit, "2f2c29", "b89865", "Mini Rex", "black otter", 1),
 	sourceVariantMeta("lionhead_tort", "rabbit", "Lionhead - tort", "lionhead_tort", srcRabbit, "a66a3a", "4f3326", "Lionhead", "tort", 2),
 	sourceVariantMeta("dutch_black_white", "rabbit", "Dutch - black and white", "dutch_black_white", srcRabbit, "2c2a28", "eee7dc", "Dutch", "black and white", 2),
@@ -318,6 +324,7 @@ var Variants = []Variant{
 	acceptedMotionVariant("parrotlet_blue_green", "parrotlet", "Parrotlet - blue green", "マメルリハ（青緑）", "parrotlet_blue_green", srcParrotletBlueGreen, srcParrotletBlueGreenMotion, "28c2df", "136f78", "Pacific parrotlet", "blue green", 2),
 	acceptedMotionVariant("lovebird_peach_faced", "lovebird", "Lovebird - peach faced", "コザクラインコ", "lovebird_peach_faced", srcLovebird, srcLovebirdMotion, "75b83e", "ef7944", "Peach-faced lovebird", "peach faced", 2),
 	acceptedMotionVariant("white_wagtail", "wagtail", "White wagtail", "ハクセキレイ", "white_wagtail", srcWhiteWagtail, srcWhiteWagtailMotion, "d8d8cf", "1d1d1f", "White wagtail", "black white gray", 3),
+	acceptedMotionVariant("shoebill_stork", "shoebill", "Shoebill", "ハシビロコウ", "shoebill_stork", srcShoebill, srcShoebillMotion, "7f8f91", "c8b894", "Shoebill", "gray blue", 3),
 }
 
 var runtimeVariantIDs = []string{
@@ -361,6 +368,8 @@ var runtimeVariantIDs = []string{
 	"japanese_giant_salamander",
 	"white_wagtail",
 	"domestic_shorthair_tabby_white_stocky",
+	"lionhead_rabbit_brown_white",
+	"shoebill_stork",
 }
 
 func RuntimeVariants() []Variant {
@@ -540,7 +549,7 @@ func DefaultMotionProfileForSpecies(speciesID string) string {
 		return MotionProfileDragonPlod
 	case "whites_tree_frog":
 		return MotionProfileFrogHop
-	case "budgerigar", "cockatiel", "java_sparrow", "parrotlet", "lovebird", "wagtail":
+	case "budgerigar", "cockatiel", "java_sparrow", "parrotlet", "lovebird", "wagtail", "shoebill":
 		return MotionProfileBirdHop
 	default:
 		return MotionProfileSmallRodentScurry
