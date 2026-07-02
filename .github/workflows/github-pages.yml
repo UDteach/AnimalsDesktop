@@ -65,7 +65,6 @@ jobs:
           test -f docs/assets/animal-icons/current-gecko_gray_brown.png
           test -f docs/assets/animal-icons/current-guinea_pig_tricolor.png
           test -f docs/assets/animal-icons/current-fancy_rat_hooded.png
-          test -f docs/assets/animal-icons/current-true_albino_chipmunk.png
           test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
           test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
           test -f docs/assets/animal-icons/current-lionhead_rabbit_brown_white.png

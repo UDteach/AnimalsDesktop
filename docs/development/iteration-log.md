@@ -1113,3 +1113,13 @@
   hood/spine pixels shifted toward slate gray-blue, preserving the clean white
   hooded body. QA artifacts are stored under
   `docs/art-source/fancy-rat-blue-hooded/motion-source/qa/slate-gray-correction-20260702/`.
+- Prepared the v0.2.11 hotfix after the `true_albino_chipmunk` source was
+  rejected for the current ImageGen-only release constraint. The public runtime,
+  Pages current grid, page asset builder, release verifier, and workflow checks
+  now expose 55 selectable animals and keep the albino chipmunk slot held for a
+  fresh ImageGen-only candidate lane.
+- Local hotfix validation passed: `go run ./cmd/importanimals`, `go run
+  ./cmd/validatemotion -runtime-only -require-accepted`, `python3
+  scripts/build_page_assets.py`, `python3 scripts/verify_page_release.py`,
+  `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, macOS
+  arm64/amd64 ZIP builds, and `git diff --check`.

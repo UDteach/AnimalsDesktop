@@ -119,7 +119,6 @@ func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
 		"gecko_gray_brown",
 		"guinea_pig_tricolor",
 		"fancy_rat_hooded",
-		"true_albino_chipmunk",
 		"richardsons_ground_squirrel",
 		"yorkshire_terrier_longcoat",
 		"chipmunk_striped",
