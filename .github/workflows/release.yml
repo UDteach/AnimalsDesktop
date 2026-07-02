@@ -110,6 +110,8 @@ jobs:
           $env:GOARCH = "amd64"
           go build -buildvcs=false -ldflags="-H=windowsgui -X main.appVersion=$version" -o dist/AnimalsDesktop-windows-amd64.exe ./cmd/animalsdesktop
           Sign-IfConfigured dist/AnimalsDesktop-windows-amd64.exe
+          go build -buildvcs=false -tags animalsdesktop_nonetwork -ldflags="-H=windowsgui -X main.appVersion=$version" -o dist/AnimalsDesktop-windows-amd64-no-network.exe ./cmd/animalsdesktop
+          Sign-IfConfigured dist/AnimalsDesktop-windows-amd64-no-network.exe
           $env:GOARCH = "386"
           go build -buildvcs=false -ldflags="-H=windowsgui -X main.appVersion=$version" -o dist/AnimalsDesktop-windows-386.exe ./cmd/animalsdesktop
           Sign-IfConfigured dist/AnimalsDesktop-windows-386.exe
@@ -129,6 +131,7 @@ jobs:
           certificate-profile-name: ${{ env.AZURE_ARTIFACT_SIGNING_CERTIFICATE_PROFILE_NAME }}
           files: |
             ${{ github.workspace }}\dist\AnimalsDesktop-windows-amd64.exe
+            ${{ github.workspace }}\dist\AnimalsDesktop-windows-amd64-no-network.exe
             ${{ github.workspace }}\dist\AnimalsDesktop-windows-386.exe
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
@@ -141,18 +144,33 @@ jobs:
           $version = "${{ github.ref_name }}"
           $repoUrl = "https://github.com/UDteach/AnimalsDesktop"
           $releaseUrl = "$repoUrl/releases/tag/$version"
-          Get-AuthenticodeSignature -FilePath dist/AnimalsDesktop-windows-amd64.exe,dist/AnimalsDesktop-windows-386.exe |
+          Get-AuthenticodeSignature -FilePath dist/AnimalsDesktop-windows-amd64.exe,dist/AnimalsDesktop-windows-amd64-no-network.exe,dist/AnimalsDesktop-windows-386.exe |
             Select-Object Path,Status,SignerCertificate |
             Format-List
           $amd64ExeHash = (Get-FileHash -Algorithm SHA256 dist/AnimalsDesktop-windows-amd64.exe).Hash
+          $amd64NoNetworkExeHash = (Get-FileHash -Algorithm SHA256 dist/AnimalsDesktop-windows-amd64-no-network.exe).Hash
           $x86ExeHash = (Get-FileHash -Algorithm SHA256 dist/AnimalsDesktop-windows-386.exe).Hash
           function Write-SecurityFile {
             param(
               [string]$Path,
               [string]$Arch,
               [string]$ZipName,
-              [string]$ExeHash
+              [string]$ExeHash,
+              [switch]$NoNetwork
             )
+            $updateLines = if ($NoNetwork) {
+              @"
+          - No-network security-check edition.
+          - Automatic startup update checks are disabled.
+          - Tray update checks, update downloads, and update installation are disabled.
+          - The Go net/http update fetch/download implementation is excluded from this build.
+          "@
+            } else {
+              @"
+          - Update check is user-triggered from the tray.
+          - Updater downloads GitHub release ZIPs and verifies GitHub-provided size and sha256 digest when present.
+          "@
+            }
             @"
           Animals Desktop Windows release security notes
 
@@ -167,8 +185,7 @@ jobs:
           Expected behavior:
           - Windows taskbar desktop pet app.
           - Runs as the current user; no admin manifest/elevation request.
-          - Update check is user-triggered from the tray.
-          - Updater downloads GitHub release ZIPs and verifies GitHub-provided size and sha256 digest when present.
+          $updateLines
           - Updater does not write or launch PowerShell scripts.
 
           If Microsoft Defender SmartScreen, Microsoft Defender, or McAfee flags this build:
@@ -176,18 +193,23 @@ jobs:
           - Submit the exact ZIP/EXE as a false positive to Microsoft Security Intelligence or McAfee Dispute Detection & Allowlisting.
           "@ | Set-Content -Path $Path -Encoding ascii
           }
-          New-Item -ItemType Directory -Force dist/package-amd64,dist/package-386 | Out-Null
+          New-Item -ItemType Directory -Force dist/package-amd64,dist/package-amd64-no-network,dist/package-386 | Out-Null
           Copy-Item dist/AnimalsDesktop-windows-amd64.exe dist/package-amd64/AnimalsDesktop.exe
           Copy-Item README.md dist/package-amd64/README.md
           Write-SecurityFile -Path dist/package-amd64/SECURITY.txt -Arch "windows-amd64" -ZipName "AnimalsDesktop-windows-amd64.zip" -ExeHash $amd64ExeHash
+          Copy-Item dist/AnimalsDesktop-windows-amd64-no-network.exe dist/package-amd64-no-network/AnimalsDesktop.exe
+          Copy-Item README.md dist/package-amd64-no-network/README.md
+          Write-SecurityFile -Path dist/package-amd64-no-network/SECURITY.txt -Arch "windows-amd64-no-network" -ZipName "AnimalsDesktop-windows-amd64-no-network.zip" -ExeHash $amd64NoNetworkExeHash -NoNetwork
           Copy-Item dist/AnimalsDesktop-windows-386.exe dist/package-386/AnimalsDesktop.exe
           Copy-Item README.md dist/package-386/README.md
           Write-SecurityFile -Path dist/package-386/SECURITY.txt -Arch "windows-386" -ZipName "AnimalsDesktop-windows-386.zip" -ExeHash $x86ExeHash
           Compress-Archive -Path dist/package-amd64/AnimalsDesktop.exe,dist/package-amd64/README.md,dist/package-amd64/SECURITY.txt -DestinationPath dist/AnimalsDesktop-windows-amd64.zip -Force
+          Compress-Archive -Path dist/package-amd64-no-network/AnimalsDesktop.exe,dist/package-amd64-no-network/README.md,dist/package-amd64-no-network/SECURITY.txt -DestinationPath dist/AnimalsDesktop-windows-amd64-no-network.zip -Force
           Compress-Archive -Path dist/package-386/AnimalsDesktop.exe,dist/package-386/README.md,dist/package-386/SECURITY.txt -DestinationPath dist/AnimalsDesktop-windows-386.zip -Force
-          $sumLines = Get-FileHash -Algorithm SHA256 dist/AnimalsDesktop-windows-amd64.zip,dist/AnimalsDesktop-windows-386.zip |
+          $sumLines = Get-FileHash -Algorithm SHA256 dist/AnimalsDesktop-windows-amd64.zip,dist/AnimalsDesktop-windows-amd64-no-network.zip,dist/AnimalsDesktop-windows-386.zip |
             ForEach-Object { "$($_.Hash)  $(Split-Path -Leaf $_.Path)" }
           $sumLines += "$amd64ExeHash  AnimalsDesktop-windows-amd64.zip/AnimalsDesktop.exe"
+          $sumLines += "$amd64NoNetworkExeHash  AnimalsDesktop-windows-amd64-no-network.zip/AnimalsDesktop.exe"
           $sumLines += "$x86ExeHash  AnimalsDesktop-windows-386.zip/AnimalsDesktop.exe"
           $sumLines | Set-Content -Path dist/SHA256SUMS.txt -Encoding ascii
       - name: Upload Windows ZIPs
@@ -196,6 +218,7 @@ jobs:
           name: animalsdesktop-windows-zips
           path: |
             dist/AnimalsDesktop-windows-amd64.zip
+            dist/AnimalsDesktop-windows-amd64-no-network.zip
             dist/AnimalsDesktop-windows-386.zip
             dist/SHA256SUMS.txt
 

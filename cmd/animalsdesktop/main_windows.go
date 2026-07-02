@@ -3,26 +3,20 @@
 package main
 
 import (
-	"archive/zip"
 	"bytes"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
-	"io"
 	"io/fs"
 	"math"
 	"math/rand"
-	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"sort"
-	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -82,7 +76,6 @@ const (
 	settingsDirName             = "AnimalsDesktop"
 	settingsFileName            = "settings.json"
 	settingsVersion             = 2
-	updateAPIURL                = "https://api.github.com/repos/UDteach/AnimalsDesktop/releases/latest"
 	updaterApplyArg             = "--animalsdesktop-apply-update"
 	updaterCleanupArg           = "--animalsdesktop-cleanup"
 	updateTempPrefix            = "animals-desktop-update-"
@@ -478,10 +471,15 @@ func enablePerMonitorDPIAwareness() {
 }
 
 func main() {
-	if runUpdaterUtility(os.Args[1:]) {
-		return
+	if networkUpdatesEnabled {
+		if runUpdaterUtility(os.Args[1:]) {
+			return
+		}
 	}
-	cleanupDir := updateCleanupDir(os.Args[1:])
+	cleanupDir := ""
+	if networkUpdatesEnabled {
+		cleanupDir = updateCleanupDir(os.Args[1:])
+	}
 
 	enablePerMonitorDPIAwareness()
 	runtime.LockOSThread()
@@ -550,7 +548,9 @@ func main() {
 	app.resetPosition()
 	app.installTray()
 	app.showStartupToast()
-	app.startUpdateCheck(false)
+	if networkUpdatesEnabled {
+		app.startUpdateCheck(false)
+	}
 	app.installKeyboardHook()
 	app.installMouseHook()
 	win.ShowWindow(app.hwnd, win.SW_SHOWNOACTIVATE)
@@ -4504,6 +4504,9 @@ func (a *petApp) updateChecking() bool {
 }
 
 func (a *petApp) hasInstallableUpdate() bool {
+	if !networkUpdatesEnabled {
+		return false
+	}
 	rel := a.currentRelease()
 	if rel == nil || !isNewerVersion(rel.TagName, appVersion) {
 		return false
@@ -4512,6 +4515,9 @@ func (a *petApp) hasInstallableUpdate() bool {
 }
 
 func (a *petApp) updateCheckMenuLabel() string {
+	if !networkUpdatesEnabled {
+		return a.localText("ネットワーク無効版", "Network disabled edition")
+	}
 	if a.update.installing.Load() {
 		return a.localText("アップデート適用中...", "Installing update...")
 	}
@@ -4533,6 +4539,15 @@ func (a *petApp) updateInstallMenuLabel() string {
 }
 
 func (a *petApp) startUpdateCheck(manual bool) {
+	if !networkUpdatesEnabled {
+		if manual {
+			a.showTrayBalloon(
+				a.localText("ネットワーク無効版", "Network disabled edition"),
+				a.localText("このビルドでは自動更新確認とダウンロードを無効化しています。", "This build disables update checks and downloads."),
+			)
+		}
+		return
+	}
 	if !a.update.checking.CompareAndSwap(false, true) {
 		if manual {
 			a.showTrayBalloon(
@@ -4610,6 +4625,13 @@ func (a *petApp) onUpdateFailed(notify bool) {
 }
 
 func (a *petApp) installLatestUpdate() {
+	if !networkUpdatesEnabled {
+		a.showTrayBalloon(
+			a.localText("ネットワーク無効版", "Network disabled edition"),
+			a.localText("このビルドではアップデートのダウンロードと適用を無効化しています。", "This build disables update downloads and installation."),
+		)
+		return
+	}
 	rel := a.currentRelease()
 	if rel == nil || !isNewerVersion(rel.TagName, appVersion) {
 		a.showTrayBalloon(
@@ -4690,35 +4712,6 @@ func (a *petApp) currentUpdateError() string {
 		return a.localText("詳細なエラーはありません。", "No detailed error is available.")
 	}
 	return a.update.lastError
-}
-
-func fetchLatestRelease() (*githubRelease, error) {
-	req, err := http.NewRequest(http.MethodGet, updateAPIURL, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("User-Agent", "AnimalsDesktop/"+appVersion)
-	client := http.Client{Timeout: 12 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("GitHub Releases API returned HTTP %d", resp.StatusCode)
-	}
-	var rel githubRelease
-	if err := json.NewDecoder(resp.Body).Decode(&rel); err != nil {
-		return nil, err
-	}
-	if rel.TagName == "" {
-		return nil, fmt.Errorf("latest release has no tag name")
-	}
-	if rel.Draft {
-		return nil, fmt.Errorf("latest release is still a draft")
-	}
-	return &rel, nil
 }
 
 func selectUpdateAsset(rel *githubRelease, goarch string) *githubReleaseAsset {
@@ -4802,326 +4795,6 @@ func parseVersionParts(version string) ([]int, bool) {
 	return out, true
 }
 
-func downloadAndStartUpdater(asset githubReleaseAsset) error {
-	if asset.BrowserDownloadURL == "" {
-		return fmt.Errorf("update asset has no download URL")
-	}
-	tmpDir, err := os.MkdirTemp("", updateTempPrefix+"*")
-	if err != nil {
-		return err
-	}
-	zipPath := filepath.Join(tmpDir, "update.zip")
-	if err := downloadFile(asset.BrowserDownloadURL, zipPath); err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	if err := verifyDownloadedAsset(zipPath, asset); err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	exePath, err := extractUpdateExe(zipPath, tmpDir)
-	if err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	currentExe, err := os.Executable()
-	if err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	helperPath := filepath.Join(tmpDir, "helper", "AnimalsDesktop.exe")
-	if err := os.MkdirAll(filepath.Dir(helperPath), 0o755); err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	if err := copyFile(currentExe, helperPath); err != nil {
-		_ = os.RemoveAll(tmpDir)
-		return err
-	}
-	return startUpdaterHelper(helperPath, tmpDir, exePath, currentExe, os.Getpid())
-}
-
-func downloadFile(url, path string) error {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return err
-	}
-	req.Header.Set("User-Agent", "AnimalsDesktop/"+appVersion)
-	client := http.Client{Timeout: 60 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("download returned HTTP %d", resp.StatusCode)
-	}
-	out, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-	_, err = io.Copy(out, resp.Body)
-	return err
-}
-
-func verifyDownloadedAsset(path string, asset githubReleaseAsset) error {
-	if asset.Size > 0 {
-		info, err := os.Stat(path)
-		if err != nil {
-			return err
-		}
-		if info.Size() != asset.Size {
-			return fmt.Errorf("downloaded update size mismatch: got %d bytes, want %d", info.Size(), asset.Size)
-		}
-	}
-	if asset.Digest == "" {
-		return nil
-	}
-	algorithm, want, ok := strings.Cut(asset.Digest, ":")
-	if !ok || !strings.EqualFold(algorithm, "sha256") || len(want) != 64 {
-		return fmt.Errorf("unsupported update digest %q", asset.Digest)
-	}
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	sum := sha256.Sum256(data)
-	got := fmt.Sprintf("%x", sum[:])
-	if !strings.EqualFold(got, want) {
-		return fmt.Errorf("downloaded update digest mismatch")
-	}
-	return nil
-}
-
-func extractUpdateExe(zipPath, tmpDir string) (string, error) {
-	reader, err := zip.OpenReader(zipPath)
-	if err != nil {
-		return "", err
-	}
-	defer reader.Close()
-	for _, file := range reader.File {
-		if !strings.EqualFold(filepath.Base(file.Name), "AnimalsDesktop.exe") {
-			continue
-		}
-		src, err := file.Open()
-		if err != nil {
-			return "", err
-		}
-		defer src.Close()
-		exePath := filepath.Join(tmpDir, "payload", "AnimalsDesktop.exe")
-		if err := os.MkdirAll(filepath.Dir(exePath), 0o755); err != nil {
-			return "", err
-		}
-		dst, err := os.Create(exePath)
-		if err != nil {
-			return "", err
-		}
-		if _, err := io.Copy(dst, src); err != nil {
-			_ = dst.Close()
-			return "", err
-		}
-		if err := dst.Close(); err != nil {
-			return "", err
-		}
-		return exePath, os.Chmod(exePath, 0o755)
-	}
-	return "", fmt.Errorf("AnimalsDesktop.exe was not found in update zip")
-}
-
-func startUpdaterHelper(helperPath, tmpDir, sourceExe, targetExe string, pid int) error {
-	return newUpdaterHelperCommand(helperPath, tmpDir, sourceExe, targetExe, pid).Start()
-}
-
-func newUpdaterHelperCommand(helperPath, tmpDir, sourceExe, targetExe string, pid int) *exec.Cmd {
-	cmd := exec.Command(
-		helperPath,
-		updaterApplyArg,
-		"--source", sourceExe,
-		"--target", targetExe,
-		"--parent-pid", strconv.Itoa(pid),
-		"--cleanup-dir", tmpDir,
-	)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	return cmd
-}
-
-type updateApplyOptions struct {
-	Source     string
-	Target     string
-	ParentPID  int
-	CleanupDir string
-}
-
-func runUpdaterUtility(args []string) bool {
-	if len(args) == 0 || args[0] != updaterApplyArg {
-		return false
-	}
-	opts, err := parseUpdateApplyArgs(args[1:])
-	if err != nil {
-		os.Exit(2)
-	}
-	if err := applyUpdate(opts); err != nil {
-		os.Exit(1)
-	}
-	return true
-}
-
-func parseUpdateApplyArgs(args []string) (updateApplyOptions, error) {
-	var opts updateApplyOptions
-	for i := 0; i < len(args); i++ {
-		if i+1 >= len(args) {
-			return opts, fmt.Errorf("%s is missing a value", args[i])
-		}
-		value := args[i+1]
-		switch args[i] {
-		case "--source":
-			opts.Source = value
-		case "--target":
-			opts.Target = value
-		case "--parent-pid":
-			pid, err := strconv.Atoi(value)
-			if err != nil || pid < 0 {
-				return opts, fmt.Errorf("invalid parent pid %q", value)
-			}
-			opts.ParentPID = pid
-		case "--cleanup-dir":
-			opts.CleanupDir = value
-		default:
-			return opts, fmt.Errorf("unknown updater argument %q", args[i])
-		}
-		i++
-	}
-	if opts.Source == "" || opts.Target == "" || opts.CleanupDir == "" {
-		return opts, fmt.Errorf("updater source, target, and cleanup-dir are required")
-	}
-	if !isUpdateTempDir(opts.CleanupDir) {
-		return opts, fmt.Errorf("refusing cleanup outside update temp dir")
-	}
-	if !isPathInsideDir(opts.Source, opts.CleanupDir) || !strings.EqualFold(filepath.Base(opts.Source), "AnimalsDesktop.exe") {
-		return opts, fmt.Errorf("updater source must be AnimalsDesktop.exe inside the update temp dir")
-	}
-	if !strings.EqualFold(filepath.Base(opts.Target), "AnimalsDesktop.exe") || isPathInsideDir(opts.Target, opts.CleanupDir) {
-		return opts, fmt.Errorf("updater target must be an installed AnimalsDesktop.exe outside the update temp dir")
-	}
-	return opts, nil
-}
-
-func applyUpdate(opts updateApplyOptions) error {
-	if opts.ParentPID > 0 {
-		if err := waitForProcessExit(opts.ParentPID, 120*time.Second); err != nil {
-			return err
-		}
-		time.Sleep(300 * time.Millisecond)
-	}
-	if err := copyFile(opts.Source, opts.Target); err != nil {
-		return err
-	}
-	return newUpdaterCleanupCommand(opts.Target, opts.CleanupDir).Start()
-}
-
-func newUpdaterCleanupCommand(targetExe, cleanupDir string) *exec.Cmd {
-	cmd := exec.Command(targetExe, updaterCleanupArg, cleanupDir)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	return cmd
-}
-
-func waitForProcessExit(pid int, timeout time.Duration) error {
-	handle, err := syscall.OpenProcess(syscall.SYNCHRONIZE, false, uint32(pid))
-	if err != nil {
-		return nil
-	}
-	defer syscall.CloseHandle(handle)
-	waitMS := uint32(timeout / time.Millisecond)
-	if timeout <= 0 {
-		waitMS = syscall.INFINITE
-	}
-	result, err := syscall.WaitForSingleObject(handle, waitMS)
-	if err != nil {
-		return err
-	}
-	if result == syscall.WAIT_TIMEOUT {
-		return fmt.Errorf("timed out waiting for process %d to exit", pid)
-	}
-	if result == syscall.WAIT_FAILED {
-		return fmt.Errorf("failed waiting for process %d", pid)
-	}
-	return nil
-}
-
-func copyFile(src, dst string) error {
-	in, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer in.Close()
-	out, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	if _, err := io.Copy(out, in); err != nil {
-		_ = out.Close()
-		return err
-	}
-	if err := out.Close(); err != nil {
-		return err
-	}
-	return os.Chmod(dst, 0o755)
-}
-
-func updateCleanupDir(args []string) string {
-	for i := 0; i < len(args)-1; i++ {
-		if args[i] == updaterCleanupArg && isUpdateTempDir(args[i+1]) {
-			return args[i+1]
-		}
-	}
-	return ""
-}
-
-func cleanupUpdateTempDirLater(dir string) {
-	for i := 0; i < 20; i++ {
-		time.Sleep(500 * time.Millisecond)
-		if err := os.RemoveAll(dir); err == nil {
-			return
-		}
-	}
-}
-
-func isUpdateTempDir(path string) bool {
-	if path == "" {
-		return false
-	}
-	absPath, err := filepath.Abs(path)
-	if err != nil {
-		return false
-	}
-	absTemp, err := filepath.Abs(os.TempDir())
-	if err != nil {
-		return false
-	}
-	rel, err := filepath.Rel(absTemp, absPath)
-	if err != nil || rel == "." || strings.HasPrefix(rel, "..") || filepath.IsAbs(rel) {
-		return false
-	}
-	return strings.HasPrefix(filepath.Base(absPath), updateTempPrefix)
-}
-
-func isPathInsideDir(path, dir string) bool {
-	absPath, err := filepath.Abs(path)
-	if err != nil {
-		return false
-	}
-	absDir, err := filepath.Abs(dir)
-	if err != nil {
-		return false
-	}
-	rel, err := filepath.Rel(absDir, absPath)
-	if err != nil || rel == "." || filepath.IsAbs(rel) {
-		return false
-	}
-	return !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && rel != ".."
-}
-
 func (a *petApp) installTray() {
 	iconPath := filepath.Join(os.TempDir(), "animals-desktop-tray.ico")
 	if data, err := fs.ReadFile(appassets.FS, "tray.ico"); err == nil {
@@ -5188,11 +4861,11 @@ func (a *petApp) showTrayMenu() {
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(languageMenu), syscall.StringToUTF16Ptr(a.txt("language")))
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 	updateFlags := uint32(win.MF_STRING)
-	if a.updateChecking() {
+	if a.updateChecking() || !networkUpdatesEnabled {
 		updateFlags |= win.MF_GRAYED
 	}
 	appendMenu(menu, updateFlags, uintptr(menuCheckUpdate), syscall.StringToUTF16Ptr(a.updateCheckMenuLabel()))
-	if a.hasInstallableUpdate() {
+	if networkUpdatesEnabled && a.hasInstallableUpdate() {
 		appendMenu(menu, win.MF_STRING, uintptr(menuInstallUpdate), syscall.StringToUTF16Ptr(a.updateInstallMenuLabel()))
 	}
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)

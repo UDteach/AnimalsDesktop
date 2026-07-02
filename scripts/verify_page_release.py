@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "docs" / "index.html"
 WINDOWS_AMD64_ASSET = "AnimalsDesktop-windows-amd64.zip"
+WINDOWS_AMD64_NO_NETWORK_ASSET = "AnimalsDesktop-windows-amd64-no-network.zip"
 WINDOWS_386_ASSET = "AnimalsDesktop-windows-386.zip"
 MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
@@ -100,6 +101,11 @@ def main() -> None:
         fail("blocked public Windows v0.2.0 release link remains")
 
     windows_tag = release_tag(WINDOWS_AMD64_ASSET, html, "Windows amd64 download version tag")
+    windows_no_network_tag = release_tag(
+        WINDOWS_AMD64_NO_NETWORK_ASSET,
+        html,
+        "Windows amd64 no-network download version tag",
+    )
     windows_386_tag = release_tag(WINDOWS_386_ASSET, html, "Windows 386 download version tag")
     checksum_tag = release_tag(CHECKSUM_ASSET, html, "SHA256SUMS download version tag")
     mac_arm64_tag = release_tag(MAC_ARM64_ASSET, html, "macOS arm64 download version tag")
@@ -120,6 +126,7 @@ def main() -> None:
 
     for label, got in {
         "Windows 386 download": windows_386_tag,
+        "Windows no-network download": windows_no_network_tag,
         "SHA256SUMS download": checksum_tag,
         "Windows badge": windows_badge,
         "release badge": release_badge,
@@ -141,6 +148,13 @@ def main() -> None:
 
     for required in (
         'data-i18n="versions.v0211.title"',
+        'data-i18n="download.windows64NoNetwork"',
+        'data-i18n-html="download.securityNote"',
+        "AnimalsDesktop-windows-amd64-no-network.zip",
+        "Smart App Control FAQ",
+        "SmartScreen reputation",
+        "GlobalSignのSmart App Control事例",
+        "GlobalSign Smart App Control case study",
         "v0.2.11 / 2026-07-02",
         "v0.2.11 / July 2, 2026",
         'data-i18n="versions.v0210.title"',

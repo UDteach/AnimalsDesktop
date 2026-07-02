@@ -518,6 +518,9 @@
             <a class="button primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.11/AnimalsDesktop-windows-amd64.zip" data-i18n="download.windows64">
               Windows版 Windows 10/11
             </a>
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.11/AnimalsDesktop-windows-amd64-no-network.zip" data-i18n="download.windows64NoNetwork">
+              Windows版 ネットワーク無効
+            </a>
             <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.11/AnimalsDesktop-windows-386.zip" data-i18n="download.windows32">
               Windows版 32-bit
             </a>
@@ -535,6 +538,9 @@
             v0.2.11 は、55種類の小動物と基本モーションを試せる先行お試し版です。チンチラの色違い2件とブルーフーディッドのファンシーラット色調補正は維持し、アルビノシマリス枠は ImageGen-only の新ソース確認まで公開選択肢から外しています。
             Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows版はZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して
             <code>AnimalsDesktop.app</code> を起動してください。
+          </p>
+          <p class="download-note" data-i18n-html="download.securityNote">
+            ネットワーク無効版は、Smart App Control / SmartScreen などのセキュリティチェックで説明しやすいよう、自動更新確認、トレイからの更新確認、更新ZIPのダウンロードを無効化したWindows 64-bit向け検証版です。Microsoftの説明では、Smart App Controlはクラウド判定が曖昧な場合に有効な署名も確認するため、未署名ビルドの通過を保証するものではありません。詳しくは <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a> と <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>、日本語の補足事例として <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSignのSmart App Control事例</a> を参照してください。
           </p>
           <div class="release-meta" aria-label="Build information">
             <span><span data-i18n="meta.preview">先行お試し版</span> <strong data-release-version>v0.2.11</strong></span>
@@ -941,11 +947,14 @@
           },
           download: {
             windows64: "Windows版 Windows 10/11",
+            windows64NoNetwork: "Windows版 ネットワーク無効",
             windows32: "Windows版 32-bit",
             macArm: "Mac版 Apple Silicon macOS 12+",
             macIntel: "Mac版 Intel macOS 12+",
             note:
               'v0.2.11 は、55種類の小動物と基本モーションを試せる先行お試し版です。チンチラの色違い2件とブルーフーディッドのファンシーラット色調補正は維持し、アルビノシマリス枠は ImageGen-only の新ソース確認まで公開選択肢から外しています。Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows版はZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版はZIPを展開して <code>AnimalsDesktop.app</code> を起動してください。',
+            securityNote:
+              'ネットワーク無効版は、Smart App Control / SmartScreen などのセキュリティチェックで説明しやすいよう、自動更新確認、トレイからの更新確認、更新ZIPのダウンロードを無効化したWindows 64-bit向け検証版です。Microsoftの説明では、Smart App Controlはクラウド判定が曖昧な場合に有効な署名も確認するため、未署名ビルドの通過を保証するものではありません。詳しくは <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a> と <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>、日本語の補足事例として <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSignのSmart App Control事例</a> を参照してください。',
           },
           meta: {
             preview: "先行お試し版",
@@ -1036,11 +1045,14 @@
           },
           download: {
             windows64: "Windows 10/11",
+            windows64NoNetwork: "Windows no-network",
             windows32: "Windows 32-bit",
             macArm: "Mac Apple Silicon macOS 12+",
             macIntel: "Mac Intel macOS 12+",
             note:
               'v0.2.11 is an early preview with fifty-five small animals and core motion. It keeps the two chinchilla color variants and refreshed blue hooded fancy rat tone, while holding the albino chipmunk slot until a new ImageGen-only source passes review. For Windows, extract the ZIP and run <code>AnimalsDesktop.exe</code>. For Mac, extract the ZIP and run <code>AnimalsDesktop.app</code>.',
+            securityNote:
+              'The no-network edition is a Windows 64-bit security-check build that disables automatic startup update checks, tray update checks, and update ZIP downloads so the runtime behavior is easier to explain for Smart App Control / SmartScreen review. Microsoft says Smart App Control also checks for a valid signature when cloud confidence is unclear, so this unsigned build is not guaranteed to pass. See the <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a>, <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>, and the Japanese supplemental <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSign Smart App Control case study</a>.',
           },
           meta: {
             preview: "Preview",
