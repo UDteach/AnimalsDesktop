@@ -77,6 +77,18 @@ CURRENT_VARIANTS = [
     "domestic_shorthair_tabby_white_stocky",
     "lionhead_rabbit_brown_white",
     "shoebill_stork",
+    "leucistic_sugar_glider",
+    "african_dormouse",
+    "netherland_dwarf_himalayan",
+    "american_flying_squirrel",
+    "longhair_hamster_black_white",
+    "djungarian_hamster_yellow",
+    "djungarian_hamster_pearl_white",
+    "fancy_rat_blue_hooded",
+    "fancy_rat_chocolate_self",
+    "fancy_rat_cream_agouti",
+    "rabbit_gray",
+    "african_fat_tailed_gecko",
 ]
 
 PAGE_RIGHT_FACING_VARIANTS = {
@@ -104,6 +116,18 @@ ICON_FRAMES = {
     "domestic_shorthair_tabby_white_stocky": 4,
     "lionhead_rabbit_brown_white": 4,
     "shoebill_stork": 4,
+    "leucistic_sugar_glider": 4,
+    "african_dormouse": 4,
+    "netherland_dwarf_himalayan": 20,
+    "american_flying_squirrel": 4,
+    "longhair_hamster_black_white": 4,
+    "djungarian_hamster_yellow": 4,
+    "djungarian_hamster_pearl_white": 4,
+    "fancy_rat_blue_hooded": 12,
+    "fancy_rat_chocolate_self": 12,
+    "fancy_rat_cream_agouti": 12,
+    "rabbit_gray": 16,
+    "african_fat_tailed_gecko": 4,
 }
 
 PREVIEW_POSES = {
@@ -149,6 +173,18 @@ PREVIEW_POSES = {
     "domestic_shorthair_tabby_white_stocky": 4,
     "lionhead_rabbit_brown_white": 4,
     "shoebill_stork": 4,
+    "leucistic_sugar_glider": 4,
+    "african_dormouse": 4,
+    "netherland_dwarf_himalayan": 20,
+    "american_flying_squirrel": 4,
+    "longhair_hamster_black_white": 4,
+    "djungarian_hamster_yellow": 4,
+    "djungarian_hamster_pearl_white": 4,
+    "fancy_rat_blue_hooded": 12,
+    "fancy_rat_chocolate_self": 12,
+    "fancy_rat_cream_agouti": 12,
+    "rabbit_gray": 16,
+    "african_fat_tailed_gecko": 4,
 }
 
 # The page-specific ImageGen source sheet was generated in this cell order.
@@ -193,20 +229,7 @@ UPCOMING_INDIVIDUAL_SOURCES = {
     ),
 }
 
-UPCOMING_SILHOUETTES = [
-	"leucistic_sugar_glider",
-	"african_dormouse",
-	"netherland_dwarf_himalayan",
-    "american_flying_squirrel",
-    "longhair_hamster_black_white",
-    "djungarian_hamster_yellow",
-    "djungarian_hamster_pearl_white",
-    "fancy_rat_blue_hooded",
-	"fancy_rat_chocolate_self",
-	"fancy_rat_cream_agouti",
-	"rabbit_gray",
-	"african_fat_tailed_gecko",
-]
+UPCOMING_SILHOUETTES: list[str] = []
 
 
 def frame_for_variant(variant: str, frame: int) -> Image.Image:
@@ -442,6 +465,20 @@ def _silhouette_from_source_cell(cell: Image.Image, kind: str) -> Image.Image:
 
 
 def write_upcoming_silhouettes() -> None:
+    out_dir = ROOT / "docs" / "assets" / "upcoming-silhouettes"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    expected = {f"{kind}.png" for kind in UPCOMING_SILHOUETTES}
+    for sidecar in out_dir.glob("._*.png"):
+        sidecar.unlink()
+    for stale in out_dir.glob("*.png"):
+        if stale.name not in expected:
+            stale.unlink()
+    if not UPCOMING_SILHOUETTES:
+        Image.new("RGBA", (UPCOMING_W * 4, UPCOMING_H), (0, 0, 0, 0)).save(
+            ROOT / "docs" / "assets" / "animalsdesktop-coming-soon-silhouettes.png"
+        )
+        return
+
     if not UPCOMING_SOURCE.exists():
         raise SystemExit(f"missing page-specific ImageGen source: {UPCOMING_SOURCE}")
     source = Image.open(UPCOMING_SOURCE).convert("RGBA")
@@ -451,15 +488,6 @@ def write_upcoming_silhouettes() -> None:
             f"too many source layout silhouettes ({len(UPCOMING_SOURCE_LAYOUT)}) for "
             f"{UPCOMING_SOURCE_COLS}x{UPCOMING_SOURCE_ROWS} source sheet"
         )
-
-    out_dir = ROOT / "docs" / "assets" / "upcoming-silhouettes"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    expected = {f"{kind}.png" for kind in UPCOMING_SILHOUETTES}
-    for sidecar in out_dir.glob("._*.png"):
-        sidecar.unlink()
-    for stale in out_dir.glob("*.png"):
-        if stale.name not in expected:
-            stale.unlink()
     silhouettes: list[Image.Image] = []
     source_indices = {kind: i for i, kind in enumerate(UPCOMING_SOURCE_LAYOUT)}
     for kind in UPCOMING_SILHOUETTES:

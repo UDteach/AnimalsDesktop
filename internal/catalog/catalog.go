@@ -68,7 +68,9 @@ var SpeciesList = []Species{
 	{ID: "guinea_pig", Label: "Guinea pig", Profile: "small-mammal"},
 	{ID: "hedgehog", Label: "Hedgehog", Profile: "small-mammal"},
 	{ID: "squirrel", Label: "Squirrel", Profile: "small-mammal"},
+	{ID: "flying_squirrel", Label: "Flying squirrel", Profile: "small-mammal"},
 	{ID: "ground_squirrel", Label: "Ground squirrel", Profile: "small-mammal"},
+	{ID: "dormouse", Label: "Dormouse", Profile: "small-mammal"},
 	{ID: "fox", Label: "Fox", Profile: "companion"},
 	{ID: "red_panda", Label: "Red panda", Profile: "companion"},
 	{ID: "otter", Label: "Otter", Profile: "low-crawler"},
@@ -95,94 +97,118 @@ var SpeciesList = []Species{
 }
 
 const (
-	srcChinchilla                    = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
-	srcChinchillaMotion              = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png"
-	srcMacaroniMouse                 = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
-	srcMacaroniMouseMotion           = "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png"
-	srcRabbit                        = "docs/source-truth/rabbit-source-truth.png"
-	srcRabbitMotion                  = "docs/art-source/rabbit/motion-source/sheets/rabbit-chestnut-agouti-source-set00.png"
-	srcQuokka                        = "docs/art-source/quokka/motion-source/accepted-frames/set00/frame-00.png"
-	srcQuokkaMotion                  = "docs/art-source/quokka/motion-source/sheets/quokka-source-set00.png"
-	srcHimalayanRabbit               = "docs/art-source/himalayan-rabbit/motion-source/accepted-frames/set00/frame-00.png"
-	srcHimalayanRabbitMotion         = "docs/art-source/himalayan-rabbit/motion-source/sheets/himalayan-rabbit-source-set00.png"
-	srcLionheadRabbit                = "docs/art-source/lionhead-rabbit-brown-white/motion-source/accepted-frames/set00/frame-00.png"
-	srcLionheadRabbitMotion          = "docs/art-source/lionhead-rabbit-brown-white/motion-source/sheets/lionhead-rabbit-brown-white-source-set00.png"
-	srcHollandLop                    = "docs/art-source/holland-lop/motion-source/accepted-frames/set00/frame-00.png"
-	srcHollandLopMotion              = "docs/art-source/holland-lop/motion-source/sheets/holland-lop-broken-orange-source-set00.png"
-	srcNetherlandDwarf               = "docs/art-source/netherland-dwarf/motion-source/accepted-frames/set00/frame-00.png"
-	srcNetherlandDwarfMotion         = "docs/art-source/netherland-dwarf/motion-source/sheets/netherland-dwarf-chestnut-source-set00.png"
-	srcDog                           = "docs/art-intake/dog/dog-source-truth-transparent.png"
-	srcFrenchBulldog                 = "docs/art-source/french-bulldog/motion-source/accepted-frames/set00/frame-00.png"
-	srcFrenchBulldogMotion           = "docs/art-source/french-bulldog/motion-source/sheets/french-bulldog-fawn-source-set00.png"
-	srcToyPoodle                     = "docs/art-source/toy-poodle/motion-source/accepted-frames/set00/frame-00.png"
-	srcToyPoodleMotion               = "docs/art-source/toy-poodle/motion-source/sheets/toy-poodle-apricot-source-set00.png"
-	srcMiniatureSchnauzer            = "docs/art-source/miniature-schnauzer/motion-source/accepted-frames/set00/frame-00.png"
-	srcMiniatureSchnauzerMotion      = "docs/art-source/miniature-schnauzer/motion-source/sheets/miniature-schnauzer-salt-pepper-source-set00.png"
-	srcCat                           = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
-	srcMaineCoon                     = "docs/art-source/maine-coon/motion-source/accepted-frames/set00/frame-00.png"
-	srcMaineCoonMotion               = "docs/art-source/maine-coon/motion-source/sheets/maine-coon-brown-tabby-source-set00.png"
-	srcRagdoll                       = "docs/art-source/ragdoll/motion-source/accepted-frames/set00/frame-00.png"
-	srcRagdollMotion                 = "docs/art-source/ragdoll/motion-source/sheets/ragdoll-seal-bicolor-source-set00.png"
-	srcScottishFold                  = "docs/art-source/scottish-fold/motion-source/accepted-frames/set00/frame-00.png"
-	srcScottishFoldMotion            = "docs/art-source/scottish-fold/motion-source/sheets/scottish-fold-silver-tabby-source-set00.png"
-	srcDomesticShorthairCalico       = "docs/art-source/domestic-shorthair/motion-source/accepted-frames/set00/frame-00.png"
-	srcDomesticShorthairMotion       = "docs/art-source/domestic-shorthair/motion-source/sheets/domestic-shorthair-calico-source-set00.png"
-	srcDomesticTabbyWhite            = "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/accepted-frames/set00/frame-00.png"
-	srcDomesticTabbyWhiteMotion      = "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/sheets/domestic-shorthair-tabby-white-stocky-source-set00.png"
-	srcBritishShorthair              = "docs/art-source/british-shorthair/motion-source/accepted-frames/set00/frame-00.png"
-	srcBritishShorthairMotion        = "docs/art-source/british-shorthair/motion-source/sheets/british-shorthair-blue-source-set00.png"
-	srcMunchkin                      = "docs/art-source/munchkin/motion-source/accepted-frames/set00/frame-00.png"
-	srcMunchkinMotion                = "docs/art-source/munchkin/motion-source/sheets/munchkin-brown-tabby-source-set00.png"
-	srcGecko                         = "docs/art-source/gecko/gecko-source-truth.png"
-	srcGeckoMotion                   = "docs/art-source/gecko/motion-source/sheets/gecko-gray-brown-source-set00.png"
-	srcLeopardGecko                  = "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-00.png"
-	srcLeopardGeckoMotion            = "docs/art-source/leopard-gecko/motion-source/sheets/leopard-gecko-source-set00.png"
-	srcWhitesTreeFrogBlue            = "docs/art-source/whites-tree-frog-blue/motion-source/accepted-frames/set00/frame-00.png"
-	srcWhitesTreeFrogBlueMotion      = "docs/art-source/whites-tree-frog-blue/motion-source/sheets/whites-tree-frog-blue-source-set00.png"
-	srcGuineaPig                     = "docs/art-source/guinea-pig/motion-source/accepted-frames/set00/frame-00.png"
-	srcGuineaPigMotion               = "docs/art-source/guinea-pig/motion-source/sheets/guinea-pig-tricolor-source-set00.png"
-	srcGuineaPigRussianSmoke         = "docs/art-source/guinea-pig-russian-smoke-white/motion-source/accepted-frames/set00/frame-00.png"
-	srcGuineaPigRussianMotion        = "docs/art-source/guinea-pig-russian-smoke-white/motion-source/sheets/guinea-pig-russian-smoke-white-source-set00.png"
-	srcFancyRat                      = "docs/art-source/fancy-rat/motion-source/accepted-frames/set00/frame-00.png"
-	srcFancyRatMotion                = "docs/art-source/fancy-rat/motion-source/sheets/fancy-rat-hooded-source-set00.png"
-	srcChipmunk                      = "docs/art-source/chipmunk/motion-source/accepted-frames/set00/frame-00.png"
-	srcChipmunkMotion                = "docs/art-source/chipmunk/motion-source/sheets/chipmunk-striped-source-set00.png"
-	srcAlbinoChipmunk                = "docs/art-source/albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png"
-	srcAlbinoChipmunkMotion          = "docs/art-source/albino-chipmunk/motion-source/sheets/albino-chipmunk-source-set00.png"
-	srcTrueAlbinoChipmunk            = "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png"
-	srcTrueAlbinoChipmunkMotion      = "docs/art-source/true-albino-chipmunk/motion-source/sheets/true-albino-chipmunk-source-set00.png"
-	srcGroundSquirrel                = "docs/art-source/richardsons-ground-squirrel/motion-source/accepted-frames/set00/frame-00.png"
-	srcGroundSquirrelMotion          = "docs/art-source/richardsons-ground-squirrel/motion-source/sheets/richardsons-ground-squirrel-source-set00.png"
-	srcYorkshireTerrier              = "docs/art-source/yorkshire-terrier/motion-source/accepted-frames/set00/frame-00.png"
-	srcYorkshireTerrierMotion        = "docs/art-source/yorkshire-terrier/motion-source/sheets/yorkshire-terrier-longcoat-source-set00.png"
-	srcHamster                       = "docs/art-source/hamster/hamster-source-truth.png"
-	srcHamsterMotion                 = "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png"
-	srcDjungarianHamster             = "docs/art-source/djungarian-hamster/motion-source/accepted-frames/set00/frame-00.png"
-	srcDjungarianHamsterMotion       = "docs/art-source/djungarian-hamster/motion-source/sheets/djungarian-hamster-source-set00.png"
-	srcCampbellHamster               = "docs/art-source/campbell-hamster/motion-source/accepted-frames/set00/frame-00.png"
-	srcCampbellHamsterMotion         = "docs/art-source/campbell-hamster/motion-source/sheets/campbell-hamster-source-set00.png"
-	srcRoborovskiHamster             = "docs/art-source/roborovski-hamster/motion-source/accepted-frames/set00/frame-00.png"
-	srcRoborovskiHamsterMotion       = "docs/art-source/roborovski-hamster/motion-source/sheets/roborovski-hamster-source-set00.png"
-	srcSugarGlider                   = "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png"
-	srcSugarGliderMotion             = "docs/art-source/sugar-glider/motion-source/sheets/sugar-glider-gray-source-set00.png"
-	srcBudgerigar                    = "docs/art-source/budgerigar/motion-source/accepted-frames/set00/frame-00.png"
-	srcBudgerigarMotion              = "docs/art-source/budgerigar/motion-source/sheets/budgerigar-green-yellow-source-set00.png"
-	srcCockatiel                     = "docs/art-source/cockatiel/motion-source/accepted-frames/set00/frame-00.png"
-	srcCockatielMotion               = "docs/art-source/cockatiel/motion-source/sheets/cockatiel-normal-gray-source-set00.png"
-	srcJavaSparrow                   = "docs/art-source/java-sparrow/motion-source/accepted-frames/set00/frame-00.png"
-	srcJavaSparrowMotion             = "docs/art-source/java-sparrow/motion-source/sheets/java-sparrow-normal-source-set00.png"
-	srcParrotlet                     = "docs/art-source/parrotlet/motion-source/accepted-frames/set00/frame-00.png"
-	srcParrotletMotion               = "docs/art-source/parrotlet/motion-source/sheets/parrotlet-green-source-set00.png"
-	srcParrotletBlueGreen            = "docs/art-source/parrotlet-blue-green/motion-source/accepted-frames/set00/frame-00.png"
-	srcParrotletBlueGreenMotion      = "docs/art-source/parrotlet-blue-green/motion-source/sheets/parrotlet-blue-green-source-set00.png"
-	srcLovebird                      = "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-00.png"
-	srcLovebirdMotion                = "docs/art-source/lovebird/motion-source/sheets/lovebird-peach-faced-source-set00.png"
-	srcJapaneseGiantSalamander       = "docs/art-source/japanese-giant-salamander/motion-source/accepted-frames/set00/frame-00.png"
-	srcJapaneseGiantSalamanderMotion = "docs/art-source/japanese-giant-salamander/motion-source/sheets/japanese-giant-salamander-source-set00.png"
-	srcWhiteWagtail                  = "docs/art-source/white-wagtail/motion-source/accepted-frames/set00/frame-00.png"
-	srcWhiteWagtailMotion            = "docs/art-source/white-wagtail/motion-source/sheets/white-wagtail-source-set00.png"
-	srcShoebill                      = "docs/art-source/shoebill-stork/motion-source/accepted-frames/set00/frame-00.png"
-	srcShoebillMotion                = "docs/art-source/shoebill-stork/motion-source/sheets/shoebill-stork-source-set00.png"
+	srcChinchilla                        = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
+	srcChinchillaMotion                  = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png"
+	srcMacaroniMouse                     = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
+	srcMacaroniMouseMotion               = "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png"
+	srcRabbit                            = "docs/source-truth/rabbit-source-truth.png"
+	srcRabbitMotion                      = "docs/art-source/rabbit/motion-source/sheets/rabbit-chestnut-agouti-source-set00.png"
+	srcQuokka                            = "docs/art-source/quokka/motion-source/accepted-frames/set00/frame-00.png"
+	srcQuokkaMotion                      = "docs/art-source/quokka/motion-source/sheets/quokka-source-set00.png"
+	srcHimalayanRabbit                   = "docs/art-source/himalayan-rabbit/motion-source/accepted-frames/set00/frame-00.png"
+	srcHimalayanRabbitMotion             = "docs/art-source/himalayan-rabbit/motion-source/sheets/himalayan-rabbit-source-set00.png"
+	srcLionheadRabbit                    = "docs/art-source/lionhead-rabbit-brown-white/motion-source/accepted-frames/set00/frame-00.png"
+	srcLionheadRabbitMotion              = "docs/art-source/lionhead-rabbit-brown-white/motion-source/sheets/lionhead-rabbit-brown-white-source-set00.png"
+	srcHollandLop                        = "docs/art-source/holland-lop/motion-source/accepted-frames/set00/frame-00.png"
+	srcHollandLopMotion                  = "docs/art-source/holland-lop/motion-source/sheets/holland-lop-broken-orange-source-set00.png"
+	srcNetherlandDwarf                   = "docs/art-source/netherland-dwarf/motion-source/accepted-frames/set00/frame-00.png"
+	srcNetherlandDwarfMotion             = "docs/art-source/netherland-dwarf/motion-source/sheets/netherland-dwarf-chestnut-source-set00.png"
+	srcDog                               = "docs/art-intake/dog/dog-source-truth-transparent.png"
+	srcFrenchBulldog                     = "docs/art-source/french-bulldog/motion-source/accepted-frames/set00/frame-00.png"
+	srcFrenchBulldogMotion               = "docs/art-source/french-bulldog/motion-source/sheets/french-bulldog-fawn-source-set00.png"
+	srcToyPoodle                         = "docs/art-source/toy-poodle/motion-source/accepted-frames/set00/frame-00.png"
+	srcToyPoodleMotion                   = "docs/art-source/toy-poodle/motion-source/sheets/toy-poodle-apricot-source-set00.png"
+	srcMiniatureSchnauzer                = "docs/art-source/miniature-schnauzer/motion-source/accepted-frames/set00/frame-00.png"
+	srcMiniatureSchnauzerMotion          = "docs/art-source/miniature-schnauzer/motion-source/sheets/miniature-schnauzer-salt-pepper-source-set00.png"
+	srcCat                               = "docs/art-source/cat/cat-kijitora-source-truth-transparent.png"
+	srcMaineCoon                         = "docs/art-source/maine-coon/motion-source/accepted-frames/set00/frame-00.png"
+	srcMaineCoonMotion                   = "docs/art-source/maine-coon/motion-source/sheets/maine-coon-brown-tabby-source-set00.png"
+	srcRagdoll                           = "docs/art-source/ragdoll/motion-source/accepted-frames/set00/frame-00.png"
+	srcRagdollMotion                     = "docs/art-source/ragdoll/motion-source/sheets/ragdoll-seal-bicolor-source-set00.png"
+	srcScottishFold                      = "docs/art-source/scottish-fold/motion-source/accepted-frames/set00/frame-00.png"
+	srcScottishFoldMotion                = "docs/art-source/scottish-fold/motion-source/sheets/scottish-fold-silver-tabby-source-set00.png"
+	srcDomesticShorthairCalico           = "docs/art-source/domestic-shorthair/motion-source/accepted-frames/set00/frame-00.png"
+	srcDomesticShorthairMotion           = "docs/art-source/domestic-shorthair/motion-source/sheets/domestic-shorthair-calico-source-set00.png"
+	srcDomesticTabbyWhite                = "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/accepted-frames/set00/frame-00.png"
+	srcDomesticTabbyWhiteMotion          = "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/sheets/domestic-shorthair-tabby-white-stocky-source-set00.png"
+	srcBritishShorthair                  = "docs/art-source/british-shorthair/motion-source/accepted-frames/set00/frame-00.png"
+	srcBritishShorthairMotion            = "docs/art-source/british-shorthair/motion-source/sheets/british-shorthair-blue-source-set00.png"
+	srcMunchkin                          = "docs/art-source/munchkin/motion-source/accepted-frames/set00/frame-00.png"
+	srcMunchkinMotion                    = "docs/art-source/munchkin/motion-source/sheets/munchkin-brown-tabby-source-set00.png"
+	srcGecko                             = "docs/art-source/gecko/gecko-source-truth.png"
+	srcGeckoMotion                       = "docs/art-source/gecko/motion-source/sheets/gecko-gray-brown-source-set00.png"
+	srcLeopardGecko                      = "docs/art-source/leopard-gecko/motion-source/accepted-frames/set00/frame-00.png"
+	srcLeopardGeckoMotion                = "docs/art-source/leopard-gecko/motion-source/sheets/leopard-gecko-source-set00.png"
+	srcWhitesTreeFrogBlue                = "docs/art-source/whites-tree-frog-blue/motion-source/accepted-frames/set00/frame-00.png"
+	srcWhitesTreeFrogBlueMotion          = "docs/art-source/whites-tree-frog-blue/motion-source/sheets/whites-tree-frog-blue-source-set00.png"
+	srcGuineaPig                         = "docs/art-source/guinea-pig/motion-source/accepted-frames/set00/frame-00.png"
+	srcGuineaPigMotion                   = "docs/art-source/guinea-pig/motion-source/sheets/guinea-pig-tricolor-source-set00.png"
+	srcGuineaPigRussianSmoke             = "docs/art-source/guinea-pig-russian-smoke-white/motion-source/accepted-frames/set00/frame-00.png"
+	srcGuineaPigRussianMotion            = "docs/art-source/guinea-pig-russian-smoke-white/motion-source/sheets/guinea-pig-russian-smoke-white-source-set00.png"
+	srcFancyRat                          = "docs/art-source/fancy-rat/motion-source/accepted-frames/set00/frame-00.png"
+	srcFancyRatMotion                    = "docs/art-source/fancy-rat/motion-source/sheets/fancy-rat-hooded-source-set00.png"
+	srcChipmunk                          = "docs/art-source/chipmunk/motion-source/accepted-frames/set00/frame-00.png"
+	srcChipmunkMotion                    = "docs/art-source/chipmunk/motion-source/sheets/chipmunk-striped-source-set00.png"
+	srcAlbinoChipmunk                    = "docs/art-source/albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png"
+	srcAlbinoChipmunkMotion              = "docs/art-source/albino-chipmunk/motion-source/sheets/albino-chipmunk-source-set00.png"
+	srcTrueAlbinoChipmunk                = "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png"
+	srcTrueAlbinoChipmunkMotion          = "docs/art-source/true-albino-chipmunk/motion-source/sheets/true-albino-chipmunk-source-set00.png"
+	srcGroundSquirrel                    = "docs/art-source/richardsons-ground-squirrel/motion-source/accepted-frames/set00/frame-00.png"
+	srcGroundSquirrelMotion              = "docs/art-source/richardsons-ground-squirrel/motion-source/sheets/richardsons-ground-squirrel-source-set00.png"
+	srcYorkshireTerrier                  = "docs/art-source/yorkshire-terrier/motion-source/accepted-frames/set00/frame-00.png"
+	srcYorkshireTerrierMotion            = "docs/art-source/yorkshire-terrier/motion-source/sheets/yorkshire-terrier-longcoat-source-set00.png"
+	srcHamster                           = "docs/art-source/hamster/hamster-source-truth.png"
+	srcHamsterMotion                     = "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png"
+	srcDjungarianHamster                 = "docs/art-source/djungarian-hamster/motion-source/accepted-frames/set00/frame-00.png"
+	srcDjungarianHamsterMotion           = "docs/art-source/djungarian-hamster/motion-source/sheets/djungarian-hamster-source-set00.png"
+	srcCampbellHamster                   = "docs/art-source/campbell-hamster/motion-source/accepted-frames/set00/frame-00.png"
+	srcCampbellHamsterMotion             = "docs/art-source/campbell-hamster/motion-source/sheets/campbell-hamster-source-set00.png"
+	srcRoborovskiHamster                 = "docs/art-source/roborovski-hamster/motion-source/accepted-frames/set00/frame-00.png"
+	srcRoborovskiHamsterMotion           = "docs/art-source/roborovski-hamster/motion-source/sheets/roborovski-hamster-source-set00.png"
+	srcLonghairHamsterBlackWhite         = "docs/art-source/longhair-hamster-black-white/motion-source/accepted-frames/set00/frame-00.png"
+	srcLonghairHamsterBlackWhiteMotion   = "docs/art-source/longhair-hamster-black-white/motion-source/sheets/longhair-hamster-black-white-source-set00.png"
+	srcDjungarianHamsterYellow           = "docs/art-source/djungarian-hamster-yellow/motion-source/accepted-frames/set00/frame-00.png"
+	srcDjungarianHamsterYellowMotion     = "docs/art-source/djungarian-hamster-yellow/motion-source/sheets/djungarian-hamster-yellow-source-set00.png"
+	srcDjungarianHamsterPearlWhite       = "docs/art-source/djungarian-hamster-pearl-white/motion-source/accepted-frames/set00/frame-00.png"
+	srcDjungarianHamsterPearlWhiteMotion = "docs/art-source/djungarian-hamster-pearl-white/motion-source/sheets/djungarian-hamster-pearl-white-source-set00.png"
+	srcSugarGlider                       = "docs/art-source/sugar-glider/motion-source/accepted-frames/set00/frame-00.png"
+	srcSugarGliderMotion                 = "docs/art-source/sugar-glider/motion-source/sheets/sugar-glider-gray-source-set00.png"
+	srcLeucisticSugarGlider              = "docs/art-source/leucistic-sugar-glider/motion-source/accepted-frames/set00/frame-00.png"
+	srcLeucisticSugarGliderMotion        = "docs/art-source/leucistic-sugar-glider/motion-source/sheets/leucistic-sugar-glider-source-set00.png"
+	srcAfricanDormouse                   = "docs/art-source/african-dormouse/motion-source/accepted-frames/set00/frame-00.png"
+	srcAfricanDormouseMotion             = "docs/art-source/african-dormouse/motion-source/sheets/african-dormouse-source-set00.png"
+	srcAmericanFlyingSquirrel            = "docs/art-source/american-flying-squirrel/motion-source/accepted-frames/set00/frame-00.png"
+	srcAmericanFlyingSquirrelMotion      = "docs/art-source/american-flying-squirrel/motion-source/sheets/american-flying-squirrel-source-set00.png"
+	srcBudgerigar                        = "docs/art-source/budgerigar/motion-source/accepted-frames/set00/frame-00.png"
+	srcBudgerigarMotion                  = "docs/art-source/budgerigar/motion-source/sheets/budgerigar-green-yellow-source-set00.png"
+	srcCockatiel                         = "docs/art-source/cockatiel/motion-source/accepted-frames/set00/frame-00.png"
+	srcCockatielMotion                   = "docs/art-source/cockatiel/motion-source/sheets/cockatiel-normal-gray-source-set00.png"
+	srcJavaSparrow                       = "docs/art-source/java-sparrow/motion-source/accepted-frames/set00/frame-00.png"
+	srcJavaSparrowMotion                 = "docs/art-source/java-sparrow/motion-source/sheets/java-sparrow-normal-source-set00.png"
+	srcParrotlet                         = "docs/art-source/parrotlet/motion-source/accepted-frames/set00/frame-00.png"
+	srcParrotletMotion                   = "docs/art-source/parrotlet/motion-source/sheets/parrotlet-green-source-set00.png"
+	srcParrotletBlueGreen                = "docs/art-source/parrotlet-blue-green/motion-source/accepted-frames/set00/frame-00.png"
+	srcParrotletBlueGreenMotion          = "docs/art-source/parrotlet-blue-green/motion-source/sheets/parrotlet-blue-green-source-set00.png"
+	srcLovebird                          = "docs/art-source/lovebird/motion-source/accepted-frames/set00/frame-00.png"
+	srcLovebirdMotion                    = "docs/art-source/lovebird/motion-source/sheets/lovebird-peach-faced-source-set00.png"
+	srcJapaneseGiantSalamander           = "docs/art-source/japanese-giant-salamander/motion-source/accepted-frames/set00/frame-00.png"
+	srcJapaneseGiantSalamanderMotion     = "docs/art-source/japanese-giant-salamander/motion-source/sheets/japanese-giant-salamander-source-set00.png"
+	srcWhiteWagtail                      = "docs/art-source/white-wagtail/motion-source/accepted-frames/set00/frame-00.png"
+	srcWhiteWagtailMotion                = "docs/art-source/white-wagtail/motion-source/sheets/white-wagtail-source-set00.png"
+	srcShoebill                          = "docs/art-source/shoebill-stork/motion-source/accepted-frames/set00/frame-00.png"
+	srcShoebillMotion                    = "docs/art-source/shoebill-stork/motion-source/sheets/shoebill-stork-source-set00.png"
+	srcNetherlandDwarfHimalayan          = "docs/art-source/netherland-dwarf-himalayan/motion-source/accepted-frames/set00/frame-00.png"
+	srcNetherlandDwarfHimalayanMotion    = "docs/art-source/netherland-dwarf-himalayan/motion-source/sheets/netherland-dwarf-himalayan-source-set00.png"
+	srcFancyRatBlueHooded                = "docs/art-source/fancy-rat-blue-hooded/motion-source/accepted-frames/set00/frame-00.png"
+	srcFancyRatBlueHoodedMotion          = "docs/art-source/fancy-rat-blue-hooded/motion-source/sheets/fancy-rat-blue-hooded-source-set00.png"
+	srcFancyRatChocolateSelf             = "docs/art-source/fancy-rat-chocolate-self/motion-source/accepted-frames/set00/frame-00.png"
+	srcFancyRatChocolateSelfMotion       = "docs/art-source/fancy-rat-chocolate-self/motion-source/sheets/fancy-rat-chocolate-self-source-set00.png"
+	srcFancyRatCreamAgouti               = "docs/art-source/fancy-rat-cream-agouti/motion-source/accepted-frames/set00/frame-00.png"
+	srcFancyRatCreamAgoutiMotion         = "docs/art-source/fancy-rat-cream-agouti/motion-source/sheets/fancy-rat-cream-agouti-source-set00.png"
+	srcRabbitGray                        = "docs/art-source/rabbit-gray/motion-source/accepted-frames/set00/frame-00.png"
+	srcRabbitGrayMotion                  = "docs/art-source/rabbit-gray/motion-source/sheets/rabbit-gray-source-set00.png"
+	srcAfricanFatTailedGecko             = "docs/art-source/african-fat-tailed-gecko/motion-source/accepted-frames/set00/frame-00.png"
+	srcAfricanFatTailedGeckoMotion       = "docs/art-source/african-fat-tailed-gecko/motion-source/sheets/african-fat-tailed-gecko-source-set00.png"
 )
 
 var Variants = []Variant{
@@ -237,6 +263,9 @@ var Variants = []Variant{
 	acceptedMotionVariant("djungarian_hamster", "hamster", "Djungarian hamster", "ジャンガリアンハムスター", "djungarian_hamster", srcDjungarianHamster, srcDjungarianHamsterMotion, "a9a49a", "f4efe7", "Djungarian hamster", "winter white gray", 2),
 	acceptedMotionVariant("campbell_hamster", "hamster", "Campbell hamster", "キャンベルハムスター", "campbell_hamster", srcCampbellHamster, srcCampbellHamsterMotion, "9b846f", "d6c9b8", "Campbell dwarf hamster", "warm gray brown", 2),
 	acceptedMotionVariant("roborovski_hamster", "hamster", "Roborovski hamster", "ロボロフスキー", "roborovski_hamster", srcRoborovskiHamster, srcRoborovskiHamsterMotion, "d7ad73", "f3eadc", "Roborovski hamster", "sandy white", 2),
+	acceptedMotionVariant("longhair_hamster_black_white", "hamster", "Longhair hamster - black white", "白黒長毛ハムスター", "longhair_hamster_black_white", srcLonghairHamsterBlackWhite, srcLonghairHamsterBlackWhiteMotion, "f0e8db", "2f2c2b", "Longhair hamster", "black white", 2),
+	acceptedMotionVariant("djungarian_hamster_yellow", "hamster", "Yellow Djungarian hamster", "イエロージャンガリアン", "djungarian_hamster_yellow", srcDjungarianHamsterYellow, srcDjungarianHamsterYellowMotion, "dcc08a", "f0e0bd", "Djungarian hamster", "yellow", 2),
+	acceptedMotionVariant("djungarian_hamster_pearl_white", "hamster", "Pearl white Djungarian hamster", "パールホワイトジャンガリアン", "djungarian_hamster_pearl_white", srcDjungarianHamsterPearlWhite, srcDjungarianHamsterPearlWhiteMotion, "eee9df", "a69d92", "Djungarian hamster", "pearl white", 2),
 	sourceVariant("hamster_cream", "hamster", "Hamster - cream", "hamster_cream", srcHamster, "e2c18b", ""),
 	sourceVariant("hamster_black_banded", "hamster", "Hamster - black banded", "hamster_black_banded", srcHamster, "3f342d", "ddd2bd"),
 	sourceVariant("hamster_white", "hamster", "Hamster - white", "hamster_white", srcHamster, "eee7d8", ""),
@@ -260,6 +289,9 @@ var Variants = []Variant{
 	shapeVariant("red_panda_dark", "red_panda", "Red panda - dark", "red_panda", "6f3f2f", "e9d9bc"),
 	shapeVariant("otter_brown", "otter", "Otter - brown", "otter", "6b4a31", "d4bb91"),
 	acceptedMotionVariant("sugar_glider_gray", "sugar_glider", "Sugar glider", "モモンガ", "sugar_glider_gray", srcSugarGlider, srcSugarGliderMotion, "8c8d88", "f1eee4", "Sugar glider", "gray", 1),
+	acceptedMotionVariant("leucistic_sugar_glider", "sugar_glider", "Leucistic sugar glider", "リューシスティックモモンガ", "leucistic_sugar_glider", srcLeucisticSugarGlider, srcLeucisticSugarGliderMotion, "f1eadf", "b69b84", "Sugar glider", "leucistic", 2),
+	acceptedMotionVariant("african_dormouse", "dormouse", "African dormouse", "アフリカヤマネ", "african_dormouse", srcAfricanDormouse, srcAfricanDormouseMotion, "8d6b46", "e1c390", "African dormouse", "brown tan", 2),
+	acceptedMotionVariant("american_flying_squirrel", "flying_squirrel", "American flying squirrel", "アメリカモモンガ", "american_flying_squirrel", srcAmericanFlyingSquirrel, srcAmericanFlyingSquirrelMotion, "8a7766", "d7c3a0", "American flying squirrel", "gray brown", 2),
 	shapeVariant("capybara_brown", "capybara", "Capybara - brown", "capybara", "8a603d", "c79d6a"),
 	shapeVariant("capybara_sand", "capybara", "Capybara - sand", "capybara", "b98a58", "e2c69c"),
 	shapeVariant("tortoise_olive", "tortoise", "Tortoise - olive", "tortoise", "6f7146", "3f3d2a"),
@@ -296,13 +328,18 @@ var Variants = []Variant{
 
 	acceptedMotionVariant("holland_lop_broken_orange", "rabbit", "Holland Lop - broken orange", "ホーランドロップ", "holland_lop_broken_orange", srcHollandLop, srcHollandLopMotion, "e6d8c3", "c97833", "Holland Lop", "broken orange", 1),
 	acceptedMotionVariant("netherland_dwarf_chestnut", "rabbit", "Netherland Dwarf - chestnut", "ネザーランドドワーフ", "netherland_dwarf_chestnut", srcNetherlandDwarf, srcNetherlandDwarfMotion, "8c633d", "d3b17a", "Netherland Dwarf", "chestnut", 1),
+	acceptedMotionVariant("netherland_dwarf_himalayan", "rabbit", "Netherland Dwarf - Himalayan", "ネザーランドドワーフ（ヒマラヤン）", "netherland_dwarf_himalayan", srcNetherlandDwarfHimalayan, srcNetherlandDwarfHimalayanMotion, "f2e6d4", "5a4237", "Netherland Dwarf", "Himalayan", 2),
 	acceptedMotionVariant("himalayan_rabbit", "rabbit", "Himalayan Rabbit", "ヒマラヤンうさぎ", "himalayan_rabbit", srcHimalayanRabbit, srcHimalayanRabbitMotion, "f3e5c8", "5b3b2d", "Himalayan rabbit", "seal point", 1),
 	acceptedMotionVariant("lionhead_rabbit_brown_white", "rabbit", "Lionhead rabbit - brown white", "ライオンラビット（白茶）", "lionhead_rabbit_brown_white", srcLionheadRabbit, srcLionheadRabbitMotion, "f1ede4", "9a6845", "Lionhead rabbit", "brown white", 2),
+	acceptedMotionVariant("rabbit_gray", "rabbit", "Gray rabbit", "グレーうさぎ", "rabbit_gray", srcRabbitGray, srcRabbitGrayMotion, "8f8d86", "d8d3c8", "Rabbit", "gray", 2),
 	sourceVariantMeta("mini_rex_black_otter", "rabbit", "Mini Rex - black otter", "mini_rex_black_otter", srcRabbit, "2f2c29", "b89865", "Mini Rex", "black otter", 1),
 	sourceVariantMeta("lionhead_tort", "rabbit", "Lionhead - tort", "lionhead_tort", srcRabbit, "a66a3a", "4f3326", "Lionhead", "tort", 2),
 	sourceVariantMeta("dutch_black_white", "rabbit", "Dutch - black and white", "dutch_black_white", srcRabbit, "2c2a28", "eee7dc", "Dutch", "black and white", 2),
 
 	acceptedMotionVariant("fancy_rat_hooded", "rat", "Fancy rat - hooded", "ファンシーラット", "fancy_rat_hooded", srcFancyRat, srcFancyRatMotion, "efe5d4", "3b332c", "Fancy rat", "hooded", 2),
+	acceptedMotionVariant("fancy_rat_blue_hooded", "rat", "Fancy rat - blue hooded", "ファンシーラット（ブルーフーディッド）", "fancy_rat_blue_hooded", srcFancyRatBlueHooded, srcFancyRatBlueHoodedMotion, "d8d6cd", "6d7480", "Fancy rat", "blue hooded", 2),
+	acceptedMotionVariant("fancy_rat_chocolate_self", "rat", "Fancy rat - chocolate self", "ファンシーラット（チョコレートセルフ）", "fancy_rat_chocolate_self", srcFancyRatChocolateSelf, srcFancyRatChocolateSelfMotion, "5f3e2c", "9d7350", "Fancy rat", "chocolate self", 2),
+	acceptedMotionVariant("fancy_rat_cream_agouti", "rat", "Fancy rat - cream agouti", "ファンシーラット（クリームアグーチ）", "fancy_rat_cream_agouti", srcFancyRatCreamAgouti, srcFancyRatCreamAgoutiMotion, "caa06f", "ead5a7", "Fancy rat", "cream agouti", 2),
 	shapeVariantMeta("fancy_mouse_white", "mouse", "Fancy mouse - white", "small_rodent", "eee7d8", "c99a8c", "Fancy mouse", "white", 2),
 	shapeVariantMeta("mongolian_gerbil_agouti", "gerbil", "Mongolian gerbil - agouti", "small_rodent", "9d7448", "e5c997", "Mongolian gerbil", "agouti", 2),
 	shapeVariantMeta("prairie_dog_tan", "prairie_dog", "Prairie dog - tan", "prairie_dog", "b98958", "e0c08e", "Prairie dog", "tan", 3),
@@ -316,6 +353,7 @@ var Variants = []Variant{
 	shapeVariantMeta("whites_tree_frog_green", "whites_tree_frog", "White's tree frog - green", "frog", "77a95a", "d7e9b8", "White's tree frog", "green", 2),
 	acceptedMotionVariant("whites_tree_frog_blue", "whites_tree_frog", "Blue White's tree frog", "水色イエアメガエル", "whites_tree_frog_blue", srcWhitesTreeFrogBlue, srcWhitesTreeFrogBlueMotion, "17b8e8", "e8dcc7", "White's tree frog", "blue", 2),
 	acceptedMotionVariant("japanese_giant_salamander", "salamander", "Japanese giant salamander", "オオサンショウウオ", "japanese_giant_salamander", srcJapaneseGiantSalamander, srcJapaneseGiantSalamanderMotion, "5d4e43", "9f8f7c", "Japanese giant salamander", "mottled brown", 3),
+	acceptedMotionVariant("african_fat_tailed_gecko", "gecko", "African fat-tailed gecko", "ニシアフリカトカゲモドキ", "african_fat_tailed_gecko", srcAfricanFatTailedGecko, srcAfricanFatTailedGeckoMotion, "7a5b45", "d9b07c", "African fat-tailed gecko", "brown banded", 2),
 
 	acceptedMotionVariant("budgerigar_green_yellow", "budgerigar", "Budgerigar - green yellow", "セキセイインコ", "budgerigar_green_yellow", srcBudgerigar, srcBudgerigarMotion, "75b64c", "f0da4d", "Budgerigar", "green yellow", 1),
 	acceptedMotionVariant("cockatiel_normal_gray", "cockatiel", "Cockatiel - normal gray", "オカメインコ", "cockatiel_normal_gray", srcCockatiel, srcCockatielMotion, "8d8a86", "f3d35c", "Cockatiel", "normal gray", 1),
@@ -370,6 +408,18 @@ var runtimeVariantIDs = []string{
 	"domestic_shorthair_tabby_white_stocky",
 	"lionhead_rabbit_brown_white",
 	"shoebill_stork",
+	"leucistic_sugar_glider",
+	"african_dormouse",
+	"netherland_dwarf_himalayan",
+	"american_flying_squirrel",
+	"longhair_hamster_black_white",
+	"djungarian_hamster_yellow",
+	"djungarian_hamster_pearl_white",
+	"fancy_rat_blue_hooded",
+	"fancy_rat_chocolate_self",
+	"fancy_rat_cream_agouti",
+	"rabbit_gray",
+	"african_fat_tailed_gecko",
 }
 
 func RuntimeVariants() []Variant {
@@ -531,7 +581,7 @@ func DefaultMotionProfileForSpecies(speciesID string) string {
 		return MotionProfileGuineaPigWaddle
 	case "hedgehog":
 		return MotionProfileHedgehogShuffle
-	case "squirrel", "ground_squirrel", "chipmunk":
+	case "squirrel", "flying_squirrel", "ground_squirrel", "chipmunk":
 		return MotionProfileSquirrelBound
 	case "fox":
 		return MotionProfileFoxTrot

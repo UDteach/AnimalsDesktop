@@ -16,21 +16,8 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
-EXPECTED_RELEASE = "v0.2.8"
-EXPECTED_UPCOMING = [
-    "leucistic_sugar_glider",
-    "african_dormouse",
-    "netherland_dwarf_himalayan",
-    "american_flying_squirrel",
-    "longhair_hamster_black_white",
-    "djungarian_hamster_yellow",
-    "djungarian_hamster_pearl_white",
-    "fancy_rat_blue_hooded",
-    "fancy_rat_chocolate_self",
-    "fancy_rat_cream_agouti",
-    "rabbit_gray",
-    "african_fat_tailed_gecko",
-]
+EXPECTED_RELEASE = "v0.2.9"
+EXPECTED_UPCOMING: list[str] = []
 
 
 def fail(message: str) -> None:
@@ -83,14 +70,17 @@ def current_page_variant_ids(html: str) -> list[str]:
 
 
 def upcoming_page_ids(html: str) -> list[str]:
-    block = one(
+    matches = re.findall(
         r'<div class="future-grid">(.*?)</div>\s*</section>',
         html,
-        "upcoming animal grid",
+        flags=re.S,
     )
+    if not matches:
+        return []
+    if len(matches) > 1:
+        fail(f"expected one upcoming animal grid, found {len(matches)}")
+    block = matches[0]
     ids = re.findall(r'assets/upcoming-silhouettes/([a-z0-9_]+)\.png', block)
-    if not ids:
-        fail("upcoming animal grid has no silhouettes")
     return ids
 
 
@@ -150,6 +140,9 @@ def main() -> None:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
 
     for required in (
+        'data-i18n="versions.v029.title"',
+        "v0.2.9 / 2026-07-02",
+        "v0.2.9 / July 2, 2026",
         'data-i18n="versions.v028.title"',
         "v0.2.8 / 2026-07-01",
         "v0.2.8 / July 1, 2026",

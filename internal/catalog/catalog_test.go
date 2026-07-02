@@ -11,11 +11,11 @@ import (
 )
 
 func TestCatalogInvariants(t *testing.T) {
-	if len(Variants) != 125 {
-		t.Fatalf("variants = %d, want exactly 125", len(Variants))
+	if len(Variants) != 137 {
+		t.Fatalf("variants = %d, want exactly 137", len(Variants))
 	}
-	if got := len(SeedVariants()); got != 114 {
-		t.Fatalf("seed variants = %d, want 114", got)
+	if got := len(SeedVariants()); got != 126 {
+		t.Fatalf("seed variants = %d, want 126", got)
 	}
 	if got := len(DeguVariantIDs()); got != 11 {
 		t.Fatalf("degu variants = %d, want 11", got)
@@ -115,6 +115,18 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 		"domestic_shorthair_tabby_white_stocky",
 		"lionhead_rabbit_brown_white",
 		"shoebill_stork",
+		"leucistic_sugar_glider",
+		"african_dormouse",
+		"netherland_dwarf_himalayan",
+		"american_flying_squirrel",
+		"longhair_hamster_black_white",
+		"djungarian_hamster_yellow",
+		"djungarian_hamster_pearl_white",
+		"fancy_rat_blue_hooded",
+		"fancy_rat_chocolate_self",
+		"fancy_rat_cream_agouti",
+		"rabbit_gray",
+		"african_fat_tailed_gecko",
 	}
 	if got := len(runtime); got != len(wantIDs) {
 		t.Fatalf("runtime variants = %d, want %d release-scoped variants", got, len(wantIDs))

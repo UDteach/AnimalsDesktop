@@ -146,6 +146,18 @@ func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
 		"domestic_shorthair_tabby_white_stocky",
 		"lionhead_rabbit_brown_white",
 		"shoebill_stork",
+		"leucistic_sugar_glider",
+		"african_dormouse",
+		"netherland_dwarf_himalayan",
+		"american_flying_squirrel",
+		"longhair_hamster_black_white",
+		"djungarian_hamster_yellow",
+		"djungarian_hamster_pearl_white",
+		"fancy_rat_blue_hooded",
+		"fancy_rat_chocolate_self",
+		"fancy_rat_cream_agouti",
+		"rabbit_gray",
+		"african_fat_tailed_gecko",
 	}
 	runtimeVariants := catalog.RuntimeVariants()
 	if len(runtimeVariants) != len(wantIDs) {

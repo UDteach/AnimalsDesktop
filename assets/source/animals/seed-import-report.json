@@ -1149,6 +1149,126 @@
     ]
   },
   {
+    "variant": "longhair_hamster_black_white",
+    "species": "hamster",
+    "breed_or_morph": "Longhair hamster",
+    "color": "black white",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/longhair-hamster-black-white/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/longhair_hamster_black_white-source.png",
+    "motion_source": "docs/art-source/longhair-hamster-black-white/motion-source/sheets/longhair-hamster-black-white-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "longhair_hamster_black_white",
+    "tint_hex": "f0e8db",
+    "accent_hex": "2f2c2b",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 8,
+      "w": 84,
+      "h": 50
+    },
+    "outputs": [
+      "assets/sprites/longhair_hamster_black_white_set00.png",
+      "assets/sprites/longhair_hamster_black_white_set01.png",
+      "assets/sprites/longhair_hamster_black_white_set02.png",
+      "assets/sprites/longhair_hamster_black_white_set03.png",
+      "assets/sprites/longhair_hamster_black_white_set04.png",
+      "assets/sprites/longhair_hamster_black_white_set05.png",
+      "assets/sprites/longhair_hamster_black_white_set06.png",
+      "assets/sprites/longhair_hamster_black_white_set07.png",
+      "assets/sprites/longhair_hamster_black_white_set08.png",
+      "assets/sprites/longhair_hamster_black_white_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "djungarian_hamster_yellow",
+    "species": "hamster",
+    "breed_or_morph": "Djungarian hamster",
+    "color": "yellow",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/djungarian-hamster-yellow/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/djungarian_hamster_yellow-source.png",
+    "motion_source": "docs/art-source/djungarian-hamster-yellow/motion-source/sheets/djungarian-hamster-yellow-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "djungarian_hamster_yellow",
+    "tint_hex": "dcc08a",
+    "accent_hex": "f0e0bd",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 7,
+      "y": 4,
+      "w": 81,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/djungarian_hamster_yellow_set00.png",
+      "assets/sprites/djungarian_hamster_yellow_set01.png",
+      "assets/sprites/djungarian_hamster_yellow_set02.png",
+      "assets/sprites/djungarian_hamster_yellow_set03.png",
+      "assets/sprites/djungarian_hamster_yellow_set04.png",
+      "assets/sprites/djungarian_hamster_yellow_set05.png",
+      "assets/sprites/djungarian_hamster_yellow_set06.png",
+      "assets/sprites/djungarian_hamster_yellow_set07.png",
+      "assets/sprites/djungarian_hamster_yellow_set08.png",
+      "assets/sprites/djungarian_hamster_yellow_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "djungarian_hamster_pearl_white",
+    "species": "hamster",
+    "breed_or_morph": "Djungarian hamster",
+    "color": "pearl white",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/djungarian-hamster-pearl-white/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/djungarian_hamster_pearl_white-source.png",
+    "motion_source": "docs/art-source/djungarian-hamster-pearl-white/motion-source/sheets/djungarian-hamster-pearl-white-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "djungarian_hamster_pearl_white",
+    "tint_hex": "eee9df",
+    "accent_hex": "a69d92",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 13,
+      "w": 84,
+      "h": 45
+    },
+    "outputs": [
+      "assets/sprites/djungarian_hamster_pearl_white_set00.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set01.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set02.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set03.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set04.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set05.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set06.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set07.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set08.png",
+      "assets/sprites/djungarian_hamster_pearl_white_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "hamster_cream",
     "species": "hamster",
     "breed_or_morph": "Hamster - cream",
@@ -1968,6 +2088,126 @@
       "assets/sprites/sugar_glider_gray_set07.png",
       "assets/sprites/sugar_glider_gray_set08.png",
       "assets/sprites/sugar_glider_gray_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "leucistic_sugar_glider",
+    "species": "sugar_glider",
+    "breed_or_morph": "Sugar glider",
+    "color": "leucistic",
+    "popularity_tier": 2,
+    "motion_profile": "sugar-glider-skitter",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/leucistic-sugar-glider/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/leucistic_sugar_glider-source.png",
+    "motion_source": "docs/art-source/leucistic-sugar-glider/motion-source/sheets/leucistic-sugar-glider-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "leucistic_sugar_glider",
+    "tint_hex": "f1eadf",
+    "accent_hex": "b69b84",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 19,
+      "w": 84,
+      "h": 39
+    },
+    "outputs": [
+      "assets/sprites/leucistic_sugar_glider_set00.png",
+      "assets/sprites/leucistic_sugar_glider_set01.png",
+      "assets/sprites/leucistic_sugar_glider_set02.png",
+      "assets/sprites/leucistic_sugar_glider_set03.png",
+      "assets/sprites/leucistic_sugar_glider_set04.png",
+      "assets/sprites/leucistic_sugar_glider_set05.png",
+      "assets/sprites/leucistic_sugar_glider_set06.png",
+      "assets/sprites/leucistic_sugar_glider_set07.png",
+      "assets/sprites/leucistic_sugar_glider_set08.png",
+      "assets/sprites/leucistic_sugar_glider_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "african_dormouse",
+    "species": "dormouse",
+    "breed_or_morph": "African dormouse",
+    "color": "brown tan",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/african-dormouse/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/african_dormouse-source.png",
+    "motion_source": "docs/art-source/african-dormouse/motion-source/sheets/african-dormouse-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "african_dormouse",
+    "tint_hex": "8d6b46",
+    "accent_hex": "e1c390",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 25,
+      "w": 84,
+      "h": 33
+    },
+    "outputs": [
+      "assets/sprites/african_dormouse_set00.png",
+      "assets/sprites/african_dormouse_set01.png",
+      "assets/sprites/african_dormouse_set02.png",
+      "assets/sprites/african_dormouse_set03.png",
+      "assets/sprites/african_dormouse_set04.png",
+      "assets/sprites/african_dormouse_set05.png",
+      "assets/sprites/african_dormouse_set06.png",
+      "assets/sprites/african_dormouse_set07.png",
+      "assets/sprites/african_dormouse_set08.png",
+      "assets/sprites/african_dormouse_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "american_flying_squirrel",
+    "species": "flying_squirrel",
+    "breed_or_morph": "American flying squirrel",
+    "color": "gray brown",
+    "popularity_tier": 2,
+    "motion_profile": "squirrel-bound",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/american-flying-squirrel/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/american_flying_squirrel-source.png",
+    "motion_source": "docs/art-source/american-flying-squirrel/motion-source/sheets/american-flying-squirrel-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "american_flying_squirrel",
+    "tint_hex": "8a7766",
+    "accent_hex": "d7c3a0",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 24,
+      "w": 84,
+      "h": 34
+    },
+    "outputs": [
+      "assets/sprites/american_flying_squirrel_set00.png",
+      "assets/sprites/american_flying_squirrel_set01.png",
+      "assets/sprites/american_flying_squirrel_set02.png",
+      "assets/sprites/american_flying_squirrel_set03.png",
+      "assets/sprites/american_flying_squirrel_set04.png",
+      "assets/sprites/american_flying_squirrel_set05.png",
+      "assets/sprites/american_flying_squirrel_set06.png",
+      "assets/sprites/american_flying_squirrel_set07.png",
+      "assets/sprites/american_flying_squirrel_set08.png",
+      "assets/sprites/american_flying_squirrel_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -3183,6 +3423,46 @@
     ]
   },
   {
+    "variant": "netherland_dwarf_himalayan",
+    "species": "rabbit",
+    "breed_or_morph": "Netherland Dwarf",
+    "color": "Himalayan",
+    "popularity_tier": 2,
+    "motion_profile": "rabbit-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/netherland-dwarf-himalayan/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/netherland_dwarf_himalayan-source.png",
+    "motion_source": "docs/art-source/netherland-dwarf-himalayan/motion-source/sheets/netherland-dwarf-himalayan-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "netherland_dwarf_himalayan",
+    "tint_hex": "f2e6d4",
+    "accent_hex": "5a4237",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 18,
+      "y": 4,
+      "w": 60,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/netherland_dwarf_himalayan_set00.png",
+      "assets/sprites/netherland_dwarf_himalayan_set01.png",
+      "assets/sprites/netherland_dwarf_himalayan_set02.png",
+      "assets/sprites/netherland_dwarf_himalayan_set03.png",
+      "assets/sprites/netherland_dwarf_himalayan_set04.png",
+      "assets/sprites/netherland_dwarf_himalayan_set05.png",
+      "assets/sprites/netherland_dwarf_himalayan_set06.png",
+      "assets/sprites/netherland_dwarf_himalayan_set07.png",
+      "assets/sprites/netherland_dwarf_himalayan_set08.png",
+      "assets/sprites/netherland_dwarf_himalayan_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "himalayan_rabbit",
     "species": "rabbit",
     "breed_or_morph": "Himalayan rabbit",
@@ -3257,6 +3537,46 @@
       "assets/sprites/lionhead_rabbit_brown_white_set07.png",
       "assets/sprites/lionhead_rabbit_brown_white_set08.png",
       "assets/sprites/lionhead_rabbit_brown_white_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "rabbit_gray",
+    "species": "rabbit",
+    "breed_or_morph": "Rabbit",
+    "color": "gray",
+    "popularity_tier": 2,
+    "motion_profile": "rabbit-hop",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/rabbit-gray/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/rabbit_gray-source.png",
+    "motion_source": "docs/art-source/rabbit-gray/motion-source/sheets/rabbit-gray-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "rabbit_gray",
+    "tint_hex": "8f8d86",
+    "accent_hex": "d8d3c8",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 22,
+      "y": 4,
+      "w": 52,
+      "h": 54
+    },
+    "outputs": [
+      "assets/sprites/rabbit_gray_set00.png",
+      "assets/sprites/rabbit_gray_set01.png",
+      "assets/sprites/rabbit_gray_set02.png",
+      "assets/sprites/rabbit_gray_set03.png",
+      "assets/sprites/rabbit_gray_set04.png",
+      "assets/sprites/rabbit_gray_set05.png",
+      "assets/sprites/rabbit_gray_set06.png",
+      "assets/sprites/rabbit_gray_set07.png",
+      "assets/sprites/rabbit_gray_set08.png",
+      "assets/sprites/rabbit_gray_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -3399,6 +3719,126 @@
       "assets/sprites/fancy_rat_hooded_set07.png",
       "assets/sprites/fancy_rat_hooded_set08.png",
       "assets/sprites/fancy_rat_hooded_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "fancy_rat_blue_hooded",
+    "species": "rat",
+    "breed_or_morph": "Fancy rat",
+    "color": "blue hooded",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/fancy-rat-blue-hooded/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/fancy_rat_blue_hooded-source.png",
+    "motion_source": "docs/art-source/fancy-rat-blue-hooded/motion-source/sheets/fancy-rat-blue-hooded-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "fancy_rat_blue_hooded",
+    "tint_hex": "d8d6cd",
+    "accent_hex": "6d7480",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 27,
+      "w": 84,
+      "h": 31
+    },
+    "outputs": [
+      "assets/sprites/fancy_rat_blue_hooded_set00.png",
+      "assets/sprites/fancy_rat_blue_hooded_set01.png",
+      "assets/sprites/fancy_rat_blue_hooded_set02.png",
+      "assets/sprites/fancy_rat_blue_hooded_set03.png",
+      "assets/sprites/fancy_rat_blue_hooded_set04.png",
+      "assets/sprites/fancy_rat_blue_hooded_set05.png",
+      "assets/sprites/fancy_rat_blue_hooded_set06.png",
+      "assets/sprites/fancy_rat_blue_hooded_set07.png",
+      "assets/sprites/fancy_rat_blue_hooded_set08.png",
+      "assets/sprites/fancy_rat_blue_hooded_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "fancy_rat_chocolate_self",
+    "species": "rat",
+    "breed_or_morph": "Fancy rat",
+    "color": "chocolate self",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/fancy-rat-chocolate-self/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/fancy_rat_chocolate_self-source.png",
+    "motion_source": "docs/art-source/fancy-rat-chocolate-self/motion-source/sheets/fancy-rat-chocolate-self-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "fancy_rat_chocolate_self",
+    "tint_hex": "5f3e2c",
+    "accent_hex": "9d7350",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 28,
+      "w": 84,
+      "h": 30
+    },
+    "outputs": [
+      "assets/sprites/fancy_rat_chocolate_self_set00.png",
+      "assets/sprites/fancy_rat_chocolate_self_set01.png",
+      "assets/sprites/fancy_rat_chocolate_self_set02.png",
+      "assets/sprites/fancy_rat_chocolate_self_set03.png",
+      "assets/sprites/fancy_rat_chocolate_self_set04.png",
+      "assets/sprites/fancy_rat_chocolate_self_set05.png",
+      "assets/sprites/fancy_rat_chocolate_self_set06.png",
+      "assets/sprites/fancy_rat_chocolate_self_set07.png",
+      "assets/sprites/fancy_rat_chocolate_self_set08.png",
+      "assets/sprites/fancy_rat_chocolate_self_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "fancy_rat_cream_agouti",
+    "species": "rat",
+    "breed_or_morph": "Fancy rat",
+    "color": "cream agouti",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/fancy-rat-cream-agouti/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/fancy_rat_cream_agouti-source.png",
+    "motion_source": "docs/art-source/fancy-rat-cream-agouti/motion-source/sheets/fancy-rat-cream-agouti-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "fancy_rat_cream_agouti",
+    "tint_hex": "caa06f",
+    "accent_hex": "ead5a7",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 32,
+      "w": 84,
+      "h": 26
+    },
+    "outputs": [
+      "assets/sprites/fancy_rat_cream_agouti_set00.png",
+      "assets/sprites/fancy_rat_cream_agouti_set01.png",
+      "assets/sprites/fancy_rat_cream_agouti_set02.png",
+      "assets/sprites/fancy_rat_cream_agouti_set03.png",
+      "assets/sprites/fancy_rat_cream_agouti_set04.png",
+      "assets/sprites/fancy_rat_cream_agouti_set05.png",
+      "assets/sprites/fancy_rat_cream_agouti_set06.png",
+      "assets/sprites/fancy_rat_cream_agouti_set07.png",
+      "assets/sprites/fancy_rat_cream_agouti_set08.png",
+      "assets/sprites/fancy_rat_cream_agouti_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
@@ -3861,6 +4301,46 @@
       "assets/sprites/japanese_giant_salamander_set07.png",
       "assets/sprites/japanese_giant_salamander_set08.png",
       "assets/sprites/japanese_giant_salamander_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
+    "variant": "african_fat_tailed_gecko",
+    "species": "gecko",
+    "breed_or_morph": "African fat-tailed gecko",
+    "color": "brown banded",
+    "popularity_tier": 2,
+    "motion_profile": "gecko-crawl",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/african-fat-tailed-gecko/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/african_fat_tailed_gecko-source.png",
+    "motion_source": "docs/art-source/african-fat-tailed-gecko/motion-source/sheets/african-fat-tailed-gecko-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "african_fat_tailed_gecko",
+    "tint_hex": "7a5b45",
+    "accent_hex": "d9b07c",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 6,
+      "y": 38,
+      "w": 84,
+      "h": 20
+    },
+    "outputs": [
+      "assets/sprites/african_fat_tailed_gecko_set00.png",
+      "assets/sprites/african_fat_tailed_gecko_set01.png",
+      "assets/sprites/african_fat_tailed_gecko_set02.png",
+      "assets/sprites/african_fat_tailed_gecko_set03.png",
+      "assets/sprites/african_fat_tailed_gecko_set04.png",
+      "assets/sprites/african_fat_tailed_gecko_set05.png",
+      "assets/sprites/african_fat_tailed_gecko_set06.png",
+      "assets/sprites/african_fat_tailed_gecko_set07.png",
+      "assets/sprites/african_fat_tailed_gecko_set08.png",
+      "assets/sprites/african_fat_tailed_gecko_set09.png"
     ],
     "warnings": [
       "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
