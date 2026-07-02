@@ -659,17 +659,13 @@ func (a *petApp) loadSettings() error {
 		return nil
 	}
 	if settings.Version >= 2 {
-		a.variant = resolveSettingsVariant(settings.Variant, settings.VariantID, settings.Version)
+		a.variant = variantIndexFromSettings(settings.Variant, settings.VariantID, settings.Version, strings.Join(settings.PetNames, "\n"))
 		a.coatMode = normalizeCoatMode(settings.CoatMode)
 		for i, variant := range settings.SelectedCoats {
 			if i >= len(a.selectedCoats) {
 				break
 			}
-			id := ""
-			if i < len(settings.SelectedCoatIDs) {
-				id = settings.SelectedCoatIDs[i]
-			}
-			a.selectedCoats[i] = resolveSettingsVariant(variant, id, settings.Version)
+			a.selectedCoats[i] = variantIndexFromSettings(variant, stringAt(settings.SelectedCoatIDs, i), settings.Version, stringAt(settings.PetNames, i))
 		}
 		for i, size := range settings.PetSizes {
 			if i >= len(a.petSizes) {
@@ -739,11 +735,10 @@ func (a *petApp) saveSettings() error {
 	}
 	coats := make([]int, len(a.selectedCoats))
 	copy(coats, a.selectedCoats[:])
-	coatIDs := make([]string, len(coats))
 	for i := range coats {
 		coats[i] = clamp(coats[i], 0, len(variants)-1)
-		coatIDs[i] = variantIDAt(coats[i])
 	}
+	coatIDs := variantIDsForIndices(coats)
 	sizes := make([]int, len(a.petSizes))
 	for i := range a.petSizes {
 		sizes[i] = a.petSizePercent(i)
@@ -812,34 +807,31 @@ func writeFileAtomically(path string, data []byte) error {
 	return os.Rename(tmpName, path)
 }
 
-func (a *petApp) persistSettings() {
-	a.settingsSaveFailed = a.saveSettings() != nil
-}
-
-func resolveSettingsVariant(index int, id string, version int) int {
-	if resolved, ok := variantIndexByID(id); ok {
-		return resolved
+func variantIndexFromSettings(index int, id string, version int, nameHint string) int {
+	if len(variants) == 0 {
+		return 0
 	}
-	if version == 2 {
-		if resolved, ok := legacyVersionTwoVariantIndex(index); ok {
-			return resolved
+	if i, ok := variantIndexByID(id); ok {
+		return i
+	}
+	if version < settingsVersion {
+		if legacyID, ok := legacyVariantIDForIndex(index, nameHint); ok {
+			if i, found := variantIndexByID(legacyID); found {
+				return i
+			}
 		}
 	}
 	return clamp(index, 0, len(variants)-1)
 }
 
-func legacyVersionTwoVariantIndex(index int) (int, bool) {
-	// v0.2.9 stored shoebill as index 41; v0.2.12 moved that slot to a cat.
-	// Without an ID in the old settings file this known user-facing drift needs
-	// an explicit repair, while future saves use stable variant IDs.
-	if index != 41 {
-		return 0, false
+func legacyVariantIDForIndex(index int, nameHint string) (string, bool) {
+	if strings.Contains(nameHint, "ハシビロコウ") || strings.Contains(strings.ToLower(nameHint), "shoebill") {
+		return "shoebill_stork", true
 	}
-	return variantIndexByID("shoebill_stork")
+	return "", false
 }
 
 func variantIndexByID(id string) (int, bool) {
-	id = strings.TrimSpace(id)
 	if id == "" {
 		return 0, false
 	}
@@ -852,10 +844,29 @@ func variantIndexByID(id string) (int, bool) {
 }
 
 func variantIDAt(index int) string {
-	if index < 0 || index >= len(variants) {
+	if len(variants) == 0 {
 		return ""
 	}
-	return variants[index].ID
+	return variants[clamp(index, 0, len(variants)-1)].ID
+}
+
+func variantIDsForIndices(indices []int) []string {
+	out := make([]string, len(indices))
+	for i, index := range indices {
+		out[i] = variantIDAt(index)
+	}
+	return out
+}
+
+func stringAt(values []string, index int) string {
+	if index < 0 || index >= len(values) {
+		return ""
+	}
+	return values[index]
+}
+
+func (a *petApp) persistSettings() {
+	a.settingsSaveFailed = a.saveSettings() != nil
 }
 
 func normalizeCoatMode(mode int) coatMode {
@@ -2930,7 +2941,7 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 	case ctrlCoatRandom:
 		return a.txt("coatRandom")
 	case ctrlVariantCombo:
-		return a.variantLabel(a.variant)
+		return a.variantDisplayLabel(a.variant)
 	case ctrlModeKeyboard:
 		return a.txt("modeKeyboard")
 	case ctrlModeRandom:
@@ -2997,7 +3008,7 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 		return a.localText("キャンセル", "Cancel")
 	}
 	if id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount {
-		return a.variantLabel(a.settingsSelectVariant(id))
+		return a.variantDisplayLabel(a.settingsSelectVariant(id))
 	}
 	if id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount {
 		return a.petDisplayName(int(id - ctrlPetNameBase))
@@ -3905,7 +3916,9 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 
 func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 	menu := win.CreatePopupMenu()
-	a.appendGroupedVariantMenu(menu, selected, 1)
+	a.appendGroupedVariantMenu(menu, selected, func(index int) uintptr {
+		return uintptr(index + 1)
+	})
 	cmd := a.trackControlMenu(id, menu)
 	win.DestroyMenu(menu)
 	if cmd == 0 {
@@ -3916,42 +3929,6 @@ func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 		return 0, false
 	}
 	return choice, true
-}
-
-type variantMenuGroup struct {
-	speciesID string
-	indices   []int
-}
-
-func runtimeVariantMenuGroups() []variantMenuGroup {
-	groups := make([]variantMenuGroup, 0)
-	groupBySpecies := make(map[string]int)
-	for i, variant := range variants {
-		if groupIndex, ok := groupBySpecies[variant.SpeciesID]; ok {
-			groups[groupIndex].indices = append(groups[groupIndex].indices, i)
-			continue
-		}
-		groupBySpecies[variant.SpeciesID] = len(groups)
-		groups = append(groups, variantMenuGroup{
-			speciesID: variant.SpeciesID,
-			indices:   []int{i},
-		})
-	}
-	return groups
-}
-
-func (a *petApp) appendGroupedVariantMenu(menu win.HMENU, selected int, commandBase uintptr) {
-	for _, group := range runtimeVariantMenuGroups() {
-		submenu := win.CreatePopupMenu()
-		for _, i := range group.indices {
-			flags := uint32(win.MF_STRING)
-			if i == selected {
-				flags |= win.MF_CHECKED
-			}
-			appendMenu(submenu, flags, commandBase+uintptr(i), syscall.StringToUTF16Ptr(a.variantLabel(i)))
-		}
-		appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(submenu), syscall.StringToUTF16Ptr(a.variantGroupLabel(group.speciesID)))
-	}
 }
 
 func (a *petApp) pickPetSizeFromMenu(id int32, selected int) (int, bool) {
@@ -4357,72 +4334,66 @@ func (a *petApp) variantLabel(i int) string {
 	return variants[i].LabelJA
 }
 
-func (a *petApp) variantGroupLabel(speciesID string) string {
-	if a.lang != langEnglish {
-		if label, ok := speciesLabelJA(speciesID); ok {
-			return label
-		}
+func (a *petApp) variantDisplayLabel(i int) string {
+	label := a.variantLabel(i)
+	if label == "" {
+		return ""
 	}
-	for _, species := range catalog.SpeciesList {
-		if species.ID == speciesID && species.Label != "" {
-			return species.Label
-		}
+	group := a.variantGroupLabel(i)
+	if group == "" {
+		return label
 	}
-	return speciesID
+	return group + " / " + label
 }
 
-func speciesLabelJA(speciesID string) (string, bool) {
-	switch speciesID {
-	case "chinchilla":
-		return "チンチラ", true
-	case "hamster":
-		return "ハムスター", true
-	case "macaroni_mouse":
-		return "マカロニマウス", true
-	case "sugar_glider":
-		return "モモンガ", true
-	case "rabbit":
-		return "うさぎ", true
-	case "gecko":
-		return "ヤモリ", true
-	case "guinea_pig":
-		return "モルモット", true
-	case "rat":
-		return "ラット", true
-	case "ground_squirrel":
-		return "ジリス", true
-	case "dog":
-		return "犬", true
-	case "chipmunk":
-		return "シマリス", true
-	case "whites_tree_frog":
-		return "アマガエル", true
-	case "budgerigar":
-		return "セキセイインコ", true
-	case "cockatiel":
-		return "オカメインコ", true
-	case "java_sparrow":
-		return "文鳥", true
-	case "parrotlet":
-		return "マメルリハ", true
-	case "lovebird":
-		return "コザクラインコ", true
-	case "cat":
-		return "猫", true
-	case "quokka":
-		return "クオッカ", true
-	case "salamander":
-		return "サンショウウオ", true
-	case "wagtail":
-		return "セキレイ", true
-	case "shoebill":
-		return "ハシビロコウ", true
-	case "dormouse":
-		return "ヤマネ", true
-	case "flying_squirrel":
-		return "モモンガ", true
-	default:
-		return "", false
+func (a *petApp) variantGroupLabel(i int) string {
+	if i < 0 || i >= len(variants) {
+		return ""
+	}
+	group := catalog.VariantGroupForSpecies(variants[i].SpeciesID)
+	if a.lang == langEnglish {
+		return group.LabelEN
+	}
+	return group.LabelJA
+}
+
+type variantMenuGroup struct {
+	Label   string
+	Indices []int
+}
+
+func (a *petApp) variantMenuGroups() []variantMenuGroup {
+	byGroup := make(map[string][]int)
+	for i, variant := range variants {
+		groupID := catalog.VariantGroupIDForSpecies(variant.SpeciesID)
+		byGroup[groupID] = append(byGroup[groupID], i)
+	}
+	groups := make([]variantMenuGroup, 0, len(byGroup))
+	for _, group := range catalog.VariantGroups {
+		indices := byGroup[group.ID]
+		if len(indices) == 0 {
+			continue
+		}
+		label := group.LabelJA
+		if a.lang == langEnglish {
+			label = group.LabelEN
+		}
+		groups = append(groups, variantMenuGroup{Label: label, Indices: indices})
+	}
+	return groups
+}
+
+func (a *petApp) appendGroupedVariantMenu(menu win.HMENU, selected int, commandID func(index int) uintptr) {
+	for _, group := range a.variantMenuGroups() {
+		submenu := win.CreatePopupMenu()
+		for _, index := range group.Indices {
+			flags := uint32(win.MF_STRING)
+			if index == selected {
+				flags |= win.MF_CHECKED
+			}
+			appendMenu(submenu, flags, commandID(index), syscall.StringToUTF16Ptr(a.variantLabel(index)))
+		}
+		appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(submenu), syscall.StringToUTF16Ptr(group.Label))
 	}
 }
 
@@ -4969,7 +4940,9 @@ func (a *petApp) installTray() {
 func (a *petApp) showTrayMenu() {
 	menu := win.CreatePopupMenu()
 	coatMenu := win.CreatePopupMenu()
-	a.appendGroupedVariantMenu(coatMenu, a.variant, uintptr(menuVariantBase))
+	a.appendGroupedVariantMenu(coatMenu, a.variant, func(index int) uintptr {
+		return uintptr(menuVariantBase + uint16(index))
+	})
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(coatMenu), syscall.StringToUTF16Ptr(a.txt("coatColor")))
 	coatModeMenu := win.CreatePopupMenu()
 	appendChecked(coatModeMenu, menuCoatFixed, a.txt("coatFixed"), a.coatMode == coatFixed)

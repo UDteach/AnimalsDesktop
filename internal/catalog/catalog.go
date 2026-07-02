@@ -6,6 +6,12 @@ type Species struct {
 	Profile string
 }
 
+type VariantGroup struct {
+	ID      string
+	LabelEN string
+	LabelJA string
+}
+
 type Variant struct {
 	ID               string
 	SpeciesID        string
@@ -94,6 +100,60 @@ var SpeciesList = []Species{
 	{ID: "lovebird", Label: "Lovebird", Profile: "bird"},
 	{ID: "wagtail", Label: "Wagtail", Profile: "bird"},
 	{ID: "shoebill", Label: "Shoebill", Profile: "bird"},
+}
+
+var VariantGroups = []VariantGroup{
+	{ID: "chinchilla", LabelEN: "Chinchillas", LabelJA: "チンチラ"},
+	{ID: "hamster", LabelEN: "Hamsters", LabelJA: "ハムスター"},
+	{ID: "rabbit", LabelEN: "Rabbits", LabelJA: "うさぎ"},
+	{ID: "sugar_glider", LabelEN: "Sugar gliders", LabelJA: "モモンガ"},
+	{ID: "small_mammal", LabelEN: "Small animals", LabelJA: "小動物"},
+	{ID: "bird", LabelEN: "Birds", LabelJA: "鳥"},
+	{ID: "cat", LabelEN: "Cats", LabelJA: "猫"},
+	{ID: "dog", LabelEN: "Dogs", LabelJA: "犬"},
+	{ID: "reptile_amphibian", LabelEN: "Reptiles and amphibians", LabelJA: "爬虫類・両生類"},
+	{ID: "other", LabelEN: "Other animals", LabelJA: "その他"},
+}
+
+func VariantGroupByID(id string) (VariantGroup, bool) {
+	for _, group := range VariantGroups {
+		if group.ID == id {
+			return group, true
+		}
+	}
+	return VariantGroup{}, false
+}
+
+func VariantGroupIDForSpecies(speciesID string) string {
+	switch speciesID {
+	case "chinchilla":
+		return "chinchilla"
+	case "hamster":
+		return "hamster"
+	case "rabbit":
+		return "rabbit"
+	case "sugar_glider", "flying_squirrel":
+		return "sugar_glider"
+	case "budgerigar", "cockatiel", "java_sparrow", "parrotlet", "lovebird", "wagtail", "shoebill":
+		return "bird"
+	case "cat":
+		return "cat"
+	case "dog":
+		return "dog"
+	case "gecko", "bearded_dragon", "crested_gecko", "corn_snake", "whites_tree_frog", "salamander":
+		return "reptile_amphibian"
+	case "macaroni_mouse", "guinea_pig", "ferret", "hedgehog", "squirrel", "ground_squirrel", "dormouse", "rat", "mouse", "gerbil", "prairie_dog", "chipmunk":
+		return "small_mammal"
+	default:
+		return "other"
+	}
+}
+
+func VariantGroupForSpecies(speciesID string) VariantGroup {
+	if group, ok := VariantGroupByID(VariantGroupIDForSpecies(speciesID)); ok {
+		return group
+	}
+	return VariantGroups[len(VariantGroups)-1]
 }
 
 const (

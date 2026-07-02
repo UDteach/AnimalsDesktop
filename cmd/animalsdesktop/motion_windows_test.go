@@ -284,47 +284,6 @@ func TestSettingsVariantSelectionCoversEveryRuntimeVariant(t *testing.T) {
 	}
 }
 
-func TestRuntimeVariantMenuGroupsCoverEveryRuntimeVariant(t *testing.T) {
-	groups := runtimeVariantMenuGroups()
-	if len(groups) == 0 {
-		t.Fatal("runtimeVariantMenuGroups returned no groups")
-	}
-	seen := make([]bool, len(variants))
-	for _, group := range groups {
-		if group.speciesID == "" {
-			t.Fatalf("group has empty species ID: %+v", group)
-		}
-		if len(group.indices) == 0 {
-			t.Fatalf("group %q has no variants", group.speciesID)
-		}
-		for _, index := range group.indices {
-			if index < 0 || index >= len(variants) {
-				t.Fatalf("group %q contains invalid index %d", group.speciesID, index)
-			}
-			if variants[index].SpeciesID != group.speciesID {
-				t.Fatalf("group %q contains %q species %q", group.speciesID, variants[index].ID, variants[index].SpeciesID)
-			}
-			if seen[index] {
-				t.Fatalf("variant %q appears in multiple groups", variants[index].ID)
-			}
-			seen[index] = true
-		}
-	}
-	for i, ok := range seen {
-		if !ok {
-			t.Fatalf("variant %q was not included in any group", variants[i].ID)
-		}
-	}
-	a := &petApp{lang: langJapanese}
-	if got := a.variantGroupLabel("rabbit"); got != "うさぎ" {
-		t.Fatalf("Japanese rabbit group label = %q", got)
-	}
-	a.lang = langEnglish
-	if got := a.variantGroupLabel("rabbit"); got != "Rabbit" {
-		t.Fatalf("English rabbit group label = %q", got)
-	}
-}
-
 func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
@@ -368,6 +327,12 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if saved.Version != settingsVersion || saved.PetCount != 10 || saved.Mode != int(modeKeyboard) {
 		t.Fatalf("saved settings = %+v, want version %d petCount 10 keyboard mode", saved, settingsVersion)
 	}
+	if saved.VariantID != variantIDAt(a.variant) {
+		t.Fatalf("saved VariantID = %q, want %q", saved.VariantID, variantIDAt(a.variant))
+	}
+	if len(saved.SelectedCoatIDs) != maxPetCount || saved.SelectedCoatIDs[1] != variantIDAt(3) {
+		t.Fatalf("saved SelectedCoatIDs = %#v", saved.SelectedCoatIDs)
+	}
 	if saved.Language != int(langEnglish) {
 		t.Fatalf("saved Language = %d, want English", saved.Language)
 	}
@@ -394,12 +359,6 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 	if len(saved.PetSizes) != maxPetCount || saved.PetSizes[0] != 80 || saved.PetSizes[4] != 120 || saved.PetSizes[5] != 70 {
 		t.Fatalf("saved pet sizes = %#v", saved.PetSizes)
-	}
-	if saved.VariantID != variantIDAt(4) {
-		t.Fatalf("saved VariantID = %q, want %q", saved.VariantID, variantIDAt(4))
-	}
-	if len(saved.SelectedCoatIDs) != maxPetCount || saved.SelectedCoatIDs[0] != variantIDAt(1) || saved.SelectedCoatIDs[3] != variantIDAt(7) {
-		t.Fatalf("saved SelectedCoatIDs = %#v", saved.SelectedCoatIDs)
 	}
 
 	b := &petApp{
@@ -455,79 +414,79 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 }
 
-func TestSettingsLoadPrefersVariantIDsOverNumericIndexes(t *testing.T) {
+func TestSettingsRoundTripUsesVariantIDsWhenRosterOrderChanges(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
-	dir := filepath.Join(configRoot, settingsDirName)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	shoebillIndex, ok := variantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	catIndex, ok := variantIndexByID("domestic_shorthair_tabby_white_stocky")
+	if !ok {
+		t.Fatal("domestic_shorthair_tabby_white_stocky missing from runtime variants")
+	}
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		t.Fatalf("mkdir settings dir: %v", err)
 	}
-	path := filepath.Join(dir, settingsFileName)
-	data := []byte(`{
-  "version": 3,
-  "variant": 0,
+	data := []byte(fmt.Sprintf(`{
+  "version": %d,
+  "variant": %d,
   "variantID": "shoebill_stork",
-  "coatMode": 1,
-  "selectedCoats": [0, 1],
-  "selectedCoatIDs": ["longhair_hamster_black_white_masked", "shoebill_stork"],
-  "petSizes": [100, 100],
-  "speed": 3,
-  "mode": 1,
+  "coatMode": %d,
+  "selectedCoats": [%d, %d],
+  "selectedCoatIDs": ["domestic_shorthair_tabby_white_stocky", "shoebill_stork"],
   "petCount": 2,
+  "speed": 5,
+  "mode": 1,
   "wheelEnabled": true,
   "bidirectional": true,
   "language": 0
-}`)
+}`, settingsVersion, catIndex, int(coatSelected), catIndex, catIndex))
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		t.Fatalf("write settings: %v", err)
 	}
+
 	a := &petApp{
-		variant:       0,
-		coatMode:      coatSelected,
 		selectedCoats: defaultSelectedCoats(),
 		petSizes:      defaultPetSizes(),
 		speed:         3,
 		mode:          modeRandom,
-		petCount:      5,
+		petCount:      1,
 		wheelEnabled:  true,
 		bidirectional: true,
-		lang:          langJapanese,
 	}
 	if err := a.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	shoebill, ok := variantIndexByID("shoebill_stork")
-	if !ok {
-		t.Fatal("shoebill_stork is not a runtime variant")
+	if a.variant != shoebillIndex {
+		t.Fatalf("variant = %d (%s), want shoebill index %d", a.variant, variantIDAt(a.variant), shoebillIndex)
 	}
-	maskedHamster, ok := variantIndexByID("longhair_hamster_black_white_masked")
-	if !ok {
-		t.Fatal("longhair_hamster_black_white_masked is not a runtime variant")
-	}
-	if a.variant != shoebill {
-		t.Fatalf("loaded variant = %d, want shoebill index %d", a.variant, shoebill)
-	}
-	if a.selectedCoats[0] != maskedHamster || a.selectedCoats[1] != shoebill {
-		t.Fatalf("loaded selectedCoats[:2] = %v, want [%d %d]", a.selectedCoats[:2], maskedHamster, shoebill)
+	if a.selectedCoats[0] != catIndex || a.selectedCoats[1] != shoebillIndex {
+		t.Fatalf("selectedCoats = %v, want cat then shoebill", a.selectedCoats[:2])
 	}
 }
 
-func TestVersionTwoSettingsRepairKnownShoebillIndexDrift(t *testing.T) {
+func TestLegacySettingsRecoverShoebillIndexDrift(t *testing.T) {
 	configRoot := t.TempDir()
 	t.Setenv("APPDATA", configRoot)
-	dir := filepath.Join(configRoot, settingsDirName)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	shoebillIndex, ok := variantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		t.Fatalf("mkdir settings dir: %v", err)
 	}
-	path := filepath.Join(dir, settingsFileName)
 	data := []byte(`{
   "version": 2,
   "variant": 41,
-  "coatMode": 0,
+  "coatMode": 1,
   "selectedCoats": [41, 0],
+  "petNames": ["爆速ハシビロコウさん", ""],
+  "petCount": 2,
   "speed": 5,
   "mode": 1,
-  "petCount": 1,
   "wheelEnabled": true,
   "bidirectional": true,
   "language": 0
@@ -535,27 +494,80 @@ func TestVersionTwoSettingsRepairKnownShoebillIndexDrift(t *testing.T) {
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		t.Fatalf("write settings: %v", err)
 	}
+
 	a := &petApp{
-		variant:       0,
-		coatMode:      coatSelected,
 		selectedCoats: defaultSelectedCoats(),
 		petSizes:      defaultPetSizes(),
 		speed:         3,
 		mode:          modeRandom,
-		petCount:      5,
+		petCount:      1,
 		wheelEnabled:  true,
 		bidirectional: true,
-		lang:          langJapanese,
 	}
 	if err := a.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	shoebill, ok := variantIndexByID("shoebill_stork")
-	if !ok {
-		t.Fatal("shoebill_stork is not a runtime variant")
+	if a.variant != shoebillIndex || a.selectedCoats[0] != shoebillIndex {
+		t.Fatalf("legacy shoebill migration = variant:%d selected:%d ids:%s/%s, want %d", a.variant, a.selectedCoats[0], variantIDAt(a.variant), variantIDAt(a.selectedCoats[0]), shoebillIndex)
 	}
-	if a.variant != shoebill || a.selectedCoats[0] != shoebill {
-		t.Fatalf("legacy shoebill selection = variant:%d selected:%d, want %d", a.variant, a.selectedCoats[0], shoebill)
+	if got := a.petNames[0]; got != "爆速ハシビロコウさん" {
+		t.Fatalf("pet name = %q", got)
+	}
+}
+
+func TestLegacySettingsKeepAmbiguousIndexWithoutShoebillName(t *testing.T) {
+	configRoot := t.TempDir()
+	t.Setenv("APPDATA", configRoot)
+	path := filepath.Join(configRoot, settingsDirName, settingsFileName)
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("mkdir settings dir: %v", err)
+	}
+	data := []byte(`{
+  "version": 2,
+  "variant": 41,
+  "coatMode": 1,
+  "selectedCoats": [41],
+  "petNames": [""],
+  "petCount": 1,
+  "speed": 5,
+  "mode": 1,
+  "wheelEnabled": true,
+  "bidirectional": true,
+  "language": 0
+}`)
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &petApp{
+		selectedCoats: defaultSelectedCoats(),
+		petSizes:      defaultPetSizes(),
+		speed:         3,
+		mode:          modeRandom,
+		petCount:      1,
+		wheelEnabled:  true,
+		bidirectional: true,
+	}
+	if err := a.loadSettings(); err != nil {
+		t.Fatalf("loadSettings() error = %v", err)
+	}
+	if a.variant != 41 || a.selectedCoats[0] != 41 {
+		t.Fatalf("ambiguous legacy index changed to variant:%d selected:%d, want raw index 41", a.variant, a.selectedCoats[0])
+	}
+}
+
+func TestVariantDisplayLabelsIncludeAnimalGroup(t *testing.T) {
+	a := &petApp{lang: langJapanese}
+	shoebillIndex, ok := variantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	if got := a.variantDisplayLabel(shoebillIndex); got != "鳥 / ハシビロコウ" {
+		t.Fatalf("shoebill display label = %q", got)
+	}
+	a.lang = langEnglish
+	if got := a.variantDisplayLabel(shoebillIndex); got != "Birds / Shoebill" {
+		t.Fatalf("English shoebill display label = %q", got)
 	}
 }
 
