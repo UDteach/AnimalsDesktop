@@ -45,6 +45,8 @@ jobs:
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$MOTION_PREVIEW/index.html"
           test -f docs/assets/animalsdesktop-preview.png
           test -f docs/assets/animal-icons/current-chinchilla_standard_gray.png
+          test -f docs/assets/animal-icons/current-chinchilla_beige.png
+          test -f docs/assets/animal-icons/current-chinchilla_ebony.png
           test -f docs/assets/animal-icons/current-hamster_golden_syrian.png
           test -f docs/assets/animal-icons/current-djungarian_hamster.png
           test -f docs/assets/animal-icons/current-campbell_hamster.png
@@ -57,11 +59,12 @@ jobs:
           test -f docs/assets/animal-icons/current-gecko_gray_brown.png
           test -f docs/assets/animal-icons/current-guinea_pig_tricolor.png
           test -f docs/assets/animal-icons/current-fancy_rat_hooded.png
-          test -f docs/assets/animal-icons/current-albino_chipmunk.png
+          test -f docs/assets/animal-icons/current-true_albino_chipmunk.png
           test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
           test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
           test -f docs/assets/animal-icons/current-lionhead_rabbit_brown_white.png
           test -f docs/assets/animal-icons/current-shoebill_stork.png
+          test -f docs/assets/animal-icons/current-fancy_rat_blue_hooded.png
           test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
           test -f docs/robots.txt
           for asset in \

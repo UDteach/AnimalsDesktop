@@ -99,6 +99,10 @@ var SpeciesList = []Species{
 const (
 	srcChinchilla                        = "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png"
 	srcChinchillaMotion                  = "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png"
+	srcChinchillaBeige                   = "docs/art-source/chinchilla-beige/motion-source/accepted-frames/set00/frame-00.png"
+	srcChinchillaBeigeMotion             = "docs/art-source/chinchilla-beige/motion-source/sheets/chinchilla-beige-source-set00.png"
+	srcChinchillaEbony                   = "docs/art-source/chinchilla-ebony/motion-source/accepted-frames/set00/frame-00.png"
+	srcChinchillaEbonyMotion             = "docs/art-source/chinchilla-ebony/motion-source/sheets/chinchilla-ebony-source-set00.png"
 	srcMacaroniMouse                     = "docs/art-source/macaroni-mouse/macaroni-mouse-source-truth.png"
 	srcMacaroniMouseMotion               = "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png"
 	srcRabbit                            = "docs/source-truth/rabbit-source-truth.png"
@@ -225,8 +229,8 @@ var Variants = []Variant{
 	deguVariant("cream_pied", "cream pied", "degu_cream_pied"),
 
 	acceptedMotionVariant("chinchilla_standard_gray", "chinchilla", "Chinchilla", "チンチラ", "chinchilla_standard_gray", srcChinchilla, srcChinchillaMotion, "", "", "Chinchilla", "standard gray", 1),
-	sourceVariant("chinchilla_beige", "chinchilla", "Chinchilla - beige", "chinchilla_beige", srcChinchilla, "c8b184", ""),
-	sourceVariant("chinchilla_ebony", "chinchilla", "Chinchilla - ebony", "chinchilla_ebony", srcChinchilla, "3e3d39", ""),
+	acceptedMotionVariant("chinchilla_beige", "chinchilla", "Chinchilla - beige", "チンチラ（ベージュ）", "chinchilla_beige", srcChinchillaBeige, srcChinchillaBeigeMotion, "", "", "Chinchilla", "beige", 2),
+	acceptedMotionVariant("chinchilla_ebony", "chinchilla", "Chinchilla - ebony", "チンチラ（エボニー）", "chinchilla_ebony", srcChinchillaEbony, srcChinchillaEbonyMotion, "", "", "Chinchilla", "ebony", 2),
 	sourceVariant("chinchilla_white_mosaic", "chinchilla", "Chinchilla - white mosaic", "chinchilla_white_mosaic", srcChinchilla, "e6e1d3", "8f9690"),
 
 	acceptedMotionVariant("macaroni_mouse_tan", "macaroni_mouse", "Macaroni mouse", "マカロニマウス", "macaroni_mouse_tan", srcMacaroniMouse, srcMacaroniMouseMotion, "", "", "Macaroni mouse", "tan", 1),
@@ -367,6 +371,8 @@ var Variants = []Variant{
 
 var runtimeVariantIDs = []string{
 	"chinchilla_standard_gray",
+	"chinchilla_beige",
+	"chinchilla_ebony",
 	"hamster_golden_syrian",
 	"djungarian_hamster",
 	"campbell_hamster",
@@ -379,7 +385,7 @@ var runtimeVariantIDs = []string{
 	"gecko_gray_brown",
 	"guinea_pig_tricolor",
 	"fancy_rat_hooded",
-	"albino_chipmunk",
+	"true_albino_chipmunk",
 	"richardsons_ground_squirrel",
 	"yorkshire_terrier_longcoat",
 	"chipmunk_striped",
@@ -628,7 +634,7 @@ func WheelCapableMotionProfile(profile string) bool {
 
 func WheelCapableVariant(variant Variant) bool {
 	switch variant.ID {
-	case "chinchilla_standard_gray", "hamster_golden_syrian":
+	case "chinchilla_standard_gray", "chinchilla_beige", "chinchilla_ebony", "hamster_golden_syrian":
 		return true
 	default:
 		return false

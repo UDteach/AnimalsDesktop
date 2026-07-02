@@ -36,6 +36,8 @@ SILHOUETTE_INK = (14, 18, 15, 255)
 
 CURRENT_VARIANTS = [
     "chinchilla_standard_gray",
+    "chinchilla_beige",
+    "chinchilla_ebony",
     "hamster_golden_syrian",
     "djungarian_hamster",
     "campbell_hamster",
@@ -48,7 +50,7 @@ CURRENT_VARIANTS = [
     "gecko_gray_brown",
     "guinea_pig_tricolor",
     "fancy_rat_hooded",
-    "albino_chipmunk",
+    "true_albino_chipmunk",
     "richardsons_ground_squirrel",
     "yorkshire_terrier_longcoat",
     "chipmunk_striped",
@@ -96,6 +98,8 @@ PAGE_RIGHT_FACING_VARIANTS = {
 }
 
 ICON_FRAMES = {
+	"chinchilla_beige": 4,
+	"chinchilla_ebony": 4,
     "macaroni_mouse_tan": 4,
     "sugar_glider_gray": 4,
     "gecko_gray_brown": 4,
@@ -132,6 +136,8 @@ ICON_FRAMES = {
 
 PREVIEW_POSES = {
     "chinchilla_standard_gray": 4,
+    "chinchilla_beige": 4,
+    "chinchilla_ebony": 4,
     "hamster_golden_syrian": 6,
     "djungarian_hamster": 8,
     "campbell_hamster": 10,
@@ -147,7 +153,7 @@ PREVIEW_POSES = {
     "guinea_pig_tricolor": 10,
     "fancy_rat_hooded": 12,
     "chipmunk_striped": 16,
-    "albino_chipmunk": 16,
+    "true_albino_chipmunk": 16,
     "richardsons_ground_squirrel": 20,
     "yorkshire_terrier_longcoat": 14,
     "budgerigar_green_yellow": 4,

@@ -178,6 +178,8 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 	wantIDs := []string{
 		"chinchilla_standard_gray",
+		"chinchilla_beige",
+		"chinchilla_ebony",
 		"hamster_golden_syrian",
 		"djungarian_hamster",
 		"campbell_hamster",
@@ -190,7 +192,7 @@ func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
 		"gecko_gray_brown",
 		"guinea_pig_tricolor",
 		"fancy_rat_hooded",
-		"albino_chipmunk",
+		"true_albino_chipmunk",
 		"richardsons_ground_squirrel",
 		"yorkshire_terrier_longcoat",
 		"chipmunk_striped",

@@ -40,22 +40,24 @@
   {
     "variant": "chinchilla_beige",
     "species": "chinchilla",
-    "breed_or_morph": "Chinchilla - beige",
-    "color": "Chinchilla - beige",
-    "popularity_tier": 3,
+    "breed_or_morph": "Chinchilla",
+    "color": "beige",
+    "popularity_tier": 2,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/chinchilla-beige/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/chinchilla_beige-source.png",
+    "motion_source": "docs/art-source/chinchilla-beige/motion-source/sheets/chinchilla-beige-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "chinchilla_beige",
-    "tint_hex": "c8b184",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 134,
-      "y": 119,
-      "w": 1254,
-      "h": 732
+      "x": 9,
+      "y": 6,
+      "w": 78,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/chinchilla_beige_set00.png",
@@ -68,27 +70,32 @@
       "assets/sprites/chinchilla_beige_set07.png",
       "assets/sprites/chinchilla_beige_set08.png",
       "assets/sprites/chinchilla_beige_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
     "variant": "chinchilla_ebony",
     "species": "chinchilla",
-    "breed_or_morph": "Chinchilla - ebony",
-    "color": "Chinchilla - ebony",
-    "popularity_tier": 3,
+    "breed_or_morph": "Chinchilla",
+    "color": "ebony",
+    "popularity_tier": 2,
     "motion_profile": "small-rodent-scurry",
-    "source_status": "prototype_only",
-    "source": "docs/art-source/chinchilla/chinchilla-standard-gray-source-truth-transparent.png",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/chinchilla-ebony/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/chinchilla_ebony-source.png",
+    "motion_source": "docs/art-source/chinchilla-ebony/motion-source/sheets/chinchilla-ebony-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
     "sprite_base": "chinchilla_ebony",
-    "tint_hex": "3e3d39",
-    "source_width": 1536,
-    "source_height": 1024,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 134,
-      "y": 119,
-      "w": 1254,
-      "h": 732
+      "x": 9,
+      "y": 6,
+      "w": 78,
+      "h": 52
     },
     "outputs": [
       "assets/sprites/chinchilla_ebony_set00.png",
@@ -101,6 +108,9 @@
       "assets/sprites/chinchilla_ebony_set07.png",
       "assets/sprites/chinchilla_ebony_set08.png",
       "assets/sprites/chinchilla_ebony_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {

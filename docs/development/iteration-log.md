@@ -1089,8 +1089,9 @@
 
 - Prepared the v0.2.9 release lane by promoting the 12 remaining Pages
   candidates into selectable runtime animals, bringing the public catalog to 54
-  animals on Windows and macOS. The true albino chipmunk remains excluded until
-  a new ImageGen repair lane passes white-background readability review.
+  animals on Windows and macOS. The first pass still excluded the true albino
+  chipmunk pending white-background readability review; the public slot was
+  replaced later in this same iteration.
 - Release validation covered runtime imports, accepted-motion validation,
   Pages asset rebuild and verifier, full Go tests/vet, macOS arm64/amd64 ZIP
   builds, local JP/EN Pages Playwright checks, public Pages checks, and
@@ -1103,3 +1104,12 @@
   adjusted from three rows to four rows for the 54-animal roster so the animals
   have more horizontal breathing room while keeping the page image dimensions
   stable.
+- Replaced the runtime and GitHub Pages black-eyed white chipmunk slot with
+  `true_albino_chipmunk`, leaving the legacy black-eyed source only as cataloged
+  source evidence. Rebuilt Pages icons and preview assets, and verified the
+  runtime list still contains 54 animals with `albino_chipmunk` absent.
+- Ran the first real-color correction pilot for `fancy_rat_blue_hooded` after
+  checking rat color/marking references: 62 accepted frames had only the cool
+  hood/spine pixels shifted toward slate gray-blue, preserving the clean white
+  hooded body. QA artifacts are stored under
+  `docs/art-source/fancy-rat-blue-hooded/motion-source/qa/slate-gray-correction-20260702/`.

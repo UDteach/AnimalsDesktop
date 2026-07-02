@@ -16,7 +16,7 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
-EXPECTED_RELEASE = "v0.2.9"
+EXPECTED_RELEASE = "v0.2.10"
 EXPECTED_UPCOMING: list[str] = []
 
 
@@ -140,6 +140,9 @@ def main() -> None:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
 
     for required in (
+        'data-i18n="versions.v0210.title"',
+        "v0.2.10 / 2026-07-02",
+        "v0.2.10 / July 2, 2026",
         'data-i18n="versions.v029.title"',
         "v0.2.9 / 2026-07-02",
         "v0.2.9 / July 2, 2026",

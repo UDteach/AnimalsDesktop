@@ -74,6 +74,8 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 	runtime := RuntimeVariants()
 	wantIDs := []string{
 		"chinchilla_standard_gray",
+		"chinchilla_beige",
+		"chinchilla_ebony",
 		"hamster_golden_syrian",
 		"djungarian_hamster",
 		"campbell_hamster",
@@ -86,7 +88,7 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 		"gecko_gray_brown",
 		"guinea_pig_tricolor",
 		"fancy_rat_hooded",
-		"albino_chipmunk",
+		"true_albino_chipmunk",
 		"richardsons_ground_squirrel",
 		"yorkshire_terrier_longcoat",
 		"chipmunk_striped",
@@ -242,6 +244,8 @@ func TestWheelCapabilityIsLimitedToChinchillaAndHamster(t *testing.T) {
 	}
 	wantByVariant := map[string]bool{
 		"chinchilla_standard_gray": true,
+		"chinchilla_beige":         true,
+		"chinchilla_ebony":         true,
 		"hamster_golden_syrian":    true,
 		"macaroni_mouse_tan":       false,
 		"sugar_glider_gray":        false,
