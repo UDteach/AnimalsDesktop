@@ -222,6 +222,27 @@ jobs:
               echo "See the release assets and SHA256SUMS.txt for downloadable packages and verification hashes."
             } > dist/RELEASE_NOTES.md
           fi
+      - name: Prepare release checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          checksum_source="$(find release-assets -type f -name SHA256SUMS.txt -print -quit || true)"
+          : > dist/SHA256SUMS.txt
+          while IFS= read -r zip_path; do
+            hash="$(sha256sum "$zip_path" | awk '{print toupper($1)}')"
+            printf '%s  %s\n' "$hash" "$(basename "$zip_path")" >> dist/SHA256SUMS.txt
+          done < <(find release-assets -type f -name '*.zip' | sort)
+          if [ -n "$checksum_source" ]; then
+            grep '/AnimalsDesktop.exe$' "$checksum_source" >> dist/SHA256SUMS.txt || true
+          fi
+          for expected in \
+            AnimalsDesktop-macos-amd64.zip \
+            AnimalsDesktop-macos-arm64.zip \
+            AnimalsDesktop-windows-386.zip \
+            AnimalsDesktop-windows-amd64.zip
+          do
+            grep -q "  ${expected}$" dist/SHA256SUMS.txt
+          done
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
@@ -230,4 +251,4 @@ jobs:
           overwrite_files: true
           files: |
             release-assets/**/*.zip
-            release-assets/**/SHA256SUMS.txt
+            dist/SHA256SUMS.txt

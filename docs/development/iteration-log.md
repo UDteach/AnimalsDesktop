@@ -1084,3 +1084,18 @@
   12 remaining upcoming silhouettes, v0.2.8 download links, and v0.2.8 version
   copy. `lionhead_rabbit_brown_white` and `shoebill_stork` moved from Upcoming
   to current animals.
+
+## 2026-07-02
+
+- Prepared the v0.2.9 release lane by promoting the 12 remaining Pages
+  candidates into selectable runtime animals, bringing the public catalog to 54
+  animals on Windows and macOS. The true albino chipmunk remains excluded until
+  a new ImageGen repair lane passes white-background readability review.
+- Release validation covered runtime imports, accepted-motion validation,
+  Pages asset rebuild and verifier, full Go tests/vet, macOS arm64/amd64 ZIP
+  builds, local JP/EN Pages Playwright checks, public Pages checks, and
+  GitHub Actions Release/Site Artifact/GitHub Pages success.
+- During release verification, `SHA256SUMS.txt` was found to include only
+  Windows package hashes. The v0.2.9 release asset was regenerated from the
+  published ZIPs, and the release workflow now rebuilds checksums in the
+  publish job so macOS and Windows ZIPs are covered together.
