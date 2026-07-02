@@ -75,7 +75,7 @@ const (
 	renameDialogClientH   int32 = 158
 	settingsDirName             = "AnimalsDesktop"
 	settingsFileName            = "settings.json"
-	settingsVersion             = 2
+	settingsVersion             = 3
 	updaterApplyArg             = "--animalsdesktop-apply-update"
 	updaterCleanupArg           = "--animalsdesktop-cleanup"
 	updateTempPrefix            = "animals-desktop-update-"
@@ -391,28 +391,30 @@ type petApp struct {
 }
 
 type appSettings struct {
-	Version        int      `json:"version"`
-	Variant        int      `json:"variant"`
-	CoatMode       int      `json:"coatMode"`
-	SelectedCoats  []int    `json:"selectedCoats"`
-	PetSizes       []int    `json:"petSizes,omitempty"`
-	Speed          int      `json:"speed"`
-	Mode           int      `json:"mode"`
-	PetCount       int      `json:"petCount"`
-	WheelEnabled   bool     `json:"wheelEnabled"`
-	Bidirectional  bool     `json:"bidirectional"`
-	PositionMode   *int     `json:"positionMode,omitempty"`
-	VerticalOffset *int     `json:"verticalOffset,omitempty"`
-	DisplayIndex   *int     `json:"displayIndex,omitempty"`
-	DisplayScope   *int     `json:"displayScope,omitempty"`
-	DisplaySpanEnd *int     `json:"displaySpanEnd,omitempty"`
-	WalkRangeStart *int     `json:"walkRangeStart,omitempty"`
-	WalkRangeEnd   *int     `json:"walkRangeEnd,omitempty"`
-	Language       int      `json:"language"`
-	SettingsX      int32    `json:"settingsX"`
-	SettingsY      int32    `json:"settingsY"`
-	NameLabels     bool     `json:"nameLabels"`
-	PetNames       []string `json:"petNames,omitempty"`
+	Version         int      `json:"version"`
+	Variant         int      `json:"variant"`
+	VariantID       string   `json:"variantID,omitempty"`
+	CoatMode        int      `json:"coatMode"`
+	SelectedCoats   []int    `json:"selectedCoats"`
+	SelectedCoatIDs []string `json:"selectedCoatIDs,omitempty"`
+	PetSizes        []int    `json:"petSizes,omitempty"`
+	Speed           int      `json:"speed"`
+	Mode            int      `json:"mode"`
+	PetCount        int      `json:"petCount"`
+	WheelEnabled    bool     `json:"wheelEnabled"`
+	Bidirectional   bool     `json:"bidirectional"`
+	PositionMode    *int     `json:"positionMode,omitempty"`
+	VerticalOffset  *int     `json:"verticalOffset,omitempty"`
+	DisplayIndex    *int     `json:"displayIndex,omitempty"`
+	DisplayScope    *int     `json:"displayScope,omitempty"`
+	DisplaySpanEnd  *int     `json:"displaySpanEnd,omitempty"`
+	WalkRangeStart  *int     `json:"walkRangeStart,omitempty"`
+	WalkRangeEnd    *int     `json:"walkRangeEnd,omitempty"`
+	Language        int      `json:"language"`
+	SettingsX       int32    `json:"settingsX"`
+	SettingsY       int32    `json:"settingsY"`
+	NameLabels      bool     `json:"nameLabels"`
+	PetNames        []string `json:"petNames,omitempty"`
 }
 
 var app *petApp
@@ -656,14 +658,18 @@ func (a *petApp) loadSettings() error {
 	if settings.Version < 1 || settings.Version > settingsVersion {
 		return nil
 	}
-	if settings.Version >= settingsVersion {
-		a.variant = clamp(settings.Variant, 0, len(variants)-1)
+	if settings.Version >= 2 {
+		a.variant = resolveSettingsVariant(settings.Variant, settings.VariantID, settings.Version)
 		a.coatMode = normalizeCoatMode(settings.CoatMode)
 		for i, variant := range settings.SelectedCoats {
 			if i >= len(a.selectedCoats) {
 				break
 			}
-			a.selectedCoats[i] = clamp(variant, 0, len(variants)-1)
+			id := ""
+			if i < len(settings.SelectedCoatIDs) {
+				id = settings.SelectedCoatIDs[i]
+			}
+			a.selectedCoats[i] = resolveSettingsVariant(variant, id, settings.Version)
 		}
 		for i, size := range settings.PetSizes {
 			if i >= len(a.petSizes) {
@@ -733,8 +739,10 @@ func (a *petApp) saveSettings() error {
 	}
 	coats := make([]int, len(a.selectedCoats))
 	copy(coats, a.selectedCoats[:])
+	coatIDs := make([]string, len(coats))
 	for i := range coats {
 		coats[i] = clamp(coats[i], 0, len(variants)-1)
+		coatIDs[i] = variantIDAt(coats[i])
 	}
 	sizes := make([]int, len(a.petSizes))
 	for i := range a.petSizes {
@@ -750,28 +758,30 @@ func (a *petApp) saveSettings() error {
 	displayScopeValue := int(displayScope)
 	walkStart, walkEnd := normalizeWalkRange(a.walkRangeStart, a.walkRangeEnd)
 	settings := appSettings{
-		Version:        settingsVersion,
-		Variant:        clamp(a.variant, 0, len(variants)-1),
-		CoatMode:       int(a.coatMode),
-		SelectedCoats:  coats,
-		PetSizes:       sizes,
-		Speed:          normalizeSpeed(a.speed),
-		Mode:           int(normalizeBehaviorMode(int(a.mode))),
-		PetCount:       clamp(a.petCount, 1, maxPetCount),
-		WheelEnabled:   a.wheelEnabled,
-		Bidirectional:  a.bidirectional,
-		PositionMode:   &positionMode,
-		VerticalOffset: &verticalOffset,
-		DisplayIndex:   &displayIndex,
-		DisplayScope:   &displayScopeValue,
-		DisplaySpanEnd: &displaySpanEnd,
-		WalkRangeStart: &walkStart,
-		WalkRangeEnd:   &walkEnd,
-		Language:       int(normalizeLanguage(int(a.lang))),
-		SettingsX:      a.settingsX,
-		SettingsY:      a.settingsY,
-		NameLabels:     a.nameLabels,
-		PetNames:       names,
+		Version:         settingsVersion,
+		Variant:         clamp(a.variant, 0, len(variants)-1),
+		VariantID:       variantIDAt(a.variant),
+		CoatMode:        int(a.coatMode),
+		SelectedCoats:   coats,
+		SelectedCoatIDs: coatIDs,
+		PetSizes:        sizes,
+		Speed:           normalizeSpeed(a.speed),
+		Mode:            int(normalizeBehaviorMode(int(a.mode))),
+		PetCount:        clamp(a.petCount, 1, maxPetCount),
+		WheelEnabled:    a.wheelEnabled,
+		Bidirectional:   a.bidirectional,
+		PositionMode:    &positionMode,
+		VerticalOffset:  &verticalOffset,
+		DisplayIndex:    &displayIndex,
+		DisplayScope:    &displayScopeValue,
+		DisplaySpanEnd:  &displaySpanEnd,
+		WalkRangeStart:  &walkStart,
+		WalkRangeEnd:    &walkEnd,
+		Language:        int(normalizeLanguage(int(a.lang))),
+		SettingsX:       a.settingsX,
+		SettingsY:       a.settingsY,
+		NameLabels:      a.nameLabels,
+		PetNames:        names,
 	}
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
@@ -804,6 +814,48 @@ func writeFileAtomically(path string, data []byte) error {
 
 func (a *petApp) persistSettings() {
 	a.settingsSaveFailed = a.saveSettings() != nil
+}
+
+func resolveSettingsVariant(index int, id string, version int) int {
+	if resolved, ok := variantIndexByID(id); ok {
+		return resolved
+	}
+	if version == 2 {
+		if resolved, ok := legacyVersionTwoVariantIndex(index); ok {
+			return resolved
+		}
+	}
+	return clamp(index, 0, len(variants)-1)
+}
+
+func legacyVersionTwoVariantIndex(index int) (int, bool) {
+	// v0.2.9 stored shoebill as index 41; v0.2.12 moved that slot to a cat.
+	// Without an ID in the old settings file this known user-facing drift needs
+	// an explicit repair, while future saves use stable variant IDs.
+	if index != 41 {
+		return 0, false
+	}
+	return variantIndexByID("shoebill_stork")
+}
+
+func variantIndexByID(id string) (int, bool) {
+	id = strings.TrimSpace(id)
+	if id == "" {
+		return 0, false
+	}
+	for i, variant := range variants {
+		if variant.ID == id {
+			return i, true
+		}
+	}
+	return 0, false
+}
+
+func variantIDAt(index int) string {
+	if index < 0 || index >= len(variants) {
+		return ""
+	}
+	return variants[index].ID
 }
 
 func normalizeCoatMode(mode int) coatMode {
@@ -3853,13 +3905,7 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 
 func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 	menu := win.CreatePopupMenu()
-	for i := range variants {
-		flags := uint32(win.MF_STRING)
-		if i == selected {
-			flags |= win.MF_CHECKED
-		}
-		appendMenu(menu, flags, uintptr(i+1), syscall.StringToUTF16Ptr(a.variantLabel(i)))
-	}
+	a.appendGroupedVariantMenu(menu, selected, 1)
 	cmd := a.trackControlMenu(id, menu)
 	win.DestroyMenu(menu)
 	if cmd == 0 {
@@ -3870,6 +3916,42 @@ func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 		return 0, false
 	}
 	return choice, true
+}
+
+type variantMenuGroup struct {
+	speciesID string
+	indices   []int
+}
+
+func runtimeVariantMenuGroups() []variantMenuGroup {
+	groups := make([]variantMenuGroup, 0)
+	groupBySpecies := make(map[string]int)
+	for i, variant := range variants {
+		if groupIndex, ok := groupBySpecies[variant.SpeciesID]; ok {
+			groups[groupIndex].indices = append(groups[groupIndex].indices, i)
+			continue
+		}
+		groupBySpecies[variant.SpeciesID] = len(groups)
+		groups = append(groups, variantMenuGroup{
+			speciesID: variant.SpeciesID,
+			indices:   []int{i},
+		})
+	}
+	return groups
+}
+
+func (a *petApp) appendGroupedVariantMenu(menu win.HMENU, selected int, commandBase uintptr) {
+	for _, group := range runtimeVariantMenuGroups() {
+		submenu := win.CreatePopupMenu()
+		for _, i := range group.indices {
+			flags := uint32(win.MF_STRING)
+			if i == selected {
+				flags |= win.MF_CHECKED
+			}
+			appendMenu(submenu, flags, commandBase+uintptr(i), syscall.StringToUTF16Ptr(a.variantLabel(i)))
+		}
+		appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(submenu), syscall.StringToUTF16Ptr(a.variantGroupLabel(group.speciesID)))
+	}
 }
 
 func (a *petApp) pickPetSizeFromMenu(id int32, selected int) (int, bool) {
@@ -4273,6 +4355,75 @@ func (a *petApp) variantLabel(i int) string {
 		return variants[i].LabelEN
 	}
 	return variants[i].LabelJA
+}
+
+func (a *petApp) variantGroupLabel(speciesID string) string {
+	if a.lang != langEnglish {
+		if label, ok := speciesLabelJA(speciesID); ok {
+			return label
+		}
+	}
+	for _, species := range catalog.SpeciesList {
+		if species.ID == speciesID && species.Label != "" {
+			return species.Label
+		}
+	}
+	return speciesID
+}
+
+func speciesLabelJA(speciesID string) (string, bool) {
+	switch speciesID {
+	case "chinchilla":
+		return "チンチラ", true
+	case "hamster":
+		return "ハムスター", true
+	case "macaroni_mouse":
+		return "マカロニマウス", true
+	case "sugar_glider":
+		return "モモンガ", true
+	case "rabbit":
+		return "うさぎ", true
+	case "gecko":
+		return "ヤモリ", true
+	case "guinea_pig":
+		return "モルモット", true
+	case "rat":
+		return "ラット", true
+	case "ground_squirrel":
+		return "ジリス", true
+	case "dog":
+		return "犬", true
+	case "chipmunk":
+		return "シマリス", true
+	case "whites_tree_frog":
+		return "アマガエル", true
+	case "budgerigar":
+		return "セキセイインコ", true
+	case "cockatiel":
+		return "オカメインコ", true
+	case "java_sparrow":
+		return "文鳥", true
+	case "parrotlet":
+		return "マメルリハ", true
+	case "lovebird":
+		return "コザクラインコ", true
+	case "cat":
+		return "猫", true
+	case "quokka":
+		return "クオッカ", true
+	case "salamander":
+		return "サンショウウオ", true
+	case "wagtail":
+		return "セキレイ", true
+	case "shoebill":
+		return "ハシビロコウ", true
+	case "dormouse":
+		return "ヤマネ", true
+	case "flying_squirrel":
+		return "モモンガ", true
+	default:
+		return "", false
+	}
 }
 
 func (a *petApp) drawForageProp(dst *image.RGBA, x, y, kind int) {
@@ -4818,13 +4969,7 @@ func (a *petApp) installTray() {
 func (a *petApp) showTrayMenu() {
 	menu := win.CreatePopupMenu()
 	coatMenu := win.CreatePopupMenu()
-	for i := range variants {
-		flags := uint32(win.MF_STRING)
-		if i == a.variant {
-			flags |= win.MF_CHECKED
-		}
-		appendMenu(coatMenu, flags, uintptr(menuVariantBase+uint16(i)), syscall.StringToUTF16Ptr(a.variantLabel(i)))
-	}
+	a.appendGroupedVariantMenu(coatMenu, a.variant, uintptr(menuVariantBase))
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(coatMenu), syscall.StringToUTF16Ptr(a.txt("coatColor")))
 	coatModeMenu := win.CreatePopupMenu()
 	appendChecked(coatModeMenu, menuCoatFixed, a.txt("coatFixed"), a.coatMode == coatFixed)
