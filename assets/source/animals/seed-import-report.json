@@ -1199,6 +1199,46 @@
     ]
   },
   {
+    "variant": "longhair_hamster_black_white_masked",
+    "species": "hamster",
+    "breed_or_morph": "Longhair hamster",
+    "color": "black white masked",
+    "popularity_tier": 2,
+    "motion_profile": "small-rodent-scurry",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/longhair-hamster-black-white-masked/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/longhair_hamster_black_white_masked-source.png",
+    "motion_source": "docs/art-source/longhair-hamster-black-white-masked/motion-source/sheets/longhair-hamster-black-white-masked-source-set00.png",
+    "motion_frames": 62,
+    "motion_sets": 1,
+    "sprite_base": "longhair_hamster_black_white_masked",
+    "tint_hex": "f1ede6",
+    "accent_hex": "252423",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 5,
+      "y": 6,
+      "w": 86,
+      "h": 52
+    },
+    "outputs": [
+      "assets/sprites/longhair_hamster_black_white_masked_set00.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set01.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set02.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set03.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set04.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set05.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set06.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set07.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set08.png",
+      "assets/sprites/longhair_hamster_black_white_masked_set09.png"
+    ],
+    "warnings": [
+      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
+    ]
+  },
+  {
     "variant": "djungarian_hamster_yellow",
     "species": "hamster",
     "breed_or_morph": "Djungarian hamster",
@@ -4067,10 +4107,10 @@
     "source_width": 96,
     "source_height": 64,
     "content": {
-      "x": 6,
-      "y": 21,
-      "w": 84,
-      "h": 37
+      "x": 5,
+      "y": 25,
+      "w": 85,
+      "h": 34
     },
     "outputs": [
       "assets/sprites/true_albino_chipmunk_set00.png",

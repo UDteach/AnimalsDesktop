@@ -9,7 +9,7 @@
   "valid": 62,
   "missing": 0,
   "invalid": 0,
-  "warnings": 52,
+  "warnings": 28,
   "sets": [
     {
       "set": "set00",
@@ -17,20 +17,24 @@
       "valid": 62,
       "missing": 0,
       "invalid": 0,
-      "warnings": 52,
+      "warnings": 28,
       "frames": [
         {
           "frame": 0,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-00.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 21,
-            "w": 84,
-            "h": 37
+            "x": 5,
+            "y": 25,
+            "w": 85,
+            "h": 34
+          },
+          "body": {
+            "alpha_pixels": 1566,
+            "fill_per_mille": 541
           },
           "warnings": [
-            "transparent pinholes: holes=2 area=4 largest=2"
+            "transparent pinholes: holes=2 area=3 largest=2"
           ]
         },
         {
@@ -38,10 +42,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-01.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 10,
-            "w": 84,
-            "h": 48
+            "x": 5,
+            "y": 16,
+            "w": 86,
+            "h": 43
+          },
+          "body": {
+            "alpha_pixels": 1901,
+            "fill_per_mille": 514
           },
           "warnings": [
             "transparent pinholes: holes=1 area=3 largest=3"
@@ -52,13 +60,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-02.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
+            "x": 5,
+            "y": 24,
+            "w": 83,
+            "h": 35
+          },
+          "body": {
+            "alpha_pixels": 1512,
+            "fill_per_mille": 520
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -66,13 +78,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-03.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 16,
-            "w": 84,
-            "h": 42
+            "x": 5,
+            "y": 22,
+            "w": 83,
+            "h": 37
+          },
+          "body": {
+            "alpha_pixels": 1572,
+            "fill_per_mille": 511
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "transparent pinholes: holes=1 area=3 largest=3"
           ]
         },
         {
@@ -80,10 +96,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-04.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 26,
+            "x": 5,
+            "y": 24,
             "w": 84,
-            "h": 32
+            "h": 35
+          },
+          "body": {
+            "alpha_pixels": 1657,
+            "fill_per_mille": 563
           }
         },
         {
@@ -91,13 +111,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-05.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 31,
-            "w": 84,
-            "h": 27
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
+          },
+          "body": {
+            "alpha_pixels": 1758,
+            "fill_per_mille": 554
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 73 at y=49 with 40px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 59 at y=49 with 48px row drop below"
           ]
         },
         {
@@ -105,25 +129,29 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-06.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 26,
-            "w": 84,
-            "h": 32
+            "x": 4,
+            "y": 23,
+            "w": 88,
+            "h": 35
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 67 at y=49 with 33px row drop below",
-            "transparent pinholes: holes=1 area=3 largest=3"
-          ]
+          "body": {
+            "alpha_pixels": 1727,
+            "fill_per_mille": 560
+          }
         },
         {
           "frame": 7,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-07.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 30,
-            "w": 84,
-            "h": 28
+            "x": 4,
+            "y": 24,
+            "w": 88,
+            "h": 34
+          },
+          "body": {
+            "alpha_pixels": 1658,
+            "fill_per_mille": 554
           }
         },
         {
@@ -131,10 +159,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-08.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 29,
-            "w": 84,
-            "h": 29
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
+          },
+          "body": {
+            "alpha_pixels": 1589,
+            "fill_per_mille": 547
           }
         },
         {
@@ -142,10 +174,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-09.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 28,
-            "w": 84,
-            "h": 30
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
+          },
+          "body": {
+            "alpha_pixels": 1682,
+            "fill_per_mille": 530
           }
         },
         {
@@ -153,10 +189,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-10.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 27,
-            "w": 85,
-            "h": 31
+            "x": 4,
+            "y": 23,
+            "w": 88,
+            "h": 35
+          },
+          "body": {
+            "alpha_pixels": 1639,
+            "fill_per_mille": 532
           }
         },
         {
@@ -164,50 +204,62 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-11.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 25,
-            "w": 84,
-            "h": 33
+            "x": 4,
+            "y": 23,
+            "w": 88,
+            "h": 35
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 66 at y=50 with 31px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1741,
+            "fill_per_mille": 565
+          }
         },
         {
           "frame": 12,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-12.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 33,
-            "w": 84,
-            "h": 25
-          }
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
+          },
+          "body": {
+            "alpha_pixels": 1553,
+            "fill_per_mille": 569
+          },
+          "warnings": [
+            "transparent pinholes: holes=1 area=1 largest=1"
+          ]
         },
         {
           "frame": 13,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-13.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 34,
-            "w": 84,
-            "h": 24
+            "x": 4,
+            "y": 29,
+            "w": 88,
+            "h": 29
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 58 at y=50 with 36px row drop below",
-            "transparent pinholes: holes=1 area=2 largest=2"
-          ]
+          "body": {
+            "alpha_pixels": 1503,
+            "fill_per_mille": 588
+          }
         },
         {
           "frame": 14,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-14.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 32,
-            "w": 84,
-            "h": 26
+            "x": 4,
+            "y": 26,
+            "w": 88,
+            "h": 32
+          },
+          "body": {
+            "alpha_pixels": 1490,
+            "fill_per_mille": 529
           }
         },
         {
@@ -215,25 +267,29 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-15.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 34,
-            "w": 84,
-            "h": 24
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 59 at y=51 with 33px row drop below",
-            "transparent pinholes: holes=1 area=3 largest=3"
-          ]
+          "body": {
+            "alpha_pixels": 1557,
+            "fill_per_mille": 570
+          }
         },
         {
           "frame": 16,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-16.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 30,
-            "w": 84,
-            "h": 28
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
+          },
+          "body": {
+            "alpha_pixels": 1551,
+            "fill_per_mille": 568
           }
         },
         {
@@ -241,13 +297,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-17.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 35,
-            "w": 84,
-            "h": 23
+            "x": 4,
+            "y": 30,
+            "w": 88,
+            "h": 28
+          },
+          "body": {
+            "alpha_pixels": 1437,
+            "fill_per_mille": 583
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content"
+            "transparent pinholes: holes=1 area=1 largest=1"
           ]
         },
         {
@@ -255,10 +315,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-18.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 31,
-            "w": 84,
-            "h": 27
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
+          },
+          "body": {
+            "alpha_pixels": 1513,
+            "fill_per_mille": 554
           },
           "warnings": [
             "transparent pinholes: holes=1 area=1 largest=1"
@@ -269,13 +333,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-19.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 33,
-            "w": 84,
-            "h": 25
+            "x": 4,
+            "y": 28,
+            "w": 88,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 1593,
+            "fill_per_mille": 603
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 82 at y=49 with 36px row drop below"
+            "transparent pinholes: holes=1 area=3 largest=3"
           ]
         },
         {
@@ -283,13 +351,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-20.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 30,
-            "w": 84,
-            "h": 28
+            "x": 4,
+            "y": 24,
+            "w": 88,
+            "h": 34
+          },
+          "body": {
+            "alpha_pixels": 1757,
+            "fill_per_mille": 587
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=49 with 52px row drop below"
           ]
         },
         {
@@ -297,10 +369,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-21.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 28,
-            "w": 84,
-            "h": 30
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
+          },
+          "body": {
+            "alpha_pixels": 1714,
+            "fill_per_mille": 590
           }
         },
         {
@@ -308,52 +384,59 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-22.png",
           "status": "valid",
           "content": {
-            "x": 6,
+            "x": 4,
             "y": 21,
-            "w": 84,
+            "w": 88,
             "h": 37
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 2099,
+            "fill_per_mille": 644
+          }
         },
         {
           "frame": 23,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-23.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 24,
-            "w": 84,
-            "h": 34
+            "x": 4,
+            "y": 18,
+            "w": 88,
+            "h": 40
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
-          ]
+          "body": {
+            "alpha_pixels": 2093,
+            "fill_per_mille": 594
+          }
         },
         {
           "frame": 24,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-24.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 15,
-            "w": 84,
-            "h": 43
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 57 at y=53 with 38px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1870,
+            "fill_per_mille": 643
+          }
         },
         {
           "frame": 25,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-25.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 29,
-            "w": 84,
-            "h": 29
+            "x": 4,
+            "y": 28,
+            "w": 88,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 1618,
+            "fill_per_mille": 612
           }
         },
         {
@@ -361,10 +444,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-26.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 19,
-            "w": 84,
-            "h": 39
+            "x": 4,
+            "y": 28,
+            "w": 88,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 1618,
+            "fill_per_mille": 612
           }
         },
         {
@@ -372,13 +459,18 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-27.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 11,
-            "w": 84,
-            "h": 47
+            "x": 4,
+            "y": 15,
+            "w": 88,
+            "h": 43
+          },
+          "body": {
+            "alpha_pixels": 1813,
+            "fill_per_mille": 479
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 58 at y=53 with 48px row drop below"
+            "motion consistency: bbox height jumps from previous frame 26 to 27 (30 -\u003e 43)",
+            "motion consistency: isolated bbox height outlier at frame 27 (43 vs neighbor avg 33)"
           ]
         },
         {
@@ -386,54 +478,59 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-28.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 13,
-            "w": 84,
-            "h": 45
+            "x": 4,
+            "y": 23,
+            "w": 88,
+            "h": 35
           },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 57 at y=52 with 29px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1651,
+            "fill_per_mille": 536
+          }
         },
         {
           "frame": 29,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-29.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 6,
-            "w": 84,
-            "h": 52
+            "x": 4,
+            "y": 26,
+            "w": 88,
+            "h": 32
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 66 at y=52 with 49px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1690,
+            "fill_per_mille": 600
+          }
         },
         {
           "frame": 30,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-30.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 19,
-            "w": 84,
-            "h": 39
+            "x": 4,
+            "y": 26,
+            "w": 88,
+            "h": 32
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 56 at y=52 with 35px row drop below",
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1612,
+            "fill_per_mille": 572
+          }
         },
         {
           "frame": 31,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-31.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 23,
-            "w": 84,
-            "h": 35
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
+          },
+          "body": {
+            "alpha_pixels": 1693,
+            "fill_per_mille": 582
           }
         },
         {
@@ -441,29 +538,32 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-32.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 16,
-            "w": 84,
-            "h": 42
+            "x": 4,
+            "y": 14,
+            "w": 88,
+            "h": 44
           },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=6 largest=6"
-          ]
+          "body": {
+            "alpha_pixels": 2189,
+            "fill_per_mille": 565
+          }
         },
         {
           "frame": 33,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-33.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 13,
-            "w": 84,
-            "h": 45
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
+          },
+          "body": {
+            "alpha_pixels": 1880,
+            "fill_per_mille": 577
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 32 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 75 at y=52 with 43px row drop below"
           ]
         },
         {
@@ -471,52 +571,59 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-34.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 22,
-            "w": 84,
-            "h": 36
+            "x": 4,
+            "y": 13,
+            "w": 88,
+            "h": 45
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 71 at y=51 with 29px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 2151,
+            "fill_per_mille": 543
+          }
         },
         {
           "frame": 35,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-35.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 28,
-            "w": 85,
-            "h": 30
+            "x": 4,
+            "y": 18,
+            "w": 88,
+            "h": 40
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 75 at y=51 with 35px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1928,
+            "fill_per_mille": 547
+          }
         },
         {
           "frame": 36,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-36.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 29,
-            "w": 85,
-            "h": 29
+            "x": 4,
+            "y": 20,
+            "w": 88,
+            "h": 38
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 69 at y=52 with 48px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1806,
+            "fill_per_mille": 540
+          }
         },
         {
           "frame": 37,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-37.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
+          },
+          "body": {
+            "alpha_pixels": 1698,
+            "fill_per_mille": 535
           }
         },
         {
@@ -524,121 +631,172 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-38.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 28,
-            "w": 85,
-            "h": 30
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 67 at y=51 with 29px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1720,
+            "fill_per_mille": 528
+          }
         },
         {
           "frame": 39,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-39.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 27,
-            "w": 84,
-            "h": 31
+            "x": 4,
+            "y": 26,
+            "w": 88,
+            "h": 32
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 67 at y=51 with 28px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1643,
+            "fill_per_mille": 583
+          }
         },
         {
           "frame": 40,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-40.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
-          }
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
+          },
+          "body": {
+            "alpha_pixels": 1794,
+            "fill_per_mille": 566
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content"
+          ]
         },
         {
           "frame": 41,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-41.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 23,
-            "w": 84,
-            "h": 35
-          }
+            "x": 4,
+            "y": 24,
+            "w": 88,
+            "h": 34
+          },
+          "body": {
+            "alpha_pixels": 1737,
+            "fill_per_mille": 580
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=52 with 38px row drop below"
+          ]
         },
         {
           "frame": 42,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-42.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 15,
-            "w": 84,
-            "h": 43
-          }
+            "x": 4,
+            "y": 24,
+            "w": 88,
+            "h": 34
+          },
+          "body": {
+            "alpha_pixels": 1700,
+            "fill_per_mille": 568
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=52 with 30px row drop below"
+          ]
         },
         {
           "frame": 43,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-43.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 21,
-            "w": 84,
-            "h": 37
-          }
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
+          },
+          "body": {
+            "alpha_pixels": 1668,
+            "fill_per_mille": 574
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 30 at y=55 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=52 with 30px row drop below"
+          ]
         },
         {
           "frame": 44,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-44.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 25,
-            "w": 84,
-            "h": 33
-          }
+            "x": 4,
+            "y": 28,
+            "w": 88,
+            "h": 30
+          },
+          "body": {
+            "alpha_pixels": 1689,
+            "fill_per_mille": 639
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content"
+          ]
         },
         {
           "frame": 45,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-45.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 22,
-            "w": 84,
-            "h": 36
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
-          ]
+          "body": {
+            "alpha_pixels": 1700,
+            "fill_per_mille": 623
+          }
         },
         {
           "frame": 46,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-46.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 23,
-            "w": 84,
-            "h": 35
-          }
+            "x": 4,
+            "y": 25,
+            "w": 88,
+            "h": 33
+          },
+          "body": {
+            "alpha_pixels": 1698,
+            "fill_per_mille": 584
+          },
+          "warnings": [
+            "possible lower ledge/shelf artifact: alpha run length 87 at y=50 with 30px row drop below"
+          ]
         },
         {
           "frame": 47,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-47.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 24,
-            "w": 84,
-            "h": 34
+            "x": 4,
+            "y": 27,
+            "w": 88,
+            "h": 31
+          },
+          "body": {
+            "alpha_pixels": 1678,
+            "fill_per_mille": 615
           },
           "warnings": [
-            "transparent pinholes: holes=1 area=2 largest=2"
+            "possible lower ledge/shelf artifact: alpha run length 87 at y=51 with 35px row drop below"
           ]
         },
         {
@@ -646,97 +804,112 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-48.png",
           "status": "valid",
           "content": {
-            "x": 6,
+            "x": 4,
             "y": 21,
-            "w": 85,
+            "w": 88,
             "h": 37
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 65 at y=52 with 33px row drop below",
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1715,
+            "fill_per_mille": 526
+          }
         },
         {
           "frame": 49,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-49.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 18,
-            "w": 84,
-            "h": 40
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=3 largest=3"
-          ]
+          "body": {
+            "alpha_pixels": 1714,
+            "fill_per_mille": 526
+          }
         },
         {
           "frame": 50,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-50.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 15,
-            "w": 84,
-            "h": 43
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1717,
+            "fill_per_mille": 541
+          }
         },
         {
           "frame": 51,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-51.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 22,
-            "w": 84,
-            "h": 36
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
           },
-          "warnings": [
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1734,
+            "fill_per_mille": 532
+          }
         },
         {
           "frame": 52,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-52.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
-          }
+            "x": 4,
+            "y": 14,
+            "w": 88,
+            "h": 44
+          },
+          "body": {
+            "alpha_pixels": 1911,
+            "fill_per_mille": 493
+          },
+          "warnings": [
+            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=53 with 54px row drop below"
+          ]
         },
         {
           "frame": 53,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-53.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 17,
-            "w": 84,
-            "h": 41
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
           },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 57 at y=53 with 49px row drop below"
-          ]
+          "body": {
+            "alpha_pixels": 1833,
+            "fill_per_mille": 578
+          }
         },
         {
           "frame": 54,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-54.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 19,
-            "w": 84,
-            "h": 39
+            "x": 4,
+            "y": 18,
+            "w": 88,
+            "h": 40
+          },
+          "body": {
+            "alpha_pixels": 1910,
+            "fill_per_mille": 542
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 31 at y=55 near lower content",
-            "possible lower ledge/shelf artifact: alpha run length 57 at y=53 with 36px row drop below"
+            "possible floor/shadow artifact: alpha run length 29 at y=55 near lower content",
+            "possible lower ledge/shelf artifact: alpha run length 58 at y=53 with 51px row drop below"
           ]
         },
         {
@@ -744,13 +917,17 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-55.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
+          },
+          "body": {
+            "alpha_pixels": 1790,
+            "fill_per_mille": 565
           },
           "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content"
+            "possible floor/shadow artifact: alpha run length 30 at y=55 near lower content"
           ]
         },
         {
@@ -758,27 +935,32 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-56.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 20,
-            "w": 84,
-            "h": 38
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
           },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content"
-          ]
+          "body": {
+            "alpha_pixels": 1740,
+            "fill_per_mille": 534
+          }
         },
         {
           "frame": 57,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-57.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 32,
-            "w": 85,
-            "h": 26
+            "x": 4,
+            "y": 30,
+            "w": 88,
+            "h": 28
+          },
+          "body": {
+            "alpha_pixels": 1603,
+            "fill_per_mille": 650
           },
           "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 80 at y=51 with 51px row drop below"
+            "possible lower ledge/shelf artifact: alpha run length 86 at y=52 with 34px row drop below"
           ]
         },
         {
@@ -786,10 +968,14 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-58.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 37,
-            "w": 84,
-            "h": 21
+            "x": 4,
+            "y": 23,
+            "w": 88,
+            "h": 35
+          },
+          "body": {
+            "alpha_pixels": 1690,
+            "fill_per_mille": 548
           }
         },
         {
@@ -797,40 +983,44 @@
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-59.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 30,
-            "w": 85,
-            "h": 28
+            "x": 4,
+            "y": 22,
+            "w": 88,
+            "h": 36
           },
-          "warnings": [
-            "possible lower ledge/shelf artifact: alpha run length 69 at y=52 with 31px row drop below",
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1724,
+            "fill_per_mille": 544
+          }
         },
         {
           "frame": 60,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-60.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 26,
-            "w": 84,
-            "h": 32
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
           },
-          "warnings": [
-            "possible floor/shadow artifact: alpha run length 28 at y=55 near lower content",
-            "transparent pinholes: holes=1 area=1 largest=1"
-          ]
+          "body": {
+            "alpha_pixels": 1721,
+            "fill_per_mille": 528
+          }
         },
         {
           "frame": 61,
           "path": "docs/art-source/true-albino-chipmunk/motion-source/accepted-frames/set00/frame-61.png",
           "status": "valid",
           "content": {
-            "x": 6,
-            "y": 24,
-            "w": 84,
-            "h": 34
+            "x": 4,
+            "y": 21,
+            "w": 88,
+            "h": 37
+          },
+          "body": {
+            "alpha_pixels": 1728,
+            "fill_per_mille": 530
           }
         }
       ],

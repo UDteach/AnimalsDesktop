@@ -1,21 +1,22 @@
 # AnimalsDesktop
 
 AnimalsDesktop is a small desktop pet app for Windows and macOS. The current
-preview exposes 55 selectable animal sprites that walk near the Windows taskbar
+preview exposes 57 selectable animal sprites that walk near the Windows taskbar
 or along the bottom edge above the Mac Dock.
 
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
-Current app version: `v0.2.11`
+Current app version: `v0.2.12`
 
 ## Current Status
 
-`v0.2.11` is an early public test release for 55 accepted 62-frame ImageGen
+`v0.2.12` is an early public test release for 57 accepted 62-frame ImageGen
 motion animals. It keeps the remaining GitHub Pages candidate wave from v0.2.9,
 the two color-tone chinchilla variants, and the refreshed blue hooded fancy rat
-tone. It removes the public true albino chipmunk slot until a new ImageGen-only
-source passes review. The release keeps the original sixteen preview animals and
-the latest accepted asset lanes:
+tone. It adds the second black-and-white long-haired hamster and restores true
+albino chipmunk with a fresh ImageGen-only red-eyed, no-marking source. The
+release keeps the original sixteen preview animals and the latest accepted asset
+lanes:
 
 - chinchilla standard gray
 - chinchilla beige
@@ -35,6 +36,7 @@ the latest accepted asset lanes:
 - Richardson's ground squirrel
 - longcoat Yorkshire Terrier
 - striped chipmunk
+- true albino chipmunk
 - leopard gecko
 - blue White's tree frog
 - green-yellow budgerigar
@@ -65,6 +67,7 @@ the latest accepted asset lanes:
 - Himalayan Netherland Dwarf
 - American flying squirrel
 - black-and-white long-haired hamster
+- black-and-white long-haired hamster 2
 - yellow Djungarian hamster
 - pearl white Djungarian hamster
 - blue hooded fancy rat
@@ -79,20 +82,19 @@ before expanding each animal to the full 10-set motion contract.
 
 ## Runtime Scope
 
-The v0.2.11 preview intentionally exposes only the 55 accepted runtime animals
-listed above. The black-eyed white chipmunk and previous true albino chipmunk
-sources remain cataloged as source evidence, but neither albino chipmunk slot is
-public until a new ImageGen-only source passes review. Unverified candidate
-species should not appear in the runtime picker until their source art and
-motion behavior pass the release QA loop. As animals graduate into a release,
-remove them from the future queue and move them into the current-animal page
-section. Coming-soon silhouettes should be page-specific generated art, not
-repurposed runtime/prototype images.
+The v0.2.12 preview intentionally exposes only the 57 accepted runtime animals
+listed above. The black-eyed white chipmunk source remains cataloged as source
+evidence, while `true_albino_chipmunk` is now backed by the new ImageGen-only
+Direction B source. Unverified candidate species should not appear in the
+runtime picker until their source art and motion behavior pass the release QA
+loop. As animals graduate into a release, remove them from the future queue and
+move them into the current-animal page section. Coming-soon silhouettes should
+be page-specific generated art, not repurposed runtime/prototype images.
 
 Future queue candidates use current popular-pet signals, then get verified per
-animal before production starts. After the v0.2.11 hotfix, the visible Pages
-candidate queue is empty; the next repair priority is a fresh ImageGen-only true
-albino chipmunk source.
+animal before production starts. After the v0.2.12 release, the visible Pages
+candidate queue is empty; the next asset priorities should be added explicitly
+before production starts.
 
 Each animal promoted into the current runtime/page list should move the preview
 version forward by a small patch bump, with page text, workflow checks, and
@@ -119,8 +121,8 @@ A full animal-family release is ready only when it has:
 - `go run ./cmd/validatemotion -runtime-only -require-accepted` passing
 
 `v0.1.5` is an explicit test-preview exception for the sixteen initial-motion
-animals plus Mac distribution. `v0.2.11` is an explicit test-preview exception
-for the 55-animal runtime roster before the full 10-set motion gate.
+animals plus Mac distribution. `v0.2.12` is an explicit test-preview exception
+for the 57-animal runtime roster before the full 10-set motion gate.
 Future full-content releases should still satisfy the full gate unless a new
 preview exception is documented.
 
@@ -136,7 +138,7 @@ go run ./cmd/validatemotion -runtime-only -require-accepted
 go test -buildvcs=false ./...
 go vet -buildvcs=false ./...
 go run ./cmd/winresicon -src docs/assets/animalsdesktop-preview.png -out winres/icon.png
-go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.11 --product-version v0.2.11
+go run github.com/tc-hib/go-winres@v0.3.1 make --arch amd64 --out cmd/animalsdesktop/rsrc --file-version v0.2.12 --product-version v0.2.12
 go build -buildvcs=false -ldflags="-H=windowsgui" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 git diff --check
 ```
@@ -148,15 +150,15 @@ same release tag as the Mac ZIPs when they are ready:
 New-Item -ItemType Directory -Force dist | Out-Null
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
-go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.2.11" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
+go build -buildvcs=false -ldflags="-H=windowsgui -s -w -X main.appVersion=v0.2.12" -o dist\AnimalsDesktop.exe ./cmd/animalsdesktop
 Compress-Archive -Path dist\AnimalsDesktop.exe,README.md -DestinationPath dist\AnimalsDesktop-windows-amd64.zip -Force
 ```
 
 macOS release ZIPs are built with:
 
 ```bash
-VERSION=v0.2.11 GOARCH=arm64 scripts/build_macos.sh
-VERSION=v0.2.11 GOARCH=amd64 scripts/build_macos.sh
+VERSION=v0.2.12 GOARCH=arm64 scripts/build_macos.sh
+VERSION=v0.2.12 GOARCH=amd64 scripts/build_macos.sh
 ```
 
 Run `cmd/prepareframe` only on one-pose candidates, outside the standard QA loop.
@@ -200,6 +202,6 @@ If you have a legacy or private `.pfx` signing certificate, the workflow can use
 
 If signing secrets are missing, the workflow still builds and publishes checksums, but the EXE remains unsigned and may continue to receive reputation-based warnings until Microsoft/McAfee reputation or allowlisting catches up.
 
-`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` fixes Windows mixed-DPI multi-monitor overlay size and placement for the 35-animal roster. `v0.2.6` expands it to 41 and adds true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, tabby-white cat, and blue-green parrotlet. `v0.2.7` temporarily removes true albino chipmunk from the public runtime while the no-pattern albino repair lane improves white-background readability, leaving 40 selectable animals. `v0.2.8` adds the brown-white Lionhead rabbit and special low-motion shoebill, bringing the public roster to 42 animals while true albino chipmunk remains held for a new ImageGen repair lane. `v0.2.9` promotes the remaining 12 Pages candidate animals into runtime and Pages, bringing the public roster to 54 animals. `v0.2.10` adds the two chinchilla color variants, restores the true albino chipmunk runtime slot, and refreshes the blue hooded fancy rat tone, bringing the public roster to 56 animals. `v0.2.11` removes the true albino chipmunk public slot until a new ImageGen-only source passes review, bringing the public roster to 55 animals.
+`v0.2.0` is retained as a mistaken Windows prerelease. `v0.2.1` is the main-line Windows trust-hardening release. `v0.2.2` keeps that trust-hardening work and adds Mac parity for animal selection, size controls, language, and display settings. `v0.2.3` is a Windows settings UI hotfix with the same sixteen-animal scope. `v0.2.4` expands the selectable animal roster to 35. `v0.2.5` fixes Windows mixed-DPI multi-monitor overlay size and placement for the 35-animal roster. `v0.2.6` expands it to 41 and adds true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, tabby-white cat, and blue-green parrotlet. `v0.2.7` temporarily removes true albino chipmunk from the public runtime while the no-pattern albino repair lane improves white-background readability, leaving 40 selectable animals. `v0.2.8` adds the brown-white Lionhead rabbit and special low-motion shoebill, bringing the public roster to 42 animals while true albino chipmunk remains held for a new ImageGen repair lane. `v0.2.9` promotes the remaining 12 Pages candidate animals into runtime and Pages, bringing the public roster to 54 animals. `v0.2.10` adds the two chinchilla color variants, restores the true albino chipmunk runtime slot, and refreshes the blue hooded fancy rat tone, bringing the public roster to 56 animals. `v0.2.11` removes the true albino chipmunk public slot until a new ImageGen-only source passes review, bringing the public roster to 55 animals. `v0.2.12` adds a second black-and-white long-haired hamster and restores true albino chipmunk with a fresh ImageGen-only source, bringing the public roster to 57 animals.
 
 Do not create a stable/final release tag until the current animal target is complete.

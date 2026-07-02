@@ -1123,3 +1123,26 @@
   scripts/build_page_assets.py`, `python3 scripts/verify_page_release.py`,
   `go test -buildvcs=false ./...`, `go vet -buildvcs=false ./...`, macOS
   arm64/amd64 ZIP builds, and `git diff --check`.
+
+## 2026-07-03
+
+- Prepared the v0.2.12 release lane by promoting two highest-priority
+  ImageGen-only accepted sources: `longhair_hamster_black_white_masked` as the
+  second black-and-white longhair hamster type, and the rebuilt Direction B
+  `true_albino_chipmunk` as a red-eyed, no-stripe albino chipmunk. The old
+  rejected albino source was replaced in accepted frames and runtime sprites.
+- Runtime and Pages now expose 57 selectable animals. The public copy, current
+  animal grid, preview image, release verifier, release notes, catalog tests,
+  and macOS variant mirror tests were updated to include
+  `true_albino_chipmunk` and `longhair_hamster_black_white_masked`.
+- The ImageGen production rule is now explicit in both the local workflow Skill
+  and repo rules: production motion art is one ImageGen call per one frame;
+  generated grids/sheets are reference-only and must not be split into accepted
+  production frames.
+- Local validation passed: `go run ./cmd/importsheet`, `go run
+  ./cmd/importanimals`, `go run ./cmd/validatemotion -runtime-only
+  -require-accepted`, `python3 scripts/build_page_assets.py`, `python3
+  scripts/verify_page_release.py`, `go test -buildvcs=false ./...`, `go vet
+  -buildvcs=false ./...`, `git diff --check`, macOS arm64/amd64 ZIP builds,
+  extracted ZIP arch/version/signature checks, and an arm64 app launch smoke
+  test using a temporary HOME.

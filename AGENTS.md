@@ -27,6 +27,8 @@ AnimalsDesktop is a Go + Win32 Windows taskbar pet app. Keep the existing lightw
 - Ears, feet, whiskers, and tails must not be cropped.
 - Generated art must not include text, borders, scenery, shadows, costumes, multiple animals, or human-like poses.
 - Generate each species as its own ImageGen source family. Coat variants may be expanded only when the species silhouette and motion set are already stable.
+- For ImageGen animal production, use separate Codex project threads as lanes by animal/variant; do not use SubAgents to generate accepted animal pixels. SubAgents are only for read-only research, QA, or evidence review.
+- Generate production motion art one frame per ImageGen call. Generated multi-cell grids/sheets may be kept as direction references only and must not be split into accepted production frames. Build contact sheets locally after normalization for review.
 
 ## Standard Checks
 
