@@ -68,7 +68,7 @@ const (
 	settingsDirName  = "AnimalsDesktop"
 	settingsFileName = "settings.json"
 
-	darwinSettingsVersion = 3
+	darwinSettingsVersion = 4
 
 	darwinSpeedSlow   = 2
 	darwinSpeedNormal = 3
@@ -106,6 +106,7 @@ var (
 
 type darwinCoatVariant struct {
 	ID           string
+	SpeciesID    string
 	SpriteBase   string
 	LabelJA      string
 	LabelEN      string
@@ -159,19 +160,21 @@ type darwinReaction struct {
 }
 
 type darwinSettings struct {
-	Version       int      `json:"version"`
-	Variant       *int     `json:"variant,omitempty"`
-	CoatMode      *int     `json:"coatMode,omitempty"`
-	SelectedCoats []int    `json:"selectedCoats,omitempty"`
-	Speed         int      `json:"speed"`
-	Language      int      `json:"language,omitempty"`
-	DisplayID     int64    `json:"displayID,omitempty"`
-	Mode          *int     `json:"mode,omitempty"`
-	PetSizes      []int    `json:"petSizes,omitempty"`
-	PetCount      int      `json:"petCount"`
-	WheelEnabled  *bool    `json:"wheelEnabled,omitempty"`
-	NameLabels    bool     `json:"nameLabels"`
-	PetNames      []string `json:"petNames,omitempty"`
+	Version         int      `json:"version"`
+	Variant         *int     `json:"variant,omitempty"`
+	VariantID       string   `json:"variantID,omitempty"`
+	CoatMode        *int     `json:"coatMode,omitempty"`
+	SelectedCoats   []int    `json:"selectedCoats,omitempty"`
+	SelectedCoatIDs []string `json:"selectedCoatIDs,omitempty"`
+	Speed           int      `json:"speed"`
+	Language        int      `json:"language,omitempty"`
+	DisplayID       int64    `json:"displayID,omitempty"`
+	Mode            *int     `json:"mode,omitempty"`
+	PetSizes        []int    `json:"petSizes,omitempty"`
+	PetCount        int      `json:"petCount"`
+	WheelEnabled    *bool    `json:"wheelEnabled,omitempty"`
+	NameLabels      bool     `json:"nameLabels"`
+	PetNames        []string `json:"petNames,omitempty"`
 }
 
 var darwinSettingsPath = defaultDarwinSettingsPath
@@ -194,6 +197,7 @@ func darwinRuntimeVariants() []darwinCoatVariant {
 		}
 		out = append(out, darwinCoatVariant{
 			ID:           variant.ID,
+			SpeciesID:    variant.SpeciesID,
 			SpriteBase:   spriteBase,
 			LabelJA:      labelJA,
 			LabelEN:      labelEN,
@@ -211,6 +215,17 @@ func darwinVariantLabel(index int, lang darwinLanguage) string {
 		return darwinVariants[index].LabelEN
 	}
 	return darwinVariants[index].LabelJA
+}
+
+func darwinVariantGroupLabel(index int, lang darwinLanguage) string {
+	if index < 0 || index >= len(darwinVariants) {
+		return ""
+	}
+	group := catalog.VariantGroupForSpecies(darwinVariants[index].SpeciesID)
+	if lang == darwinLangEnglish {
+		return group.LabelEN
+	}
+	return group.LabelJA
 }
 
 func main() {
@@ -536,6 +551,17 @@ func goAnimalsDesktopCopyVariantLabel(index C.int, buffer *C.char, length C.int)
 	return copyDarwinCString(darwinVariantLabel(int(index), lang), buffer, length)
 }
 
+//export goAnimalsDesktopCopyVariantGroupLabel
+func goAnimalsDesktopCopyVariantGroupLabel(index C.int, buffer *C.char, length C.int) C.int {
+	lang := darwinLangJapanese
+	if darwinApp != nil {
+		darwinApp.mu.Lock()
+		lang = darwinApp.lang
+		darwinApp.mu.Unlock()
+	}
+	return copyDarwinCString(darwinVariantGroupLabel(int(index), lang), buffer, length)
+}
+
 //export goAnimalsDesktopGetPetSize
 func goAnimalsDesktopGetPetSize(index C.int) C.int {
 	if darwinApp == nil {
@@ -672,9 +698,9 @@ func (a *darwinPetApp) loadSettings() {
 	}
 	a.lang = normalizeDarwinLanguage(settings.Language)
 	a.displayID = normalizeDarwinDisplayID(settings.DisplayID)
-	if settings.Version >= darwinSettingsVersion {
+	if settings.Version >= 3 && settings.Version <= darwinSettingsVersion {
 		if settings.Variant != nil {
-			a.variant = normalizeDarwinVariant(*settings.Variant)
+			a.variant = darwinVariantIndexFromSettings(*settings.Variant, settings.VariantID, settings.Version, strings.Join(settings.PetNames, "\n"))
 		}
 		if settings.CoatMode != nil {
 			a.coatMode = normalizeDarwinCoatMode(*settings.CoatMode)
@@ -684,7 +710,7 @@ func (a *darwinPetApp) loadSettings() {
 				if i >= maxPetCount {
 					break
 				}
-				a.selectedCoats[i] = normalizeDarwinVariant(variant)
+				a.selectedCoats[i] = darwinVariantIndexFromSettings(variant, stringAt(settings.SelectedCoatIDs, i), settings.Version, stringAt(settings.PetNames, i))
 			}
 		}
 		if len(settings.PetSizes) > 0 {
@@ -722,6 +748,10 @@ func (a *darwinPetApp) saveSettings() {
 	wheelEnabled := a.wheelEnabled
 	selectedCoats := make([]int, maxPetCount)
 	copy(selectedCoats, a.selectedCoats[:])
+	for i := range selectedCoats {
+		selectedCoats[i] = normalizeDarwinVariant(selectedCoats[i])
+	}
+	selectedCoatIDs := darwinVariantIDsForIndices(selectedCoats)
 	petSizes := make([]int, maxPetCount)
 	for i := range a.petSizes {
 		petSizes[i] = normalizeDarwinPetSizePercent(a.petSizes[i])
@@ -734,25 +764,85 @@ func (a *darwinPetApp) saveSettings() {
 	coatMode := int(normalizeDarwinCoatMode(int(a.coatMode)))
 	mode := int(normalizeDarwinMode(int(a.mode)))
 	settings := darwinSettings{
-		Version:       darwinSettingsVersion,
-		Variant:       &variant,
-		CoatMode:      &coatMode,
-		SelectedCoats: selectedCoats,
-		Speed:         normalizeDarwinSpeed(a.speed),
-		Language:      int(normalizeDarwinLanguage(int(a.lang))),
-		DisplayID:     normalizeDarwinDisplayID(a.displayID),
-		Mode:          &mode,
-		PetSizes:      petSizes,
-		PetCount:      normalizeDarwinPetCount(a.petCount),
-		WheelEnabled:  &wheelEnabled,
-		NameLabels:    a.nameLabels,
-		PetNames:      petNames,
+		Version:         darwinSettingsVersion,
+		Variant:         &variant,
+		VariantID:       darwinVariantIDAt(variant),
+		CoatMode:        &coatMode,
+		SelectedCoats:   selectedCoats,
+		SelectedCoatIDs: selectedCoatIDs,
+		Speed:           normalizeDarwinSpeed(a.speed),
+		Language:        int(normalizeDarwinLanguage(int(a.lang))),
+		DisplayID:       normalizeDarwinDisplayID(a.displayID),
+		Mode:            &mode,
+		PetSizes:        petSizes,
+		PetCount:        normalizeDarwinPetCount(a.petCount),
+		WheelEnabled:    &wheelEnabled,
+		NameLabels:      a.nameLabels,
+		PetNames:        petNames,
 	}
 	data, err := json.MarshalIndent(settings, "", "  ")
 	if err != nil {
 		return
 	}
 	_ = os.WriteFile(path, append(data, '\n'), 0o644)
+}
+
+func darwinVariantIndexFromSettings(index int, id string, version int, nameHint string) int {
+	if len(darwinVariants) == 0 {
+		return 0
+	}
+	if i, ok := darwinVariantIndexByID(id); ok {
+		return i
+	}
+	if version < darwinSettingsVersion {
+		if legacyID, ok := darwinLegacyVariantIDForIndex(index, nameHint); ok {
+			if i, found := darwinVariantIndexByID(legacyID); found {
+				return i
+			}
+		}
+	}
+	return normalizeDarwinVariant(index)
+}
+
+func darwinLegacyVariantIDForIndex(index int, nameHint string) (string, bool) {
+	if strings.Contains(nameHint, "ハシビロコウ") || strings.Contains(strings.ToLower(nameHint), "shoebill") {
+		return "shoebill_stork", true
+	}
+	return "", false
+}
+
+func darwinVariantIndexByID(id string) (int, bool) {
+	if id == "" {
+		return 0, false
+	}
+	for i, variant := range darwinVariants {
+		if variant.ID == id {
+			return i, true
+		}
+	}
+	return 0, false
+}
+
+func darwinVariantIDAt(index int) string {
+	if len(darwinVariants) == 0 {
+		return ""
+	}
+	return darwinVariants[normalizeDarwinVariant(index)].ID
+}
+
+func darwinVariantIDsForIndices(indices []int) []string {
+	out := make([]string, len(indices))
+	for i, index := range indices {
+		out[i] = darwinVariantIDAt(index)
+	}
+	return out
+}
+
+func stringAt(values []string, index int) string {
+	if index < 0 || index >= len(values) {
+		return ""
+	}
+	return values[index]
 }
 
 func (a *darwinPetApp) setSceneWidth(width int) {

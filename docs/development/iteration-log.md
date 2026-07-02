@@ -1146,3 +1146,12 @@
   -buildvcs=false ./...`, `git diff --check`, macOS arm64/amd64 ZIP builds,
   extracted ZIP arch/version/signature checks, and an arm64 app launch smoke
   test using a temporary HOME.
+
+- Prepared the v0.2.13 settings hotfix after a report that a previously
+  selected low-motion shoebill could load as a cat. The cause was legacy
+  settings storing only the runtime picker index; after v0.2.12 roster
+  additions, the old shoebill index pointed at a cat slot. Windows and macOS now
+  save stable runtime variant IDs alongside compatibility indices, recover
+  named legacy shoebill settings, leave ambiguous legacy numeric indices
+  unchanged, and group animal pickers by broad animal type. The public roster
+  remains 57 animals with no new asset changes in this hotfix.

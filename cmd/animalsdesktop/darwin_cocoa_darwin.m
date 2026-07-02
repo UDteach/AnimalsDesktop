@@ -29,6 +29,7 @@ extern int goAnimalsDesktopGetVariant(void);
 extern int goAnimalsDesktopGetSelectedCoat(int index);
 extern int goAnimalsDesktopGetVariantCount(void);
 extern int goAnimalsDesktopCopyVariantLabel(int index, char *buffer, int length);
+extern int goAnimalsDesktopCopyVariantGroupLabel(int index, char *buffer, int length);
 extern int goAnimalsDesktopGetPetSize(int index);
 extern int goAnimalsDesktopGetNameLabels(void);
 extern int goAnimalsDesktopCopyPetName(int index, char *buffer, int length);
@@ -67,6 +68,20 @@ static NSString *AnimalsVariantLabel(NSInteger index) {
 	}
 	NSString *label = [NSString stringWithUTF8String:buffer];
 	return label != nil ? label : [NSString stringWithFormat:@"Animal %ld", (long)index + 1];
+}
+
+static NSString *AnimalsVariantGroupLabel(NSInteger index) {
+	char buffer[256] = {0};
+	int copied = goAnimalsDesktopCopyVariantGroupLabel((int)index, buffer, (int)sizeof(buffer));
+	if (copied <= 0) {
+		return @"Animals";
+	}
+	NSString *label = [NSString stringWithUTF8String:buffer];
+	return label != nil ? label : @"Animals";
+}
+
+static NSString *AnimalsVariantDisplayLabel(NSInteger index) {
+	return [NSString stringWithFormat:@"%@ / %@", AnimalsVariantGroupLabel(index), AnimalsVariantLabel(index)];
 }
 
 static NSString *AnimalsPetSizeLabel(NSInteger percent) {
@@ -285,6 +300,7 @@ static NSString *AnimalsDisplayLabel(NSInteger index, NSScreen *screen) {
 @property(nonatomic, retain) NSButton *wheelCheckbox;
 @property(nonatomic, retain) NSButton *nameLabelsCheckbox;
 - (instancetype)initWithSceneHeight:(CGFloat)sceneHeight iconBytes:(const unsigned char *)iconBytes iconLength:(int)iconLength;
+- (void)addGroupedVariantItemsToMenu:(NSMenu *)menu;
 @end
 
 static AnimalsAppDelegate *animalsDelegate = nil;
@@ -410,9 +426,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 
 	NSMenu *variantMenu = [[[NSMenu alloc] initWithTitle:AnimalsText(@"fixedAnimal")] autorelease];
 	[variantMenu setDelegate:self];
-	for (NSInteger i = 0; i < goAnimalsDesktopGetVariantCount(); i++) {
-		[variantMenu addItem:[self menuItemWithTitle:AnimalsVariantLabel(i) action:@selector(setVariantFromMenu:) tag:AnimalsMenuVariantBase + i]];
-	}
+	[self addGroupedVariantItemsToMenu:variantMenu];
 	NSMenuItem *variantRoot = [[[NSMenuItem alloc] initWithTitle:AnimalsText(@"fixedAnimal") action:nil keyEquivalent:@""] autorelease];
 	[variantRoot setSubmenu:variantMenu];
 	[menu addItem:variantRoot];
@@ -493,6 +507,23 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[item setTarget:self];
 	[item setTag:tag];
 	return item;
+}
+
+- (void)addGroupedVariantItemsToMenu:(NSMenu *)menu {
+	NSMutableDictionary *menusByGroup = [NSMutableDictionary dictionary];
+	for (NSInteger i = 0; i < goAnimalsDesktopGetVariantCount(); i++) {
+		NSString *group = AnimalsVariantGroupLabel(i);
+		NSMenu *groupMenu = [menusByGroup objectForKey:group];
+		if (groupMenu == nil) {
+			groupMenu = [[[NSMenu alloc] initWithTitle:group] autorelease];
+			[groupMenu setDelegate:self];
+			NSMenuItem *root = [[[NSMenuItem alloc] initWithTitle:group action:nil keyEquivalent:@""] autorelease];
+			[root setSubmenu:groupMenu];
+			[menu addItem:root];
+			[menusByGroup setObject:groupMenu forKey:group];
+		}
+		[groupMenu addItem:[self menuItemWithTitle:AnimalsVariantLabel(i) action:@selector(setVariantFromMenu:) tag:AnimalsMenuVariantBase + i]];
+	}
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
@@ -926,9 +957,37 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 
 - (void)populateVariantPopup:(NSPopUpButton *)popup {
 	[popup removeAllItems];
+	NSMutableArray *groupOrder = [NSMutableArray array];
+	NSMutableDictionary *indicesByGroup = [NSMutableDictionary dictionary];
 	NSInteger count = (NSInteger)goAnimalsDesktopGetVariantCount();
 	for (NSInteger i = 0; i < count; i++) {
-		[popup addItemWithTitle:AnimalsVariantLabel(i)];
+		NSString *group = AnimalsVariantGroupLabel(i);
+		NSMutableArray *indices = [indicesByGroup objectForKey:group];
+		if (indices == nil) {
+			indices = [NSMutableArray array];
+			[indicesByGroup setObject:indices forKey:group];
+			[groupOrder addObject:group];
+		}
+		[indices addObject:[NSNumber numberWithInteger:i]];
+	}
+	for (NSString *group in groupOrder) {
+		[popup addItemWithTitle:group];
+		[[popup lastItem] setEnabled:NO];
+		[[popup lastItem] setTag:-1];
+		for (NSNumber *number in [indicesByGroup objectForKey:group]) {
+			NSInteger i = [number integerValue];
+			[popup addItemWithTitle:AnimalsVariantDisplayLabel(i)];
+			[[popup lastItem] setTag:i];
+		}
+	}
+}
+
+- (void)selectVariant:(NSInteger)variant inPopup:(NSPopUpButton *)popup {
+	for (NSMenuItem *item in [[popup menu] itemArray]) {
+		if ([item tag] == variant) {
+			[popup selectItem:item];
+			return;
+		}
 	}
 }
 
@@ -956,7 +1015,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self.countPopup selectItemAtIndex:MAX(0, MIN(AnimalsMaxPetCount - 1, count - 1))];
 	[self.languagePopup selectItemAtIndex:goAnimalsDesktopGetLanguage() == 1 ? 1 : 0];
 	[self.coatModePopup selectItemAtIndex:goAnimalsDesktopGetCoatMode()];
-	[self.fixedCoatPopup selectItemAtIndex:goAnimalsDesktopGetVariant()];
+	[self selectVariant:goAnimalsDesktopGetVariant() inPopup:self.fixedCoatPopup];
 	[self.modePopup selectItemAtIndex:goAnimalsDesktopGetMode()];
 	NSInteger speed = goAnimalsDesktopGetSpeed();
 	[self.speedPopup selectItemAtIndex:(speed == 2 ? 0 : (speed == 5 ? 2 : 1))];
@@ -978,7 +1037,7 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 	[self.wheelCheckbox setState:goAnimalsDesktopGetWheelEnabled() ? NSControlStateValueOn : NSControlStateValueOff];
 	for (NSInteger i = 0; i < [self.selectedCoatPopups count]; i++) {
 		NSPopUpButton *popup = [self.selectedCoatPopups objectAtIndex:i];
-		[popup selectItemAtIndex:goAnimalsDesktopGetSelectedCoat((int)i)];
+		[self selectVariant:goAnimalsDesktopGetSelectedCoat((int)i) inPopup:popup];
 		[popup setEnabled:(goAnimalsDesktopGetCoatMode() == 1 && i < count)];
 	}
 	[self.fixedCoatPopup setEnabled:(goAnimalsDesktopGetCoatMode() == 0)];
@@ -1027,12 +1086,18 @@ static AnimalsAppDelegate *animalsDelegate = nil;
 }
 
 - (void)settingsFixedCoatChanged:(id)sender {
-	goAnimalsDesktopSetVariant((int)[sender indexOfSelectedItem]);
+	NSInteger variant = [[sender selectedItem] tag];
+	if (variant >= 0) {
+		goAnimalsDesktopSetVariant((int)variant);
+	}
 	[self refreshMenuState];
 }
 
 - (void)settingsSelectedCoatChanged:(id)sender {
-	goAnimalsDesktopSetSelectedCoat((int)[sender tag], (int)[sender indexOfSelectedItem]);
+	NSInteger variant = [[sender selectedItem] tag];
+	if (variant >= 0) {
+		goAnimalsDesktopSetSelectedCoat((int)[sender tag], (int)variant);
+	}
 	[self refreshMenuState];
 }
 

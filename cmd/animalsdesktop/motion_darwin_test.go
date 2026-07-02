@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"os"
@@ -321,6 +322,155 @@ func TestDarwinSettingsUpdateRuntimeStateAndPersist(t *testing.T) {
 	}
 	if got := b.petDisplayName(1); got != "Animal 2" {
 		t.Fatalf("default display name = %q, want Animal 2", got)
+	}
+}
+
+func TestDarwinSettingsPersistAndLoadVariantIDs(t *testing.T) {
+	oldSettingsPath := darwinSettingsPath
+	settingsPath := filepath.Join(t.TempDir(), "settings.json")
+	darwinSettingsPath = func() (string, error) {
+		return settingsPath, nil
+	}
+	t.Cleanup(func() {
+		darwinSettingsPath = oldSettingsPath
+	})
+
+	shoebillIndex, ok := darwinVariantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	catIndex, ok := darwinVariantIndexByID("domestic_shorthair_tabby_white_stocky")
+	if !ok {
+		t.Fatal("domestic_shorthair_tabby_white_stocky missing from runtime variants")
+	}
+	data := []byte(fmt.Sprintf(`{
+  "version": %d,
+  "variant": %d,
+  "variantID": "shoebill_stork",
+  "coatMode": 1,
+  "selectedCoats": [%d, %d],
+  "selectedCoatIDs": ["domestic_shorthair_tabby_white_stocky", "shoebill_stork"],
+  "petCount": 2,
+  "speed": 5,
+  "mode": 1,
+  "wheelEnabled": true
+}`, darwinSettingsVersion, catIndex, catIndex, catIndex))
+	if err := os.WriteFile(settingsPath, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &darwinPetApp{
+		speed:         darwinSpeedNormal,
+		petCount:      1,
+		coatMode:      darwinCoatSelected,
+		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
+		wheelEnabled:  true,
+	}
+	a.loadSettings()
+	if a.variant != shoebillIndex {
+		t.Fatalf("variant = %d (%s), want shoebill index %d", a.variant, darwinVariantIDAt(a.variant), shoebillIndex)
+	}
+	if a.selectedCoats[0] != catIndex || a.selectedCoats[1] != shoebillIndex {
+		t.Fatalf("selectedCoats = %v, want cat then shoebill", a.selectedCoats[:2])
+	}
+}
+
+func TestDarwinLegacySettingsRecoverShoebillIndexDrift(t *testing.T) {
+	oldSettingsPath := darwinSettingsPath
+	settingsPath := filepath.Join(t.TempDir(), "settings.json")
+	darwinSettingsPath = func() (string, error) {
+		return settingsPath, nil
+	}
+	t.Cleanup(func() {
+		darwinSettingsPath = oldSettingsPath
+	})
+
+	shoebillIndex, ok := darwinVariantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	data := []byte(`{
+  "version": 3,
+  "variant": 41,
+  "coatMode": 1,
+  "selectedCoats": [41, 0],
+  "petNames": ["爆速ハシビロコウさん", ""],
+  "petCount": 2,
+  "speed": 5,
+  "mode": 1,
+  "wheelEnabled": true
+}`)
+	if err := os.WriteFile(settingsPath, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &darwinPetApp{
+		speed:         darwinSpeedNormal,
+		petCount:      1,
+		coatMode:      darwinCoatSelected,
+		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
+		wheelEnabled:  true,
+	}
+	a.loadSettings()
+	if a.variant != shoebillIndex || a.selectedCoats[0] != shoebillIndex {
+		t.Fatalf("legacy shoebill migration = variant:%d selected:%d ids:%s/%s, want %d", a.variant, a.selectedCoats[0], darwinVariantIDAt(a.variant), darwinVariantIDAt(a.selectedCoats[0]), shoebillIndex)
+	}
+	if got := a.petNames[0]; got != "爆速ハシビロコウさん" {
+		t.Fatalf("pet name = %q", got)
+	}
+}
+
+func TestDarwinLegacySettingsKeepAmbiguousIndexWithoutShoebillName(t *testing.T) {
+	oldSettingsPath := darwinSettingsPath
+	settingsPath := filepath.Join(t.TempDir(), "settings.json")
+	darwinSettingsPath = func() (string, error) {
+		return settingsPath, nil
+	}
+	t.Cleanup(func() {
+		darwinSettingsPath = oldSettingsPath
+	})
+
+	data := []byte(`{
+  "version": 3,
+  "variant": 41,
+  "coatMode": 1,
+  "selectedCoats": [41],
+  "petNames": [""],
+  "petCount": 1,
+  "speed": 5,
+  "mode": 1,
+  "wheelEnabled": true
+}`)
+	if err := os.WriteFile(settingsPath, data, 0o644); err != nil {
+		t.Fatalf("write settings: %v", err)
+	}
+
+	a := &darwinPetApp{
+		speed:         darwinSpeedNormal,
+		petCount:      1,
+		coatMode:      darwinCoatSelected,
+		selectedCoats: defaultDarwinSelectedCoats(),
+		petSizes:      defaultDarwinPetSizes(),
+		wheelEnabled:  true,
+	}
+	a.loadSettings()
+	if a.variant != 41 || a.selectedCoats[0] != 41 {
+		t.Fatalf("ambiguous legacy index changed to variant:%d selected:%d, want raw index 41", a.variant, a.selectedCoats[0])
+	}
+}
+
+func TestDarwinVariantGroupLabels(t *testing.T) {
+	shoebillIndex, ok := darwinVariantIndexByID("shoebill_stork")
+	if !ok {
+		t.Fatal("shoebill_stork missing from runtime variants")
+	}
+	if got := darwinVariantGroupLabel(shoebillIndex, darwinLangJapanese); got != "鳥" {
+		t.Fatalf("Japanese shoebill group = %q", got)
+	}
+	if got := darwinVariantGroupLabel(shoebillIndex, darwinLangEnglish); got != "Birds" {
+		t.Fatalf("English shoebill group = %q", got)
 	}
 }
 

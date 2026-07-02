@@ -70,6 +70,26 @@ func TestCatalogInvariants(t *testing.T) {
 	}
 }
 
+func TestVariantGroupsClassifyRuntimeAnimals(t *testing.T) {
+	tests := map[string]string{
+		"shoebill":     "bird",
+		"cat":          "cat",
+		"rabbit":       "rabbit",
+		"chinchilla":   "chinchilla",
+		"gecko":        "reptile_amphibian",
+		"sugar_glider": "sugar_glider",
+	}
+	for speciesID, want := range tests {
+		if got := VariantGroupIDForSpecies(speciesID); got != want {
+			t.Fatalf("VariantGroupIDForSpecies(%q) = %q, want %q", speciesID, got, want)
+		}
+	}
+	group := VariantGroupForSpecies("shoebill")
+	if group.LabelJA != "鳥" || group.LabelEN != "Birds" {
+		t.Fatalf("shoebill group labels = %+v", group)
+	}
+}
+
 func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 	runtime := RuntimeVariants()
 	wantIDs := []string{
