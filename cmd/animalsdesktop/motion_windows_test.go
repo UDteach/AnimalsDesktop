@@ -1058,7 +1058,16 @@ func TestSelectUpdateAssetFindsWindowsZip(t *testing.T) {
 	}
 }
 
+func skipIfNetworkUpdatesDisabled(t *testing.T) {
+	t.Helper()
+	if !networkUpdatesEnabled {
+		t.Skip("update runtime is excluded from the no-network build")
+	}
+}
+
 func TestVerifyDownloadedAssetChecksSizeAndSHA256Digest(t *testing.T) {
+	skipIfNetworkUpdatesDisabled(t)
+
 	path := filepath.Join(t.TempDir(), "update.zip")
 	data := []byte("trusted update bytes")
 	if err := os.WriteFile(path, data, 0o644); err != nil {
@@ -1084,6 +1093,8 @@ func TestVerifyDownloadedAssetChecksSizeAndSHA256Digest(t *testing.T) {
 }
 
 func TestParseUpdateApplyArgsRequiresSafeCleanupDir(t *testing.T) {
+	skipIfNetworkUpdatesDisabled(t)
+
 	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"unit-test")
 	opts, err := parseUpdateApplyArgs([]string{
 		"--source", filepath.Join(cleanupDir, "AnimalsDesktop.exe"),
@@ -1128,6 +1139,8 @@ func TestParseUpdateApplyArgsRequiresSafeCleanupDir(t *testing.T) {
 }
 
 func TestExtractUpdateExeUsesFixedPayloadPath(t *testing.T) {
+	skipIfNetworkUpdatesDisabled(t)
+
 	tmpDir := t.TempDir()
 	zipPath := filepath.Join(tmpDir, "update.zip")
 	zipFile, err := os.Create(zipPath)
@@ -1167,6 +1180,8 @@ func TestExtractUpdateExeUsesFixedPayloadPath(t *testing.T) {
 }
 
 func TestUpdaterCommandsInvokeAppExeDirectly(t *testing.T) {
+	skipIfNetworkUpdatesDisabled(t)
+
 	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"command-test")
 	sourceExe := filepath.Join(cleanupDir, "payload", "AnimalsDesktop.exe")
 	targetExe := filepath.Join(t.TempDir(), "AnimalsDesktop.exe")
@@ -1221,7 +1236,10 @@ func TestReleaseWorkflowPackageIncludesSecurityManifestAndHashes(t *testing.T) {
 		"SECURITY.txt",
 		"SHA256SUMS.txt",
 		"AnimalsDesktop-windows-amd64.zip/AnimalsDesktop.exe",
+		"AnimalsDesktop-windows-amd64-no-network.zip/AnimalsDesktop.exe",
 		"AnimalsDesktop-windows-386.zip/AnimalsDesktop.exe",
+		"No-network security-check edition",
+		"The Go net/http update fetch/download implementation is excluded from this build.",
 		"Microsoft Security Intelligence",
 		"McAfee Dispute Detection & Allowlisting",
 	} {
@@ -1241,6 +1259,8 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 	for _, want := range []string{
 		"go run ./cmd/validatemotion -runtime-only -require-accepted",
 		"go build -buildvcs=false",
+		"-tags animalsdesktop_nonetwork",
+		"AnimalsDesktop-windows-amd64-no-network.zip",
 		"./cmd/animalsdesktop",
 		"body_path: dist/RELEASE_NOTES.md",
 		"github.ref_name == 'v0.2.1'",
@@ -1260,6 +1280,8 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 }
 
 func TestUpdateCleanupDirOnlyAcceptsUpdateTempDirs(t *testing.T) {
+	skipIfNetworkUpdatesDisabled(t)
+
 	cleanupDir := filepath.Join(os.TempDir(), updateTempPrefix+"cleanup-test")
 	if got := updateCleanupDir([]string{updaterCleanupArg, cleanupDir}); got != cleanupDir {
 		t.Fatalf("updateCleanupDir() = %q, want %q", got, cleanupDir)
