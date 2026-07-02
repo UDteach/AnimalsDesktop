@@ -297,25 +297,42 @@ def draw_soft_shadow(canvas: Image.Image, cx: int, cy: int, w: int, h: int) -> N
 
 
 def preview_positions(count: int) -> list[tuple[int, int, int, int]]:
-    rows = 3 if count > 24 else 2
+    if count > 48:
+        rows = 4
+    elif count > 24:
+        rows = 3
+    else:
+        rows = 2
     row_counts = [count // rows] * rows
     for i in range(count % rows):
         row_counts[i] += 1
-    base_ys = [346, 400, 448] if rows == 3 else [372, 430]
+    if rows == 4:
+        base_ys = [312, 356, 402, 448]
+        max_w = 66
+        max_h = 46
+    elif rows == 3:
+        base_ys = [346, 400, 448]
+        max_w = 58
+        max_h = 42
+    else:
+        base_ys = [372, 430]
+        max_w = 84
+        max_h = 58
     positions: list[tuple[int, int, int, int]] = []
     for row, row_count in enumerate(row_counts):
         if row_count == 0:
             continue
-        left = 28
-        right = PREVIEW_W - 76
-        gap = (right - left) / max(1, row_count - 1)
-        max_w = 58 if rows == 3 else 84
-        max_h = 42 if rows == 3 else 58
+        center_left = 44 + max_w / 2
+        center_right = PREVIEW_W - 44 - max_w / 2
+        if row_count > 1 and row % 2 == 1:
+            stagger = (center_right - center_left) / max(1, row_count) / 2
+            center_left += stagger
+            center_right -= stagger
+        gap = (center_right - center_left) / max(1, row_count - 1)
         for col in range(row_count):
-            x = round(left + col * gap)
-            if row % 2 == 1:
-                x += round(gap / 2)
-            positions.append((min(x, PREVIEW_W - max_w - 22), base_ys[row], max_w, max_h))
+            center_x = round(center_left + col * gap)
+            x = round(center_x - max_w / 2)
+            positions.append((x, base_ys[row], max_w, max_h))
     return positions
 
 

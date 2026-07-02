@@ -1099,3 +1099,7 @@
   Windows package hashes. The v0.2.9 release asset was regenerated from the
   published ZIPs, and the release workflow now rebuilds checksums in the
   publish job so macOS and Windows ZIPs are covered together.
+- After visual review of the public release page, the hero preview image was
+  adjusted from three rows to four rows for the 54-animal roster so the animals
+  have more horizontal breathing room while keeping the page image dimensions
+  stable.
