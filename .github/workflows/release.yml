@@ -233,7 +233,7 @@ jobs:
             printf '%s  %s\n' "$hash" "$(basename "$zip_path")" >> dist/SHA256SUMS.txt
           done < <(find release-assets -type f -name '*.zip' | sort)
           if [ -n "$checksum_source" ]; then
-            grep '/AnimalsDesktop.exe$' "$checksum_source" >> dist/SHA256SUMS.txt || true
+            sed 's/\r$//' "$checksum_source" | grep '/AnimalsDesktop.exe$' >> dist/SHA256SUMS.txt || true
           fi
           for expected in \
             AnimalsDesktop-macos-amd64.zip \

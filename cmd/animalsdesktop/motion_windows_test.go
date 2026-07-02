@@ -1252,7 +1252,7 @@ func TestReleaseWorkflowPublishesMainLineWindowsTrustAssets(t *testing.T) {
 		"github.ref_name == 'v0.2.7'",
 		"docs/releases/${version}.md",
 		"checksum_source=\"$(find release-assets -type f -name SHA256SUMS.txt -print -quit || true)\"",
-		"grep '/AnimalsDesktop.exe$' \"$checksum_source\" >> dist/SHA256SUMS.txt || true",
+		"sed 's/\\r$//' \"$checksum_source\" | grep '/AnimalsDesktop.exe$' >> dist/SHA256SUMS.txt || true",
 	} {
 		if !strings.Contains(workflow, want) {
 			t.Fatalf("release workflow does not contain %q", want)
