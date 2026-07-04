@@ -15,6 +15,7 @@ import (
 	"strings"
 	"testing"
 
+	"animals-desktop/internal/catalog"
 	"github.com/lxn/win"
 )
 
@@ -289,27 +290,30 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	t.Setenv("APPDATA", configRoot)
 
 	a := &petApp{
-		variant:        4,
-		coatMode:       coatSelected,
-		selectedCoats:  [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8},
-		petSizes:       [maxPetCount]int{80, 90, 100, 110, 120, 70, 80, 90, 100, 110},
-		petNames:       [maxPetCount]string{"モカ", "Sora", "  Nagi  ", "", "", "", "", "", "", ""},
-		nameLabels:     true,
-		speed:          5,
-		mode:           modeKeyboard,
-		petCount:       10,
-		wheelEnabled:   false,
-		bidirectional:  false,
-		positionMode:   positionScreenBottom,
-		overlayOffsetY: 24,
-		displayIndex:   0,
-		displayScope:   displayScopeSingle,
-		displaySpanEnd: 0,
-		walkRangeStart: 15,
-		walkRangeEnd:   85,
-		lang:           langEnglish,
-		settingsX:      220,
-		settingsY:      180,
+		variant:                4,
+		coatMode:               coatSelected,
+		selectedCoats:          [maxPetCount]int{1, 3, 5, 7, 9, 0, 2, 4, 6, 8},
+		selectedSlotModes:      [maxPetCount]petSlotMode{petSlotFixed, petSlotRandom, petSlotFixed, petSlotRandom},
+		selectedRandomGroupIDs: [maxPetCount]string{"", "rabbit", "", "chinchilla"},
+		randomGroupID:          "rabbit",
+		petSizes:               [maxPetCount]int{80, 90, 100, 110, 120, 70, 80, 90, 100, 110},
+		petNames:               [maxPetCount]string{"モカ", "Sora", "  Nagi  ", "", "", "", "", "", "", ""},
+		nameLabels:             true,
+		speed:                  5,
+		mode:                   modeKeyboard,
+		petCount:               10,
+		wheelEnabled:           false,
+		bidirectional:          false,
+		positionMode:           positionScreenBottom,
+		overlayOffsetY:         24,
+		displayIndex:           0,
+		displayScope:           displayScopeSingle,
+		displaySpanEnd:         0,
+		walkRangeStart:         15,
+		walkRangeEnd:           85,
+		lang:                   langEnglish,
+		settingsX:              220,
+		settingsY:              180,
 	}
 	if err := a.saveSettings(); err != nil {
 		t.Fatalf("saveSettings() error = %v", err)
@@ -332,6 +336,15 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	}
 	if len(saved.SelectedCoatIDs) != maxPetCount || saved.SelectedCoatIDs[1] != variantIDAt(3) {
 		t.Fatalf("saved SelectedCoatIDs = %#v", saved.SelectedCoatIDs)
+	}
+	if len(saved.SelectedSlotModes) != maxPetCount || saved.SelectedSlotModes[1] != int(petSlotRandom) || saved.SelectedSlotModes[2] != int(petSlotFixed) {
+		t.Fatalf("saved SelectedSlotModes = %#v", saved.SelectedSlotModes)
+	}
+	if len(saved.SelectedRandomGroupIDs) != maxPetCount || saved.SelectedRandomGroupIDs[1] != "rabbit" || saved.SelectedRandomGroupIDs[3] != "chinchilla" {
+		t.Fatalf("saved SelectedRandomGroupIDs = %#v", saved.SelectedRandomGroupIDs)
+	}
+	if saved.RandomGroupID != "rabbit" {
+		t.Fatalf("saved RandomGroupID = %q, want rabbit", saved.RandomGroupID)
 	}
 	if saved.Language != int(langEnglish) {
 		t.Fatalf("saved Language = %d, want English", saved.Language)
@@ -403,6 +416,15 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 		if b.selectedCoats[i] != wantCoats[i] {
 			t.Fatalf("selectedCoats[%d] = %d, want %d", i, b.selectedCoats[i], wantCoats[i])
 		}
+	}
+	if b.selectedSlotModes[1] != petSlotRandom || b.selectedSlotModes[2] != petSlotFixed {
+		t.Fatalf("loaded selectedSlotModes = %#v", b.selectedSlotModes)
+	}
+	if b.selectedRandomGroupIDs[1] != "rabbit" || b.selectedRandomGroupIDs[3] != "chinchilla" {
+		t.Fatalf("loaded selectedRandomGroupIDs = %#v", b.selectedRandomGroupIDs)
+	}
+	if b.randomGroupID != "rabbit" {
+		t.Fatalf("loaded randomGroupID = %q, want rabbit", b.randomGroupID)
 	}
 	if b.petNames[0] != "モカ" || b.petNames[1] != "Sora" || b.petNames[2] != "Nagi" {
 		t.Fatalf("loaded pet names = %#v", b.petNames[:3])
@@ -1693,12 +1715,72 @@ func TestSelectedCoatModeUsesPerPetChoices(t *testing.T) {
 	}
 }
 
+func TestSelectedCoatModeMixesFixedAndRandomSlots(t *testing.T) {
+	rabbitIndex, ok := variantIndexByID("rabbit_chestnut_agouti")
+	if !ok {
+		t.Fatal("rabbit_chestnut_agouti missing from runtime variants")
+	}
+	chinchillaIndex, ok := variantIndexByID("chinchilla_standard_gray")
+	if !ok {
+		t.Fatal("chinchilla_standard_gray missing from runtime variants")
+	}
+	a := &petApp{
+		coatMode:               coatSelected,
+		selectedCoats:          [maxPetCount]int{rabbitIndex, chinchillaIndex},
+		selectedSlotModes:      [maxPetCount]petSlotMode{petSlotFixed, petSlotFixed, petSlotRandom, petSlotRandom, petSlotRandom},
+		selectedRandomGroupIDs: [maxPetCount]string{"", "", "rabbit", "chinchilla", ""},
+		pets: []desktopPet{
+			{variant: 0},
+			{variant: 0},
+			{variant: 0},
+			{variant: 0},
+			{variant: 0},
+		},
+	}
+
+	a.refreshPetVariants()
+
+	if got := a.pets[0].variant; got != rabbitIndex {
+		t.Fatalf("fixed slot 0 = %d, want rabbit index %d", got, rabbitIndex)
+	}
+	if got := a.pets[1].variant; got != chinchillaIndex {
+		t.Fatalf("fixed slot 1 = %d, want chinchilla index %d", got, chinchillaIndex)
+	}
+	if got := catalog.VariantGroupIDForSpecies(variants[a.pets[2].variant].SpeciesID); got != "rabbit" {
+		t.Fatalf("random slot 2 group = %q, want rabbit", got)
+	}
+	if got := catalog.VariantGroupIDForSpecies(variants[a.pets[3].variant].SpeciesID); got != "chinchilla" {
+		t.Fatalf("random slot 3 group = %q, want chinchilla", got)
+	}
+	if got := a.pets[4].variant; got < 0 || got >= len(variants) {
+		t.Fatalf("random-all slot 4 = %d, want valid variant", got)
+	}
+}
+
 func TestRandomCoatModeAssignsValidVariants(t *testing.T) {
 	a := &petApp{coatMode: coatRandom}
 	for i := 0; i < 100; i++ {
 		got := a.variantForIndex(i)
 		if got < 0 || got >= len(variants) {
 			t.Fatalf("random variant = %d, want 0..%d", got, len(variants)-1)
+		}
+	}
+}
+
+func TestRandomCoatModeCanFilterByVariantGroup(t *testing.T) {
+	a := &petApp{coatMode: coatRandom, randomGroupID: "rabbit"}
+	for i := 0; i < 100; i++ {
+		got := a.variantForIndex(i)
+		if group := catalog.VariantGroupIDForSpecies(variants[got].SpeciesID); group != "rabbit" {
+			t.Fatalf("random rabbit variant group = %q (%s), want rabbit", group, variants[got].ID)
+		}
+	}
+
+	a.setRandomGroupID("chinchilla")
+	for i := 0; i < 100; i++ {
+		got := a.variantForIndex(i)
+		if group := catalog.VariantGroupIDForSpecies(variants[got].SpeciesID); group != "chinchilla" {
+			t.Fatalf("random chinchilla variant group = %q (%s), want chinchilla", group, variants[got].ID)
 		}
 	}
 }

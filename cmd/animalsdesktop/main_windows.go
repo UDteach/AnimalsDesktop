@@ -75,7 +75,7 @@ const (
 	renameDialogClientH   int32 = 158
 	settingsDirName             = "AnimalsDesktop"
 	settingsFileName            = "settings.json"
-	settingsVersion             = 3
+	settingsVersion             = 4
 	updaterApplyArg             = "--animalsdesktop-apply-update"
 	updaterCleanupArg           = "--animalsdesktop-cleanup"
 	updateTempPrefix            = "animals-desktop-update-"
@@ -127,28 +127,30 @@ var (
 )
 
 const (
-	menuExit          uint16 = 100
-	menuModeKeyboard  uint16 = 101
-	menuModeRandom    uint16 = 102
-	menuSpeedSlow     uint16 = 110
-	menuSpeedNormal   uint16 = 111
-	menuSpeedFast     uint16 = 112
-	menuCount1        uint16 = 120
-	menuCount2        uint16 = 121
-	menuCount3        uint16 = 122
-	menuCount5        uint16 = 123
-	menuCount10       uint16 = 124
-	menuWheelToggle   uint16 = 130
-	menuCoatFixed     uint16 = 131
-	menuCoatSelected  uint16 = 132
-	menuCoatRandom    uint16 = 133
-	menuSettings      uint16 = 140
-	menuCheckUpdate   uint16 = 150
-	menuInstallUpdate uint16 = 151
-	menuLangJapanese  uint16 = 160
-	menuLangEnglish   uint16 = 161
-	menuHideToggle    uint16 = 170
-	menuVariantBase   uint16 = 200
+	menuExit            uint16 = 100
+	menuModeKeyboard    uint16 = 101
+	menuModeRandom      uint16 = 102
+	menuSpeedSlow       uint16 = 110
+	menuSpeedNormal     uint16 = 111
+	menuSpeedFast       uint16 = 112
+	menuCount1          uint16 = 120
+	menuCount2          uint16 = 121
+	menuCount3          uint16 = 122
+	menuCount5          uint16 = 123
+	menuCount10         uint16 = 124
+	menuWheelToggle     uint16 = 130
+	menuCoatFixed       uint16 = 131
+	menuCoatSelected    uint16 = 132
+	menuCoatRandom      uint16 = 133
+	menuSettings        uint16 = 140
+	menuCheckUpdate     uint16 = 150
+	menuInstallUpdate   uint16 = 151
+	menuLangJapanese    uint16 = 160
+	menuLangEnglish     uint16 = 161
+	menuHideToggle      uint16 = 170
+	menuRandomAll       uint16 = 180
+	menuVariantBase     uint16 = 200
+	menuRandomGroupBase uint16 = 400
 )
 
 const (
@@ -258,6 +260,13 @@ const (
 	coatRandom
 )
 
+type petSlotMode int
+
+const (
+	petSlotFixed petSlotMode = iota
+	petSlotRandom
+)
+
 type overlayPositionMode int
 
 const (
@@ -333,88 +342,94 @@ type mouseHookStruct struct {
 }
 
 type petApp struct {
-	hwnd               win.HWND
-	hinst              win.HINSTANCE
-	trayIcon           win.HICON
-	keyHook            uintptr
-	mouseHook          uintptr
-	keyHookFailed      bool
-	mouseHookFailed    bool
-	overlayHwnds       []win.HWND
-	frames             *spriteCache
-	forageSprites      []*image.RGBA
-	wheel              *image.RGBA
-	pets               []desktopPet
-	forage             []forageItem
-	reactions          []petReaction
-	variant            int
-	coatMode           coatMode
-	selectedCoats      [maxPetCount]int
-	petSizes           [maxPetCount]int
-	petNames           [maxPetCount]string
-	nameLabels         bool
-	speed              int
-	mode               behaviorMode
-	petCount           int
-	wheelEnabled       bool
-	bidirectional      bool
-	positionMode       overlayPositionMode
-	overlayOffsetY     int
-	displayIndex       int
-	displayScope       displayScope
-	displaySpanEnd     int
-	walkRangeStart     int
-	walkRangeEnd       int
-	overlayHidden      bool
-	settingsHwnd       win.HWND
-	settingsTab        settingsTab
-	lang               language
-	settingsFont       win.HFONT
-	settingsTitleFont  win.HFONT
-	settingsSmallFont  win.HFONT
-	settingsBrush      win.HBRUSH
-	settingsCard       win.HBRUSH
-	settingsX          int32
-	settingsY          int32
-	settingsSaveFailed bool
-	update             updateState
-	nameHwnd           win.HWND
-	nameText           string
-	hoverPet           int
-	renameHwnd         win.HWND
-	renameEdit         win.HWND
-	renameIndex        int
-	wheelX             int
-	sceneW             int
-	tickCount          int
-	closing            atomic.Bool
+	hwnd                   win.HWND
+	hinst                  win.HINSTANCE
+	trayIcon               win.HICON
+	keyHook                uintptr
+	mouseHook              uintptr
+	keyHookFailed          bool
+	mouseHookFailed        bool
+	overlayHwnds           []win.HWND
+	frames                 *spriteCache
+	forageSprites          []*image.RGBA
+	wheel                  *image.RGBA
+	pets                   []desktopPet
+	forage                 []forageItem
+	reactions              []petReaction
+	variant                int
+	coatMode               coatMode
+	selectedCoats          [maxPetCount]int
+	selectedSlotModes      [maxPetCount]petSlotMode
+	selectedRandomGroupIDs [maxPetCount]string
+	randomGroupID          string
+	petSizes               [maxPetCount]int
+	petNames               [maxPetCount]string
+	nameLabels             bool
+	speed                  int
+	mode                   behaviorMode
+	petCount               int
+	wheelEnabled           bool
+	bidirectional          bool
+	positionMode           overlayPositionMode
+	overlayOffsetY         int
+	displayIndex           int
+	displayScope           displayScope
+	displaySpanEnd         int
+	walkRangeStart         int
+	walkRangeEnd           int
+	overlayHidden          bool
+	settingsHwnd           win.HWND
+	settingsTab            settingsTab
+	lang                   language
+	settingsFont           win.HFONT
+	settingsTitleFont      win.HFONT
+	settingsSmallFont      win.HFONT
+	settingsBrush          win.HBRUSH
+	settingsCard           win.HBRUSH
+	settingsX              int32
+	settingsY              int32
+	settingsSaveFailed     bool
+	update                 updateState
+	nameHwnd               win.HWND
+	nameText               string
+	hoverPet               int
+	renameHwnd             win.HWND
+	renameEdit             win.HWND
+	renameIndex            int
+	wheelX                 int
+	sceneW                 int
+	tickCount              int
+	closing                atomic.Bool
 }
 
 type appSettings struct {
-	Version         int      `json:"version"`
-	Variant         int      `json:"variant"`
-	VariantID       string   `json:"variantID,omitempty"`
-	CoatMode        int      `json:"coatMode"`
-	SelectedCoats   []int    `json:"selectedCoats"`
-	SelectedCoatIDs []string `json:"selectedCoatIDs,omitempty"`
-	PetSizes        []int    `json:"petSizes,omitempty"`
-	Speed           int      `json:"speed"`
-	Mode            int      `json:"mode"`
-	PetCount        int      `json:"petCount"`
-	WheelEnabled    bool     `json:"wheelEnabled"`
-	Bidirectional   bool     `json:"bidirectional"`
-	PositionMode    *int     `json:"positionMode,omitempty"`
-	VerticalOffset  *int     `json:"verticalOffset,omitempty"`
-	DisplayIndex    *int     `json:"displayIndex,omitempty"`
-	DisplayScope    *int     `json:"displayScope,omitempty"`
-	DisplaySpanEnd  *int     `json:"displaySpanEnd,omitempty"`
-	WalkRangeStart  *int     `json:"walkRangeStart,omitempty"`
-	WalkRangeEnd    *int     `json:"walkRangeEnd,omitempty"`
-	Language        int      `json:"language"`
-	SettingsX       int32    `json:"settingsX"`
-	SettingsY       int32    `json:"settingsY"`
-	NameLabels      bool     `json:"nameLabels"`
-	PetNames        []string `json:"petNames,omitempty"`
+	Version                int      `json:"version"`
+	Variant                int      `json:"variant"`
+	VariantID              string   `json:"variantID,omitempty"`
+	CoatMode               int      `json:"coatMode"`
+	SelectedCoats          []int    `json:"selectedCoats"`
+	SelectedCoatIDs        []string `json:"selectedCoatIDs,omitempty"`
+	SelectedSlotModes      []int    `json:"selectedSlotModes,omitempty"`
+	SelectedRandomGroupIDs []string `json:"selectedRandomGroupIDs,omitempty"`
+	RandomGroupID          string   `json:"randomGroupID,omitempty"`
+	PetSizes               []int    `json:"petSizes,omitempty"`
+	Speed                  int      `json:"speed"`
+	Mode                   int      `json:"mode"`
+	PetCount               int      `json:"petCount"`
+	WheelEnabled           bool     `json:"wheelEnabled"`
+	Bidirectional          bool     `json:"bidirectional"`
+	PositionMode           *int     `json:"positionMode,omitempty"`
+	VerticalOffset         *int     `json:"verticalOffset,omitempty"`
+	DisplayIndex           *int     `json:"displayIndex,omitempty"`
+	DisplayScope           *int     `json:"displayScope,omitempty"`
+	DisplaySpanEnd         *int     `json:"displaySpanEnd,omitempty"`
+	WalkRangeStart         *int     `json:"walkRangeStart,omitempty"`
+	WalkRangeEnd           *int     `json:"walkRangeEnd,omitempty"`
+	Language               int      `json:"language"`
+	SettingsX              int32    `json:"settingsX"`
+	SettingsY              int32    `json:"settingsY"`
+	NameLabels             bool     `json:"nameLabels"`
+	PetNames               []string `json:"petNames,omitempty"`
 }
 
 var app *petApp
@@ -667,6 +682,19 @@ func (a *petApp) loadSettings() error {
 			}
 			a.selectedCoats[i] = variantIndexFromSettings(variant, stringAt(settings.SelectedCoatIDs, i), settings.Version, stringAt(settings.PetNames, i))
 		}
+		for i, mode := range settings.SelectedSlotModes {
+			if i >= len(a.selectedSlotModes) {
+				break
+			}
+			a.selectedSlotModes[i] = normalizePetSlotMode(mode)
+		}
+		for i, groupID := range settings.SelectedRandomGroupIDs {
+			if i >= len(a.selectedRandomGroupIDs) {
+				break
+			}
+			a.selectedRandomGroupIDs[i] = normalizeVariantGroupID(groupID)
+		}
+		a.randomGroupID = normalizeVariantGroupID(settings.RandomGroupID)
 		for i, size := range settings.PetSizes {
 			if i >= len(a.petSizes) {
 				break
@@ -739,6 +767,14 @@ func (a *petApp) saveSettings() error {
 		coats[i] = clamp(coats[i], 0, len(variants)-1)
 	}
 	coatIDs := variantIDsForIndices(coats)
+	slotModes := make([]int, len(a.selectedSlotModes))
+	for i, mode := range a.selectedSlotModes {
+		slotModes[i] = int(normalizePetSlotMode(int(mode)))
+	}
+	slotRandomGroupIDs := make([]string, len(a.selectedRandomGroupIDs))
+	for i, groupID := range a.selectedRandomGroupIDs {
+		slotRandomGroupIDs[i] = normalizeVariantGroupID(groupID)
+	}
 	sizes := make([]int, len(a.petSizes))
 	for i := range a.petSizes {
 		sizes[i] = a.petSizePercent(i)
@@ -753,30 +789,33 @@ func (a *petApp) saveSettings() error {
 	displayScopeValue := int(displayScope)
 	walkStart, walkEnd := normalizeWalkRange(a.walkRangeStart, a.walkRangeEnd)
 	settings := appSettings{
-		Version:         settingsVersion,
-		Variant:         clamp(a.variant, 0, len(variants)-1),
-		VariantID:       variantIDAt(a.variant),
-		CoatMode:        int(a.coatMode),
-		SelectedCoats:   coats,
-		SelectedCoatIDs: coatIDs,
-		PetSizes:        sizes,
-		Speed:           normalizeSpeed(a.speed),
-		Mode:            int(normalizeBehaviorMode(int(a.mode))),
-		PetCount:        clamp(a.petCount, 1, maxPetCount),
-		WheelEnabled:    a.wheelEnabled,
-		Bidirectional:   a.bidirectional,
-		PositionMode:    &positionMode,
-		VerticalOffset:  &verticalOffset,
-		DisplayIndex:    &displayIndex,
-		DisplayScope:    &displayScopeValue,
-		DisplaySpanEnd:  &displaySpanEnd,
-		WalkRangeStart:  &walkStart,
-		WalkRangeEnd:    &walkEnd,
-		Language:        int(normalizeLanguage(int(a.lang))),
-		SettingsX:       a.settingsX,
-		SettingsY:       a.settingsY,
-		NameLabels:      a.nameLabels,
-		PetNames:        names,
+		Version:                settingsVersion,
+		Variant:                clamp(a.variant, 0, len(variants)-1),
+		VariantID:              variantIDAt(a.variant),
+		CoatMode:               int(a.coatMode),
+		SelectedCoats:          coats,
+		SelectedCoatIDs:        coatIDs,
+		SelectedSlotModes:      slotModes,
+		SelectedRandomGroupIDs: slotRandomGroupIDs,
+		RandomGroupID:          normalizeVariantGroupID(a.randomGroupID),
+		PetSizes:               sizes,
+		Speed:                  normalizeSpeed(a.speed),
+		Mode:                   int(normalizeBehaviorMode(int(a.mode))),
+		PetCount:               clamp(a.petCount, 1, maxPetCount),
+		WheelEnabled:           a.wheelEnabled,
+		Bidirectional:          a.bidirectional,
+		PositionMode:           &positionMode,
+		VerticalOffset:         &verticalOffset,
+		DisplayIndex:           &displayIndex,
+		DisplayScope:           &displayScopeValue,
+		DisplaySpanEnd:         &displaySpanEnd,
+		WalkRangeStart:         &walkStart,
+		WalkRangeEnd:           &walkEnd,
+		Language:               int(normalizeLanguage(int(a.lang))),
+		SettingsX:              a.settingsX,
+		SettingsY:              a.settingsY,
+		NameLabels:             a.nameLabels,
+		PetNames:               names,
 	}
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
@@ -876,6 +915,29 @@ func normalizeCoatMode(mode int) coatMode {
 	default:
 		return coatRandom
 	}
+}
+
+func normalizePetSlotMode(mode int) petSlotMode {
+	switch petSlotMode(mode) {
+	case petSlotFixed, petSlotRandom:
+		return petSlotMode(mode)
+	default:
+		return petSlotFixed
+	}
+}
+
+func normalizeVariantGroupID(groupID string) string {
+	groupID = strings.TrimSpace(groupID)
+	if groupID == "" {
+		return ""
+	}
+	if _, ok := catalog.VariantGroupByID(groupID); !ok {
+		return ""
+	}
+	if len(variantIndicesForGroupID(groupID)) == 0 {
+		return ""
+	}
+	return groupID
 }
 
 func normalizeBehaviorMode(mode int) behaviorMode {
@@ -2040,8 +2102,27 @@ func (a *petApp) setSelectedVariant(index int, variant int) {
 		return
 	}
 	a.selectedCoats[index] = clamp(variant, 0, len(variants)-1)
+	a.selectedSlotModes[index] = petSlotFixed
 	if a.coatMode == coatSelected && index < len(a.pets) {
 		a.pets[index].variant = a.selectedCoats[index]
+	}
+}
+
+func (a *petApp) setSelectedRandomGroup(index int, groupID string) {
+	if index < 0 || index >= maxPetCount {
+		return
+	}
+	a.selectedSlotModes[index] = petSlotRandom
+	a.selectedRandomGroupIDs[index] = normalizeVariantGroupID(groupID)
+	if a.coatMode == coatSelected && index < len(a.pets) {
+		a.pets[index].variant = a.variantForIndex(index)
+	}
+}
+
+func (a *petApp) setRandomGroupID(groupID string) {
+	a.randomGroupID = normalizeVariantGroupID(groupID)
+	if a.coatMode == coatRandom {
+		a.refreshPetVariants()
 	}
 }
 
@@ -2057,13 +2138,27 @@ func (a *petApp) variantForIndex(index int) int {
 	}
 	switch a.coatMode {
 	case coatRandom:
-		return rand.Intn(len(variants))
+		return randomVariantForGroup(a.randomGroupID)
 	case coatSelected:
 		if index >= 0 && index < len(a.selectedCoats) {
+			if normalizePetSlotMode(int(a.selectedSlotModes[index])) == petSlotRandom {
+				return randomVariantForGroup(a.selectedRandomGroupIDs[index])
+			}
 			return clamp(a.selectedCoats[index], 0, len(variants)-1)
 		}
 	}
 	return clamp(a.variant, 0, len(variants)-1)
+}
+
+func randomVariantForGroup(groupID string) int {
+	if len(variants) == 0 {
+		return 0
+	}
+	indices := variantIndicesForGroupID(normalizeVariantGroupID(groupID))
+	if len(indices) == 0 {
+		return rand.Intn(len(variants))
+	}
+	return indices[rand.Intn(len(indices))]
 }
 
 func defaultSelectedCoats() [maxPetCount]int {
@@ -2563,7 +2658,9 @@ func (a *petApp) createSettingsWindow() {
 		a.createButton(hwnd, ctrlCoatSelected, a.txt("coatSelected"), 374, 250, 130, 30, 0)
 		a.createButton(hwnd, ctrlCoatRandom, a.txt("coatRandom"), 518, 250, 110, 30, 0)
 
-		a.createButton(hwnd, ctrlVariantCombo, "", 360, 298, 318, 34, 0)
+		if a.coatMode != coatSelected {
+			a.createButton(hwnd, ctrlVariantCombo, "", 360, 298, 318, 34, 0)
+		}
 		a.createButton(hwnd, ctrlNameLabels, "", 548, 344, 132, 28, 0)
 		for i := 0; i < a.petCount; i++ {
 			_, nameRect := settingsPetNameRects(i)
@@ -2695,7 +2792,9 @@ func (a *petApp) paintSettingsWindow(hwnd win.HWND) {
 		drawTextLine(hdc, a.txt("petCount"), win.RECT{Left: 250, Top: 154, Right: 390, Bottom: 184}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, fmt.Sprintf("%d", a.petCount), win.RECT{Left: 464, Top: 154, Right: 498, Bottom: 184}, a.settingsFont, rgb(25, 49, 40), win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		drawTextLine(hdc, a.txt("coatMode"), win.RECT{Left: 250, Top: 214, Right: 420, Bottom: 238}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
-		drawTextLine(hdc, a.txt("coatColor"), win.RECT{Left: 250, Top: 302, Right: 352, Bottom: 328}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
+		if a.coatMode != coatSelected {
+			drawTextLine(hdc, a.animalChoiceLabel(), win.RECT{Left: 250, Top: 302, Right: 352, Bottom: 328}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
+		}
 		drawTextLine(hdc, a.petNameSectionLabel(), win.RECT{Left: 250, Top: 344, Right: 520, Bottom: 370}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		if a.petCount > 0 {
 			for i := 0; i < a.petCount; i++ {
@@ -2941,6 +3040,9 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 	case ctrlCoatRandom:
 		return a.txt("coatRandom")
 	case ctrlVariantCombo:
+		if a.coatMode == coatRandom {
+			return a.randomGroupDisplayLabel(a.randomGroupID)
+		}
 		return a.variantDisplayLabel(a.variant)
 	case ctrlModeKeyboard:
 		return a.txt("modeKeyboard")
@@ -3008,7 +3110,7 @@ func (a *petApp) settingsButtonLabel(id int32) string {
 		return a.localText("キャンセル", "Cancel")
 	}
 	if id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount {
-		return a.variantDisplayLabel(a.settingsSelectVariant(id))
+		return a.petAssignmentDisplayLabel(int(id - ctrlPetVariantBase))
 	}
 	if id >= ctrlPetNameBase && id < ctrlPetNameBase+maxPetCount {
 		return a.petDisplayName(int(id - ctrlPetNameBase))
@@ -3317,7 +3419,16 @@ func (a *petApp) positionSummary() string {
 }
 
 func (a *petApp) settingsCoatSelectButton(id int32) bool {
-	return id == ctrlVariantCombo || (id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount)
+	if id == ctrlVariantCombo {
+		return a.coatMode == coatFixed
+	}
+	if id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount {
+		index := int(id - ctrlPetVariantBase)
+		return index >= 0 &&
+			index < len(a.selectedSlotModes) &&
+			normalizePetSlotMode(int(a.selectedSlotModes[index])) == petSlotFixed
+	}
+	return false
 }
 
 func settingsPetRowRects(index int) (win.RECT, win.RECT, win.RECT, win.RECT) {
@@ -3371,9 +3482,48 @@ func (a *petApp) petDisplayName(index int) string {
 
 func (a *petApp) petNameSectionLabel() string {
 	if a.coatMode == coatSelected {
-		return a.localText("名前 / 動物 / サイズ", "Names / animals / size")
+		return a.localText("名前 / 表示 / サイズ", "Names / assignment / size")
 	}
 	return a.localText("名前 / サイズ", "Names / size")
+}
+
+func (a *petApp) animalChoiceLabel() string {
+	if a.coatMode == coatRandom {
+		return a.localText("ランダム対象", "Random pool")
+	}
+	if a.coatMode == coatSelected {
+		return a.localText("各ペットの表示", "Per-pet assignment")
+	}
+	return a.txt("coatColor")
+}
+
+func (a *petApp) petAssignmentDisplayLabel(index int) string {
+	if index < 0 || index >= maxPetCount {
+		return ""
+	}
+	if normalizePetSlotMode(int(a.selectedSlotModes[index])) == petSlotRandom {
+		return a.randomGroupDisplayLabel(a.selectedRandomGroupIDs[index])
+	}
+	return a.variantDisplayLabel(a.selectedCoats[index])
+}
+
+func (a *petApp) randomGroupDisplayLabel(groupID string) string {
+	groupID = normalizeVariantGroupID(groupID)
+	if groupID == "" {
+		return a.localText("ランダム / すべて", "Random / all")
+	}
+	return a.localText("ランダム / "+a.variantGroupLabelByID(groupID), "Random / "+a.variantGroupLabelByID(groupID))
+}
+
+func (a *petApp) variantGroupLabelByID(groupID string) string {
+	group, ok := catalog.VariantGroupByID(groupID)
+	if !ok {
+		return ""
+	}
+	if a.lang == langEnglish {
+		return group.LabelEN
+	}
+	return group.LabelJA
 }
 
 func (a *petApp) localText(ja, en string) string {
@@ -3656,7 +3806,9 @@ func (a *petApp) syncSettingsWindow() {
 	a.setButtonChecked(ctrlCoatSelected, a.coatMode == coatSelected)
 	a.setButtonChecked(ctrlCoatRandom, a.coatMode == coatRandom)
 	a.syncSelectButton(ctrlVariantCombo)
-	win.EnableWindow(win.GetDlgItem(a.settingsHwnd, ctrlVariantCombo), a.coatMode == coatFixed)
+	if h := win.GetDlgItem(a.settingsHwnd, ctrlVariantCombo); h != 0 {
+		win.EnableWindow(h, a.coatMode == coatFixed || a.coatMode == coatRandom)
+	}
 	for i := 0; i < a.petCount; i++ {
 		a.syncSelectButton(ctrlPetNameBase + int32(i))
 		a.syncSelectButton(ctrlPetVariantBase + int32(i))
@@ -3819,9 +3971,16 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 		a.settingsTab = tabDisplay
 		a.recreateSettingsWindow()
 	case ctrlVariantCombo:
-		sel, ok := a.pickVariantFromMenu(id, a.variant)
-		if ok {
-			a.setFixedVariant(sel)
+		if a.coatMode == coatRandom {
+			groupID, ok := a.pickRandomGroupFromMenu(id, a.randomGroupID)
+			if ok {
+				a.setRandomGroupID(groupID)
+			}
+		} else {
+			sel, ok := a.pickVariantFromMenu(id, a.variant)
+			if ok {
+				a.setFixedVariant(sel)
+			}
 		}
 	case ctrlCoatFixed:
 		a.setCoatMode(coatFixed)
@@ -3900,9 +4059,13 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 		}
 	default:
 		if id >= ctrlPetVariantBase && id < ctrlPetVariantBase+maxPetCount {
-			sel, ok := a.pickVariantFromMenu(id, a.settingsSelectVariant(id))
+			assignment, ok := a.pickPetAssignmentFromMenu(id, int(id-ctrlPetVariantBase))
 			if ok {
-				a.setSelectedVariant(int(id-ctrlPetVariantBase), sel)
+				if assignment.Mode == petSlotRandom {
+					a.setSelectedRandomGroup(int(id-ctrlPetVariantBase), assignment.GroupID)
+				} else {
+					a.setSelectedVariant(int(id-ctrlPetVariantBase), assignment.Variant)
+				}
 			}
 			break
 		}
@@ -3929,6 +4092,105 @@ func (a *petApp) pickVariantFromMenu(id int32, selected int) (int, bool) {
 		return 0, false
 	}
 	return choice, true
+}
+
+type petAssignmentChoice struct {
+	Mode    petSlotMode
+	Variant int
+	GroupID string
+}
+
+func (a *petApp) pickPetAssignmentFromMenu(id int32, index int) (petAssignmentChoice, bool) {
+	menu := win.CreatePopupMenu()
+	const (
+		cmdRandomAll       uint32 = 1
+		cmdRandomGroupBase uint32 = 100
+		cmdVariantBase     uint32 = 1000
+	)
+	currentMode := petSlotFixed
+	currentVariant := 0
+	currentGroupID := ""
+	if index >= 0 && index < maxPetCount {
+		currentMode = normalizePetSlotMode(int(a.selectedSlotModes[index]))
+		currentVariant = clamp(a.selectedCoats[index], 0, len(variants)-1)
+		currentGroupID = normalizeVariantGroupID(a.selectedRandomGroupIDs[index])
+	}
+	appendMenu(menu, win.MF_STRING|checkedFlag(currentMode == petSlotRandom && currentGroupID == ""), uintptr(cmdRandomAll), syscall.StringToUTF16Ptr(a.randomAllMenuLabel()))
+	groupMenu := win.CreatePopupMenu()
+	groupCommandIDs := make(map[uint32]string)
+	for groupIndex, group := range a.variantMenuGroups() {
+		cmd := cmdRandomGroupBase + uint32(groupIndex)
+		groupCommandIDs[cmd] = group.ID
+		flags := uint32(win.MF_STRING)
+		if currentMode == petSlotRandom && currentGroupID == group.ID {
+			flags |= win.MF_CHECKED
+		}
+		appendMenu(groupMenu, flags, uintptr(cmd), syscall.StringToUTF16Ptr(a.randomGroupMenuLabel(group.Label)))
+	}
+	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(groupMenu), syscall.StringToUTF16Ptr(a.txt("randomByType")))
+	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
+	selectedVariant := currentVariant
+	if currentMode == petSlotRandom {
+		selectedVariant = -1
+	}
+	a.appendGroupedVariantMenu(menu, selectedVariant, func(variantIndex int) uintptr {
+		return uintptr(cmdVariantBase + uint32(variantIndex))
+	})
+	cmd := a.trackControlMenu(id, menu)
+	win.DestroyMenu(menu)
+	if cmd == 0 {
+		return petAssignmentChoice{}, false
+	}
+	if cmd == cmdRandomAll {
+		return petAssignmentChoice{Mode: petSlotRandom}, true
+	}
+	if groupID, ok := groupCommandIDs[cmd]; ok {
+		return petAssignmentChoice{Mode: petSlotRandom, GroupID: groupID}, true
+	}
+	if cmd >= cmdVariantBase && int(cmd-cmdVariantBase) < len(variants) {
+		return petAssignmentChoice{Mode: petSlotFixed, Variant: int(cmd - cmdVariantBase)}, true
+	}
+	return petAssignmentChoice{}, false
+}
+
+func (a *petApp) pickRandomGroupFromMenu(id int32, selected string) (string, bool) {
+	menu := win.CreatePopupMenu()
+	const cmdRandomAll uint32 = 1
+	selected = normalizeVariantGroupID(selected)
+	appendMenu(menu, win.MF_STRING|checkedFlag(selected == ""), uintptr(cmdRandomAll), syscall.StringToUTF16Ptr(a.randomAllMenuLabel()))
+	groupCommandIDs := make(map[uint32]string)
+	for groupIndex, group := range a.variantMenuGroups() {
+		cmd := uint32(groupIndex + 2)
+		groupCommandIDs[cmd] = group.ID
+		flags := uint32(win.MF_STRING)
+		if selected == group.ID {
+			flags |= win.MF_CHECKED
+		}
+		appendMenu(menu, flags, uintptr(cmd), syscall.StringToUTF16Ptr(group.Label))
+	}
+	cmd := a.trackControlMenu(id, menu)
+	win.DestroyMenu(menu)
+	if cmd == 0 {
+		return "", false
+	}
+	if cmd == cmdRandomAll {
+		return "", true
+	}
+	if groupID, ok := groupCommandIDs[cmd]; ok {
+		return groupID, true
+	}
+	return "", false
+}
+
+func (a *petApp) randomAllMenuLabel() string {
+	return a.localText("ランダム（すべて）", "Random: all")
+}
+
+func (a *petApp) randomGroupMenuLabel(group string) string {
+	if a.lang == langEnglish {
+		return "Random: " + group
+	}
+	return "ランダム（" + group + "）"
 }
 
 func (a *petApp) pickPetSizeFromMenu(id int32, selected int) (int, bool) {
@@ -4221,6 +4483,10 @@ func (a *petApp) txt(key string) string {
 			return "Choose each"
 		case "coatRandom":
 			return "Random"
+		case "randomByType":
+			return "Random by type"
+		case "randomTarget":
+			return "Random pool"
 		case "selectedCoats":
 			return "Per-pet animals"
 		case "coatNote":
@@ -4288,6 +4554,10 @@ func (a *petApp) txt(key string) string {
 		return "1匹ずつ選ぶ"
 	case "coatRandom":
 		return "ランダム"
+	case "randomByType":
+		return "種類でランダム"
+	case "randomTarget":
+		return "ランダム対象"
 	case "selectedCoats":
 		return "それぞれのペット"
 	case "coatNote":
@@ -4343,7 +4613,19 @@ func (a *petApp) variantDisplayLabel(i int) string {
 	if group == "" {
 		return label
 	}
+	if sameDisplayLabel(group, label) {
+		return label
+	}
 	return group + " / " + label
+}
+
+func sameDisplayLabel(a, b string) bool {
+	normalize := func(s string) string {
+		s = strings.ToLower(strings.TrimSpace(s))
+		s = strings.TrimSuffix(s, "s")
+		return s
+	}
+	return normalize(a) == normalize(b)
 }
 
 func (a *petApp) variantGroupLabel(i int) string {
@@ -4358,6 +4640,7 @@ func (a *petApp) variantGroupLabel(i int) string {
 }
 
 type variantMenuGroup struct {
+	ID      string
 	Label   string
 	Indices []int
 }
@@ -4378,9 +4661,26 @@ func (a *petApp) variantMenuGroups() []variantMenuGroup {
 		if a.lang == langEnglish {
 			label = group.LabelEN
 		}
-		groups = append(groups, variantMenuGroup{Label: label, Indices: indices})
+		groups = append(groups, variantMenuGroup{ID: group.ID, Label: label, Indices: indices})
 	}
 	return groups
+}
+
+func variantIndicesForGroupID(groupID string) []int {
+	if groupID == "" {
+		indices := make([]int, len(variants))
+		for i := range variants {
+			indices[i] = i
+		}
+		return indices
+	}
+	indices := make([]int, 0)
+	for i, variant := range variants {
+		if catalog.VariantGroupIDForSpecies(variant.SpeciesID) == groupID {
+			indices = append(indices, i)
+		}
+	}
+	return indices
 }
 
 func (a *petApp) appendGroupedVariantMenu(menu win.HMENU, selected int, commandID func(index int) uintptr) {
@@ -4949,6 +5249,12 @@ func (a *petApp) showTrayMenu() {
 	appendChecked(coatModeMenu, menuCoatSelected, a.txt("coatSelected"), a.coatMode == coatSelected)
 	appendChecked(coatModeMenu, menuCoatRandom, a.txt("coatRandom"), a.coatMode == coatRandom)
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(coatModeMenu), syscall.StringToUTF16Ptr(a.txt("coatMode")))
+	randomGroupMenu := win.CreatePopupMenu()
+	appendChecked(randomGroupMenu, menuRandomAll, a.randomAllMenuLabel(), normalizeVariantGroupID(a.randomGroupID) == "")
+	for i, group := range a.variantMenuGroups() {
+		appendChecked(randomGroupMenu, menuRandomGroupBase+uint16(i), group.Label, normalizeVariantGroupID(a.randomGroupID) == group.ID)
+	}
+	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(randomGroupMenu), syscall.StringToUTF16Ptr(a.txt("randomTarget")))
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 
 	speedMenu := win.CreatePopupMenu()
@@ -5079,6 +5385,19 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 		a.setCoatMode(coatSelected)
 	case id == menuCoatRandom:
 		a.setCoatMode(coatRandom)
+	case id == menuRandomAll:
+		a.setRandomGroupID("")
+		a.setCoatMode(coatRandom)
+		a.render()
+	case id >= menuRandomGroupBase:
+		groupIndex := int(id - menuRandomGroupBase)
+		groups := a.variantMenuGroups()
+		if groupIndex < 0 || groupIndex >= len(groups) {
+			return false
+		}
+		a.setRandomGroupID(groups[groupIndex].ID)
+		a.setCoatMode(coatRandom)
+		a.render()
 	case id == menuLangJapanese:
 		a.lang = langJapanese
 	case id == menuLangEnglish:

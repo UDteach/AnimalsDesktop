@@ -1155,3 +1155,13 @@
   named legacy shoebill settings, leave ambiguous legacy numeric indices
   unchanged, and group animal pickers by broad animal type. The public roster
   remains 57 animals with no new asset changes in this hotfix.
+
+## 2026-07-04
+
+- Prepared the v0.2.15 Windows settings release by adding per-pet fixed/random
+  slot modes, per-slot random type filters, and a global random type filter
+  reachable from settings and the tray menu. The public roster remains 57
+  animals with no asset changes. Local validation covered importer
+  determinism, full Go tests/vet, Windows amd64/no-network builds, and visible
+  settings UI screenshots for mixed fixed/random, per-slot random menus, and
+  global type-filtered random mode.
