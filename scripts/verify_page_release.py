@@ -39,11 +39,18 @@ def one(pattern: str, html: str, label: str) -> str:
 
 
 def release_tag(asset: str, html: str, label: str) -> str:
-    return one(
+    matches = re.findall(
         rf'releases/download/(v[0-9][^"/]*)/{re.escape(asset)}',
         html,
-        label,
+        flags=re.S,
     )
+    if not matches:
+        fail(f"missing {label}")
+    tags = sorted(set(matches))
+    if len(tags) > 1:
+        fail(f"{label} points to multiple versions: {', '.join(tags)}")
+    return tags[0]
+
 
 def runtime_variant_ids() -> list[str]:
     catalog = CATALOG.read_text(encoding="utf-8")
@@ -60,13 +67,13 @@ def runtime_variant_ids() -> list[str]:
 
 def current_page_variant_ids(html: str) -> list[str]:
     block = one(
-        r'<div class="current-grid">(.*?)</div>\s*</section>',
+        r"const animalCatalog = \[(.*?)\n\s*\];",
         html,
-        "current animal grid",
+        "JavaScript animal catalog",
     )
-    ids = re.findall(r'assets/animal-icons/current-([a-z0-9_]+)\.png', block)
+    ids = re.findall(r'\["([a-z0-9_]+)",\s*"[^"]+"\]', block)
     if not ids:
-        fail("current animal grid has no icons")
+        fail("JavaScript animal catalog has no IDs")
     return ids
 
 
@@ -85,11 +92,14 @@ def upcoming_page_ids(html: str) -> list[str]:
     return ids
 
 
-def verify_asset_refs(html: str) -> None:
-    refs = sorted(set(re.findall(r'(?:src|href)="(assets/[^"]+)"', html)))
+def verify_asset_refs(html: str, page_ids: list[str]) -> None:
+    refs = set(re.findall(r'(?:src|href)="(assets/[^"]+)"', html))
+    refs.update(re.findall(r'url\(["\']?(assets/[^"\')]+)', html))
+    refs.update(f"assets/animal-icons/current-{variant_id}.png" for variant_id in page_ids)
     if not refs:
         fail("no local asset references found")
-    missing = [ref for ref in refs if not (ROOT / "docs" / ref).exists()]
+    normalized = sorted({re.split(r"[?#]", ref, maxsplit=1)[0] for ref in refs})
+    missing = [ref for ref in normalized if not (ROOT / "docs" / ref).exists()]
     if missing:
         fail(f"missing local page assets: {missing}")
 
@@ -147,31 +157,22 @@ def main() -> None:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
 
     for required in (
-        'data-i18n="versions.v0215.title"',
-        "v0.2.15 / 2026-07-04",
-        "v0.2.15 / July 4, 2026",
+        '<time datetime="2026-07-04">2026-07-04</time>',
+        '<time datetime="2026-07-04">July 4, 2026</time>',
         "固定表示とランダム表示",
         "種類で絞り込め",
         "fixed animals and random slots",
         "filtered by animal type",
-        'data-i18n="versions.v0214.title"',
         "v0.2.14 / 2026-07-03",
         "v0.2.14 / July 3, 2026",
         "ハシビロコウが別の動物として復元",
         "stable IDs",
         "groups the Windows and Mac animal pickers by type",
-        'data-i18n="versions.v0213.title"',
         "v0.2.13 / 2026-07-03",
         "v0.2.13 / July 3, 2026",
-        "ハシビロコウが別の動物として復元",
-        "stable IDs",
         "roster additions do not remap saved choices",
-        'data-i18n="versions.v0212.title"',
         "v0.2.12 / 2026-07-03",
         "v0.2.12 / July 3, 2026",
-        'data-i18n="versions.v0211.title"',
-        'data-i18n="download.windows64NoNetwork"',
-        'data-i18n-html="download.securityNote"',
         "AnimalsDesktop-windows-amd64-no-network.zip",
         "Smart App Control FAQ",
         "SmartScreen reputation",
@@ -179,34 +180,42 @@ def main() -> None:
         "GlobalSign Smart App Control case study",
         "v0.2.11 / 2026-07-02",
         "v0.2.11 / July 2, 2026",
-        'data-i18n="versions.v0210.title"',
         "v0.2.10 / 2026-07-02",
         "v0.2.10 / July 2, 2026",
-        'data-i18n="versions.v029.title"',
         "v0.2.9 / 2026-07-02",
         "v0.2.9 / July 2, 2026",
-        'data-i18n="versions.v028.title"',
         "v0.2.8 / 2026-07-01",
         "v0.2.8 / July 1, 2026",
-        'data-i18n="versions.v027.title"',
         "v0.2.7 / 2026-07-01",
         "v0.2.7 / July 1, 2026",
-        'data-i18n="versions.v026.title"',
         "v0.2.6 / 2026-06-30",
         "v0.2.6 / June 30, 2026",
-        'data-i18n="versions.v025.title"',
         "v0.2.5 / 2026-06-29",
         "v0.2.5 / June 29, 2026",
-        'data-i18n="versions.v024.title"',
         "v0.2.4 / 2026-06-28",
         "v0.2.4 / June 28, 2026",
         "v0.2.3 / 2026-06-28",
         "v0.2.3 / June 28, 2026",
+        "v0.2.2 / 2026-06-27",
+        "v0.2.2 / June 27, 2026",
+        "v0.2.1 / 2026-06-27",
+        "v0.2.1 / June 27, 2026",
+        "v0.1.5 / 2026-06-21",
+        "v0.1.5 / June 21, 2026",
+        "Pagesに残っていた候補12件は v0.2.9 で追加済みです。次の追加候補は準備中です。",
+        "オカメインコ",
+        "Cockatiel - normal gray",
+        "v0.2.15の詳細",
+        "About v0.2.15",
+        "最大10匹",
+        "Show up to 10 animals",
+        "木、種、餌",
+        "trees, seeds, and food",
     ):
         if required not in html:
             fail(f"missing version history text: {required}")
 
-    verify_asset_refs(html)
+    verify_asset_refs(html, page_ids)
 
     print(
         f"Pages release links verified: Windows {windows_tag}, macOS {mac_arm64_tag}, "

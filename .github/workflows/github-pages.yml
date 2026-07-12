@@ -34,9 +34,9 @@ jobs:
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
           python3 scripts/verify_page_release.py
-          grep -q "Mac版 Apple Silicon" docs/index.html
+          grep -q "Mac版をダウンロード" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
-          grep -q "この版について" docs/index.html
+          grep -q "v0.2.15の詳細" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"
           grep -q "Generator Comparison Images" "docs/$MOTION_PREVIEW/index.html"
@@ -71,6 +71,22 @@ jobs:
           test -f docs/assets/animal-icons/current-shoebill_stork.png
           test -f docs/assets/animal-icons/current-fancy_rat_blue_hooded.png
           test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
+          test "$(find docs/assets/animal-icons -maxdepth 1 -name 'current-*.png' | wc -l)" -eq 57
+          test -f docs/assets/top-dual-monitor-hero.png
+          for demo in \
+            chinchilla_standard_gray \
+            chipmunk_striped \
+            fancy_rat_hooded \
+            gecko_leopard \
+            guinea_pig_tricolor \
+            hamster_golden_syrian \
+            holland_lop_broken_orange \
+            macaroni_mouse_tan \
+            rabbit_chestnut_agouti \
+            sugar_glider_gray
+          do
+            test -f "docs/assets/web-demo/$demo.png"
+          done
           test -f docs/robots.txt
           for asset in \
             chinchilla_standard_gray_set00.png \
@@ -86,6 +102,7 @@ jobs:
           mkdir -p "public-site/assets"
           mkdir -p "public-site/assets/animal-icons"
           mkdir -p "public-site/assets/upcoming-silhouettes"
+          mkdir -p "public-site/assets/web-demo"
           if find docs -name '._*' -print -quit | grep -q .; then
             echo "AppleDouble sidecars must not be published from docs/." >&2
             find docs -name '._*' -print >&2
@@ -95,7 +112,9 @@ jobs:
           cp docs/robots.txt public-site/robots.txt
           cp docs/assets/animalsdesktop-preview.png public-site/assets/animalsdesktop-preview.png
           cp docs/assets/animalsdesktop-coming-soon-silhouettes.png public-site/assets/animalsdesktop-coming-soon-silhouettes.png
+          cp docs/assets/top-dual-monitor-hero.png public-site/assets/top-dual-monitor-hero.png
           cp docs/assets/animal-icons/current-*.png public-site/assets/animal-icons/
+          cp docs/assets/web-demo/*.png public-site/assets/web-demo/
           shopt -s nullglob
           upcoming_silhouettes=(docs/assets/upcoming-silhouettes/*.png)
           if ((${#upcoming_silhouettes[@]})); then
