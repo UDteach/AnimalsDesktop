@@ -22,6 +22,8 @@ jobs:
           go run ./cmd/importsheet
           go run ./cmd/importanimals
           go run ./cmd/validatemotion -runtime-only -require-accepted
+          python3 -m unittest discover -s scripts -p "test_*.py"
+          python3 scripts/verify_page_release.py
       - name: Test
         run: go test -buildvcs=false ./cmd/animalsdesktop
       - name: Build macOS ZIPs
@@ -56,6 +58,8 @@ jobs:
           go run ./cmd/importsheet
           go run ./cmd/importanimals
           go run ./cmd/validatemotion -runtime-only -require-accepted
+          python -m unittest discover -s scripts -p "test_*.py"
+          python scripts/verify_page_release.py
       - name: Test
         run: go test -buildvcs=false ./...
       - name: Build Windows

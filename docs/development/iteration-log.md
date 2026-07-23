@@ -1165,3 +1165,33 @@
   determinism, full Go tests/vet, Windows amd64/no-network builds, and visible
   settings UI screenshots for mixed fixed/random, per-slot random menus, and
   global type-filtered random mode.
+
+## 2026-07-23
+
+- Preserved the existing dirty `main` checkout, fetched the latest
+  `origin/main`, and created a separate clean implementation branch from the
+  current remote head. No existing source art, generated evidence, or local
+  work was deleted.
+- Added the canonical `docs/development/adding-an-animal.md` integration path,
+  catalog contract validation, and `cmd/importanimals -variant <id> -check`.
+  Targeted mode validates or imports one animal without overwriting the
+  aggregate seed report or preview.
+- Made the Go catalog's curated runtime order the shared source for Windows
+  and macOS tests plus Pages generation. A strict Python parser rejects
+  formatting drift and quoted IDs in comments, while Pages and tagged-release
+  workflows now run the independent runtime-versus-page and exact-icon-set
+  verifier.
+- Unified motion-source family resolution across import and release
+  validation. `set00` alone remains an explicitly warned preview fallback, but
+  any partially populated `set00`-`set09` family now fails instead of silently
+  duplicating one sheet.
+- Local development dependencies were completed with Go 1.26.5, Python 3.14.6,
+  and pinned Pillow 12.3.0. A fresh 57-animal Pages asset rebuild was
+  deterministic and produced no tracked image changes.
+- Final local validation covered the uncached full Go suite, `go vet`, Windows
+  GUI build, all 127 seed variants through no-write import checking, Python
+  parser tests, Pages verification, and `git diff --check`. The current
+  57-animal preview roster still uses the documented single-source-set release
+  exception; all entries are accepted sources, but they are not the future
+  full ten-unique-set content gate. No animal pixels, tags, releases, or
+  production Pages state were published in this iteration.

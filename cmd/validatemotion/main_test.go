@@ -138,6 +138,23 @@ func TestValidateVariantAcceptsSingleAcceptedSourceSetButNotReleaseReady(t *test
 	}
 }
 
+func TestValidateVariantRejectsPartialSourceFamily(t *testing.T) {
+	root := t.TempDir()
+	set00Path := filepath.Join(root, "animal-set00-source.png")
+	writePNG(t, set00Path, testMotionSheet())
+	writePNG(t, filepath.Join(root, "animal-set01-source.png"), testMotionSheet())
+
+	_, err := validateVariant(catalog.Variant{
+		ID:               "chinchilla_standard_gray",
+		SpeciesID:        "chinchilla",
+		SourceStatus:     catalog.SourceStatusMotionDraft,
+		MotionSourcePath: set00Path,
+	})
+	if err == nil || !strings.Contains(err.Error(), "incomplete motion source family") {
+		t.Fatalf("validateVariant() error = %v, want incomplete-family failure", err)
+	}
+}
+
 func TestValidateVariantRejectsOpaqueMotionFrameBackground(t *testing.T) {
 	root := t.TempDir()
 	set00Path := filepath.Join(root, "animal-set00-source.png")
@@ -161,6 +178,20 @@ func TestValidateVariantRejectsOpaqueMotionFrameBackground(t *testing.T) {
 	if !strings.Contains(err.Error(), "transparent background") {
 		t.Fatalf("validateVariant() error = %v, want transparent-background failure", err)
 	}
+}
+
+func testMotionSheet() *image.RGBA {
+	sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
+	for frame := 0; frame < totalFrames; frame++ {
+		x0 := frame * frameW
+		sheet.SetRGBA(x0+6, 6, color.RGBA{R: 80, G: byte(frame), B: 80, A: 255})
+		for y := 28; y < 52; y++ {
+			for x := 20; x < 76; x++ {
+				sheet.SetRGBA(x0+x, y, color.RGBA{R: 150, G: 150, B: 145, A: 255})
+			}
+		}
+	}
+	return sheet
 }
 
 func writeMotionSourceFamily(t *testing.T, root string) string {

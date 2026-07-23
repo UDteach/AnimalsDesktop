@@ -104,76 +104,11 @@ func TestDarwinRandomPauseAvoidsWeakNibbleFrames(t *testing.T) {
 }
 
 func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
-	wantIDs := []string{
-		"chinchilla_standard_gray",
-		"chinchilla_beige",
-		"chinchilla_ebony",
-		"hamster_golden_syrian",
-		"djungarian_hamster",
-		"campbell_hamster",
-		"macaroni_mouse_tan",
-		"sugar_glider_gray",
-		"rabbit_chestnut_agouti",
-		"holland_lop_broken_orange",
-		"netherland_dwarf_chestnut",
-		"himalayan_rabbit",
-		"gecko_gray_brown",
-		"guinea_pig_tricolor",
-		"fancy_rat_hooded",
-		"richardsons_ground_squirrel",
-		"yorkshire_terrier_longcoat",
-		"chipmunk_striped",
-		"true_albino_chipmunk",
-		"gecko_leopard",
-		"whites_tree_frog_blue",
-		"budgerigar_green_yellow",
-		"cockatiel_normal_gray",
-		"java_sparrow_normal",
-		"parrotlet_green",
-		"parrotlet_blue_green",
-		"lovebird_peach_faced",
-		"ragdoll_seal_bicolor",
-		"scottish_fold_silver_tabby",
-		"french_bulldog_fawn",
-		"maine_coon_brown_tabby",
-		"domestic_shorthair_calico",
-		"british_shorthair_blue",
-		"toy_poodle_apricot",
-		"munchkin_brown_tabby",
-		"roborovski_hamster",
-		"guinea_pig_russian_smoke_white",
-		"quokka",
-		"miniature_schnauzer_salt_pepper",
-		"japanese_giant_salamander",
-		"white_wagtail",
-		"domestic_shorthair_tabby_white_stocky",
-		"lionhead_rabbit_brown_white",
-		"shoebill_stork",
-		"leucistic_sugar_glider",
-		"african_dormouse",
-		"netherland_dwarf_himalayan",
-		"american_flying_squirrel",
-		"longhair_hamster_black_white",
-		"longhair_hamster_black_white_masked",
-		"djungarian_hamster_yellow",
-		"djungarian_hamster_pearl_white",
-		"fancy_rat_blue_hooded",
-		"fancy_rat_chocolate_self",
-		"fancy_rat_cream_agouti",
-		"rabbit_gray",
-		"african_fat_tailed_gecko",
-	}
 	runtimeVariants := catalog.RuntimeVariants()
-	if len(runtimeVariants) != len(wantIDs) {
-		t.Fatalf("catalog runtime variants = %d, want %d selectable animals", len(runtimeVariants), len(wantIDs))
-	}
 	if len(darwinVariants) != len(runtimeVariants) {
 		t.Fatalf("darwinVariants = %d, want catalog runtime count %d", len(darwinVariants), len(runtimeVariants))
 	}
 	for i, want := range runtimeVariants {
-		if want.ID != wantIDs[i] {
-			t.Fatalf("catalog runtime variant[%d] = %q, want release-scoped %q", i, want.ID, wantIDs[i])
-		}
 		got := darwinVariants[i]
 		if got.ID != want.ID || got.SpriteBase != want.SpriteBase || got.LabelJA != want.LabelJA || got.LabelEN != want.LabelEN {
 			t.Fatalf("darwinVariants[%d] = %+v, want catalog variant %+v", i, got, want)

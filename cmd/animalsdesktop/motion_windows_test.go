@@ -176,72 +176,14 @@ func TestTypingDoesNotStartWheelInRandomMode(t *testing.T) {
 	}
 }
 
-func TestRuntimeCatalogIsReleaseScopedToPreviewAnimals(t *testing.T) {
-	wantIDs := []string{
-		"chinchilla_standard_gray",
-		"chinchilla_beige",
-		"chinchilla_ebony",
-		"hamster_golden_syrian",
-		"djungarian_hamster",
-		"campbell_hamster",
-		"macaroni_mouse_tan",
-		"sugar_glider_gray",
-		"rabbit_chestnut_agouti",
-		"holland_lop_broken_orange",
-		"netherland_dwarf_chestnut",
-		"himalayan_rabbit",
-		"gecko_gray_brown",
-		"guinea_pig_tricolor",
-		"fancy_rat_hooded",
-		"richardsons_ground_squirrel",
-		"yorkshire_terrier_longcoat",
-		"chipmunk_striped",
-		"true_albino_chipmunk",
-		"gecko_leopard",
-		"whites_tree_frog_blue",
-		"budgerigar_green_yellow",
-		"cockatiel_normal_gray",
-		"java_sparrow_normal",
-		"parrotlet_green",
-		"parrotlet_blue_green",
-		"lovebird_peach_faced",
-		"ragdoll_seal_bicolor",
-		"scottish_fold_silver_tabby",
-		"french_bulldog_fawn",
-		"maine_coon_brown_tabby",
-		"domestic_shorthair_calico",
-		"british_shorthair_blue",
-		"toy_poodle_apricot",
-		"munchkin_brown_tabby",
-		"roborovski_hamster",
-		"guinea_pig_russian_smoke_white",
-		"quokka",
-		"miniature_schnauzer_salt_pepper",
-		"japanese_giant_salamander",
-		"white_wagtail",
-		"domestic_shorthair_tabby_white_stocky",
-		"lionhead_rabbit_brown_white",
-		"shoebill_stork",
-		"leucistic_sugar_glider",
-		"african_dormouse",
-		"netherland_dwarf_himalayan",
-		"american_flying_squirrel",
-		"longhair_hamster_black_white",
-		"longhair_hamster_black_white_masked",
-		"djungarian_hamster_yellow",
-		"djungarian_hamster_pearl_white",
-		"fancy_rat_blue_hooded",
-		"fancy_rat_chocolate_self",
-		"fancy_rat_cream_agouti",
-		"rabbit_gray",
-		"african_fat_tailed_gecko",
-	}
-	if got := len(variants); got != len(wantIDs) {
-		t.Fatalf("runtime variants = %d, want %d", got, len(wantIDs))
+func TestRuntimeCatalogMatchesCatalogSource(t *testing.T) {
+	want := catalog.RuntimeVariants()
+	if got := len(variants); got != len(want) {
+		t.Fatalf("Windows runtime variants = %d, want %d catalog variants", got, len(want))
 	}
 	for i, variant := range variants {
-		if variant.ID != wantIDs[i] {
-			t.Fatalf("runtime variant[%d] = %q, want %q", i, variant.ID, wantIDs[i])
+		if variant != want[i] {
+			t.Fatalf("Windows runtime variant[%d] = %+v, want catalog variant %+v", i, variant, want[i])
 		}
 		if variant.SpeciesID == "degu" {
 			t.Fatalf("runtime variants include degu: %+v", variant)
@@ -1992,7 +1934,7 @@ func assertPowerShellParses(t *testing.T, script string) {
 		t.Fatalf("write script under test: %v", err)
 	}
 	parser := `
-$script = Get-Content -LiteralPath $args[0] -Raw
+$script = Get-Content -LiteralPath $env:ANIMALSDESKTOP_PARSE_SCRIPT_PATH -Raw
 $tokens = $null
 $errors = $null
 [System.Management.Automation.Language.Parser]::ParseInput($script, [ref]$tokens, [ref]$errors) | Out-Null
@@ -2001,7 +1943,8 @@ if ($errors.Count -gt 0) {
   exit 1
 }
 `
-	cmd := exec.Command(powershell, "-NoProfile", "-NonInteractive", "-Command", parser, scriptPath)
+	cmd := exec.Command(powershell, "-NoProfile", "-NonInteractive", "-Command", parser)
+	cmd.Env = append(os.Environ(), "ANIMALSDESKTOP_PARSE_SCRIPT_PATH="+scriptPath)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("PowerShell parser rejected script: %v\n%s", err, out)

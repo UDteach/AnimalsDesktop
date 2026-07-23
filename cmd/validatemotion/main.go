@@ -11,9 +11,9 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"animals-desktop/internal/catalog"
+	"animals-desktop/internal/motionsource"
 )
 
 const (
@@ -128,27 +128,7 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 }
 
 func motionSourceSheetPaths(set00Path string) ([]string, error) {
-	if set00Path == "" {
-		return nil, fmt.Errorf("motion source path is empty")
-	}
-	if !strings.Contains(set00Path, "set00") {
-		if _, err := os.Stat(set00Path); err != nil {
-			return nil, err
-		}
-		return []string{set00Path}, nil
-	}
-	paths := make([]string, 0, motionSets)
-	for set := 0; set < motionSets; set++ {
-		path := strings.Replace(set00Path, "set00", fmt.Sprintf("set%02d", set), 1)
-		if _, err := os.Stat(path); err != nil {
-			if os.IsNotExist(err) && set > 0 {
-				return []string{set00Path}, nil
-			}
-			return nil, err
-		}
-		paths = append(paths, path)
-	}
-	return paths, nil
+	return motionsource.ResolveSetPaths(set00Path, motionSets)
 }
 
 func validateSheet(path string) (string, error) {

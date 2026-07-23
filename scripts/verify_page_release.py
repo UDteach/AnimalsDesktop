@@ -7,6 +7,8 @@ import re
 import sys
 from pathlib import Path
 
+from catalog_runtime import runtime_variant_ids
+
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "docs" / "index.html"
@@ -52,19 +54,6 @@ def release_tag(asset: str, html: str, label: str) -> str:
     return tags[0]
 
 
-def runtime_variant_ids() -> list[str]:
-    catalog = CATALOG.read_text(encoding="utf-8")
-    block = one(
-        r"var runtimeVariantIDs = \[\]string\{(.*?)\}",
-        catalog,
-        "runtime variant list",
-    )
-    ids = re.findall(r'"([^"]+)"', block)
-    if not ids:
-        fail("runtime variant list is empty")
-    return ids
-
-
 def current_page_variant_ids(html: str) -> list[str]:
     block = one(
         r"const animalCatalog = \[(.*?)\n\s*\];",
@@ -102,6 +91,18 @@ def verify_asset_refs(html: str, page_ids: list[str]) -> None:
     missing = [ref for ref in normalized if not (ROOT / "docs" / ref).exists()]
     if missing:
         fail(f"missing local page assets: {missing}")
+
+
+def verify_current_icons(page_ids: list[str], icon_dir: Path) -> None:
+    expected = {f"current-{variant_id}.png" for variant_id in page_ids}
+    actual = {path.name for path in icon_dir.glob("current-*.png")}
+    missing = sorted(expected - actual)
+    stale = sorted(actual - expected)
+    if missing or stale:
+        fail(
+            "current animal icons differ from runtime roster; "
+            f"missing={missing}, stale={stale}"
+        )
 
 
 def main() -> None:
@@ -147,10 +148,14 @@ def main() -> None:
     if mac_arm64_tag != mac_amd64_tag:
         fail(f"macOS download tags differ: {mac_arm64_tag} != {mac_amd64_tag}")
 
-    runtime_ids = runtime_variant_ids()
+    try:
+        runtime_ids = runtime_variant_ids(CATALOG)
+    except ValueError as error:
+        fail(str(error))
     page_ids = current_page_variant_ids(html)
     if page_ids != runtime_ids:
         fail(f"current animal grid {page_ids} does not match runtime variants {runtime_ids}")
+    verify_current_icons(page_ids, ROOT / "docs" / "assets" / "animal-icons")
 
     upcoming_ids = upcoming_page_ids(html)
     if upcoming_ids != EXPECTED_UPCOMING:

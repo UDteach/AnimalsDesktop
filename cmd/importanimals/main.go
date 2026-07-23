@@ -8,23 +8,38 @@ import (
 	"image/color"
 	"image/draw"
 	"image/png"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"animals-desktop/internal/catalog"
+	"animals-desktop/internal/motionsource"
 	xdraw "golang.org/x/image/draw"
 )
 
 const (
-	totalFrames = 62
-	motionSets  = 10
-	frameW      = 96
-	frameH      = 64
+	totalFrames        = 62
+	motionSets         = 10
+	frameW             = 96
+	frameH             = 64
+	defaultReportPath  = "assets/source/animals/seed-import-report.json"
+	defaultPreviewPath = "docs/assets/animalsdesktop-seed-preview.png"
 )
 
 var defaultGeneratedSourceDir = filepath.FromSlash("assets/source/animals/generated")
+
+type importOptions struct {
+	outDir             string
+	reportPath         string
+	previewPath        string
+	generatedSourceDir string
+	variantID          string
+	check              bool
+	reportExplicit     bool
+	previewExplicit    bool
+}
 
 type seedReport struct {
 	Variant         string     `json:"variant"`
@@ -65,26 +80,132 @@ type renderProfile struct {
 }
 
 func main() {
-	outDir := flag.String("out", filepath.FromSlash("assets/sprites"), "output sprite directory")
-	reportPath := flag.String("report", filepath.FromSlash("assets/source/animals/seed-import-report.json"), "JSON report path")
-	previewPath := flag.String("preview", filepath.FromSlash("docs/assets/animalsdesktop-seed-preview.png"), "seed preview PNG path")
-	generatedSourceDir := flag.String("generated-source-dir", defaultGeneratedSourceDir, "directory for normalized/generated source PNGs")
-	flag.Parse()
+	if err := runImporter(os.Args[1:], os.Stdout, os.Stderr); err != nil {
+		log.Fatal(err)
+	}
+}
 
-	seedVariants := catalog.SeedVariants()
-	reports := make([]seedReport, 0)
-	for _, variant := range seedVariants {
-		report, err := importVariant(variant, *outDir, *generatedSourceDir)
+func runImporter(args []string, stdout io.Writer, stderr io.Writer) error {
+	options, err := parseImportOptions(args, stderr)
+	if err == flag.ErrHelp {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if err := catalog.Validate(); err != nil {
+		return fmt.Errorf("validate catalog: %w", err)
+	}
+	variants, err := selectImportVariants(options.variantID)
+	if err != nil {
+		return err
+	}
+	options = resolveOutputPaths(options)
+	return executeImport(options, variants, stdout)
+}
+
+func parseImportOptions(args []string, stderr io.Writer) (importOptions, error) {
+	options := importOptions{}
+	flags := flag.NewFlagSet("importanimals", flag.ContinueOnError)
+	flags.SetOutput(stderr)
+	flags.StringVar(&options.outDir, "out", filepath.FromSlash("assets/sprites"), "output sprite directory")
+	flags.StringVar(&options.reportPath, "report", filepath.FromSlash(defaultReportPath), "JSON report path")
+	flags.StringVar(&options.previewPath, "preview", filepath.FromSlash(defaultPreviewPath), "seed preview PNG path")
+	flags.StringVar(&options.generatedSourceDir, "generated-source-dir", defaultGeneratedSourceDir, "directory for normalized/generated source PNGs")
+	flags.StringVar(&options.variantID, "variant", "", "import exactly one catalog SeedStage variant")
+	flags.BoolVar(&options.check, "check", false, "validate imports using temporary output without repository writes")
+	if err := flags.Parse(args); err != nil {
+		return importOptions{}, err
+	}
+	if flags.NArg() != 0 {
+		return importOptions{}, fmt.Errorf("unexpected positional arguments: %s", strings.Join(flags.Args(), " "))
+	}
+	flags.Visit(func(flag *flag.Flag) {
+		switch flag.Name {
+		case "report":
+			options.reportExplicit = true
+		case "preview":
+			options.previewExplicit = true
+		}
+	})
+	return options, nil
+}
+
+func selectImportVariants(variantID string) ([]catalog.Variant, error) {
+	if variantID == "" {
+		variants := catalog.SeedVariants()
+		if len(variants) == 0 {
+			return nil, fmt.Errorf("catalog has no variants marked SeedStage")
+		}
+		return variants, nil
+	}
+	variant, ok := catalog.VariantByID(variantID)
+	if !ok {
+		return nil, fmt.Errorf("unknown variant %q; choose a catalog variant ID marked SeedStage", variantID)
+	}
+	if !variant.SeedStage {
+		return nil, fmt.Errorf("variant %q is not importable: catalog entry is not marked SeedStage", variantID)
+	}
+	return []catalog.Variant{variant}, nil
+}
+
+func resolveOutputPaths(options importOptions) importOptions {
+	if options.variantID == "" {
+		return options
+	}
+	if !options.reportExplicit {
+		options.reportPath = ""
+	}
+	if !options.previewExplicit {
+		options.previewPath = ""
+	}
+	return options
+}
+
+func executeImport(options importOptions, variants []catalog.Variant, stdout io.Writer) error {
+	if options.check {
+		tempRoot, err := os.MkdirTemp("", "animalsdesktop-import-check-*")
 		if err != nil {
-			log.Fatalf("import %s: %v", variant.ID, err)
+			return fmt.Errorf("create check output: %w", err)
+		}
+		defer os.RemoveAll(tempRoot)
+		options.outDir = filepath.Join(tempRoot, "sprites")
+		options.generatedSourceDir = filepath.Join(tempRoot, "generated")
+		if options.reportPath != "" {
+			options.reportPath = filepath.Join(tempRoot, "seed-import-report.json")
+		}
+		if options.previewPath != "" {
+			options.previewPath = filepath.Join(tempRoot, "seed-preview.png")
+		}
+	}
+
+	reports := make([]seedReport, 0, len(variants))
+	for _, variant := range variants {
+		report, err := importVariant(variant, options.outDir, options.generatedSourceDir)
+		if err != nil {
+			return fmt.Errorf("import %s: %w", variant.ID, err)
 		}
 		reports = append(reports, report)
 	}
-	writeJSON(*reportPath, reports)
-	if err := writeSeedPreview(seedVariants, *outDir, *previewPath); err != nil {
-		log.Fatalf("write preview: %v", err)
+	if options.reportPath != "" {
+		if err := writeJSON(options.reportPath, reports); err != nil {
+			return fmt.Errorf("write report: %w", err)
+		}
 	}
-	fmt.Printf("imported %d seed animal variants into %d-frame sheets\n", len(reports), totalFrames)
+	if options.previewPath != "" {
+		if err := writeSeedPreview(variants, options.outDir, options.previewPath); err != nil {
+			return fmt.Errorf("write preview: %w", err)
+		}
+	}
+	if stdout == nil {
+		stdout = io.Discard
+	}
+	if options.check {
+		fmt.Fprintf(stdout, "validated %d seed animal variants through %d-frame import pipeline\n", len(reports), totalFrames)
+	} else {
+		fmt.Fprintf(stdout, "imported %d seed animal variants into %d-frame sheets\n", len(reports), totalFrames)
+	}
+	return nil
 }
 
 func importVariant(variant catalog.Variant, outDir string, generatedSourceDir string) (seedReport, error) {
@@ -185,27 +306,7 @@ func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, 
 }
 
 func motionSourceSheetPaths(set00Path string) ([]string, error) {
-	if set00Path == "" {
-		return nil, fmt.Errorf("motion source path is empty")
-	}
-	if !strings.Contains(set00Path, "set00") {
-		return []string{set00Path}, nil
-	}
-	paths := make([]string, 0, motionSets)
-	for set := 0; set < motionSets; set++ {
-		path := strings.Replace(set00Path, "set00", fmt.Sprintf("set%02d", set), 1)
-		if _, err := os.Stat(path); err != nil {
-			if os.IsNotExist(err) {
-				if set == 0 {
-					return nil, err
-				}
-				return []string{set00Path}, nil
-			}
-			return nil, err
-		}
-		paths = append(paths, path)
-	}
-	return paths, nil
+	return motionsource.ResolveSetPaths(set00Path, motionSets)
 }
 
 func loadMotionSourceSheet(path string) (*image.RGBA, error) {
@@ -864,17 +965,18 @@ func copyFile(srcPath string, dstPath string) error {
 	return os.WriteFile(dstPath, data, 0o644)
 }
 
-func writeJSON(path string, report []seedReport) {
+func writeJSON(path string, report []seedReport) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		log.Fatalf("create report dir: %v", err)
+		return fmt.Errorf("create report dir: %w", err)
 	}
 	data, err := json.MarshalIndent(report, "", "  ")
 	if err != nil {
-		log.Fatalf("marshal report: %v", err)
+		return fmt.Errorf("marshal report: %w", err)
 	}
 	if err := os.WriteFile(path, append(data, '\n'), 0o644); err != nil {
-		log.Fatalf("write report: %v", err)
+		return fmt.Errorf("write report: %w", err)
 	}
+	return nil
 }
 
 func writeSeedPreview(variants []catalog.Variant, outDir string, path string) error {

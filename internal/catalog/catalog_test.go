@@ -11,62 +11,25 @@ import (
 )
 
 func TestCatalogInvariants(t *testing.T) {
-	if len(Variants) != 138 {
-		t.Fatalf("variants = %d, want exactly 138", len(Variants))
-	}
-	if got := len(SeedVariants()); got != 127 {
-		t.Fatalf("seed variants = %d, want 127", got)
-	}
-	if got := len(DeguVariantIDs()); got != 11 {
-		t.Fatalf("degu variants = %d, want 11", got)
+	if err := Validate(); err != nil {
+		t.Fatalf("catalog validation failed: %v", err)
 	}
 
-	species := map[string]Species{}
-	for _, entry := range SpeciesList {
-		if entry.ID == "" || entry.Label == "" || entry.Profile == "" {
-			t.Fatalf("incomplete species entry: %+v", entry)
-		}
-		if _, exists := species[entry.ID]; exists {
-			t.Fatalf("duplicate species id %q", entry.ID)
-		}
-		species[entry.ID] = entry
-	}
-
-	ids := map[string]bool{}
-	spriteBases := map[string]bool{}
+	seedCount := 0
+	deguCount := 0
 	for _, variant := range Variants {
-		if variant.ID == "" || variant.SpeciesID == "" || variant.LabelEN == "" || variant.SpriteBase == "" {
-			t.Fatalf("incomplete variant: %+v", variant)
+		if variant.SeedStage {
+			seedCount++
 		}
-		if variant.BreedOrMorph == "" || variant.Color == "" || variant.PopularityTier == 0 || variant.MotionProfile == "" || variant.SourceStatus == "" {
-			t.Fatalf("variant %q missing catalog metadata: %+v", variant.ID, variant)
+		if variant.SpeciesID == "degu" {
+			deguCount++
 		}
-		if _, ok := species[variant.SpeciesID]; !ok {
-			t.Fatalf("variant %q references unknown species %q", variant.ID, variant.SpeciesID)
-		}
-		if ids[variant.ID] {
-			t.Fatalf("duplicate variant id %q", variant.ID)
-		}
-		ids[variant.ID] = true
-		if spriteBases[variant.SpriteBase] {
-			t.Fatalf("duplicate sprite base %q", variant.SpriteBase)
-		}
-		spriteBases[variant.SpriteBase] = true
-		if variant.SeedStage && variant.SourcePath == "" && variant.Shape == "" {
-			t.Fatalf("seed variant %q has neither source path nor procedural shape", variant.ID)
-		}
-		if variant.SeedStage && variant.SourceStatus != SourceStatusPrototypeOnly && variant.SourceStatus != SourceStatusImageGenQueued && variant.SourceStatus != SourceStatusMotionDraft && variant.SourceStatus != SourceStatusMotionAccepted {
-			t.Fatalf("seed variant %q source status = %q, want prototype/imagegen/motion status", variant.ID, variant.SourceStatus)
-		}
-		if (variant.SourceStatus == SourceStatusMotionDraft || variant.SourceStatus == SourceStatusMotionAccepted) && variant.MotionSourcePath == "" {
-			t.Fatalf("motion source variant %q has no motion source path", variant.ID)
-		}
-		if variant.MotionSourcePath != "" && variant.SourceStatus != SourceStatusMotionDraft && variant.SourceStatus != SourceStatusMotionAccepted {
-			t.Fatalf("variant %q has motion source path with source status %q", variant.ID, variant.SourceStatus)
-		}
-		if !variant.SeedStage && variant.SourceStatus != SourceStatusDeguMotion {
-			t.Fatalf("non-seed variant %q source status = %q, want degu motion source", variant.ID, variant.SourceStatus)
-		}
+	}
+	if got := len(SeedVariants()); got != seedCount {
+		t.Fatalf("SeedVariants() = %d, want %d catalog seed variants", got, seedCount)
+	}
+	if got := len(DeguVariantIDs()); got != deguCount {
+		t.Fatalf("DeguVariantIDs() = %d, want %d catalog degu variants", got, deguCount)
 	}
 }
 
@@ -92,71 +55,12 @@ func TestVariantGroupsClassifyRuntimeAnimals(t *testing.T) {
 
 func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 	runtime := RuntimeVariants()
-	wantIDs := []string{
-		"chinchilla_standard_gray",
-		"chinchilla_beige",
-		"chinchilla_ebony",
-		"hamster_golden_syrian",
-		"djungarian_hamster",
-		"campbell_hamster",
-		"macaroni_mouse_tan",
-		"sugar_glider_gray",
-		"rabbit_chestnut_agouti",
-		"holland_lop_broken_orange",
-		"netherland_dwarf_chestnut",
-		"himalayan_rabbit",
-		"gecko_gray_brown",
-		"guinea_pig_tricolor",
-		"fancy_rat_hooded",
-		"richardsons_ground_squirrel",
-		"yorkshire_terrier_longcoat",
-		"chipmunk_striped",
-		"true_albino_chipmunk",
-		"gecko_leopard",
-		"whites_tree_frog_blue",
-		"budgerigar_green_yellow",
-		"cockatiel_normal_gray",
-		"java_sparrow_normal",
-		"parrotlet_green",
-		"parrotlet_blue_green",
-		"lovebird_peach_faced",
-		"ragdoll_seal_bicolor",
-		"scottish_fold_silver_tabby",
-		"french_bulldog_fawn",
-		"maine_coon_brown_tabby",
-		"domestic_shorthair_calico",
-		"british_shorthair_blue",
-		"toy_poodle_apricot",
-		"munchkin_brown_tabby",
-		"roborovski_hamster",
-		"guinea_pig_russian_smoke_white",
-		"quokka",
-		"miniature_schnauzer_salt_pepper",
-		"japanese_giant_salamander",
-		"white_wagtail",
-		"domestic_shorthair_tabby_white_stocky",
-		"lionhead_rabbit_brown_white",
-		"shoebill_stork",
-		"leucistic_sugar_glider",
-		"african_dormouse",
-		"netherland_dwarf_himalayan",
-		"american_flying_squirrel",
-		"longhair_hamster_black_white",
-		"longhair_hamster_black_white_masked",
-		"djungarian_hamster_yellow",
-		"djungarian_hamster_pearl_white",
-		"fancy_rat_blue_hooded",
-		"fancy_rat_chocolate_self",
-		"fancy_rat_cream_agouti",
-		"rabbit_gray",
-		"african_fat_tailed_gecko",
-	}
-	if got := len(runtime); got != len(wantIDs) {
-		t.Fatalf("runtime variants = %d, want %d release-scoped variants", got, len(wantIDs))
+	if got := len(runtime); got != len(runtimeVariantIDs) {
+		t.Fatalf("runtime variants = %d, want %d release-scoped ids", got, len(runtimeVariantIDs))
 	}
 	for i, variant := range runtime {
-		if variant.ID != wantIDs[i] {
-			t.Fatalf("runtime variant[%d] = %q, want %q", i, variant.ID, wantIDs[i])
+		if variant.ID != runtimeVariantIDs[i] {
+			t.Fatalf("runtime variant[%d] = %q, want %q", i, variant.ID, runtimeVariantIDs[i])
 		}
 		if variant.SpeciesID == "degu" {
 			t.Fatalf("runtime variants must not include degu: %+v", variant)

@@ -10,6 +10,11 @@ on:
       - "docs/robots.txt"
       - "docs/assets/**"
       - "docs/previews/**"
+      - "internal/catalog/catalog.go"
+      - "scripts/build_page_assets.py"
+      - "scripts/catalog_runtime.py"
+      - "scripts/test_catalog_runtime.py"
+      - "scripts/test_verify_page_release.py"
       - "scripts/verify_page_release.py"
   workflow_dispatch:
 
@@ -33,6 +38,7 @@ jobs:
           SPRITE_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
+          python3 -m unittest discover -s scripts -p "test_*.py"
           python3 scripts/verify_page_release.py
           grep -q "Mac版をダウンロード" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
@@ -50,28 +56,7 @@ jobs:
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$SPRITE_PREVIEW/index.html"
           ! grep -Eq "art-source|source-truth|rejected-candidates|review/candidates" "docs/$MOTION_PREVIEW/index.html"
           test -f docs/assets/animalsdesktop-preview.png
-          test -f docs/assets/animal-icons/current-chinchilla_standard_gray.png
-          test -f docs/assets/animal-icons/current-chinchilla_beige.png
-          test -f docs/assets/animal-icons/current-chinchilla_ebony.png
-          test -f docs/assets/animal-icons/current-hamster_golden_syrian.png
-          test -f docs/assets/animal-icons/current-djungarian_hamster.png
-          test -f docs/assets/animal-icons/current-campbell_hamster.png
-          test -f docs/assets/animal-icons/current-macaroni_mouse_tan.png
-          test -f docs/assets/animal-icons/current-rabbit_chestnut_agouti.png
-          test -f docs/assets/animal-icons/current-holland_lop_broken_orange.png
-          test -f docs/assets/animal-icons/current-netherland_dwarf_chestnut.png
-          test -f docs/assets/animal-icons/current-himalayan_rabbit.png
-          test -f docs/assets/animal-icons/current-sugar_glider_gray.png
-          test -f docs/assets/animal-icons/current-gecko_gray_brown.png
-          test -f docs/assets/animal-icons/current-guinea_pig_tricolor.png
-          test -f docs/assets/animal-icons/current-fancy_rat_hooded.png
-          test -f docs/assets/animal-icons/current-richardsons_ground_squirrel.png
-          test -f docs/assets/animal-icons/current-yorkshire_terrier_longcoat.png
-          test -f docs/assets/animal-icons/current-lionhead_rabbit_brown_white.png
-          test -f docs/assets/animal-icons/current-shoebill_stork.png
-          test -f docs/assets/animal-icons/current-fancy_rat_blue_hooded.png
           test -f docs/assets/animalsdesktop-coming-soon-silhouettes.png
-          test "$(find docs/assets/animal-icons -maxdepth 1 -name 'current-*.png' | wc -l)" -eq 57
           test -f docs/assets/top-dual-monitor-hero.png
           for demo in \
             chinchilla_standard_gray \

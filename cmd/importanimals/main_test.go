@@ -3,6 +3,7 @@ package main
 import (
 	"image"
 	"image/color"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,6 +11,147 @@ import (
 
 	"animals-desktop/internal/catalog"
 )
+
+func TestSelectImportVariantsTargetsOneSeedVariant(t *testing.T) {
+	seeds := catalog.SeedVariants()
+	if len(seeds) == 0 {
+		t.Fatal("catalog has no seed variants")
+	}
+
+	got, err := selectImportVariants(seeds[0].ID)
+	if err != nil {
+		t.Fatalf("selectImportVariants() error = %v", err)
+	}
+	if len(got) != 1 || got[0].ID != seeds[0].ID {
+		t.Fatalf("selected variants = %#v, want exactly %q", got, seeds[0].ID)
+	}
+}
+
+func TestRunImporterHelpSucceedsWithoutImporting(t *testing.T) {
+	var stderr strings.Builder
+	if err := runImporter([]string{"-h"}, io.Discard, &stderr); err != nil {
+		t.Fatalf("runImporter(-h) error = %v", err)
+	}
+	for _, want := range []string{"Usage of importanimals", "-variant", "-check"} {
+		if !strings.Contains(stderr.String(), want) {
+			t.Fatalf("help output = %q, want %q", stderr.String(), want)
+		}
+	}
+}
+
+func TestSelectImportVariantsRejectsUnknownAndNonSeedIDs(t *testing.T) {
+	t.Run("unknown", func(t *testing.T) {
+		_, err := selectImportVariants("definitely_not_a_catalog_variant")
+		if err == nil {
+			t.Fatal("selectImportVariants() succeeded for unknown variant")
+		}
+		if !strings.Contains(err.Error(), "unknown variant") || !strings.Contains(err.Error(), "SeedStage") {
+			t.Fatalf("selectImportVariants() error = %v, want actionable unknown-variant error", err)
+		}
+	})
+
+	t.Run("non-seed", func(t *testing.T) {
+		var nonSeed catalog.Variant
+		for _, variant := range catalog.Variants {
+			if !variant.SeedStage {
+				nonSeed = variant
+				break
+			}
+		}
+		if nonSeed.ID == "" {
+			t.Fatal("catalog has no non-seed variant for rejection test")
+		}
+
+		_, err := selectImportVariants(nonSeed.ID)
+		if err == nil {
+			t.Fatalf("selectImportVariants() succeeded for non-seed variant %q", nonSeed.ID)
+		}
+		if !strings.Contains(err.Error(), "not importable") || !strings.Contains(err.Error(), "not marked SeedStage") {
+			t.Fatalf("selectImportVariants() error = %v, want actionable non-importable error", err)
+		}
+	})
+}
+
+func TestResolveOutputPathsKeepsAggregateDefaultsAndProtectsTargetedArtifacts(t *testing.T) {
+	aggregate, err := parseImportOptions(nil, io.Discard)
+	if err != nil {
+		t.Fatalf("parse aggregate options: %v", err)
+	}
+	aggregate = resolveOutputPaths(aggregate)
+	if aggregate.reportPath != filepath.FromSlash(defaultReportPath) {
+		t.Fatalf("aggregate report path = %q, want %q", aggregate.reportPath, filepath.FromSlash(defaultReportPath))
+	}
+	if aggregate.previewPath != filepath.FromSlash(defaultPreviewPath) {
+		t.Fatalf("aggregate preview path = %q, want %q", aggregate.previewPath, filepath.FromSlash(defaultPreviewPath))
+	}
+
+	targeted, err := parseImportOptions([]string{"-variant", "target_variant"}, io.Discard)
+	if err != nil {
+		t.Fatalf("parse targeted options: %v", err)
+	}
+	targeted = resolveOutputPaths(targeted)
+	if targeted.reportPath != "" || targeted.previewPath != "" {
+		t.Fatalf("targeted default artifacts = report:%q preview:%q, want both suppressed", targeted.reportPath, targeted.previewPath)
+	}
+
+	explicit, err := parseImportOptions([]string{
+		"-variant", "target_variant",
+		"-report", filepath.FromSlash("tmp/target-report.json"),
+		"-preview", filepath.FromSlash("tmp/target-preview.png"),
+	}, io.Discard)
+	if err != nil {
+		t.Fatalf("parse targeted explicit options: %v", err)
+	}
+	explicit = resolveOutputPaths(explicit)
+	if explicit.reportPath != filepath.FromSlash("tmp/target-report.json") {
+		t.Fatalf("explicit report path = %q", explicit.reportPath)
+	}
+	if explicit.previewPath != filepath.FromSlash("tmp/target-preview.png") {
+		t.Fatalf("explicit preview path = %q", explicit.previewPath)
+	}
+}
+
+func TestCheckModeDoesNotWriteConfiguredRepositoryPaths(t *testing.T) {
+	repositoryRoot := filepath.Join(t.TempDir(), "repository")
+	if err := os.MkdirAll(repositoryRoot, 0o755); err != nil {
+		t.Fatalf("create repository root: %v", err)
+	}
+	options := importOptions{
+		outDir:             filepath.Join(repositoryRoot, "assets", "sprites"),
+		reportPath:         filepath.Join(repositoryRoot, "assets", "source", "animals", "seed-import-report.json"),
+		previewPath:        filepath.Join(repositoryRoot, "docs", "assets", "animalsdesktop-seed-preview.png"),
+		generatedSourceDir: filepath.Join(repositoryRoot, "assets", "source", "animals", "generated"),
+		variantID:          "test_seed_variant",
+		check:              true,
+		reportExplicit:     true,
+		previewExplicit:    true,
+	}
+	variant := catalog.Variant{
+		ID:             "test_seed_variant",
+		SpeciesID:      "mouse",
+		BreedOrMorph:   "Test mouse",
+		Color:          "brown",
+		PopularityTier: 1,
+		MotionProfile:  catalog.MotionProfileSmallRodentScurry,
+		SourceStatus:   catalog.SourceStatusPrototypeOnly,
+		SpriteBase:     "test_seed_variant",
+		SeedStage:      true,
+		Shape:          "small_rodent",
+		TintHex:        "8a6748",
+		AccentHex:      "eadbc0",
+	}
+
+	if err := executeImport(options, []catalog.Variant{variant}, io.Discard); err != nil {
+		t.Fatalf("executeImport() check error = %v", err)
+	}
+	entries, err := os.ReadDir(repositoryRoot)
+	if err != nil {
+		t.Fatalf("read repository root: %v", err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("check mode wrote repository entries: %v", entries)
+	}
+}
 
 func TestNormalizeSourceUsesFixedCanvas(t *testing.T) {
 	src := image.NewRGBA(image.Rect(0, 0, 200, 120))

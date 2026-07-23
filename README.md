@@ -126,6 +126,25 @@ preview exception is documented.
 
 ## Development
 
+Local asset work requires Go 1.24 or newer plus Python 3.10 or newer. Install
+the pinned Python image dependency once:
+
+```powershell
+python -m pip install -r requirements-dev.txt
+```
+
+For the source-art, catalog, targeted-import, runtime, and release boundaries
+for a new animal, see
+[`docs/development/adding-an-animal.md`](docs/development/adding-an-animal.md).
+The fast local loop validates and imports one cataloged animal without
+rewriting the aggregate report or preview:
+
+```powershell
+go run ./cmd/importanimals -variant <variant_id> -check
+go run ./cmd/importanimals -variant <variant_id>
+go run ./cmd/validatemotion -variant <variant_id> -require-accepted
+```
+
 Useful checks during local development:
 
 ```powershell
