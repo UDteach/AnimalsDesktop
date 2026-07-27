@@ -39,6 +39,7 @@ func TestVariantGroupsClassifyRuntimeAnimals(t *testing.T) {
 		"cat":          "cat",
 		"rabbit":       "rabbit",
 		"chinchilla":   "chinchilla",
+		"ferret":       "small_mammal",
 		"gecko":        "reptile_amphibian",
 		"sugar_glider": "sugar_glider",
 	}
@@ -68,6 +69,94 @@ func TestRuntimeVariantsAreReleaseScoped(t *testing.T) {
 		if variant.SourceStatus != SourceStatusMotionAccepted {
 			t.Fatalf("runtime variant %q source status = %q, want accepted", variant.ID, variant.SourceStatus)
 		}
+	}
+}
+
+func TestAcceptedFerretVariantsAreRuntimeScopedAtEnd(t *testing.T) {
+	want := []struct {
+		id               string
+		labelEN          string
+		labelJA          string
+		sourcePath       string
+		motionSourcePath string
+		tintHex          string
+		accentHex        string
+		color            string
+		popularityTier   int
+	}{
+		{
+			id:               "ferret_sable_panda",
+			labelEN:          "Ferret - sable panda",
+			labelJA:          "フェレット（セーブルパンダ）",
+			sourcePath:       "docs/art-source/ferret-sable-panda/motion-source/accepted-frames/set00/frame-00.png",
+			motionSourcePath: "docs/art-source/ferret-sable-panda/motion-source/sheets/ferret-sable-panda-source-set00.png",
+			tintHex:          "eee7d9",
+			accentHex:        "6e5140",
+			color:            "sable panda",
+			popularityTier:   2,
+		},
+		{
+			id:               "ferret_sable",
+			labelEN:          "Ferret - sable",
+			labelJA:          "フェレット（セーブル）",
+			sourcePath:       "docs/art-source/ferret-sable/motion-source/accepted-frames/set00/frame-00.png",
+			motionSourcePath: "docs/art-source/ferret-sable/motion-source/sheets/ferret-sable-source-set00.png",
+			tintHex:          "8b6746",
+			accentHex:        "ece0c8",
+			color:            "sable",
+			popularityTier:   1,
+		},
+		{
+			id:               "ferret_albino",
+			labelEN:          "Ferret - albino",
+			labelJA:          "フェレット（アルビノ）",
+			sourcePath:       "docs/art-source/ferret-albino/motion-source/accepted-frames/set00/frame-00.png",
+			motionSourcePath: "docs/art-source/ferret-albino/motion-source/sheets/ferret-albino-source-set00.png",
+			tintHex:          "eadcc7",
+			accentHex:        "c58b78",
+			color:            "albino",
+			popularityTier:   2,
+		},
+	}
+
+	runtime := RuntimeVariants()
+	if len(runtime) < len(want) {
+		t.Fatalf("runtime variants = %d, need at least %d ferret variants", len(runtime), len(want))
+	}
+	runtimeTail := runtime[len(runtime)-len(want):]
+	for i, expected := range want {
+		if runtimeTail[i].ID != expected.id {
+			t.Fatalf("runtime tail[%d] = %q, want %q", i, runtimeTail[i].ID, expected.id)
+		}
+
+		variant, ok := VariantByID(expected.id)
+		if !ok {
+			t.Fatalf("missing accepted ferret variant %q", expected.id)
+		}
+		if variant.SpeciesID != "ferret" ||
+			variant.BreedOrMorph != "Ferret" ||
+			variant.LabelEN != expected.labelEN ||
+			variant.LabelJA != expected.labelJA ||
+			variant.SpriteBase != expected.id ||
+			variant.SourcePath != expected.sourcePath ||
+			variant.MotionSourcePath != expected.motionSourcePath ||
+			variant.TintHex != expected.tintHex ||
+			variant.AccentHex != expected.accentHex ||
+			variant.Color != expected.color ||
+			variant.PopularityTier != expected.popularityTier ||
+			!variant.SeedStage ||
+			MotionProfileForVariant(variant) != MotionProfileFerretSlink ||
+			variant.SourceStatus != SourceStatusMotionAccepted {
+			t.Fatalf("accepted ferret variant %q metadata = %+v", expected.id, variant)
+		}
+	}
+
+	champagne, ok := VariantByID("ferret_champagne")
+	if !ok {
+		t.Fatal("missing prototype ferret_champagne")
+	}
+	if champagne.SourceStatus != SourceStatusPrototypeOnly {
+		t.Fatalf("ferret_champagne source status = %q, want prototype", champagne.SourceStatus)
 	}
 }
 

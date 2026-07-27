@@ -14,8 +14,8 @@ when the parent thread explicitly accepts it as the next production target.
 - Next requested production candidate after this batch: normal striped chipmunk / シマリス, distinct from `albino_chipmunk`.
 - Incremental preview release policy: after an animal reaches accepted `set00`
   parity, it may ship in the next small preview version after explicit release
-  approval and matching download artifacts. Do not claim DeguDesktop-level
-  completion until the full 10-set gate is met.
+  approval and matching download artifacts. Accepted `set00` is the complete
+  canonical source; the importer expands it into all ten runtime slots.
 - Wheel-capable runtime animals: chinchilla and hamster only
 
 ## Batch Strategy
@@ -33,19 +33,21 @@ unreviewed frames through one context.
 ## Completion Contract
 
 Use `docs/art-source/motion-contract.md` as the promotion and release gate. The
-runtime target stays DeguDesktop-compatible: 10 motion sets, 62 frames per set,
-96x64 transparent frames, and the DeguDesktop frame slots preserved. A family is
-not complete just because it is selectable; it is complete for a version bump
-only when its source-truth art, 62-frame motion set, importer output,
-settings/tray reflection, visual review, and QA pass.
+runtime target stays DeguDesktop-compatible: 10 runtime slots, 62 frames per
+slot, 96x64 transparent frames, and the DeguDesktop frame slots preserved. One
+reviewed and accepted canonical 62-frame `set00` is the normal complete source;
+the importer expands it into all ten runtime sheets. A family is not complete
+just because it is selectable; it is complete for a version bump only when its
+source-truth art, canonical motion set, importer output, settings/tray
+reflection, visual review, and QA pass.
 
-Work one family at a time for full releases. Preview releases may incrementally
-add completed `set00` animals when the parent thread explicitly accepts the
-exception and the release page labels the build as a preview. Public coming-soon
-silhouettes are release-managed: when an animal ships, remove it from the queue
-image/list and move it into the current-animal section. Do not repurpose runtime,
-prototype, or accepted-frame art for coming-soon silhouettes; either generate
-page-specific future art or keep the future queue text-only.
+Work one family at a time for content releases. A completed canonical `set00`
+does not need a preview exception for source coverage; publication still needs
+explicit release approval and matching page/download artifacts. Public
+coming-soon silhouettes are release-managed: when an animal ships, remove it
+from the queue image/list and move it into the current-animal section. Do not
+repurpose runtime, prototype, or accepted-frame art for coming-soon silhouettes;
+either generate page-specific future art or keep the future queue text-only.
 
 ## Profile-Specific Notes
 

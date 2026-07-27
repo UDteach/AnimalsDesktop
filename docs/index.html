@@ -6,7 +6,7 @@
     <title>Animals Desktop</title>
     <meta
       name="description"
-      content="Animals Desktopは、57種類の小動物がWindowsのタスクバー付近やMacのDock付近でちょこちょこ動くデスクトップペットアプリです。"
+      content="Animals Desktopは、フェレット3種を含む60種類から選べるWindows / Mac向けデスクトップペットアプリです。"
     />
     <link rel="icon" href="assets/animal-icons/current-chinchilla_standard_gray.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -873,11 +873,19 @@
         line-height: 1.65;
       }
 
+      .hero-copy .release-boundary {
+        margin: 8px 0 0;
+        color: #4b5a50;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
       .hero-copy .actions {
         display: flex;
         flex-wrap: wrap;
         gap: 22px;
-        margin-top: 26px;
+        margin-top: 18px;
       }
 
       .hero-copy .button {
@@ -1378,13 +1386,14 @@
       <section class="top-hero" aria-labelledby="top-heading">
         <div class="hero-copy">
           <h1 id="top-heading">Animals Desktop</h1>
-          <p class="lead" data-language-copy="lead">デスクトップのすみに、57種類の動物が歩きます。</p>
+          <p class="lead" data-language-copy="lead">60種類の動物から選べます。</p>
+          <p class="release-boundary" data-language-copy="releaseBoundary">公開版 v0.2.16：60種類</p>
           <div id="download" class="actions">
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-windows-amd64.zip">
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64.zip">
               <i class="fa-brands fa-windows" aria-hidden="true"></i>
               <span data-language-copy="windows">Windows版をダウンロード</span>
             </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-macos-arm64.zip">
+            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-arm64.zip">
               <i class="fa-brands fa-apple" aria-hidden="true"></i>
               <span data-language-copy="mac">Mac版をダウンロード</span>
             </a>
@@ -1429,35 +1438,35 @@
           <div>
             <h2 id="download-details-heading">Animals Desktopについて</h2>
             <p class="intro-copy">
-              57種類の動物が、Windowsのタスクバー付近やMacのDock付近を歩くデスクトップペットです。白黒長毛ハムスター2と、赤目で無模様の真のアルビノシマリスも選べます。表示数や1匹ごとのサイズを選び、歩き、待機、クリック反応を楽しめます。
+              セーブルパンダ、セーブル、アルビノのフェレット3種を追加し、選べる動物が60種類になりました。表示数や1匹ごとのサイズを選び、歩き、待機、クリック反応を楽しめます。
             </p>
             <p class="download-note">
-              v0.2.15 は、57種類の小動物と基本モーションを試せる先行お試し版です。Windows版では固定表示とランダム表示を組み合わせられ、1匹ごとのランダム対象を全体または種類別に選べます。全体ランダムも、うさぎやチンチラなどの種類で絞り込めます。
-              Windows版はトレイの Language メニューから表示言語を切り替えられます。ZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版も v0.2.15 のZIPを展開して
+              v0.2.16 は、60種類の動物と基本モーションを試せる先行お試し版です。Windows版では固定表示とランダム表示を組み合わせられ、1匹ごとのランダム対象を全体または種類別に選べます。全体ランダムも、うさぎやフェレットなどの種類で絞り込めます。
+              Windows版はトレイの Language メニューから表示言語を切り替えられます。ZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版も v0.2.16 のZIPを展開して
               <code>AnimalsDesktop.app</code> を起動してください。
             </p>
             <div class="release-meta" aria-label="Build information">
-              <span>先行お試し版 <strong data-release-version>v0.2.15</strong></span>
-              <span>Windows版 <strong>v0.2.15</strong></span>
-              <span>Mac版 <strong>v0.2.15</strong></span>
-              <span>小動物 <strong>57種</strong></span>
-              <span>内容 <strong>選択UI</strong></span>
-              <span>更新日 <strong data-build-date>2026-07-04</strong></span>
+              <span>先行お試し版 <strong data-release-version>v0.2.16</strong></span>
+              <span>Windows版 <strong>v0.2.16</strong></span>
+              <span>Mac版 <strong>v0.2.16</strong></span>
+              <span>動物 <strong>60種</strong></span>
+              <span>追加 <strong>フェレット3種</strong></span>
+              <span>更新日 <strong data-build-date>2026-07-27</strong></span>
             </div>
           </div>
           <div class="download-alternatives">
             <h3 class="download-alternatives-title">その他のダウンロードと検証情報</h3>
             <div class="detail-links">
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 ネットワーク無効</a>
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 32-bit</a>
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac版 Intel macOS 12+</a>
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
+              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 ネットワーク無効</a>
+              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 32-bit</a>
+              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac版 Intel macOS 12+</a>
+              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
             </div>
             <details class="content-disclosure">
               <summary>ネットワーク無効版について</summary>
               <div class="disclosure-body">
                 <p>
-                  ネットワーク無効版は、Smart App Control / SmartScreen などのセキュリティチェックで説明しやすいよう、自動更新確認、トレイからの更新確認、更新ZIPのダウンロードを無効化したWindows 64-bit向け検証版です。Microsoftの説明では、Smart App Controlはクラウド判定が曖昧な場合に有効な署名も確認するため、未署名ビルドの通過を保証するものではありません。詳しくは
+                  v0.2.16のWindows版は未署名のため、Smart App Control / SmartScreen などに警告またはブロックされる場合があります。ネットワーク無効版は、自動更新確認、トレイからの更新確認、更新ZIPのダウンロードを無効化したWindows 64-bit向け検証版であり、警告を回避するものではありません。詳しくは
                   <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a>、
                   <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>、日本語の補足事例として
                   <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSignのSmart App Control事例</a>を参照してください。
@@ -1471,12 +1480,12 @@
         <div class="section-head">
           <div>
             <h2 id="animals-heading">登場する動物</h2>
-            <p>鳥、猫、犬、爬虫類、小動物を含む57種類から選べます。</p>
+            <p>公開版では、鳥、猫、犬、爬虫類、小動物を含む60種類から選べます。</p>
           </div>
         </div>
         <div class="catalog-filters" role="group" aria-label="動物のカテゴリ">
-          <button class="catalog-filter" type="button" data-category="all" aria-pressed="true">すべて <span>57</span></button>
-          <button class="catalog-filter" type="button" data-category="small" aria-pressed="false">小動物 <span>26</span></button>
+          <button class="catalog-filter" type="button" data-category="all" aria-pressed="true">すべて <span>60</span></button>
+          <button class="catalog-filter" type="button" data-category="small" aria-pressed="false">小動物 <span>29</span></button>
           <button class="catalog-filter" type="button" data-category="rabbit" aria-pressed="false">うさぎ <span>7</span></button>
           <button class="catalog-filter" type="button" data-category="bird" aria-pressed="false">鳥 <span>8</span></button>
           <button class="catalog-filter" type="button" data-category="cat" aria-pressed="false">猫 <span>7</span></button>
@@ -1583,10 +1592,10 @@
           </article>
         </div>
         <button class="catalog-toggle" type="button" aria-controls="animal-grid" aria-expanded="false">
-          <span>57種類すべて見る</span>
+          <span>60種類すべて見る</span>
           <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </button>
-        <p class="catalog-note">Pagesに残っていた候補12件は v0.2.9 で追加済みです。次の追加候補は準備中です。</p>
+        <p class="catalog-note">v0.2.16で、セーブルパンダ、セーブル、アルビノのフェレット3種を追加しました。</p>
       </section>
 
       <section id="features" aria-labelledby="features-heading">
@@ -1606,7 +1615,7 @@
           </article>
           <article>
             <h3>シンプルなWindows / Mac版</h3>
-            <p>Windows版とMac版のv0.2.15を入手できます。現行プレビューでは木、種、餌などは表示せず、動物本体のしぐさを中心に楽しめます。</p>
+            <p>Windows版とMac版のv0.2.16を入手できます。現行プレビューでは木、種、餌などは表示せず、動物本体のしぐさを中心に楽しめます。</p>
           </article>
         </div>
       </section>
@@ -1615,21 +1624,25 @@
         <div class="section-head">
           <div>
             <h2 id="versions-heading">更新内容</h2>
-            <p>公開中の主な変更点です。Windows版とMac版は現在 v0.2.15 です。</p>
+            <p>公開中の主な変更点です。Windows版とMac版は現在 v0.2.16 です。</p>
           </div>
         </div>
         <div class="version-list">
           <article class="version-card">
             <div>
-              <h3>v0.2.15</h3>
-              <time datetime="2026-07-04">2026-07-04</time>
+              <h3>v0.2.16</h3>
+              <time datetime="2026-07-27">2026-07-27</time>
             </div>
-            <p>Windows版の動物設定で、固定表示とランダム表示を1匹ごとに組み合わせられるようにしました。ランダム枠は全動物または種類別に絞り込め、全体ランダムも種類指定に対応しました。選べる動物は57種類のままです。</p>
+            <p>セーブルパンダ、セーブル、アルビノのフェレット3種を追加しました。選べる動物は60種類です。Windows版とMac版の動物選択、歩行、待機、クリック反応に対応しています。</p>
           </article>
         </div>
         <details class="content-disclosure">
-          <summary>v0.2.14以前の更新内容</summary>
+          <summary>v0.2.15以前の更新内容</summary>
           <div class="history-list">
+            <article class="history-item">
+              <h3>v0.2.15 / 2026-07-04</h3>
+              <p>Windows版の動物設定で、固定表示とランダム表示を1匹ごとに組み合わせられるようにしました。ランダム枠は全動物または種類別に絞り込め、全体ランダムも種類指定に対応しました。選べる動物は57種類です。</p>
+            </article>
             <article class="history-item">
               <h3>v0.2.14 / 2026-07-03</h3>
               <p>動物選択の保存を安定したID方式へ切り替え、過去設定でハシビロコウが別の動物として復元されることがある問題を修正しました。Windows版とMac版の動物選択メニューを種類別に整理しています。選べる動物は57種類のままです。</p>
@@ -1640,11 +1653,11 @@
             </article>
             <article class="history-item">
               <h3>v0.2.12 / 2026-07-03</h3>
-              <p>白黒長毛ハムスター2と、ImageGen-onlyで作り直した赤目・無模様の真のアルビノシマリスを追加しました。選べる動物は57種類です。</p>
+              <p>白黒長毛ハムスター2と、作り直した赤目・無模様の真のアルビノシマリスを追加しました。選べる動物は57種類です。</p>
             </article>
             <article class="history-item">
               <h3>v0.2.11 / 2026-07-02</h3>
-              <p>アルビノシマリス枠を ImageGen-only の新ソース確認まで公開選択肢から外しました。チンチラのベージュ/エボニーとブルーフーディッドのファンシーラット色調補正は維持し、選べる動物は55種類です。</p>
+              <p>アルビノシマリス枠を新しい素材の確認まで公開選択肢から外しました。チンチラのベージュ/エボニーとブルーフーディッドのファンシーラット色調補正は維持し、選べる動物は55種類です。</p>
             </article>
             <article class="history-item">
               <h3>v0.2.10 / 2026-07-02</h3>
@@ -1652,11 +1665,11 @@
             </article>
             <article class="history-item">
               <h3>v0.2.9 / 2026-07-02</h3>
-              <p>残っていたPages候補12件を追加し、選べる動物を54種類に増やしました。真のアルビノシマリスは白背景での見え方修正まで一時的に外しています。</p>
+              <p>候補の動物12種類を追加し、選べる動物を54種類に増やしました。真のアルビノシマリスは白背景での見え方修正まで一時的に外しています。</p>
             </article>
             <article class="history-item">
               <h3>v0.2.8 / 2026-07-01</h3>
-              <p>ライオンラビットと、あまり動かない低モーション特別扱いのハシビロコウを追加し、選べる動物を42種類に増やしました。真のアルビノシマリスはImageGenレーンで白背景の見え方を直すまで一時的に外しています。</p>
+              <p>ライオンラビットと、動きが控えめなハシビロコウを追加し、選べる動物を42種類に増やしました。真のアルビノシマリスは白背景での見え方を直すまで一時的に外しています。</p>
             </article>
             <article class="history-item">
               <h3>v0.2.7 / 2026-07-01</h3>
@@ -1693,9 +1706,9 @@
           </div>
         </details>
         <details class="content-disclosure">
-          <summary>v0.2.15の詳細</summary>
+          <summary>v0.2.16の詳細</summary>
           <div class="disclosure-body">
-            <p>v0.2.15 は、57種類の小動物を試せるWindows / Macプレビュー版です。チンチラの色違い2件、ブルーフーディッドのファンシーラット色調補正、白黒長毛ハムスター2、真のアルビノシマリスを含む57種類を選べます。Windows版では固定枠とランダム枠の組み合わせ、1匹ごとの種類別ランダム、全体ランダムの種類絞り込みも設定できます。その他の動物は、動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定で選べます。Windows版はトレイから Language を切り替えられます。木、種、餌などの追加アイテムはこの版では表示しません。</p>
+            <p>v0.2.16 は、60種類の動物を試せるWindows / Macプレビュー版です。白地に茶色のセーブルパンダ、一般的なセーブル、白い毛と赤い目のアルビノのフェレット3種を追加しました。Windows版では固定枠とランダム枠の組み合わせ、1匹ごとの種類別ランダム、全体ランダムの種類絞り込みを設定できます。動物選択、サイズ変更、表示数、言語、表示先ディスプレイ設定も利用できます。木、種、餌などの追加アイテムはこの版では表示しません。</p>
           </div>
         </details>
         <a class="release-archive-link" href="https://github.com/UDteach/AnimalsDesktop/releases">
@@ -1705,25 +1718,25 @@
 
       <section class="english" id="english" hidden>
         <h2>About Animals Desktop</h2>
-        <p>Animals Desktop is a small desktop pet app for Windows and macOS. Fifty-seven small animals, including a second black-and-white long-haired hamster and a rebuilt red-eyed true albino chipmunk, walk near the Windows taskbar or above the Mac Dock. You can change the visible count and each animal's size, then enjoy walking, idle motion, and click reactions.</p>
-        <p>v0.2.15 is an early preview with fifty-seven small animals and core motion. On Windows, fixed animals and random slots can be mixed per pet. Random slots can target all animals or one animal type, and global random mode can also be filtered by type. The tray Language menu changes the Windows app language. Extract the ZIP and run <code>AnimalsDesktop.exe</code> on Windows or <code>AnimalsDesktop.app</code> on Mac.</p>
+        <p>Animals Desktop is a small desktop pet app for Windows and macOS. It includes sixty animals, including Sable Panda, Sable, and Albino ferrets, that walk near the Windows taskbar or above the Mac Dock. You can change the visible count and each animal's size, then enjoy walking, idle motion, and click reactions.</p>
+        <p>v0.2.16 is an early preview with sixty animals and core motion. On Windows, fixed animals and random slots can be mixed per pet. Random slots can target all animals or one animal type, and global random mode can also be filtered by type. The tray Language menu changes the Windows app language. Extract the ZIP and run <code>AnimalsDesktop.exe</code> on Windows or <code>AnimalsDesktop.app</code> on Mac.</p>
         <div class="detail-links">
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows no-network</a>
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows 32-bit</a>
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac Intel macOS 12+</a>
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.15/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows no-network</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows 32-bit</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac Intel macOS 12+</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
         </div>
         <details class="content-disclosure">
           <summary>About the no-network edition</summary>
           <div class="disclosure-body">
-            <p>The no-network edition is a Windows 64-bit security-check build that disables automatic startup update checks, tray update checks, and update ZIP downloads so the runtime behavior is easier to explain for Smart App Control / SmartScreen review. Microsoft says Smart App Control also checks for a valid signature when cloud confidence is unclear, so this unsigned build is not guaranteed to pass. See the <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a>, <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>, and the Japanese supplemental <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSign Smart App Control case study</a>.</p>
+            <p>The v0.2.16 Windows packages are unsigned, so Smart App Control, SmartScreen, or security software may warn about or block them. The Windows 64-bit no-network edition disables automatic startup update checks, tray update checks, and update ZIP downloads for security review; it does not bypass these warnings. See the <a href="https://support.microsoft.com/en-us/windows/security/threat-malware-protection/smart-app-control-frequently-asked-questions">Smart App Control FAQ</a>, <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation">SmartScreen reputation</a>, and the Japanese supplemental <a href="https://college.globalsign.com/blog/smartappcontrol_20260423/">GlobalSign Smart App Control case study</a>.</p>
           </div>
         </details>
 
         <h2>Available animals</h2>
-        <p>The current preview includes fifty-seven animals: birds, cats, dogs, reptiles, amphibians, rabbits, and small mammals.</p>
-        <div class="english-animal-list" aria-label="Fifty-seven available animals"></div>
-        <p>The 12 remaining GitHub Pages candidates were added in v0.2.9. The next additions are being prepared.</p>
+        <p>The public catalog includes sixty animals: birds, cats, dogs, reptiles, amphibians, rabbits, and small mammals.</p>
+        <div class="english-animal-list" aria-label="Sixty available animals"></div>
+        <p>v0.2.16 adds Sable Panda, Sable, and Albino ferrets.</p>
 
         <h2>Features</h2>
         <div class="features">
@@ -1737,29 +1750,29 @@
           </article>
           <article>
             <h3>Simple Windows and Mac preview</h3>
-            <p>Windows v0.2.15 and Mac v0.2.15 are available here. This preview focuses on animal motion and does not show trees, seeds, food, or other props.</p>
+          <p>Windows v0.2.16 and Mac v0.2.16 are available here. This preview focuses on animal motion and does not show trees, seeds, food, or other props.</p>
           </article>
         </div>
 
         <h2>Version Changes</h2>
-        <p>Windows and Mac are currently on v0.2.15.</p>
+        <p>Windows and Mac are currently on v0.2.16.</p>
         <div class="version-list">
           <article class="version-card">
             <div>
-              <h3>v0.2.15</h3>
-              <time datetime="2026-07-04">July 4, 2026</time>
+              <h3>v0.2.16</h3>
+              <time datetime="2026-07-27">July 27, 2026</time>
             </div>
-            <p>Adds Windows settings for mixing fixed animals with random slots per pet. Random slots can target all animals or a selected animal type, and global random mode can also be filtered by animal type. The selectable roster remains fifty-seven animals.</p>
+            <p>Adds Sable Panda, Sable, and Albino ferrets. The selectable roster now contains sixty animals, with animal selection, walking, idle motion, and click reactions on Windows and Mac.</p>
           </article>
         </div>
         <details class="content-disclosure">
-          <summary>Changes before v0.2.15</summary>
+          <summary>Changes before v0.2.16</summary>
           <div class="history-list english-history-list"></div>
         </details>
         <details class="content-disclosure">
-          <summary>About v0.2.15</summary>
+          <summary>About v0.2.16</summary>
           <div class="disclosure-body">
-            <p>v0.2.15 is a Windows and Mac preview for trying fifty-seven small animals. It includes the two chinchilla color variants, refreshed blue hooded fancy rat tone, second black-and-white long-haired hamster, and rebuilt true albino chipmunk. On Windows, fixed animals and random slots can be mixed per pet, per-slot random can target an animal type, and global random mode can be filtered by type. Other controls cover animal selection, size changes, visible count, language, and display settings. Extra props such as trees, seeds, and food are not shown in this version.</p>
+            <p>v0.2.16 is a Windows and Mac preview for trying sixty animals. It adds a white-and-brown Sable Panda ferret, a common Sable ferret, and a white, red-eyed Albino ferret. On Windows, fixed animals and random slots can be mixed per pet, per-slot random can target an animal type, and global random mode can be filtered by type. Other controls cover animal selection, size changes, visible count, language, and display settings. Extra props such as trees, seeds, and food are not shown in this version.</p>
           </div>
         </details>
         <a class="release-archive-link" href="https://github.com/UDteach/AnimalsDesktop/releases">View past releases <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
@@ -1775,13 +1788,15 @@
       (() => {
         const languageCopy = {
           ja: {
-            lead: "デスクトップのすみに、57種類の動物が歩きます。",
+            lead: "60種類の動物から選べます。",
+            releaseBoundary: "公開版 v0.2.16：60種類",
             windows: "Windows版をダウンロード",
             mac: "Mac版をダウンロード",
             hint: "動物をクリック",
           },
           en: {
-            lead: "57 animals walk along the edge of your desktop.",
+            lead: "Choose from 60 animals.",
+            releaseBoundary: "Public v0.2.16: 60 animals",
             windows: "Download for Windows",
             mac: "Download for Mac",
             hint: "Click an animal",
@@ -1878,17 +1893,21 @@
           ["fancy_rat_cream_agouti", "ファンシーラット（クリームアグーチ）"],
           ["rabbit_gray", "グレーうさぎ"],
           ["african_fat_tailed_gecko", "ニシアフリカトカゲモドキ"],
+          ["ferret_sable_panda", "フェレット（セーブルパンダ）"],
+          ["ferret_sable", "フェレット（セーブル）"],
+          ["ferret_albino", "フェレット（アルビノ）"],
         ];
         const animalTextEn = [
-          "Chinchilla", "Chinchilla - beige", "Chinchilla - ebony", "Hamster", "Djungarian hamster", "Campbell hamster", "Macaroni mouse", "Sugar glider", "Rabbit", "Holland Lop - broken orange", "Netherland Dwarf - chestnut", "Himalayan Rabbit", "Gecko", "Guinea pig - tricolor", "Fancy rat - hooded", "Richardson's ground squirrel", "Yorkshire Terrier - long coat", "Chipmunk - striped", "True albino chipmunk", "Leopard gecko", "Blue White's tree frog", "Budgerigar - green yellow", "Cockatiel - normal gray", "Java sparrow - normal", "Parrotlet - green", "Parrotlet - blue green", "Lovebird - peach faced", "Ragdoll - seal bicolor", "Scottish Fold - silver tabby", "French Bulldog - fawn", "Maine Coon - brown tabby", "Domestic Shorthair - calico", "British Shorthair - blue", "Toy Poodle - apricot", "Munchkin - brown tabby", "Roborovski hamster", "Guinea pig - Russian smoke white", "Quokka", "Miniature Schnauzer - salt and pepper", "Japanese giant salamander", "White wagtail", "Domestic Shorthair - tabby white", "Lionhead rabbit - brown white", "Shoebill", "Leucistic sugar glider", "African dormouse", "Netherland Dwarf Himalayan", "American flying squirrel", "Black-and-white long-haired hamster", "Black-and-white long-haired hamster 2", "Yellow Djungarian hamster", "Pearl white Djungarian hamster", "Fancy rat - blue hooded", "Fancy rat - chocolate self", "Fancy rat - cream agouti", "Gray rabbit", "African fat-tailed gecko",
+          "Chinchilla", "Chinchilla - beige", "Chinchilla - ebony", "Hamster", "Djungarian hamster", "Campbell hamster", "Macaroni mouse", "Sugar glider", "Rabbit", "Holland Lop - broken orange", "Netherland Dwarf - chestnut", "Himalayan Rabbit", "Gecko", "Guinea pig - tricolor", "Fancy rat - hooded", "Richardson's ground squirrel", "Yorkshire Terrier - long coat", "Chipmunk - striped", "True albino chipmunk", "Leopard gecko", "Blue White's tree frog", "Budgerigar - green yellow", "Cockatiel - normal gray", "Java sparrow - normal", "Parrotlet - green", "Parrotlet - blue green", "Lovebird - peach faced", "Ragdoll - seal bicolor", "Scottish Fold - silver tabby", "French Bulldog - fawn", "Maine Coon - brown tabby", "Domestic Shorthair - calico", "British Shorthair - blue", "Toy Poodle - apricot", "Munchkin - brown tabby", "Roborovski hamster", "Guinea pig - Russian smoke white", "Quokka", "Miniature Schnauzer - salt and pepper", "Japanese giant salamander", "White wagtail", "Domestic Shorthair - tabby white", "Lionhead rabbit - brown white", "Shoebill", "Leucistic sugar glider", "African dormouse", "Netherland Dwarf Himalayan", "American flying squirrel", "Black-and-white long-haired hamster", "Black-and-white long-haired hamster 2", "Yellow Djungarian hamster", "Pearl white Djungarian hamster", "Fancy rat - blue hooded", "Fancy rat - chocolate self", "Fancy rat - cream agouti", "Gray rabbit", "African fat-tailed gecko", "Sable panda ferret", "Sable ferret", "Albino ferret",
         ];
         const releaseHistoryEn = [
+          ["v0.2.15 / July 4, 2026", "Adds Windows settings for mixing fixed animals with random slots per pet. Random slots can target all animals or a selected animal type, and global random mode can also be filtered by animal type. The selectable roster remains fifty-seven animals."],
           ["v0.2.14 / July 3, 2026", "Saves animal selections by stable IDs, fixes legacy settings that could restore the shoebill as another animal, and groups the Windows and Mac animal pickers by type. The selectable roster remains fifty-seven animals."],
           ["v0.2.13 / July 3, 2026", "Switches the Windows animal selection settings to stable IDs so roster additions do not remap saved choices. The selectable roster remains fifty-seven animals."],
-          ["v0.2.12 / July 3, 2026", "Adds a second black-and-white long-haired hamster and an ImageGen-only rebuilt red-eyed, no-marking true albino chipmunk. The selectable roster is now fifty-seven animals."],
-          ["v0.2.11 / July 2, 2026", "Removes the albino chipmunk slot from the public picker until a new ImageGen-only source passes review. The beige and ebony chinchilla variants and blue hooded fancy rat tone fix remain available. The selectable roster is now fifty-five animals."],
+          ["v0.2.12 / July 3, 2026", "Adds a second black-and-white long-haired hamster and a rebuilt red-eyed, no-marking true albino chipmunk. The selectable roster is now fifty-seven animals."],
+          ["v0.2.11 / July 2, 2026", "Removes the albino chipmunk slot from the public picker until replacement art passes review. The beige and ebony chinchilla variants and blue hooded fancy rat tone fix remain available. The selectable roster is now fifty-five animals."],
           ["v0.2.10 / July 2, 2026", "Adds beige and ebony chinchilla variants, replaces the black-eyed white chipmunk slot with the red-eyed no-marking true albino chipmunk, and tunes the blue hooded fancy rat toward a cooler gray-blue tone. The selectable roster is now fifty-six animals."],
-          ["v0.2.9 / July 2, 2026", "Adds the remaining 12 GitHub Pages candidate animals, expanding the selectable roster to fifty-four animals. The true albino chipmunk is temporarily held until its white-background readability is repaired."],
+          ["v0.2.9 / July 2, 2026", "Adds 12 more animals, expanding the selectable roster to fifty-four animals. The true albino chipmunk is temporarily held until its white-background readability is repaired."],
           ["v0.2.8 / July 1, 2026", "Adds lionhead rabbit and a special low-motion shoebill, expanding the selectable roster to forty-two animals. The true albino chipmunk is temporarily held until its white-background readability is repaired."],
           ["v0.2.7 / July 1, 2026", "Temporarily removes the true albino chipmunk from the public runtime while its white-background readability is repaired, bringing the public selectable roster to forty animals. Windows and Mac selection, size, count, language, and display controls continue to work."],
           ["v0.2.6 / June 30, 2026", "Adds blue-green parrotlet, true albino chipmunk, Miniature Schnauzer, Japanese giant salamander, white wagtail, and a tabby-white domestic shorthair, expanding the selectable roster to forty-one. It also refreshes selected bird, quokka, Roborovski hamster, cat, and dog assets, corrects leopard gecko turn-frame sizing, and fixes Windows mixed-DPI multi-monitor display behavior."],
@@ -1993,9 +2012,9 @@
             const expanded = catalogToggle.getAttribute("aria-expanded") !== "true";
             catalogToggle.setAttribute("aria-expanded", String(expanded));
             animalGrid.classList.toggle("is-collapsed", !expanded);
-            toggleLabel.textContent = expanded ? "先頭だけ表示" : "57種類すべて見る";
+            toggleLabel.textContent = expanded ? "先頭だけ表示" : "60種類すべて見る";
             toggleIcon.className = expanded ? "fa-solid fa-chevron-up" : "fa-solid fa-chevron-down";
-            catalogStatus.textContent = expanded ? "57種類すべてを表示しています。" : "先頭10種類を表示しています。";
+            catalogStatus.textContent = expanded ? "60種類すべてを表示しています。" : "先頭10種類を表示しています。";
           });
         }
         if (animalGrid && catalogToggle && catalogStatus) {
@@ -2008,7 +2027,7 @@
                 animalGrid.querySelectorAll(".animal-card").forEach((card) => { card.hidden = false; });
                 catalogToggle.hidden = false;
                 catalogToggle.setAttribute("aria-expanded", "false");
-                catalogToggle.querySelector("span").textContent = "57種類すべて見る";
+                catalogToggle.querySelector("span").textContent = "60種類すべて見る";
                 catalogToggle.querySelector("i").className = "fa-solid fa-chevron-down";
                 catalogStatus.textContent = "先頭10種類を表示しています。";
                 return;

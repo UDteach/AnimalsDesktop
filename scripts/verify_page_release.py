@@ -19,7 +19,9 @@ MAC_ARM64_ASSET = "AnimalsDesktop-macos-arm64.zip"
 MAC_AMD64_ASSET = "AnimalsDesktop-macos-amd64.zip"
 CHECKSUM_ASSET = "SHA256SUMS.txt"
 CATALOG = ROOT / "internal" / "catalog" / "catalog.go"
-EXPECTED_RELEASE = "v0.2.15"
+EXPECTED_RELEASE = "v0.2.16"
+EXPECTED_CURRENT_ANIMALS = 60
+EXPECTED_BUILD_DATE = "2026-07-27"
 EXPECTED_UPCOMING: list[str] = []
 
 
@@ -64,6 +66,18 @@ def current_page_variant_ids(html: str) -> list[str]:
     if not ids:
         fail("JavaScript animal catalog has no IDs")
     return ids
+
+
+def english_animal_labels(html: str) -> list[str]:
+    block = one(
+        r"const animalTextEn = \[(.*?)\n\s*\];",
+        html,
+        "English animal labels",
+    )
+    labels = re.findall(r'"([^"]+)"', block)
+    if not labels:
+        fail("English animal label list is empty")
+    return labels
 
 
 def upcoming_page_ids(html: str) -> list[str]:
@@ -134,19 +148,31 @@ def main() -> None:
         html,
         "public release version badge",
     )
+    mac_badge = one(
+        r"<span[^>]*>\s*Mac版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
+        html,
+        "visible Mac version badge",
+    )
+    build_date = one(
+        r"<strong data-build-date>([^<]+)</strong>",
+        html,
+        "visible build date",
+    )
 
     for label, got in {
         "Windows 386 download": windows_386_tag,
         "Windows no-network download": windows_no_network_tag,
+        "macOS arm64 download": mac_arm64_tag,
+        "macOS amd64 download": mac_amd64_tag,
         "SHA256SUMS download": checksum_tag,
         "Windows badge": windows_badge,
+        "Mac badge": mac_badge,
         "release badge": release_badge,
     }.items():
         if got != windows_tag:
             fail(f"{label} {got} does not match Windows amd64 tag {windows_tag}")
-
-    if mac_arm64_tag != mac_amd64_tag:
-        fail(f"macOS download tags differ: {mac_arm64_tag} != {mac_amd64_tag}")
+    if build_date != EXPECTED_BUILD_DATE:
+        fail(f"build date {build_date} does not match expected {EXPECTED_BUILD_DATE}")
 
     try:
         runtime_ids = runtime_variant_ids(CATALOG)
@@ -155,6 +181,17 @@ def main() -> None:
     page_ids = current_page_variant_ids(html)
     if page_ids != runtime_ids:
         fail(f"current animal grid {page_ids} does not match runtime variants {runtime_ids}")
+    if len(page_ids) != EXPECTED_CURRENT_ANIMALS:
+        fail(
+            f"current animal count {len(page_ids)} does not match expected "
+            f"{EXPECTED_CURRENT_ANIMALS}"
+        )
+    english_labels = english_animal_labels(html)
+    if len(english_labels) != len(page_ids):
+        fail(
+            f"English animal label count {len(english_labels)} does not match "
+            f"current animal count {len(page_ids)}"
+        )
     verify_current_icons(page_ids, ROOT / "docs" / "assets" / "animal-icons")
 
     upcoming_ids = upcoming_page_ids(html)
@@ -162,8 +199,10 @@ def main() -> None:
         fail(f"upcoming animal grid {upcoming_ids} does not match expected priority {EXPECTED_UPCOMING}")
 
     for required in (
-        '<time datetime="2026-07-04">2026-07-04</time>',
-        '<time datetime="2026-07-04">July 4, 2026</time>',
+        '<time datetime="2026-07-27">2026-07-27</time>',
+        '<time datetime="2026-07-27">July 27, 2026</time>',
+        "v0.2.15 / 2026-07-04",
+        "v0.2.15 / July 4, 2026",
         "固定表示とランダム表示",
         "種類で絞り込め",
         "fixed animals and random slots",
@@ -207,11 +246,20 @@ def main() -> None:
         "v0.2.1 / June 27, 2026",
         "v0.1.5 / 2026-06-21",
         "v0.1.5 / June 21, 2026",
-        "Pagesに残っていた候補12件は v0.2.9 で追加済みです。次の追加候補は準備中です。",
+        "v0.2.16で、セーブルパンダ、セーブル、アルビノのフェレット3種を追加しました。",
+        "v0.2.16 adds Sable Panda, Sable, and Albino ferrets.",
+        "公開版 v0.2.16：60種類",
+        "Public v0.2.16: 60 animals",
+        "フェレット（セーブルパンダ）",
+        "フェレット（セーブル）",
+        "フェレット（アルビノ）",
+        "Sable panda ferret",
+        "Sable ferret",
+        "Albino ferret",
         "オカメインコ",
         "Cockatiel - normal gray",
-        "v0.2.15の詳細",
-        "About v0.2.15",
+        "v0.2.16の詳細",
+        "About v0.2.16",
         "最大10匹",
         "Show up to 10 animals",
         "木、種、餌",
@@ -219,6 +267,10 @@ def main() -> None:
     ):
         if required not in html:
             fail(f"missing version history text: {required}")
+
+    for forbidden in ("次回版", "next-version catalog"):
+        if forbidden in html:
+            fail(f"stale pre-release copy remains: {forbidden}")
 
     verify_asset_refs(html, page_ids)
 

@@ -24,6 +24,6 @@ frames. The parent pass preserved the original frames under
 distributions toward frames `56-59`, regenerated contact sheets, and reran
 `cmd/auditframes` before promotion.
 
-This is accepted at current runtime-preview parity. It is not a full content
-release set yet because only `set00` exists; a full release gate still requires
-accepted `set00` through `set09`.
+This canonical `set00` is the complete accepted 62-frame source. The importer
+expands it into all ten runtime slots; publication still requires the separate
+runtime, build, page, packaging, and release-approval gates.

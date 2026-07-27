@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"image"
@@ -11,30 +15,50 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"runtime"
+	"strings"
 
 	xdraw "golang.org/x/image/draw"
 )
 
 const (
-	frameW    = 96
-	frameH    = 64
-	targetW   = 88
-	targetH   = 52
-	baselineY = 58
+	frameW                           = 96
+	frameH                           = 64
+	targetW                          = 88
+	targetH                          = 52
+	baselineY                        = 58
+	minNormalizedAlphaIoU            = 0.980
+	maxNormalizedCentroidShiftPixels = 0.30
 )
 
 type prepareReport struct {
-	Source            string   `json:"source"`
-	Output            string   `json:"output"`
-	SourceWidth       int      `json:"source_width"`
-	SourceHeight      int      `json:"source_height"`
-	OutputWidth       int      `json:"output_width"`
-	OutputHeight      int      `json:"output_height"`
-	BackgroundMode    string   `json:"background_mode"`
-	BackgroundRemoved bool     `json:"background_removed"`
-	Content           rectJSON `json:"content"`
-	OutputContent     rectJSON `json:"output_content"`
-	Warnings          []string `json:"warnings,omitempty"`
+	Source               string    `json:"source"`
+	SourceSHA256         string    `json:"source_sha256"`
+	Output               string    `json:"output"`
+	OutputSHA256         string    `json:"output_sha256"`
+	SourceWidth          int       `json:"source_width"`
+	SourceHeight         int       `json:"source_height"`
+	OutputWidth          int       `json:"output_width"`
+	OutputHeight         int       `json:"output_height"`
+	BackgroundMode       string    `json:"background_mode"`
+	BackgroundRemoved    bool      `json:"background_removed"`
+	Content              rectJSON  `json:"content"`
+	OutputContent        rectJSON  `json:"output_content"`
+	Warnings             []string  `json:"warnings,omitempty"`
+	GeometryMode         string    `json:"geometry_mode,omitempty"`
+	GeometryReference    string    `json:"geometry_reference,omitempty"`
+	GeometryReferenceSHA string    `json:"geometry_reference_sha256,omitempty"`
+	PreLockOutputContent *rectJSON `json:"pre_lock_output_content,omitempty"`
+	ReferenceContent     *rectJSON `json:"reference_content,omitempty"`
+	GeometryAdjusted     *bool     `json:"geometry_adjusted,omitempty"`
+	ReferenceAreaPX      *int      `json:"reference_area_px,omitempty"`
+	CandidateAreaPX      *int      `json:"candidate_area_px,omitempty"`
+	IntersectionPX       *int      `json:"intersection_px,omitempty"`
+	UnionPX              *int      `json:"union_px,omitempty"`
+	IoU                  *float64  `json:"iou,omitempty"`
+	CentroidDXPX         *float64  `json:"centroid_dx_px,omitempty"`
+	CentroidDYPX         *float64  `json:"centroid_dy_px,omitempty"`
+	CentroidShiftPX      *float64  `json:"centroid_shift_px,omitempty"`
 }
 
 type rectJSON struct {
@@ -44,12 +68,19 @@ type rectJSON struct {
 	H int `json:"h"`
 }
 
+type prepareFrameOptions struct {
+	Background     string
+	Tolerance      float64
+	MatchAlphaBBox string
+}
+
 func main() {
 	srcPath := flag.String("src", "", "source candidate PNG")
 	outPath := flag.String("out", "", "output 96x64 transparent PNG")
 	reportPath := flag.String("report", "", "optional JSON report path")
 	background := flag.String("background", "auto", "background handling: auto or chroma-green")
 	tolerance := flag.Float64("tolerance", 18, "RGB distance tolerance for uniform edge background removal")
+	matchAlphaBBox := flag.String("match-alpha-bbox", "", "optional canonical 96x64 PNG whose alpha bounding box must be matched within 1px")
 	flag.Parse()
 
 	if *srcPath == "" {
@@ -59,14 +90,28 @@ func main() {
 		fatalf("-out is required")
 	}
 
-	report, err := prepareFrameWithMode(*srcPath, *outPath, *background, *tolerance)
+	options := prepareFrameOptions{
+		Background:     *background,
+		Tolerance:      *tolerance,
+		MatchAlphaBBox: *matchAlphaBBox,
+	}
+	if err := requireDistinctPreparePaths(*srcPath, *outPath, *reportPath, *matchAlphaBBox); err != nil {
+		fatalf("%v", err)
+	}
+	report, outputData, err := prepareFrameData(*srcPath, *outPath, options)
 	if err != nil {
 		fatalf("%v", err)
 	}
+	payloads := []filePayload{{Path: *outPath, Data: outputData}}
 	if *reportPath != "" {
-		if err := writeReport(*reportPath, report); err != nil {
-			fatalf("write report: %v", err)
+		reportData, encodeErr := encodePrepareReport(report)
+		if encodeErr != nil {
+			fatalf("encode report: %v", encodeErr)
 		}
+		payloads = append(payloads, filePayload{Path: *reportPath, Data: reportData})
+	}
+	if err := writeFileTransaction(payloads); err != nil {
+		fatalf("write prepared output: %v", err)
 	}
 	fmt.Printf("prepared %s -> %s\n", filepath.ToSlash(*srcPath), filepath.ToSlash(*outPath))
 }
@@ -76,13 +121,39 @@ func prepareFrame(srcPath string, outPath string, tolerance float64) (prepareRep
 }
 
 func prepareFrameWithMode(srcPath string, outPath string, background string, tolerance float64) (prepareReport, error) {
-	src, err := openPNG(srcPath)
+	return prepareFrameWithOptions(srcPath, outPath, prepareFrameOptions{
+		Background: background,
+		Tolerance:  tolerance,
+	})
+}
+
+func prepareFrameWithOptions(srcPath string, outPath string, options prepareFrameOptions) (prepareReport, error) {
+	report, outputData, err := prepareFrameData(srcPath, outPath, options)
 	if err != nil {
 		return prepareReport{}, err
+	}
+	if err := writeFileTransaction([]filePayload{{Path: outPath, Data: outputData}}); err != nil {
+		return prepareReport{}, err
+	}
+	return report, nil
+}
+
+func prepareFrameData(srcPath string, outPath string, options prepareFrameOptions) (prepareReport, []byte, error) {
+	if err := requireDistinctPreparePaths(srcPath, outPath, "", options.MatchAlphaBBox); err != nil {
+		return prepareReport{}, nil, err
+	}
+	sourceHash, err := fileSHA256(srcPath)
+	if err != nil {
+		return prepareReport{}, nil, fmt.Errorf("hash source: %w", err)
+	}
+	src, err := openPNG(srcPath)
+	if err != nil {
+		return prepareReport{}, nil, err
 	}
 	bounds := src.Bounds()
 	report := prepareReport{
 		Source:       filepath.ToSlash(srcPath),
+		SourceSHA256: sourceHash,
 		Output:       filepath.ToSlash(outPath),
 		SourceWidth:  bounds.Dx(),
 		SourceHeight: bounds.Dy(),
@@ -91,26 +162,26 @@ func prepareFrameWithMode(srcPath string, outPath string, background string, tol
 	}
 
 	cleaned := cloneRGBA(src)
-	switch background {
+	switch options.Background {
 	case "auto":
 		if hasTransparentAlpha(cleaned) {
 			report.BackgroundMode = "source-alpha"
 		} else {
-			if err := removeUniformEdgeBackground(cleaned, tolerance); err != nil {
-				return prepareReport{}, err
+			if err := removeUniformEdgeBackground(cleaned, options.Tolerance); err != nil {
+				return prepareReport{}, nil, err
 			}
 			report.BackgroundMode = "uniform-edge-rgb"
 			report.BackgroundRemoved = true
 		}
 	case "chroma-green":
 		if err := removeChromaGreenBackground(cleaned); err != nil {
-			return prepareReport{}, err
+			return prepareReport{}, nil, err
 		}
 		despillGreen(cleaned)
 		report.BackgroundMode = "chroma-green"
 		report.BackgroundRemoved = true
 	default:
-		return prepareReport{}, fmt.Errorf("unknown -background %q", background)
+		return prepareReport{}, nil, fmt.Errorf("unknown -background %q", options.Background)
 	}
 	if hasTransparentAlpha(cleaned) && report.BackgroundMode == "" {
 		report.BackgroundMode = "source-alpha"
@@ -119,35 +190,340 @@ func prepareFrameWithMode(srcPath string, outPath string, background string, tol
 
 	content := alphaBounds(cleaned, cleaned.Bounds())
 	if content.Empty() {
-		return prepareReport{}, fmt.Errorf("%s has no visible alpha after background preparation", srcPath)
+		return prepareReport{}, nil, fmt.Errorf("%s has no visible alpha after background preparation", srcPath)
 	}
 	if content == cleaned.Bounds() {
-		return prepareReport{}, fmt.Errorf("%s still has no transparent background after preparation", srcPath)
+		return prepareReport{}, nil, fmt.Errorf("%s still has no transparent background after preparation", srcPath)
 	}
 	report.Content = rectToJSON(content)
 	report.Warnings = frameWarnings(content, cleaned.Bounds())
 	if len(report.Warnings) > 0 {
-		return prepareReport{}, fmt.Errorf("%s content touches source canvas edge after preparation; background removal or source crop is not clean", srcPath)
+		return prepareReport{}, nil, fmt.Errorf("%s content touches source canvas edge after preparation; background removal or source crop is not clean", srcPath)
 	}
 	if holeCount, holeArea, largestHole := transparentHoleStats(cleaned, content); holeCount > 0 {
-		return prepareReport{}, fmt.Errorf("%s has transparent pinholes after background preparation: holes=%d area=%d largest=%d", srcPath, holeCount, holeArea, largestHole)
+		return prepareReport{}, nil, fmt.Errorf("%s has transparent pinholes after background preparation: holes=%d area=%d largest=%d", srcPath, holeCount, holeArea, largestHole)
 	}
 
 	out := fitContent(cleaned, content)
 	outContent := alphaBounds(out, out.Bounds())
 	if outContent.Empty() {
-		return prepareReport{}, fmt.Errorf("%s produced empty output", srcPath)
+		return prepareReport{}, nil, fmt.Errorf("%s produced empty output", srcPath)
 	}
 	if outContent == out.Bounds() {
-		return prepareReport{}, fmt.Errorf("%s produced output with no transparent margin", srcPath)
+		return prepareReport{}, nil, fmt.Errorf("%s produced output with no transparent margin", srcPath)
 	}
+
+	if options.MatchAlphaBBox != "" {
+		referenceImage, referenceContent, err := geometryReferenceData(options.MatchAlphaBBox)
+		if err != nil {
+			return prepareReport{}, nil, err
+		}
+		referenceHash, err := fileSHA256(options.MatchAlphaBBox)
+		if err != nil {
+			return prepareReport{}, nil, fmt.Errorf("hash geometry reference: %w", err)
+		}
+		if deltas := rectDeltas(outContent, referenceContent); deltas.exceeds(1) {
+			return prepareReport{}, nil, fmt.Errorf(
+				"%s ordinary output alpha bounds %v differ from geometry reference %s bounds %v by more than 1px (x=%d y=%d w=%d h=%d)",
+				srcPath,
+				outContent,
+				options.MatchAlphaBBox,
+				referenceContent,
+				deltas.X,
+				deltas.Y,
+				deltas.W,
+				deltas.H,
+			)
+		}
+
+		preLock := rectToJSON(outContent)
+		reference := rectToJSON(referenceContent)
+		adjusted := outContent != referenceContent
+		report.GeometryMode = "match-alpha-bbox"
+		report.GeometryReference = filepath.ToSlash(options.MatchAlphaBBox)
+		report.GeometryReferenceSHA = referenceHash
+		report.PreLockOutputContent = &preLock
+		report.ReferenceContent = &reference
+		report.GeometryAdjusted = &adjusted
+
+		if adjusted {
+			out = fitContentToRect(cleaned, content, referenceContent)
+			clearTransparentRGB(out)
+			outContent = alphaBounds(out, out.Bounds())
+			if outContent != referenceContent {
+				return prepareReport{}, nil, fmt.Errorf(
+					"%s geometry lock produced alpha bounds %v, want exact reference bounds %v",
+					srcPath,
+					outContent,
+					referenceContent,
+				)
+			}
+		}
+
+		geometry, err := compareAlphaGeometry(referenceImage, out, out.Bounds())
+		if err != nil {
+			return prepareReport{}, nil, fmt.Errorf("%s normalized geometry comparison: %w", srcPath, err)
+		}
+		setAlphaGeometryReport(&report, geometry)
+		if err := validateNormalizedAlphaGeometry(geometry); err != nil {
+			return prepareReport{}, nil, fmt.Errorf("%s normalized geometry gate failed: %w", srcPath, err)
+		}
+	}
+
 	report.OutputContent = rectToJSON(outContent)
 	report.Warnings = append(report.Warnings, frameWarnings(outContent, out.Bounds())...)
 
-	if err := writePNG(outPath, out); err != nil {
-		return prepareReport{}, err
+	outputData, err := encodePNG(out)
+	if err != nil {
+		return prepareReport{}, nil, fmt.Errorf("encode output PNG: %w", err)
 	}
-	return report, nil
+	report.OutputSHA256 = sha256Hex(outputData)
+	return report, outputData, nil
+}
+
+type rectangleDeltas struct {
+	X int
+	Y int
+	W int
+	H int
+}
+
+func rectDeltas(a image.Rectangle, b image.Rectangle) rectangleDeltas {
+	return rectangleDeltas{
+		X: absInt(a.Min.X - b.Min.X),
+		Y: absInt(a.Min.Y - b.Min.Y),
+		W: absInt(a.Dx() - b.Dx()),
+		H: absInt(a.Dy() - b.Dy()),
+	}
+}
+
+func (d rectangleDeltas) exceeds(limit int) bool {
+	return d.X > limit || d.Y > limit || d.W > limit || d.H > limit
+}
+
+func geometryReferenceData(path string) (*image.RGBA, image.Rectangle, error) {
+	reference, err := openPNG(path)
+	if err != nil {
+		return nil, image.Rectangle{}, fmt.Errorf("open geometry reference: %w", err)
+	}
+	if reference.Bounds().Dx() != frameW || reference.Bounds().Dy() != frameH {
+		return nil, image.Rectangle{}, fmt.Errorf(
+			"geometry reference %s is %dx%d, want %dx%d",
+			path,
+			reference.Bounds().Dx(),
+			reference.Bounds().Dy(),
+			frameW,
+			frameH,
+		)
+	}
+
+	content := alphaBounds(reference, reference.Bounds())
+	if content.Empty() {
+		return nil, image.Rectangle{}, fmt.Errorf("geometry reference %s has no visible alpha", path)
+	}
+	if content == reference.Bounds() {
+		return nil, image.Rectangle{}, fmt.Errorf("geometry reference %s has no transparent margin", path)
+	}
+	if warnings := frameWarnings(content, reference.Bounds()); len(warnings) > 0 {
+		return nil, image.Rectangle{}, fmt.Errorf("geometry reference %s alpha touches canvas edge: %s", path, strings.Join(warnings, "; "))
+	}
+	return reference, content, nil
+}
+
+type alphaGeometry struct {
+	ReferenceArea int
+	CandidateArea int
+	Intersection  int
+	Union         int
+	IoU           float64
+	CentroidDX    float64
+	CentroidDY    float64
+	CentroidShift float64
+}
+
+func compareAlphaGeometry(reference image.Image, candidate image.Image, bounds image.Rectangle) (alphaGeometry, error) {
+	if bounds.Empty() || !bounds.In(reference.Bounds()) || !bounds.In(candidate.Bounds()) {
+		return alphaGeometry{}, fmt.Errorf("comparison bounds %v are outside reference %v or candidate %v", bounds, reference.Bounds(), candidate.Bounds())
+	}
+
+	var referenceSumX, referenceSumY int64
+	var candidateSumX, candidateSumY int64
+	metrics := alphaGeometry{}
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			referenceSubject := alphaAboveGeometryThreshold(reference, x, y)
+			candidateSubject := alphaAboveGeometryThreshold(candidate, x, y)
+			localX := int64(x - bounds.Min.X)
+			localY := int64(y - bounds.Min.Y)
+			if referenceSubject {
+				metrics.ReferenceArea++
+				referenceSumX += localX
+				referenceSumY += localY
+			}
+			if candidateSubject {
+				metrics.CandidateArea++
+				candidateSumX += localX
+				candidateSumY += localY
+			}
+			if referenceSubject && candidateSubject {
+				metrics.Intersection++
+			}
+			if referenceSubject || candidateSubject {
+				metrics.Union++
+			}
+		}
+	}
+	if metrics.ReferenceArea == 0 {
+		return alphaGeometry{}, fmt.Errorf("reference alpha mask is empty at alpha > 8")
+	}
+	if metrics.CandidateArea == 0 {
+		return alphaGeometry{}, fmt.Errorf("candidate alpha mask is empty at alpha > 8")
+	}
+	if metrics.Union == 0 {
+		return alphaGeometry{}, errors.New("alpha mask union is empty")
+	}
+
+	centroidDenominator := int64(metrics.ReferenceArea) * int64(metrics.CandidateArea)
+	metrics.IoU = float64(metrics.Intersection) / float64(metrics.Union)
+	metrics.CentroidDX = float64(
+		candidateSumX*int64(metrics.ReferenceArea)-referenceSumX*int64(metrics.CandidateArea),
+	) / float64(centroidDenominator)
+	metrics.CentroidDY = float64(
+		candidateSumY*int64(metrics.ReferenceArea)-referenceSumY*int64(metrics.CandidateArea),
+	) / float64(centroidDenominator)
+	metrics.CentroidShift = math.Hypot(metrics.CentroidDX, metrics.CentroidDY)
+	return metrics, nil
+}
+
+func alphaAboveGeometryThreshold(img image.Image, x int, y int) bool {
+	return color.NRGBAModel.Convert(img.At(x, y)).(color.NRGBA).A > 8
+}
+
+func setAlphaGeometryReport(report *prepareReport, metrics alphaGeometry) {
+	report.ReferenceAreaPX = intPointer(metrics.ReferenceArea)
+	report.CandidateAreaPX = intPointer(metrics.CandidateArea)
+	report.IntersectionPX = intPointer(metrics.Intersection)
+	report.UnionPX = intPointer(metrics.Union)
+	report.IoU = floatPointer(metrics.IoU)
+	report.CentroidDXPX = floatPointer(metrics.CentroidDX)
+	report.CentroidDYPX = floatPointer(metrics.CentroidDY)
+	report.CentroidShiftPX = floatPointer(metrics.CentroidShift)
+}
+
+func validateNormalizedAlphaGeometry(metrics alphaGeometry) error {
+	failures := make([]string, 0, 2)
+	if math.IsNaN(metrics.IoU) || math.IsInf(metrics.IoU, 0) ||
+		math.IsNaN(metrics.CentroidShift) || math.IsInf(metrics.CentroidShift, 0) {
+		return errors.New("geometry metrics are not finite")
+	}
+	if metrics.IoU < minNormalizedAlphaIoU {
+		failures = append(failures, fmt.Sprintf("IoU %g is below %g", metrics.IoU, minNormalizedAlphaIoU))
+	}
+	if metrics.CentroidShift > maxNormalizedCentroidShiftPixels {
+		failures = append(failures, fmt.Sprintf(
+			"centroid shift %gpx exceeds %gpx",
+			metrics.CentroidShift,
+			maxNormalizedCentroidShiftPixels,
+		))
+	}
+	if len(failures) > 0 {
+		return errors.New(strings.Join(failures, "; "))
+	}
+	return nil
+}
+
+func sameResolvedPath(a string, b string) (bool, error) {
+	resolvedA, err := resolvePathForComparison(a)
+	if err != nil {
+		return false, err
+	}
+	resolvedB, err := resolvePathForComparison(b)
+	if err != nil {
+		return false, err
+	}
+	if samePathString(resolvedA, resolvedB) {
+		return true, nil
+	}
+
+	infoA, errA := os.Stat(a)
+	infoB, errB := os.Stat(b)
+	if errA == nil && errB == nil && os.SameFile(infoA, infoB) {
+		return true, nil
+	}
+	return false, nil
+}
+
+type namedPreparePath struct {
+	Name string
+	Path string
+}
+
+func requireDistinctPreparePaths(srcPath string, outPath string, reportPath string, referencePath string) error {
+	paths := []namedPreparePath{
+		{Name: "source", Path: srcPath},
+		{Name: "output", Path: outPath},
+		{Name: "report", Path: reportPath},
+		{Name: "geometry reference", Path: referencePath},
+	}
+	filtered := paths[:0]
+	for _, item := range paths {
+		if item.Path != "" {
+			filtered = append(filtered, item)
+		}
+	}
+	for i := range filtered {
+		for j := i + 1; j < len(filtered); j++ {
+			same, err := sameResolvedPath(filtered[i].Path, filtered[j].Path)
+			if err != nil {
+				return fmt.Errorf("compare %s and %s paths: %w", filtered[i].Name, filtered[j].Name, err)
+			}
+			if same {
+				return fmt.Errorf(
+					"%s and %s resolve to the same path: %s",
+					filtered[i].Name,
+					filtered[j].Name,
+					filepath.ToSlash(filtered[i].Path),
+				)
+			}
+		}
+	}
+	return nil
+}
+
+func resolvePathForComparison(path string) (string, error) {
+	absolute, err := filepath.Abs(path)
+	if err != nil {
+		return "", err
+	}
+	absolute = filepath.Clean(absolute)
+
+	current := absolute
+	missing := []string{}
+	for {
+		resolved, evalErr := filepath.EvalSymlinks(current)
+		if evalErr == nil {
+			for i := len(missing) - 1; i >= 0; i-- {
+				resolved = filepath.Join(resolved, missing[i])
+			}
+			return filepath.Clean(resolved), nil
+		}
+		if !os.IsNotExist(evalErr) {
+			return "", evalErr
+		}
+		parent := filepath.Dir(current)
+		if parent == current {
+			return absolute, nil
+		}
+		missing = append(missing, filepath.Base(current))
+		current = parent
+	}
+}
+
+func samePathString(a string, b string) bool {
+	if runtime.GOOS == "windows" {
+		return strings.EqualFold(a, b)
+	}
+	return a == b
 }
 
 func openPNG(path string) (*image.RGBA, error) {
@@ -340,6 +716,12 @@ func fitContent(src *image.RGBA, content image.Rectangle) *image.RGBA {
 	return out
 }
 
+func fitContentToRect(src *image.RGBA, content image.Rectangle, destination image.Rectangle) *image.RGBA {
+	out := image.NewRGBA(image.Rect(0, 0, frameW, frameH))
+	xdraw.CatmullRom.Scale(out, destination, src, content, xdraw.Over, nil)
+	return out
+}
+
 func alphaBounds(img image.Image, rect image.Rectangle) image.Rectangle {
 	rect = rect.Intersect(img.Bounds())
 	minX, minY := rect.Max.X, rect.Max.Y
@@ -448,30 +830,196 @@ func rectToJSON(rect image.Rectangle) rectJSON {
 	return rectJSON{X: rect.Min.X, Y: rect.Min.Y, W: rect.Dx(), H: rect.Dy()}
 }
 
-func writePNG(path string, img image.Image) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return err
-	}
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	return png.Encode(f, img)
+func intPointer(value int) *int {
+	return &value
 }
 
-func writeReport(path string, report prepareReport) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return err
+func floatPointer(value float64) *float64 {
+	return &value
+}
+
+func encodePNG(img image.Image) ([]byte, error) {
+	var buffer bytes.Buffer
+	if err := png.Encode(&buffer, img); err != nil {
+		return nil, err
 	}
-	f, err := os.Create(path)
+	return buffer.Bytes(), nil
+}
+
+func encodePrepareReport(report prepareReport) ([]byte, error) {
+	data, err := json.MarshalIndent(report, "", "  ")
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer f.Close()
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "  ")
-	return enc.Encode(report)
+	return append(data, '\n'), nil
+}
+
+func fileSHA256(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return sha256Hex(data), nil
+}
+
+func sha256Hex(data []byte) string {
+	sum := sha256.Sum256(data)
+	return hex.EncodeToString(sum[:])
+}
+
+type filePayload struct {
+	Path string
+	Data []byte
+}
+
+type stagedFilePayload struct {
+	filePayload
+	TempPath    string
+	BackupPath  string
+	HadOriginal bool
+	Committed   bool
+}
+
+var (
+	createTempFile = os.CreateTemp
+	renameFile     = os.Rename
+	removeFile     = os.Remove
+)
+
+// writeFileTransaction is failure-transactional for ordinary filesystem
+// errors: every payload is staged before any destination changes, and existing
+// files are restored if a later rename fails. No portable API can make a
+// multi-path transaction power-loss atomic, so a process or machine crash may
+// leave hidden stage/backup files for manual recovery.
+func writeFileTransaction(payloads []filePayload) error {
+	if len(payloads) == 0 {
+		return nil
+	}
+	for i := range payloads {
+		if payloads[i].Path == "" {
+			return fmt.Errorf("payload %d has an empty path", i)
+		}
+		for j := i + 1; j < len(payloads); j++ {
+			same, err := sameResolvedPath(payloads[i].Path, payloads[j].Path)
+			if err != nil {
+				return fmt.Errorf("compare output paths: %w", err)
+			}
+			if same {
+				return fmt.Errorf("transaction outputs resolve to the same path: %s", filepath.ToSlash(payloads[i].Path))
+			}
+		}
+	}
+
+	staged := make([]stagedFilePayload, 0, len(payloads))
+	cleanupTemps := func() {
+		for i := range staged {
+			if staged[i].TempPath != "" {
+				_ = removeFile(staged[i].TempPath)
+			}
+		}
+	}
+	for _, payload := range payloads {
+		dir := filepath.Dir(payload.Path)
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			cleanupTemps()
+			return err
+		}
+		temp, err := createTempFile(dir, "."+filepath.Base(payload.Path)+".stage-*")
+		if err != nil {
+			cleanupTemps()
+			return err
+		}
+		tempPath := temp.Name()
+		if _, err := temp.Write(payload.Data); err != nil {
+			_ = temp.Close()
+			_ = removeFile(tempPath)
+			cleanupTemps()
+			return err
+		}
+		if err := temp.Sync(); err != nil {
+			_ = temp.Close()
+			_ = removeFile(tempPath)
+			cleanupTemps()
+			return err
+		}
+		if err := temp.Close(); err != nil {
+			_ = removeFile(tempPath)
+			cleanupTemps()
+			return err
+		}
+		staged = append(staged, stagedFilePayload{filePayload: payload, TempPath: tempPath})
+	}
+
+	restoreBackups := func() {
+		for i := len(staged) - 1; i >= 0; i-- {
+			item := &staged[i]
+			if item.Committed {
+				_ = removeFile(item.Path)
+			}
+			if item.HadOriginal && item.BackupPath != "" {
+				_ = renameFile(item.BackupPath, item.Path)
+				item.BackupPath = ""
+			}
+		}
+		cleanupTemps()
+	}
+
+	for i := range staged {
+		item := &staged[i]
+		info, err := os.Stat(item.Path)
+		switch {
+		case err == nil:
+			if !info.Mode().IsRegular() {
+				restoreBackups()
+				return fmt.Errorf("destination is not a regular file: %s", filepath.ToSlash(item.Path))
+			}
+			backup, createErr := createTempFile(filepath.Dir(item.Path), "."+filepath.Base(item.Path)+".backup-*")
+			if createErr != nil {
+				restoreBackups()
+				return createErr
+			}
+			item.BackupPath = backup.Name()
+			if closeErr := backup.Close(); closeErr != nil {
+				_ = removeFile(item.BackupPath)
+				item.BackupPath = ""
+				restoreBackups()
+				return closeErr
+			}
+			if removeErr := removeFile(item.BackupPath); removeErr != nil {
+				item.BackupPath = ""
+				restoreBackups()
+				return removeErr
+			}
+			if renameErr := renameFile(item.Path, item.BackupPath); renameErr != nil {
+				item.BackupPath = ""
+				restoreBackups()
+				return renameErr
+			}
+			item.HadOriginal = true
+		case os.IsNotExist(err):
+			// No backup is needed.
+		default:
+			restoreBackups()
+			return err
+		}
+	}
+
+	for i := range staged {
+		item := &staged[i]
+		if err := renameFile(item.TempPath, item.Path); err != nil {
+			restoreBackups()
+			return err
+		}
+		item.TempPath = ""
+		item.Committed = true
+	}
+	for i := range staged {
+		if staged[i].BackupPath != "" {
+			_ = removeFile(staged[i].BackupPath)
+			staged[i].BackupPath = ""
+		}
+	}
+	return nil
 }
 
 func maxInt(a int, b int) int {
@@ -479,6 +1027,13 @@ func maxInt(a int, b int) int {
 		return a
 	}
 	return b
+}
+
+func absInt(value int) int {
+	if value < 0 {
+		return -value
+	}
+	return value
 }
 
 func fatalf(format string, args ...any) {

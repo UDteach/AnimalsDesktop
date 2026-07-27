@@ -97,6 +97,160 @@ func TestWeakNibbleVariantsUseStableActionFallback(t *testing.T) {
 	}
 }
 
+func TestFerretMotionProfileUsesAcceptedFrameRanges(t *testing.T) {
+	ferret := coatVariant{SpeciesID: "ferret"}
+	tests := []struct {
+		name    string
+		states  []behaviorState
+		start   int
+		count   int
+		divisor int
+		clamped bool
+	}{
+		{name: "idle", states: []behaviorState{stateIdle}, start: 0, count: 4, divisor: 5},
+		{name: "slink", states: []behaviorState{stateWalk, stateForage, stateCarry}, start: 4, count: 8, divisor: 2},
+		{name: "scurry", states: []behaviorState{stateScurry, stateWheel}, start: 12, count: 8, divisor: 1},
+		{name: "sniff", states: []behaviorState{stateNibble, stateEat, stateDig}, start: 20, count: 6, divisor: 3},
+		{name: "groom", states: []behaviorState{stateGroom, stateFaceGroom}, start: 26, count: 6, divisor: 3},
+		{name: "turn", states: []behaviorState{stateTurn}, start: 32, count: 8, divisor: 2, clamped: true},
+		{name: "creep", states: []behaviorState{stateHop}, start: 40, count: 8, divisor: 2},
+		{name: "rest", states: []behaviorState{stateRest}, start: 48, count: 8, divisor: 4},
+		{name: "alert", states: []behaviorState{stateStand}, start: 56, count: 6, divisor: 4},
+	}
+
+	for _, tt := range tests {
+		for _, state := range tt.states {
+			t.Run(fmt.Sprintf("%s/state-%d", tt.name, state), func(t *testing.T) {
+				seen := make(map[int]bool)
+				for frame := 0; frame < tt.count*tt.divisor; frame++ {
+					got := currentFrameForVariant(state, frame, ferret)
+					if got < tt.start || got >= tt.start+tt.count {
+						t.Fatalf("frame %d = %d, want %d..%d", frame, got, tt.start, tt.start+tt.count-1)
+					}
+					seen[got] = true
+				}
+				if len(seen) != tt.count {
+					t.Fatalf("visited %d distinct frames, want all %d in %d..%d", len(seen), tt.count, tt.start, tt.start+tt.count-1)
+				}
+				if tt.clamped {
+					if got := currentFrameForVariant(state, 999, ferret); got != tt.start+tt.count-1 {
+						t.Fatalf("late frame = %d, want clamped final frame %d", got, tt.start+tt.count-1)
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestFerretMovingStatesNeverUseStationaryActionFrames(t *testing.T) {
+	ferret := coatVariant{MotionProfile: catalog.MotionProfileFerretSlink}
+	for _, state := range []behaviorState{
+		stateWalk,
+		stateScurry,
+		stateWheel,
+		stateForage,
+		stateCarry,
+	} {
+		for frame := 0; frame < 128; frame++ {
+			got := currentFrameForVariant(state, frame, ferret)
+			if got < walkStart || got >= nibbleStart {
+				t.Fatalf("moving state %d frame %d = %d, want slink/scurry range %d..%d", state, frame, got, walkStart, nibbleStart-1)
+			}
+		}
+	}
+	for frame := 0; frame < 128; frame++ {
+		got := currentFrameForVariant(stateHop, frame, ferret)
+		if got < eatStart || got >= standStart {
+			t.Fatalf("moving creep frame %d = %d, want creep range %d..%d", frame, got, eatStart, standStart-1)
+		}
+	}
+}
+
+func TestFerretRandomActionSelectionCanReachRest(t *testing.T) {
+	ferretCounts := make(map[behaviorState]int)
+	defaultCounts := make(map[behaviorState]int)
+	for roll := 0; roll < 100; roll++ {
+		ferretCounts[randomActionState(catalog.MotionProfileFerretSlink, roll)]++
+		defaultCounts[randomActionState(catalog.MotionProfileDegu, roll)]++
+	}
+
+	if got := ferretCounts[stateRest]; got != 2 {
+		t.Fatalf("ferret rest rolls = %d, want 2", got)
+	}
+	if got := defaultCounts[stateRest]; got != 0 {
+		t.Fatalf("default profile rest rolls = %d, want 0", got)
+	}
+	wantDefault := map[behaviorState]int{
+		stateIdle:      30,
+		stateWalk:      40,
+		stateScurry:    14,
+		stateNibble:    6,
+		stateStand:     4,
+		stateFaceGroom: 4,
+		stateHop:       2,
+	}
+	for state, want := range wantDefault {
+		if got := defaultCounts[state]; got != want {
+			t.Fatalf("default state %d rolls = %d, want %d", state, got, want)
+		}
+	}
+}
+
+func TestRestIsStationaryAndCompletesSafely(t *testing.T) {
+	a := &petApp{
+		mode:     modeKeyboard,
+		sceneW:   800,
+		petSizes: defaultPetSizes(),
+	}
+	p := desktopPet{
+		x:          120,
+		variant:    0,
+		item:       noItem,
+		carryKind:  noItem,
+		state:      stateRest,
+		stateTicks: 0,
+		moveSpeed:  9,
+		dir:        1,
+	}
+
+	a.tickPet(0, &p)
+
+	if p.x != 120 {
+		t.Fatalf("rest completion moved pet to x=%d, want 120", p.x)
+	}
+	if p.state != stateIdle || p.moveSpeed != 0 {
+		t.Fatalf("rest completion = state %d speed %d, want idle and stationary", p.state, p.moveSpeed)
+	}
+}
+
+func TestDefaultMotionProfileFrameMappingIsUnchanged(t *testing.T) {
+	degu := coatVariant{SpeciesID: "degu"}
+	for _, state := range []behaviorState{
+		stateIdle,
+		stateWalk,
+		stateScurry,
+		stateNibble,
+		stateHop,
+		stateWheel,
+		stateGroom,
+		stateForage,
+		stateCarry,
+		stateTurn,
+		stateEat,
+		stateDig,
+		stateStand,
+		stateFaceGroom,
+	} {
+		for frame := 0; frame < 64; frame++ {
+			got := currentFrameForVariant(state, frame, degu)
+			want := currentFrame(state, frame)
+			if got != want {
+				t.Fatalf("state %d frame %d = %d, want legacy frame %d", state, frame, got, want)
+			}
+		}
+	}
+}
+
 func TestFrameFromSeqHandlesEmptyAndBadDivisor(t *testing.T) {
 	if got := frameFromSeq(nil, 12, 2); got != idleStart {
 		t.Fatalf("frameFromSeq(nil) = %d, want %d", got, idleStart)
@@ -1723,6 +1877,54 @@ func TestRandomCoatModeCanFilterByVariantGroup(t *testing.T) {
 		got := a.variantForIndex(i)
 		if group := catalog.VariantGroupIDForSpecies(variants[got].SpeciesID); group != "chinchilla" {
 			t.Fatalf("random chinchilla variant group = %q (%s), want chinchilla", group, variants[got].ID)
+		}
+	}
+}
+
+func TestFerretVariantsAreEligibleForSmallAnimalRandomGroup(t *testing.T) {
+	indices := variantIndicesForGroupID("small_mammal")
+	eligible := make(map[string]bool, len(indices))
+	for _, index := range indices {
+		if index < 0 || index >= len(variants) {
+			t.Fatalf("small_mammal index = %d, want 0..%d", index, len(variants)-1)
+		}
+		variant := variants[index]
+		if got := catalog.VariantGroupIDForSpecies(variant.SpeciesID); got != "small_mammal" {
+			t.Fatalf("small_mammal contains %q in group %q", variant.ID, got)
+		}
+		eligible[variant.ID] = true
+	}
+
+	a := &petApp{lang: langJapanese}
+	for _, variantID := range []string{
+		"ferret_sable_panda",
+		"ferret_sable",
+		"ferret_albino",
+	} {
+		if !eligible[variantID] {
+			t.Errorf("%s missing from small_mammal random group", variantID)
+		}
+		index, ok := variantIndexByID(variantID)
+		if !ok {
+			t.Fatalf("%s missing from runtime variants", variantID)
+		}
+		if got := a.variantDisplayLabel(index); !strings.HasPrefix(got, "小動物 / フェレット") {
+			t.Errorf("Japanese %s display label = %q", variantID, got)
+		}
+		a.lang = langEnglish
+		if got := a.variantDisplayLabel(index); !strings.HasPrefix(got, "Small animals / Ferret") {
+			t.Errorf("English %s display label = %q", variantID, got)
+		}
+		a.lang = langJapanese
+	}
+
+	for draw := 0; draw < 256; draw++ {
+		index := randomVariantForGroup("small_mammal")
+		if index < 0 || index >= len(variants) {
+			t.Fatalf("random small_mammal index = %d, want 0..%d", index, len(variants)-1)
+		}
+		if got := catalog.VariantGroupIDForSpecies(variants[index].SpeciesID); got != "small_mammal" {
+			t.Fatalf("random small_mammal draw selected %q in group %q", variants[index].ID, got)
 		}
 	}
 }

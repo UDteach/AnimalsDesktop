@@ -16,12 +16,19 @@ on:
       - "scripts/test_catalog_runtime.py"
       - "scripts/test_verify_page_release.py"
       - "scripts/verify_page_release.py"
+      - "requirements-dev.txt"
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+env:
+  PUBLIC_RELEASE: v0.2.16
 
 concurrency:
   group: github-pages
@@ -32,17 +39,64 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify linked release assets are published
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_path="repos/${GITHUB_REPOSITORY}/releases/tags/${PUBLIC_RELEASE}"
+          release_state="$(gh api "$release_path" --jq 'if (.draft == false and .prerelease == false) then "published" else "not-published" end')"
+          if [[ "$release_state" != "published" ]]; then
+            echo "${PUBLIC_RELEASE} is not a published stable release; keeping the current Pages deployment." >&2
+            exit 1
+          fi
+
+          required_assets=(
+            AnimalsDesktop-windows-amd64.zip
+            AnimalsDesktop-windows-amd64-no-network.zip
+            AnimalsDesktop-windows-386.zip
+            AnimalsDesktop-macos-arm64.zip
+            AnimalsDesktop-macos-amd64.zip
+            SHA256SUMS.txt
+          )
+          for attempt in {1..12}; do
+            gh api "$release_path" --jq '.assets[].name' > "$RUNNER_TEMP/release-assets.txt"
+            missing=()
+            for asset in "${required_assets[@]}"; do
+              if ! grep -Fxq "$asset" "$RUNNER_TEMP/release-assets.txt"; then
+                missing+=("$asset")
+              fi
+            done
+            if ((${#missing[@]} == 0)); then
+              echo "${PUBLIC_RELEASE} release assets are complete."
+              exit 0
+            fi
+            if ((attempt < 12)); then
+              echo "Waiting for release assets: ${missing[*]}"
+              sleep 10
+            fi
+          done
+          echo "Missing release assets for ${PUBLIC_RELEASE}: ${missing[*]}" >&2
+          exit 1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: "requirements-dev.txt"
+      - name: Install Python test dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
       - name: Verify public release page
         shell: bash
         run: |
           SPRITE_PREVIEW="previews/sprite-review-3f8d9c2a7b6e4d1fb0a926c5894e31ad"
           MOTION_PREVIEW="previews/motion-generation-eval-20260623"
           grep -q "Animals Desktop" docs/index.html
-          python3 -m unittest discover -s scripts -p "test_*.py"
-          python3 scripts/verify_page_release.py
+          python -m unittest discover -s scripts -p "test_*.py"
+          python scripts/verify_page_release.py
           grep -q "Mac版をダウンロード" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
-          grep -q "v0.2.15の詳細" docs/index.html
+          grep -q "v0.2.16の詳細" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"
           grep -q "Frame Motion And Generator Choice" "docs/$MOTION_PREVIEW/index.html"
           grep -q "Generator Comparison Images" "docs/$MOTION_PREVIEW/index.html"

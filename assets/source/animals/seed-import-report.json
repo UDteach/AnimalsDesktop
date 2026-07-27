@@ -11,7 +11,8 @@
     "generated_source": "assets/source/animals/generated/chinchilla_standard_gray-source.png",
     "motion_source": "docs/art-source/chinchilla/motion-source/sheets/chinchilla-standard-gray-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "chinchilla_standard_gray",
     "source_width": 1536,
     "source_height": 1024,
@@ -32,9 +33,6 @@
       "assets/sprites/chinchilla_standard_gray_set07.png",
       "assets/sprites/chinchilla_standard_gray_set08.png",
       "assets/sprites/chinchilla_standard_gray_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -49,7 +47,8 @@
     "generated_source": "assets/source/animals/generated/chinchilla_beige-source.png",
     "motion_source": "docs/art-source/chinchilla-beige/motion-source/sheets/chinchilla-beige-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "chinchilla_beige",
     "source_width": 96,
     "source_height": 64,
@@ -70,9 +69,6 @@
       "assets/sprites/chinchilla_beige_set07.png",
       "assets/sprites/chinchilla_beige_set08.png",
       "assets/sprites/chinchilla_beige_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -87,7 +83,8 @@
     "generated_source": "assets/source/animals/generated/chinchilla_ebony-source.png",
     "motion_source": "docs/art-source/chinchilla-ebony/motion-source/sheets/chinchilla-ebony-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "chinchilla_ebony",
     "source_width": 96,
     "source_height": 64,
@@ -108,9 +105,6 @@
       "assets/sprites/chinchilla_ebony_set07.png",
       "assets/sprites/chinchilla_ebony_set08.png",
       "assets/sprites/chinchilla_ebony_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -159,7 +153,8 @@
     "generated_source": "assets/source/animals/generated/macaroni_mouse_tan-source.png",
     "motion_source": "docs/art-source/macaroni-mouse/motion-source/sheets/macaroni-mouse-tan-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "macaroni_mouse_tan",
     "source_width": 512,
     "source_height": 384,
@@ -180,9 +175,6 @@
       "assets/sprites/macaroni_mouse_tan_set07.png",
       "assets/sprites/macaroni_mouse_tan_set08.png",
       "assets/sprites/macaroni_mouse_tan_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -263,7 +255,8 @@
     "generated_source": "assets/source/animals/generated/rabbit_chestnut_agouti-source.png",
     "motion_source": "docs/art-source/rabbit/motion-source/sheets/rabbit-chestnut-agouti-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "rabbit_chestnut_agouti",
     "source_width": 1536,
     "source_height": 1024,
@@ -284,9 +277,6 @@
       "assets/sprites/rabbit_chestnut_agouti_set07.png",
       "assets/sprites/rabbit_chestnut_agouti_set08.png",
       "assets/sprites/rabbit_chestnut_agouti_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -433,7 +423,8 @@
     "generated_source": "assets/source/animals/generated/quokka-source.png",
     "motion_source": "docs/art-source/quokka/motion-source/sheets/quokka-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "quokka",
     "tint_hex": "a65f25",
     "accent_hex": "d48a3d",
@@ -456,9 +447,6 @@
       "assets/sprites/quokka_set07.png",
       "assets/sprites/quokka_set08.png",
       "assets/sprites/quokka_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -835,7 +823,8 @@
     "generated_source": "assets/source/animals/generated/gecko_gray_brown-source.png",
     "motion_source": "docs/art-source/gecko/motion-source/sheets/gecko-gray-brown-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "gecko_gray_brown",
     "source_width": 1717,
     "source_height": 916,
@@ -856,9 +845,6 @@
       "assets/sprites/gecko_gray_brown_set07.png",
       "assets/sprites/gecko_gray_brown_set08.png",
       "assets/sprites/gecko_gray_brown_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -873,7 +859,8 @@
     "generated_source": "assets/source/animals/generated/gecko_leopard-source.png",
     "motion_source": "docs/art-source/leopard-gecko/motion-source/sheets/leopard-gecko-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "gecko_leopard",
     "tint_hex": "d9a83c",
     "accent_hex": "2f2418",
@@ -896,9 +883,6 @@
       "assets/sprites/gecko_leopard_set07.png",
       "assets/sprites/gecko_leopard_set08.png",
       "assets/sprites/gecko_leopard_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1012,7 +996,8 @@
     "generated_source": "assets/source/animals/generated/hamster_golden_syrian-source.png",
     "motion_source": "docs/art-source/hamster/motion-source/sheets/hamster-golden-syrian-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "hamster_golden_syrian",
     "source_width": 1513,
     "source_height": 1039,
@@ -1033,9 +1018,6 @@
       "assets/sprites/hamster_golden_syrian_set07.png",
       "assets/sprites/hamster_golden_syrian_set08.png",
       "assets/sprites/hamster_golden_syrian_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1050,7 +1032,8 @@
     "generated_source": "assets/source/animals/generated/djungarian_hamster-source.png",
     "motion_source": "docs/art-source/djungarian-hamster/motion-source/sheets/djungarian-hamster-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "djungarian_hamster",
     "tint_hex": "a9a49a",
     "accent_hex": "f4efe7",
@@ -1073,9 +1056,6 @@
       "assets/sprites/djungarian_hamster_set07.png",
       "assets/sprites/djungarian_hamster_set08.png",
       "assets/sprites/djungarian_hamster_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1090,7 +1070,8 @@
     "generated_source": "assets/source/animals/generated/campbell_hamster-source.png",
     "motion_source": "docs/art-source/campbell-hamster/motion-source/sheets/campbell-hamster-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "campbell_hamster",
     "tint_hex": "9b846f",
     "accent_hex": "d6c9b8",
@@ -1113,9 +1094,6 @@
       "assets/sprites/campbell_hamster_set07.png",
       "assets/sprites/campbell_hamster_set08.png",
       "assets/sprites/campbell_hamster_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1130,7 +1108,8 @@
     "generated_source": "assets/source/animals/generated/roborovski_hamster-source.png",
     "motion_source": "docs/art-source/roborovski-hamster/motion-source/sheets/roborovski-hamster-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "roborovski_hamster",
     "tint_hex": "d7ad73",
     "accent_hex": "f3eadc",
@@ -1153,9 +1132,6 @@
       "assets/sprites/roborovski_hamster_set07.png",
       "assets/sprites/roborovski_hamster_set08.png",
       "assets/sprites/roborovski_hamster_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1170,7 +1146,8 @@
     "generated_source": "assets/source/animals/generated/longhair_hamster_black_white-source.png",
     "motion_source": "docs/art-source/longhair-hamster-black-white/motion-source/sheets/longhair-hamster-black-white-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "longhair_hamster_black_white",
     "tint_hex": "f0e8db",
     "accent_hex": "2f2c2b",
@@ -1193,9 +1170,6 @@
       "assets/sprites/longhair_hamster_black_white_set07.png",
       "assets/sprites/longhair_hamster_black_white_set08.png",
       "assets/sprites/longhair_hamster_black_white_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1210,7 +1184,8 @@
     "generated_source": "assets/source/animals/generated/longhair_hamster_black_white_masked-source.png",
     "motion_source": "docs/art-source/longhair-hamster-black-white-masked/motion-source/sheets/longhair-hamster-black-white-masked-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "longhair_hamster_black_white_masked",
     "tint_hex": "f1ede6",
     "accent_hex": "252423",
@@ -1233,9 +1208,6 @@
       "assets/sprites/longhair_hamster_black_white_masked_set07.png",
       "assets/sprites/longhair_hamster_black_white_masked_set08.png",
       "assets/sprites/longhair_hamster_black_white_masked_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1250,7 +1222,8 @@
     "generated_source": "assets/source/animals/generated/djungarian_hamster_yellow-source.png",
     "motion_source": "docs/art-source/djungarian-hamster-yellow/motion-source/sheets/djungarian-hamster-yellow-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "djungarian_hamster_yellow",
     "tint_hex": "dcc08a",
     "accent_hex": "f0e0bd",
@@ -1273,9 +1246,6 @@
       "assets/sprites/djungarian_hamster_yellow_set07.png",
       "assets/sprites/djungarian_hamster_yellow_set08.png",
       "assets/sprites/djungarian_hamster_yellow_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1290,7 +1260,8 @@
     "generated_source": "assets/source/animals/generated/djungarian_hamster_pearl_white-source.png",
     "motion_source": "docs/art-source/djungarian-hamster-pearl-white/motion-source/sheets/djungarian-hamster-pearl-white-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "djungarian_hamster_pearl_white",
     "tint_hex": "eee9df",
     "accent_hex": "a69d92",
@@ -1313,9 +1284,6 @@
       "assets/sprites/djungarian_hamster_pearl_white_set07.png",
       "assets/sprites/djungarian_hamster_pearl_white_set08.png",
       "assets/sprites/djungarian_hamster_pearl_white_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1452,26 +1420,67 @@
     ]
   },
   {
+    "variant": "ferret_sable_panda",
+    "species": "ferret",
+    "breed_or_morph": "Ferret",
+    "color": "sable panda",
+    "popularity_tier": 2,
+    "motion_profile": "ferret-slink",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/ferret-sable-panda/motion-source/accepted-frames/set00/frame-00.png",
+    "generated_source": "assets/source/animals/generated/ferret_sable_panda-source.png",
+    "motion_source": "docs/art-source/ferret-sable-panda/motion-source/sheets/ferret-sable-panda-source-set00.png",
+    "motion_frames": 62,
+    "source_sets": 1,
+    "runtime_sets": 10,
+    "sprite_base": "ferret_sable_panda",
+    "tint_hex": "eee7d9",
+    "accent_hex": "6e5140",
+    "source_width": 96,
+    "source_height": 64,
+    "content": {
+      "x": 4,
+      "y": 29,
+      "w": 88,
+      "h": 29
+    },
+    "outputs": [
+      "assets/sprites/ferret_sable_panda_set00.png",
+      "assets/sprites/ferret_sable_panda_set01.png",
+      "assets/sprites/ferret_sable_panda_set02.png",
+      "assets/sprites/ferret_sable_panda_set03.png",
+      "assets/sprites/ferret_sable_panda_set04.png",
+      "assets/sprites/ferret_sable_panda_set05.png",
+      "assets/sprites/ferret_sable_panda_set06.png",
+      "assets/sprites/ferret_sable_panda_set07.png",
+      "assets/sprites/ferret_sable_panda_set08.png",
+      "assets/sprites/ferret_sable_panda_set09.png"
+    ]
+  },
+  {
     "variant": "ferret_sable",
     "species": "ferret",
-    "breed_or_morph": "Ferret - sable",
-    "color": "Ferret - sable",
-    "popularity_tier": 3,
+    "breed_or_morph": "Ferret",
+    "color": "sable",
+    "popularity_tier": 1,
     "motion_profile": "ferret-slink",
-    "source_status": "prototype_only",
-    "source": "procedural:ferret",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/ferret-sable/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/ferret_sable-source.png",
+    "motion_source": "docs/art-source/ferret-sable/motion-source/sheets/ferret-sable-source-set00.png",
+    "motion_frames": 62,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "ferret_sable",
-    "shape": "ferret",
     "tint_hex": "8b6746",
     "accent_hex": "ece0c8",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 0,
-      "y": 147,
-      "w": 345,
-      "h": 109
+      "x": 4,
+      "y": 29,
+      "w": 88,
+      "h": 29
     },
     "outputs": [
       "assets/sprites/ferret_sable_set00.png",
@@ -1484,32 +1493,32 @@
       "assets/sprites/ferret_sable_set07.png",
       "assets/sprites/ferret_sable_set08.png",
       "assets/sprites/ferret_sable_set09.png"
-    ],
-    "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
     ]
   },
   {
     "variant": "ferret_albino",
     "species": "ferret",
-    "breed_or_morph": "Ferret - albino",
-    "color": "Ferret - albino",
-    "popularity_tier": 3,
+    "breed_or_morph": "Ferret",
+    "color": "albino",
+    "popularity_tier": 2,
     "motion_profile": "ferret-slink",
-    "source_status": "prototype_only",
-    "source": "procedural:ferret",
+    "source_status": "motion_source_accepted",
+    "source": "docs/art-source/ferret-albino/motion-source/accepted-frames/set00/frame-00.png",
     "generated_source": "assets/source/animals/generated/ferret_albino-source.png",
+    "motion_source": "docs/art-source/ferret-albino/motion-source/sheets/ferret-albino-source-set00.png",
+    "motion_frames": 62,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "ferret_albino",
-    "shape": "ferret",
     "tint_hex": "eadcc7",
     "accent_hex": "c58b78",
-    "source_width": 512,
-    "source_height": 384,
+    "source_width": 96,
+    "source_height": 64,
     "content": {
-      "x": 0,
-      "y": 147,
-      "w": 345,
-      "h": 109
+      "x": 4,
+      "y": 29,
+      "w": 88,
+      "h": 29
     },
     "outputs": [
       "assets/sprites/ferret_albino_set00.png",
@@ -1522,9 +1531,6 @@
       "assets/sprites/ferret_albino_set07.png",
       "assets/sprites/ferret_albino_set08.png",
       "assets/sprites/ferret_albino_set09.png"
-    ],
-    "warnings": [
-      "procedural source seed; replace with ImageGen source-truth before final animation import"
     ]
   },
   {
@@ -1577,7 +1583,8 @@
     "generated_source": "assets/source/animals/generated/guinea_pig_tricolor-source.png",
     "motion_source": "docs/art-source/guinea-pig/motion-source/sheets/guinea-pig-tricolor-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "guinea_pig_tricolor",
     "tint_hex": "b46c32",
     "accent_hex": "f0e6d2",
@@ -1600,9 +1607,6 @@
       "assets/sprites/guinea_pig_tricolor_set07.png",
       "assets/sprites/guinea_pig_tricolor_set08.png",
       "assets/sprites/guinea_pig_tricolor_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1617,7 +1621,8 @@
     "generated_source": "assets/source/animals/generated/guinea_pig_russian_smoke_white-source.png",
     "motion_source": "docs/art-source/guinea-pig-russian-smoke-white/motion-source/sheets/guinea-pig-russian-smoke-white-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "guinea_pig_russian_smoke_white",
     "tint_hex": "f1eee6",
     "accent_hex": "8d8380",
@@ -1640,9 +1645,6 @@
       "assets/sprites/guinea_pig_russian_smoke_white_set07.png",
       "assets/sprites/guinea_pig_russian_smoke_white_set08.png",
       "assets/sprites/guinea_pig_russian_smoke_white_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -1885,7 +1887,8 @@
     "generated_source": "assets/source/animals/generated/richardsons_ground_squirrel-source.png",
     "motion_source": "docs/art-source/richardsons-ground-squirrel/motion-source/sheets/richardsons-ground-squirrel-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "richardsons_ground_squirrel",
     "tint_hex": "a8895c",
     "accent_hex": "d8c091",
@@ -1908,9 +1911,6 @@
       "assets/sprites/richardsons_ground_squirrel_set07.png",
       "assets/sprites/richardsons_ground_squirrel_set08.png",
       "assets/sprites/richardsons_ground_squirrel_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2115,7 +2115,8 @@
     "generated_source": "assets/source/animals/generated/sugar_glider_gray-source.png",
     "motion_source": "docs/art-source/sugar-glider/motion-source/sheets/sugar-glider-gray-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "sugar_glider_gray",
     "tint_hex": "8c8d88",
     "accent_hex": "f1eee4",
@@ -2138,9 +2139,6 @@
       "assets/sprites/sugar_glider_gray_set07.png",
       "assets/sprites/sugar_glider_gray_set08.png",
       "assets/sprites/sugar_glider_gray_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2155,7 +2153,8 @@
     "generated_source": "assets/source/animals/generated/leucistic_sugar_glider-source.png",
     "motion_source": "docs/art-source/leucistic-sugar-glider/motion-source/sheets/leucistic-sugar-glider-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "leucistic_sugar_glider",
     "tint_hex": "f1eadf",
     "accent_hex": "b69b84",
@@ -2178,9 +2177,6 @@
       "assets/sprites/leucistic_sugar_glider_set07.png",
       "assets/sprites/leucistic_sugar_glider_set08.png",
       "assets/sprites/leucistic_sugar_glider_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2195,7 +2191,8 @@
     "generated_source": "assets/source/animals/generated/african_dormouse-source.png",
     "motion_source": "docs/art-source/african-dormouse/motion-source/sheets/african-dormouse-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "african_dormouse",
     "tint_hex": "8d6b46",
     "accent_hex": "e1c390",
@@ -2218,9 +2215,6 @@
       "assets/sprites/african_dormouse_set07.png",
       "assets/sprites/african_dormouse_set08.png",
       "assets/sprites/african_dormouse_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2235,7 +2229,8 @@
     "generated_source": "assets/source/animals/generated/american_flying_squirrel-source.png",
     "motion_source": "docs/art-source/american-flying-squirrel/motion-source/sheets/american-flying-squirrel-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "american_flying_squirrel",
     "tint_hex": "8a7766",
     "accent_hex": "d7c3a0",
@@ -2258,9 +2253,6 @@
       "assets/sprites/american_flying_squirrel_set07.png",
       "assets/sprites/american_flying_squirrel_set08.png",
       "assets/sprites/american_flying_squirrel_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2427,7 +2419,8 @@
     "generated_source": "assets/source/animals/generated/french_bulldog_fawn-source.png",
     "motion_source": "docs/art-source/french-bulldog/motion-source/sheets/french-bulldog-fawn-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "french_bulldog_fawn",
     "tint_hex": "c49a6c",
     "accent_hex": "3a3026",
@@ -2450,9 +2443,6 @@
       "assets/sprites/french_bulldog_fawn_set07.png",
       "assets/sprites/french_bulldog_fawn_set08.png",
       "assets/sprites/french_bulldog_fawn_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2467,7 +2457,8 @@
     "generated_source": "assets/source/animals/generated/toy_poodle_apricot-source.png",
     "motion_source": "docs/art-source/toy-poodle/motion-source/sheets/toy-poodle-apricot-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "toy_poodle_apricot",
     "tint_hex": "d98a3f",
     "accent_hex": "5a3825",
@@ -2490,9 +2481,6 @@
       "assets/sprites/toy_poodle_apricot_set07.png",
       "assets/sprites/toy_poodle_apricot_set08.png",
       "assets/sprites/toy_poodle_apricot_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2507,7 +2495,8 @@
     "generated_source": "assets/source/animals/generated/miniature_schnauzer_salt_pepper-source.png",
     "motion_source": "docs/art-source/miniature-schnauzer/motion-source/sheets/miniature-schnauzer-salt-pepper-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "miniature_schnauzer_salt_pepper",
     "tint_hex": "8e8c86",
     "accent_hex": "d8d0c4",
@@ -2530,9 +2519,6 @@
       "assets/sprites/miniature_schnauzer_salt_pepper_set07.png",
       "assets/sprites/miniature_schnauzer_salt_pepper_set08.png",
       "assets/sprites/miniature_schnauzer_salt_pepper_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2917,7 +2903,8 @@
     "generated_source": "assets/source/animals/generated/yorkshire_terrier_longcoat-source.png",
     "motion_source": "docs/art-source/yorkshire-terrier/motion-source/sheets/yorkshire-terrier-longcoat-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "yorkshire_terrier_longcoat",
     "tint_hex": "b87a3b",
     "accent_hex": "242326",
@@ -2940,9 +2927,6 @@
       "assets/sprites/yorkshire_terrier_longcoat_set07.png",
       "assets/sprites/yorkshire_terrier_longcoat_set08.png",
       "assets/sprites/yorkshire_terrier_longcoat_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2957,7 +2941,8 @@
     "generated_source": "assets/source/animals/generated/maine_coon_brown_tabby-source.png",
     "motion_source": "docs/art-source/maine-coon/motion-source/sheets/maine-coon-brown-tabby-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "maine_coon_brown_tabby",
     "tint_hex": "6e5239",
     "accent_hex": "a88457",
@@ -2980,9 +2965,6 @@
       "assets/sprites/maine_coon_brown_tabby_set07.png",
       "assets/sprites/maine_coon_brown_tabby_set08.png",
       "assets/sprites/maine_coon_brown_tabby_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -2997,7 +2979,8 @@
     "generated_source": "assets/source/animals/generated/ragdoll_seal_bicolor-source.png",
     "motion_source": "docs/art-source/ragdoll/motion-source/sheets/ragdoll-seal-bicolor-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "ragdoll_seal_bicolor",
     "tint_hex": "e7ddca",
     "accent_hex": "594333",
@@ -3020,9 +3003,6 @@
       "assets/sprites/ragdoll_seal_bicolor_set07.png",
       "assets/sprites/ragdoll_seal_bicolor_set08.png",
       "assets/sprites/ragdoll_seal_bicolor_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3070,7 +3050,8 @@
     "generated_source": "assets/source/animals/generated/british_shorthair_blue-source.png",
     "motion_source": "docs/art-source/british-shorthair/motion-source/sheets/british-shorthair-blue-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "british_shorthair_blue",
     "tint_hex": "737d84",
     "source_width": 96,
@@ -3092,9 +3073,6 @@
       "assets/sprites/british_shorthair_blue_set07.png",
       "assets/sprites/british_shorthair_blue_set08.png",
       "assets/sprites/british_shorthair_blue_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3109,7 +3087,8 @@
     "generated_source": "assets/source/animals/generated/munchkin_brown_tabby-source.png",
     "motion_source": "docs/art-source/munchkin/motion-source/sheets/munchkin-brown-tabby-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "munchkin_brown_tabby",
     "tint_hex": "8b542e",
     "accent_hex": "2f241c",
@@ -3132,9 +3111,6 @@
       "assets/sprites/munchkin_brown_tabby_set07.png",
       "assets/sprites/munchkin_brown_tabby_set08.png",
       "assets/sprites/munchkin_brown_tabby_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3216,7 +3192,8 @@
     "generated_source": "assets/source/animals/generated/scottish_fold_silver_tabby-source.png",
     "motion_source": "docs/art-source/scottish-fold/motion-source/sheets/scottish-fold-silver-tabby-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "scottish_fold_silver_tabby",
     "tint_hex": "a7aaa5",
     "accent_hex": "5e625f",
@@ -3239,9 +3216,6 @@
       "assets/sprites/scottish_fold_silver_tabby_set07.png",
       "assets/sprites/scottish_fold_silver_tabby_set08.png",
       "assets/sprites/scottish_fold_silver_tabby_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3290,7 +3264,8 @@
     "generated_source": "assets/source/animals/generated/domestic_shorthair_calico-source.png",
     "motion_source": "docs/art-source/domestic-shorthair/motion-source/sheets/domestic-shorthair-calico-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "domestic_shorthair_calico",
     "tint_hex": "e8dfcd",
     "accent_hex": "bd6d2e",
@@ -3313,9 +3288,6 @@
       "assets/sprites/domestic_shorthair_calico_set07.png",
       "assets/sprites/domestic_shorthair_calico_set08.png",
       "assets/sprites/domestic_shorthair_calico_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3330,7 +3302,8 @@
     "generated_source": "assets/source/animals/generated/domestic_shorthair_tabby_white_stocky-source.png",
     "motion_source": "docs/art-source/domestic-shorthair-tabby-white-stocky/motion-source/sheets/domestic-shorthair-tabby-white-stocky-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "domestic_shorthair_tabby_white_stocky",
     "tint_hex": "5d5145",
     "accent_hex": "f1ede4",
@@ -3353,9 +3326,6 @@
       "assets/sprites/domestic_shorthair_tabby_white_stocky_set07.png",
       "assets/sprites/domestic_shorthair_tabby_white_stocky_set08.png",
       "assets/sprites/domestic_shorthair_tabby_white_stocky_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3404,7 +3374,8 @@
     "generated_source": "assets/source/animals/generated/holland_lop_broken_orange-source.png",
     "motion_source": "docs/art-source/holland-lop/motion-source/sheets/holland-lop-broken-orange-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "holland_lop_broken_orange",
     "tint_hex": "e6d8c3",
     "accent_hex": "c97833",
@@ -3427,9 +3398,6 @@
       "assets/sprites/holland_lop_broken_orange_set07.png",
       "assets/sprites/holland_lop_broken_orange_set08.png",
       "assets/sprites/holland_lop_broken_orange_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3444,7 +3412,8 @@
     "generated_source": "assets/source/animals/generated/netherland_dwarf_chestnut-source.png",
     "motion_source": "docs/art-source/netherland-dwarf/motion-source/sheets/netherland-dwarf-chestnut-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "netherland_dwarf_chestnut",
     "tint_hex": "8c633d",
     "accent_hex": "d3b17a",
@@ -3467,9 +3436,6 @@
       "assets/sprites/netherland_dwarf_chestnut_set07.png",
       "assets/sprites/netherland_dwarf_chestnut_set08.png",
       "assets/sprites/netherland_dwarf_chestnut_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3484,7 +3450,8 @@
     "generated_source": "assets/source/animals/generated/netherland_dwarf_himalayan-source.png",
     "motion_source": "docs/art-source/netherland-dwarf-himalayan/motion-source/sheets/netherland-dwarf-himalayan-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "netherland_dwarf_himalayan",
     "tint_hex": "f2e6d4",
     "accent_hex": "5a4237",
@@ -3507,9 +3474,6 @@
       "assets/sprites/netherland_dwarf_himalayan_set07.png",
       "assets/sprites/netherland_dwarf_himalayan_set08.png",
       "assets/sprites/netherland_dwarf_himalayan_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3524,7 +3488,8 @@
     "generated_source": "assets/source/animals/generated/himalayan_rabbit-source.png",
     "motion_source": "docs/art-source/himalayan-rabbit/motion-source/sheets/himalayan-rabbit-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "himalayan_rabbit",
     "tint_hex": "f3e5c8",
     "accent_hex": "5b3b2d",
@@ -3547,9 +3512,6 @@
       "assets/sprites/himalayan_rabbit_set07.png",
       "assets/sprites/himalayan_rabbit_set08.png",
       "assets/sprites/himalayan_rabbit_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3564,7 +3526,8 @@
     "generated_source": "assets/source/animals/generated/lionhead_rabbit_brown_white-source.png",
     "motion_source": "docs/art-source/lionhead-rabbit-brown-white/motion-source/sheets/lionhead-rabbit-brown-white-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "lionhead_rabbit_brown_white",
     "tint_hex": "f1ede4",
     "accent_hex": "9a6845",
@@ -3587,9 +3550,6 @@
       "assets/sprites/lionhead_rabbit_brown_white_set07.png",
       "assets/sprites/lionhead_rabbit_brown_white_set08.png",
       "assets/sprites/lionhead_rabbit_brown_white_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3604,7 +3564,8 @@
     "generated_source": "assets/source/animals/generated/rabbit_gray-source.png",
     "motion_source": "docs/art-source/rabbit-gray/motion-source/sheets/rabbit-gray-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "rabbit_gray",
     "tint_hex": "8f8d86",
     "accent_hex": "d8d3c8",
@@ -3627,9 +3588,6 @@
       "assets/sprites/rabbit_gray_set07.png",
       "assets/sprites/rabbit_gray_set08.png",
       "assets/sprites/rabbit_gray_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3746,7 +3704,8 @@
     "generated_source": "assets/source/animals/generated/fancy_rat_hooded-source.png",
     "motion_source": "docs/art-source/fancy-rat/motion-source/sheets/fancy-rat-hooded-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "fancy_rat_hooded",
     "tint_hex": "efe5d4",
     "accent_hex": "3b332c",
@@ -3769,9 +3728,6 @@
       "assets/sprites/fancy_rat_hooded_set07.png",
       "assets/sprites/fancy_rat_hooded_set08.png",
       "assets/sprites/fancy_rat_hooded_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3786,7 +3742,8 @@
     "generated_source": "assets/source/animals/generated/fancy_rat_blue_hooded-source.png",
     "motion_source": "docs/art-source/fancy-rat-blue-hooded/motion-source/sheets/fancy-rat-blue-hooded-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "fancy_rat_blue_hooded",
     "tint_hex": "d8d6cd",
     "accent_hex": "6d7480",
@@ -3809,9 +3766,6 @@
       "assets/sprites/fancy_rat_blue_hooded_set07.png",
       "assets/sprites/fancy_rat_blue_hooded_set08.png",
       "assets/sprites/fancy_rat_blue_hooded_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3826,7 +3780,8 @@
     "generated_source": "assets/source/animals/generated/fancy_rat_chocolate_self-source.png",
     "motion_source": "docs/art-source/fancy-rat-chocolate-self/motion-source/sheets/fancy-rat-chocolate-self-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "fancy_rat_chocolate_self",
     "tint_hex": "5f3e2c",
     "accent_hex": "9d7350",
@@ -3849,9 +3804,6 @@
       "assets/sprites/fancy_rat_chocolate_self_set07.png",
       "assets/sprites/fancy_rat_chocolate_self_set08.png",
       "assets/sprites/fancy_rat_chocolate_self_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -3866,7 +3818,8 @@
     "generated_source": "assets/source/animals/generated/fancy_rat_cream_agouti-source.png",
     "motion_source": "docs/art-source/fancy-rat-cream-agouti/motion-source/sheets/fancy-rat-cream-agouti-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "fancy_rat_cream_agouti",
     "tint_hex": "caa06f",
     "accent_hex": "ead5a7",
@@ -3889,9 +3842,6 @@
       "assets/sprites/fancy_rat_cream_agouti_set07.png",
       "assets/sprites/fancy_rat_cream_agouti_set08.png",
       "assets/sprites/fancy_rat_cream_agouti_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4020,7 +3970,8 @@
     "generated_source": "assets/source/animals/generated/chipmunk_striped-source.png",
     "motion_source": "docs/art-source/chipmunk/motion-source/sheets/chipmunk-striped-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "chipmunk_striped",
     "tint_hex": "a06a3a",
     "accent_hex": "2f241e",
@@ -4043,9 +3994,6 @@
       "assets/sprites/chipmunk_striped_set07.png",
       "assets/sprites/chipmunk_striped_set08.png",
       "assets/sprites/chipmunk_striped_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4060,7 +4008,8 @@
     "generated_source": "assets/source/animals/generated/albino_chipmunk-source.png",
     "motion_source": "docs/art-source/albino-chipmunk/motion-source/sheets/albino-chipmunk-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "albino_chipmunk",
     "tint_hex": "f2dfbd",
     "accent_hex": "cf9a5b",
@@ -4083,9 +4032,6 @@
       "assets/sprites/albino_chipmunk_set07.png",
       "assets/sprites/albino_chipmunk_set08.png",
       "assets/sprites/albino_chipmunk_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4100,7 +4046,8 @@
     "generated_source": "assets/source/animals/generated/true_albino_chipmunk-source.png",
     "motion_source": "docs/art-source/true-albino-chipmunk/motion-source/sheets/true-albino-chipmunk-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "true_albino_chipmunk",
     "tint_hex": "f7e9d6",
     "accent_hex": "d98f8a",
@@ -4123,9 +4070,6 @@
       "assets/sprites/true_albino_chipmunk_set07.png",
       "assets/sprites/true_albino_chipmunk_set08.png",
       "assets/sprites/true_albino_chipmunk_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4288,7 +4232,8 @@
     "generated_source": "assets/source/animals/generated/whites_tree_frog_blue-source.png",
     "motion_source": "docs/art-source/whites-tree-frog-blue/motion-source/sheets/whites-tree-frog-blue-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "whites_tree_frog_blue",
     "tint_hex": "17b8e8",
     "accent_hex": "e8dcc7",
@@ -4311,9 +4256,6 @@
       "assets/sprites/whites_tree_frog_blue_set07.png",
       "assets/sprites/whites_tree_frog_blue_set08.png",
       "assets/sprites/whites_tree_frog_blue_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4328,7 +4270,8 @@
     "generated_source": "assets/source/animals/generated/japanese_giant_salamander-source.png",
     "motion_source": "docs/art-source/japanese-giant-salamander/motion-source/sheets/japanese-giant-salamander-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "japanese_giant_salamander",
     "tint_hex": "5d4e43",
     "accent_hex": "9f8f7c",
@@ -4351,9 +4294,6 @@
       "assets/sprites/japanese_giant_salamander_set07.png",
       "assets/sprites/japanese_giant_salamander_set08.png",
       "assets/sprites/japanese_giant_salamander_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4368,7 +4308,8 @@
     "generated_source": "assets/source/animals/generated/african_fat_tailed_gecko-source.png",
     "motion_source": "docs/art-source/african-fat-tailed-gecko/motion-source/sheets/african-fat-tailed-gecko-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "african_fat_tailed_gecko",
     "tint_hex": "7a5b45",
     "accent_hex": "d9b07c",
@@ -4391,9 +4332,6 @@
       "assets/sprites/african_fat_tailed_gecko_set07.png",
       "assets/sprites/african_fat_tailed_gecko_set08.png",
       "assets/sprites/african_fat_tailed_gecko_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4408,7 +4346,8 @@
     "generated_source": "assets/source/animals/generated/budgerigar_green_yellow-source.png",
     "motion_source": "docs/art-source/budgerigar/motion-source/sheets/budgerigar-green-yellow-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "budgerigar_green_yellow",
     "tint_hex": "75b64c",
     "accent_hex": "f0da4d",
@@ -4431,9 +4370,6 @@
       "assets/sprites/budgerigar_green_yellow_set07.png",
       "assets/sprites/budgerigar_green_yellow_set08.png",
       "assets/sprites/budgerigar_green_yellow_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4448,7 +4384,8 @@
     "generated_source": "assets/source/animals/generated/cockatiel_normal_gray-source.png",
     "motion_source": "docs/art-source/cockatiel/motion-source/sheets/cockatiel-normal-gray-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "cockatiel_normal_gray",
     "tint_hex": "8d8a86",
     "accent_hex": "f3d35c",
@@ -4471,9 +4408,6 @@
       "assets/sprites/cockatiel_normal_gray_set07.png",
       "assets/sprites/cockatiel_normal_gray_set08.png",
       "assets/sprites/cockatiel_normal_gray_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4488,7 +4422,8 @@
     "generated_source": "assets/source/animals/generated/java_sparrow_normal-source.png",
     "motion_source": "docs/art-source/java-sparrow/motion-source/sheets/java-sparrow-normal-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "java_sparrow_normal",
     "tint_hex": "8f7b83",
     "accent_hex": "d44848",
@@ -4511,9 +4446,6 @@
       "assets/sprites/java_sparrow_normal_set07.png",
       "assets/sprites/java_sparrow_normal_set08.png",
       "assets/sprites/java_sparrow_normal_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4528,7 +4460,8 @@
     "generated_source": "assets/source/animals/generated/parrotlet_green-source.png",
     "motion_source": "docs/art-source/parrotlet/motion-source/sheets/parrotlet-green-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "parrotlet_green",
     "tint_hex": "80bd38",
     "accent_hex": "d9e982",
@@ -4551,9 +4484,6 @@
       "assets/sprites/parrotlet_green_set07.png",
       "assets/sprites/parrotlet_green_set08.png",
       "assets/sprites/parrotlet_green_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4568,7 +4498,8 @@
     "generated_source": "assets/source/animals/generated/parrotlet_blue_green-source.png",
     "motion_source": "docs/art-source/parrotlet-blue-green/motion-source/sheets/parrotlet-blue-green-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "parrotlet_blue_green",
     "tint_hex": "28c2df",
     "accent_hex": "136f78",
@@ -4591,9 +4522,6 @@
       "assets/sprites/parrotlet_blue_green_set07.png",
       "assets/sprites/parrotlet_blue_green_set08.png",
       "assets/sprites/parrotlet_blue_green_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4608,7 +4536,8 @@
     "generated_source": "assets/source/animals/generated/lovebird_peach_faced-source.png",
     "motion_source": "docs/art-source/lovebird/motion-source/sheets/lovebird-peach-faced-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "lovebird_peach_faced",
     "tint_hex": "75b83e",
     "accent_hex": "ef7944",
@@ -4631,9 +4560,6 @@
       "assets/sprites/lovebird_peach_faced_set07.png",
       "assets/sprites/lovebird_peach_faced_set08.png",
       "assets/sprites/lovebird_peach_faced_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4648,7 +4574,8 @@
     "generated_source": "assets/source/animals/generated/white_wagtail-source.png",
     "motion_source": "docs/art-source/white-wagtail/motion-source/sheets/white-wagtail-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "white_wagtail",
     "tint_hex": "d8d8cf",
     "accent_hex": "1d1d1f",
@@ -4671,9 +4598,6 @@
       "assets/sprites/white_wagtail_set07.png",
       "assets/sprites/white_wagtail_set08.png",
       "assets/sprites/white_wagtail_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   },
   {
@@ -4688,7 +4612,8 @@
     "generated_source": "assets/source/animals/generated/shoebill_stork-source.png",
     "motion_source": "docs/art-source/shoebill-stork/motion-source/sheets/shoebill-stork-source-set00.png",
     "motion_frames": 62,
-    "motion_sets": 1,
+    "source_sets": 1,
+    "runtime_sets": 10,
     "sprite_base": "shoebill_stork",
     "tint_hex": "7f8f91",
     "accent_hex": "c8b894",
@@ -4711,9 +4636,6 @@
       "assets/sprites/shoebill_stork_set07.png",
       "assets/sprites/shoebill_stork_set08.png",
       "assets/sprites/shoebill_stork_set09.png"
-    ],
-    "warnings": [
-      "single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"
     ]
   }
 ]

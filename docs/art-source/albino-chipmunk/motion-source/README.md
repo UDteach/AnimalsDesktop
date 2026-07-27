@@ -18,6 +18,6 @@ go run ./cmd/auditframes -frames-dir docs/art-source/albino-chipmunk/motion-sour
 go run ./cmd/validatemotion -variant albino_chipmunk -require-accepted
 ```
 
-This is accepted at current runtime-preview parity. It is not a full content
-release set yet because only `set00` exists; a full release gate still requires
-accepted `set00` through `set09`.
+This canonical `set00` is the complete accepted 62-frame source. The importer
+expands it into all ten runtime slots; publication still requires the separate
+runtime, build, page, packaging, and release-approval gates.

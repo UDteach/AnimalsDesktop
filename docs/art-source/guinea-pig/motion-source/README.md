@@ -19,6 +19,6 @@ go run ./cmd/validatemotion -variant guinea_pig_tricolor -require-accepted
 Notes:
 
 - This is accepted as slot-based motion, not a single continuous 62-frame loop.
-- Only `set00` exists, so the variant is accepted source art but not 10-set release-ready.
+- Canonical `set00` is the complete accepted source and expands into all ten runtime slots.
 - Generation provenance and visual QA are in `docs/art-source/one-frame-method-fullrun-20260626/guinea-pig-tricolor-set00-oneframe-62/`.
 - Do not use `guinea-pig-tricolor-template-lock-set00-62` as accepted source; its late frames were visually rejected because the template-lock pass damaged the animal silhouette.

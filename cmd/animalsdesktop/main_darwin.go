@@ -62,6 +62,13 @@ const (
 	nibbleFrames = 6
 	hopStart     = 26
 	hopFrames    = 6
+
+	ferretSniffStart  = nibbleStart
+	ferretSniffFrames = nibbleFrames
+	ferretGroomStart  = hopStart
+	ferretGroomFrames = hopFrames
+	ferretRestStart   = 48
+	ferretRestFrames  = 8
 )
 
 const (
@@ -102,15 +109,19 @@ var (
 	walkFrameSeq   = []int{walkStart, walkStart + 1, walkStart + 3, walkStart + 1}
 	nibbleFrameSeq = []int{nibbleStart, nibbleStart + 1, nibbleStart + 2, nibbleStart + 1}
 	hopFrameSeq    = []int{hopStart, hopStart + 1, hopStart + 2, hopStart + 3}
+	ferretSniffSeq = []int{ferretSniffStart, ferretSniffStart + 1, ferretSniffStart + 2, ferretSniffStart + 3, ferretSniffStart + 4, ferretSniffStart + 5}
+	ferretGroomSeq = []int{ferretGroomStart, ferretGroomStart + 1, ferretGroomStart + 2, ferretGroomStart + 3, ferretGroomStart + 4, ferretGroomStart + 5}
+	ferretRestSeq  = []int{ferretRestStart, ferretRestStart + 1, ferretRestStart + 2, ferretRestStart + 3, ferretRestStart + 4, ferretRestStart + 5, ferretRestStart + 6, ferretRestStart + 7}
 )
 
 type darwinCoatVariant struct {
-	ID           string
-	SpeciesID    string
-	SpriteBase   string
-	LabelJA      string
-	LabelEN      string
-	WheelCapable bool
+	ID            string
+	SpeciesID     string
+	SpriteBase    string
+	LabelJA       string
+	LabelEN       string
+	MotionProfile string
+	WheelCapable  bool
 }
 
 var darwinVariants = darwinRuntimeVariants()
@@ -143,14 +154,15 @@ type darwinPetApp struct {
 }
 
 type darwinPet struct {
-	x         int
-	lane      int
-	dir       int
-	speed     int
-	frame     int
-	variant   int
-	nextPause int
-	pause     int
+	x           int
+	lane        int
+	dir         int
+	speed       int
+	frame       int
+	variant     int
+	nextPause   int
+	pause       int
+	pauseAction int
 }
 
 type darwinReaction struct {
@@ -196,12 +208,13 @@ func darwinRuntimeVariants() []darwinCoatVariant {
 			labelEN = labelJA
 		}
 		out = append(out, darwinCoatVariant{
-			ID:           variant.ID,
-			SpeciesID:    variant.SpeciesID,
-			SpriteBase:   spriteBase,
-			LabelJA:      labelJA,
-			LabelEN:      labelEN,
-			WheelCapable: catalog.WheelCapableVariant(variant),
+			ID:            variant.ID,
+			SpeciesID:     variant.SpeciesID,
+			SpriteBase:    spriteBase,
+			LabelJA:       labelJA,
+			LabelEN:       labelEN,
+			MotionProfile: catalog.MotionProfileForVariant(variant),
+			WheelCapable:  catalog.WheelCapableVariant(variant),
 		})
 	}
 	return out
@@ -1146,14 +1159,20 @@ func (a *darwinPetApp) tickPets() {
 		}
 		if p.pause > 0 {
 			p.pause--
-			p.frame = seqFrameFrom(idleFrameSeq, a.tick, 5)
+			variantID := a.variantID(p.variant)
+			if darwinMotionProfileForVariantID(variantID) == catalog.MotionProfileFerretSlink {
+				p.frame = darwinRandomPauseFrame(variantID, p.pauseAction, a.tick)
+			} else {
+				p.frame = seqFrameFrom(idleFrameSeq, a.tick, 5)
+			}
 			continue
 		}
 		p.nextPause--
 		if p.nextPause <= 0 {
 			p.pause = 30 + rand.Intn(70)
 			p.nextPause = 120 + rand.Intn(180)
-			p.frame = darwinRandomPauseFrame(a.variantID(p.variant), rand.Intn(3), a.tick)
+			p.pauseAction = rand.Intn(3)
+			p.frame = darwinRandomPauseFrame(a.variantID(p.variant), p.pauseAction, a.tick)
 			continue
 		}
 		a.movePet(p, p.speed)
@@ -1313,6 +1332,11 @@ func seqFrameFrom(seq []int, tick, delay int) int {
 }
 
 func darwinRandomPauseFrame(variantID string, action int, tick int) int {
+	if darwinMotionProfileForVariantID(variantID) == catalog.MotionProfileFerretSlink {
+		seq, delay := darwinFerretPauseSequence(action)
+		return seqFrameFrom(seq, tick, delay)
+	}
+
 	switch action {
 	case 0:
 		seq, delay := darwinNibbleLikeSequence(variantID)
@@ -1321,6 +1345,26 @@ func darwinRandomPauseFrame(variantID string, action int, tick int) int {
 		return seqFrameFrom(hopFrameSeq, tick, 2)
 	default:
 		return seqFrameFrom(idleFrameSeq, tick, 5)
+	}
+}
+
+func darwinMotionProfileForVariantID(variantID string) string {
+	for _, variant := range darwinVariants {
+		if variant.ID == variantID {
+			return variant.MotionProfile
+		}
+	}
+	return ""
+}
+
+func darwinFerretPauseSequence(action int) ([]int, int) {
+	switch action {
+	case 0:
+		return ferretSniffSeq, 3
+	case 1:
+		return ferretGroomSeq, 3
+	default:
+		return ferretRestSeq, 5
 	}
 }
 

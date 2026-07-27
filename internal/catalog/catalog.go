@@ -275,6 +275,12 @@ const (
 	srcRabbitGrayMotion                      = "docs/art-source/rabbit-gray/motion-source/sheets/rabbit-gray-source-set00.png"
 	srcAfricanFatTailedGecko                 = "docs/art-source/african-fat-tailed-gecko/motion-source/accepted-frames/set00/frame-00.png"
 	srcAfricanFatTailedGeckoMotion           = "docs/art-source/african-fat-tailed-gecko/motion-source/sheets/african-fat-tailed-gecko-source-set00.png"
+	srcFerretSablePanda                      = "docs/art-source/ferret-sable-panda/motion-source/accepted-frames/set00/frame-00.png"
+	srcFerretSablePandaMotion                = "docs/art-source/ferret-sable-panda/motion-source/sheets/ferret-sable-panda-source-set00.png"
+	srcFerretSable                           = "docs/art-source/ferret-sable/motion-source/accepted-frames/set00/frame-00.png"
+	srcFerretSableMotion                     = "docs/art-source/ferret-sable/motion-source/sheets/ferret-sable-source-set00.png"
+	srcFerretAlbino                          = "docs/art-source/ferret-albino/motion-source/accepted-frames/set00/frame-00.png"
+	srcFerretAlbinoMotion                    = "docs/art-source/ferret-albino/motion-source/sheets/ferret-albino-source-set00.png"
 )
 
 var Variants = []Variant{
@@ -338,8 +344,9 @@ var Variants = []Variant{
 	sourceVariant("hamster_white", "hamster", "Hamster - white", "hamster_white", srcHamster, "eee7d8", ""),
 	sourceVariant("hamster_cinnamon", "hamster", "Hamster - cinnamon", "hamster_cinnamon", srcHamster, "b56b38", ""),
 
-	shapeVariant("ferret_sable", "ferret", "Ferret - sable", "ferret", "8b6746", "ece0c8"),
-	shapeVariant("ferret_albino", "ferret", "Ferret - albino", "ferret", "eadcc7", "c58b78"),
+	acceptedMotionVariant("ferret_sable_panda", "ferret", "Ferret - sable panda", "フェレット（セーブルパンダ）", "ferret_sable_panda", srcFerretSablePanda, srcFerretSablePandaMotion, "eee7d9", "6e5140", "Ferret", "sable panda", 2),
+	acceptedMotionVariant("ferret_sable", "ferret", "Ferret - sable", "フェレット（セーブル）", "ferret_sable", srcFerretSable, srcFerretSableMotion, "8b6746", "ece0c8", "Ferret", "sable", 1),
+	acceptedMotionVariant("ferret_albino", "ferret", "Ferret - albino", "フェレット（アルビノ）", "ferret_albino", srcFerretAlbino, srcFerretAlbinoMotion, "eadcc7", "c58b78", "Ferret", "albino", 2),
 	shapeVariant("ferret_champagne", "ferret", "Ferret - champagne", "ferret", "c7a476", "f1e1c1"),
 	acceptedMotionVariant("guinea_pig_tricolor", "guinea_pig", "Guinea pig - tricolor", "モルモット", "guinea_pig_tricolor", srcGuineaPig, srcGuineaPigMotion, "b46c32", "f0e6d2", "Guinea pig", "tricolor", 1),
 	acceptedMotionVariant("guinea_pig_russian_smoke_white", "guinea_pig", "Guinea pig - Russian smoke white", "モルモット（ロシアンスモーク白）", "guinea_pig_russian_smoke_white", srcGuineaPigRussianSmoke, srcGuineaPigRussianMotion, "f1eee6", "8d8380", "Guinea pig", "Russian smoke white", 2),
@@ -490,6 +497,9 @@ var runtimeVariantIDs = []string{
 	"fancy_rat_cream_agouti",
 	"rabbit_gray",
 	"african_fat_tailed_gecko",
+	"ferret_sable_panda",
+	"ferret_sable",
+	"ferret_albino",
 }
 
 func RuntimeVariants() []Variant {

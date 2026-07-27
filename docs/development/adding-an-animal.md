@@ -4,6 +4,11 @@ This is the canonical integration path for a new AnimalsDesktop species,
 breed, morph, or coat. It keeps source-art acceptance, local runtime preview,
 public Pages, and release publication as separate decisions.
 
+Use [current-asset-production-flow.md](current-asset-production-flow.md) for
+the one-frame production gates, non-promotable coat-sheet experiment,
+hash-backed parent approvals, contact review, and shared transparent-matte
+policy that must be completed before this integration path begins.
+
 ## Prerequisites
 
 - Go 1.24 or newer
@@ -15,8 +20,8 @@ public Pages, and release publication as separate decisions.
 - A new species or materially different silhouette needs its own ImageGen
   source family. Do not create it by recoloring another species.
 - A coat variant may share a species only after that species' silhouette and
-  motion set are stable. Accepted production frames still come from one
-  ImageGen call per frame.
+  `62/62` motion set are parent-approved. Every accepted coat frame still uses
+  one ImageGen call. A generated multi-cell sheet is direction evidence only.
 - Source-art acceptance does not automatically make an animal selectable.
 - Runtime selection does not automatically update Pages, tags, downloads, or a
   GitHub Release. Those remain explicit release work.
@@ -39,7 +44,13 @@ Run the mechanical gate and assemble the source sheet:
 ```powershell
 go run ./cmd/auditframes `
   -frames-dir docs\art-source\<family>\motion-source\accepted-frames\set00 `
-  -strict -artifact-warnings -motion-warnings
+  -strict -artifact-warnings -motion-warnings `
+  -motion-boundaries 4,12,20,26,32,40,48,56
+
+python scripts\audit_frame_matte.py `
+  --frames-dir docs\art-source\<family>\motion-source\accepted-frames\set00 `
+  --format json `
+  --output docs\art-source\<family>\motion-source\qa\matte-audit-set00.json
 
 go run ./cmd/assemblemotion `
   -frames-dir docs\art-source\<family>\motion-source\accepted-frames\set00 `
@@ -50,6 +61,46 @@ go run ./cmd/assemblemotion `
 Mechanical success is not visual acceptance. Review light, dark, and checker
 contacts for species read, anatomy, baseline, crop, matte, and continuity
 before registering the source as accepted.
+
+For the bounded four-cell direction experiment, `cmd/coatbatch` can run
+`build`, `measure`, `tone`, and diagnostic `slice` using the exact manifest and
+command sequence in `current-asset-production-flow.md`. It binds the manifest,
+prompt, call key, swatch, raw source, canonical base frames, generated sheets,
+and slices with SHA-256. Every output remains non-promotable. Do not substitute
+the retained experiment Python helpers or copy experiment pixels into accepted
+source art.
+
+The ordinary raw silhouette and tone bounds remain `IoU >= 98.5%`, centroid
+movement `<= 1.25px`, and gain `0.95-1.05`. The production-flow document also
+defines two evidence-bound recovery policies for this ferret run: an
+Albino-only high-contrast raw-IoU floor and an exact-input Sable tone recovery.
+They are named, fail-closed exceptions, not reusable numeric knobs. Any retained
+diagnostic candidate remains non-promotable even after a successful replay.
+
+For a standalone coat-variant frame of the same approved pose,
+`prepareframe` can fail closed on a one-pixel normalization difference and
+match the canonical output bbox:
+
+```powershell
+go run ./cmd/prepareframe `
+  -background chroma-green `
+  -src <candidate-source.png> `
+  -out <candidate-frame.png> `
+  -match-alpha-bbox <canonical-96x64-frame.png> `
+  -report <prepare-report.json>
+```
+
+The option accepts only an ordinary output whose `X`, `Y`, width, and height
+are each already within one pixel of the reference. Larger differences are
+rejected, and an exact match is a pixel-identical no-op. The report records
+the source/reference/output SHA-256 values, pre-lock and reference bboxes, and
+whether resampling occurred. It also rejects the final output unless its alpha
+mask has at least `98.0%` IoU and at most `0.30px` centroid movement from the
+canonical frame. Source, output, reference, and report paths must all be
+distinct. This is a normalization guard, not an anatomy repair: it does not
+copy the reference alpha mask and cannot waive per-frame provenance, contact,
+matte, motion-continuity, or parent visual review. It never makes a generated
+sheet cell eligible for production.
 
 ## 2. Register the catalog entry
 
@@ -97,10 +148,12 @@ runtime sprite sheets. It intentionally does not replace the aggregate
 Confirm the targeted diff contains only the intended generated source and
 `<sprite-base>_set00.png` through `<sprite-base>_set09.png`.
 
-A single `set00` source sheet is allowed as a clearly warned local preview
-fallback. Once any `set01`-`set09` source is added, the family must contain all
-ten sheets; a partial family is rejected instead of silently duplicating
-`set00`.
+A single accepted `set00` source sheet is the normal complete source contract.
+The importer expands it into all ten runtime sprite slots for compatibility,
+without a preview or incompleteness warning. If any optional independent
+`set01`-`set09` source is added, the family must contain all ten byte-unique
+source sheets; a partial or duplicated family is rejected. Keep only canonical
+`set00` unless ten genuinely different motion sources are ready.
 
 ## 5. Opt into runtime and release gates
 
@@ -131,7 +184,8 @@ permission from local animal integration.
 ## Addition checklist
 
 - [ ] New species uses its own source family; coat-only reuse is justified.
-- [ ] `62/62` one-frame source files pass mechanical and parent visual QA.
+- [ ] `62/62` standalone source files pass mechanical and parent visual QA;
+      no accepted file originates from a generated multi-cell sheet.
 - [ ] Catalog metadata and paths pass `catalog.Validate()`.
 - [ ] Targeted `importanimals -check` passes without repository writes.
 - [ ] Targeted import changes only the intended animal assets.

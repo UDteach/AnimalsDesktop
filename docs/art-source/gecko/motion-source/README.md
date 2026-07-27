@@ -18,5 +18,5 @@ go run ./cmd/validatemotion -variant gecko_gray_brown -require-accepted
 Notes:
 
 - This is accepted as slot-based motion, not a single continuous 62-frame loop.
-- Only `set00` exists, so the variant is accepted source art but not 10-set release-ready.
+- Canonical `set00` is the complete accepted source and expands into all ten runtime slots.
 - Generation provenance and visual QA are in `docs/art-source/one-frame-method-fullrun-20260626/gecko-set00-oneframe-62/`.

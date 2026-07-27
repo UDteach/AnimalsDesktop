@@ -8,6 +8,8 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -18,19 +20,20 @@ const (
 )
 
 type auditReport struct {
-	Root        string      `json:"root,omitempty"`
-	FramesDir   string      `json:"frames_dir,omitempty"`
-	Pattern     string      `json:"pattern"`
-	Strict      bool        `json:"strict"`
-	FrameWidth  int         `json:"frame_width"`
-	FrameHeight int         `json:"frame_height"`
-	SetCount    int         `json:"set_count"`
-	FrameCount  int         `json:"frame_count"`
-	Valid       int         `json:"valid"`
-	Missing     int         `json:"missing"`
-	Invalid     int         `json:"invalid"`
-	Warnings    int         `json:"warnings"`
-	Sets        []setReport `json:"sets"`
+	Root             string      `json:"root,omitempty"`
+	FramesDir        string      `json:"frames_dir,omitempty"`
+	Pattern          string      `json:"pattern"`
+	Strict           bool        `json:"strict"`
+	MotionBoundaries []int       `json:"motion_boundaries,omitempty"`
+	FrameWidth       int         `json:"frame_width"`
+	FrameHeight      int         `json:"frame_height"`
+	SetCount         int         `json:"set_count"`
+	FrameCount       int         `json:"frame_count"`
+	Valid            int         `json:"valid"`
+	Missing          int         `json:"missing"`
+	Invalid          int         `json:"invalid"`
+	Warnings         int         `json:"warnings"`
+	Sets             []setReport `json:"sets"`
 }
 
 type setReport struct {
@@ -74,13 +77,18 @@ func main() {
 	strict := flag.Bool("strict", false, "exit non-zero unless every expected frame is valid")
 	artifactWarnings := flag.Bool("artifact-warnings", false, "warn about likely visual artifacts such as long low horizontal alpha runs")
 	motionWarnings := flag.Bool("motion-warnings", false, "warn about abrupt frame-to-frame bbox, baseline, alpha-area, and body-fill changes")
+	motionBoundariesValue := flag.String("motion-boundaries", "", "comma-separated strictly increasing unique segment-start frame indices in 1..61; empty compares all adjacent frames")
 	flag.Parse()
 
+	motionBoundaries, err := parseMotionBoundaries(*motionBoundariesValue)
+	if err != nil {
+		fatalf("invalid -motion-boundaries: %v", err)
+	}
 	if (*root == "") == (*framesDir == "") {
 		fatalf("provide exactly one of -root or -frames-dir")
 	}
 
-	report, err := audit(*root, *framesDir, *pattern, *strict, *artifactWarnings, *motionWarnings)
+	report, err := auditWithMotionBoundaries(*root, *framesDir, *pattern, *strict, *artifactWarnings, *motionWarnings, motionBoundaries)
 	if err != nil {
 		fatalf("%v", err)
 	}
@@ -95,26 +103,66 @@ func main() {
 	}
 }
 
+func parseMotionBoundaries(value string) ([]int, error) {
+	if value == "" {
+		return nil, nil
+	}
+
+	parts := strings.Split(value, ",")
+	boundaries := make([]int, 0, len(parts))
+	for i, part := range parts {
+		token := strings.TrimSpace(part)
+		if token == "" {
+			return nil, fmt.Errorf("entry %d is empty", i+1)
+		}
+		for _, char := range token {
+			if char < '0' || char > '9' {
+				return nil, fmt.Errorf("entry %d %q is not a decimal integer", i+1, token)
+			}
+		}
+		frame, err := strconv.Atoi(token)
+		if err != nil {
+			return nil, fmt.Errorf("entry %d %q is not a valid frame index", i+1, token)
+		}
+		if frame < 1 || frame >= totalFrames {
+			return nil, fmt.Errorf("entry %d is %d; want 1..%d", i+1, frame, totalFrames-1)
+		}
+		if len(boundaries) > 0 && frame <= boundaries[len(boundaries)-1] {
+			if frame == boundaries[len(boundaries)-1] {
+				return nil, fmt.Errorf("entry %d duplicates frame %d", i+1, frame)
+			}
+			return nil, fmt.Errorf("entry %d is %d; values must be strictly increasing", i+1, frame)
+		}
+		boundaries = append(boundaries, frame)
+	}
+	return boundaries, nil
+}
+
 func audit(root string, framesDir string, pattern string, strict bool, artifactWarnings bool, motionWarnings bool) (auditReport, error) {
+	return auditWithMotionBoundaries(root, framesDir, pattern, strict, artifactWarnings, motionWarnings, nil)
+}
+
+func auditWithMotionBoundaries(root string, framesDir string, pattern string, strict bool, artifactWarnings bool, motionWarnings bool, motionBoundaries []int) (auditReport, error) {
 	report := auditReport{
-		Root:        filepath.ToSlash(root),
-		FramesDir:   filepath.ToSlash(framesDir),
-		Pattern:     pattern,
-		Strict:      strict,
-		FrameWidth:  frameW,
-		FrameHeight: frameH,
-		Sets:        []setReport{},
+		Root:             filepath.ToSlash(root),
+		FramesDir:        filepath.ToSlash(framesDir),
+		Pattern:          pattern,
+		Strict:           strict,
+		MotionBoundaries: append([]int(nil), motionBoundaries...),
+		FrameWidth:       frameW,
+		FrameHeight:      frameH,
+		Sets:             []setReport{},
 	}
 	if root != "" {
 		for set := 0; set < motionSets; set++ {
 			setName := fmt.Sprintf("set%02d", set)
 			setDir := filepath.Join(root, setName)
-			setReport := auditSet(setName, setDir, pattern, artifactWarnings, motionWarnings)
+			setReport := auditSetWithMotionBoundaries(setName, setDir, pattern, artifactWarnings, motionWarnings, motionBoundaries)
 			addSet(&report, setReport)
 		}
 		return report, nil
 	}
-	setReport := auditSet(filepath.Base(framesDir), framesDir, pattern, artifactWarnings, motionWarnings)
+	setReport := auditSetWithMotionBoundaries(filepath.Base(framesDir), framesDir, pattern, artifactWarnings, motionWarnings, motionBoundaries)
 	addSet(&report, setReport)
 	return report, nil
 }
@@ -130,6 +178,10 @@ func addSet(report *auditReport, set setReport) {
 }
 
 func auditSet(setName string, framesDir string, pattern string, artifactWarnings bool, motionWarnings bool) setReport {
+	return auditSetWithMotionBoundaries(setName, framesDir, pattern, artifactWarnings, motionWarnings, nil)
+}
+
+func auditSetWithMotionBoundaries(setName string, framesDir string, pattern string, artifactWarnings bool, motionWarnings bool, motionBoundaries []int) setReport {
 	report := setReport{
 		Set:    setName,
 		Dir:    filepath.ToSlash(framesDir),
@@ -149,7 +201,7 @@ func auditSet(setName string, framesDir string, pattern string, artifactWarnings
 		report.Frames = append(report.Frames, frameReport)
 	}
 	if motionWarnings {
-		addMotionWarnings(&report)
+		addMotionWarningsWithBoundaries(&report, motionBoundaries)
 	}
 	for _, frameReport := range report.Frames {
 		report.Warnings += len(frameReport.Warnings)
@@ -277,6 +329,15 @@ type motionMetric struct {
 }
 
 func addMotionWarnings(set *setReport) {
+	addMotionWarningsWithBoundaries(set, nil)
+}
+
+func addMotionWarningsWithBoundaries(set *setReport, motionBoundaries []int) {
+	boundaries := make(map[int]struct{}, len(motionBoundaries))
+	for _, frame := range motionBoundaries {
+		boundaries[frame] = struct{}{}
+	}
+
 	metrics := make([]*motionMetric, len(set.Frames))
 	for i := range set.Frames {
 		frame := &set.Frames[i]
@@ -297,13 +358,20 @@ func addMotionWarnings(set *setReport) {
 		if curr == nil {
 			continue
 		}
-		if i > 0 && metrics[i-1] != nil {
+		if i > 0 && metrics[i-1] != nil && !hasMotionBoundaryBefore(boundaries, curr.frame) {
 			addAdjacentMotionWarnings(&set.Frames[i], metrics[i-1], curr)
 		}
-		if i > 0 && i+1 < len(metrics) && metrics[i-1] != nil && metrics[i+1] != nil {
+		if i > 0 && i+1 < len(metrics) && metrics[i-1] != nil && metrics[i+1] != nil &&
+			!hasMotionBoundaryBefore(boundaries, curr.frame) &&
+			!hasMotionBoundaryBefore(boundaries, metrics[i+1].frame) {
 			addIsolatedMotionWarnings(&set.Frames[i], metrics[i-1], curr, metrics[i+1])
 		}
 	}
+}
+
+func hasMotionBoundaryBefore(boundaries map[int]struct{}, frame int) bool {
+	_, ok := boundaries[frame]
+	return ok
 }
 
 func addAdjacentMotionWarnings(frame *frameReport, prev *motionMetric, curr *motionMetric) {

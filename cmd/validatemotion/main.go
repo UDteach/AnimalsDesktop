@@ -17,10 +17,10 @@ import (
 )
 
 const (
-	frameW      = 96
-	frameH      = 64
-	totalFrames = 62
-	motionSets  = 10
+	frameW            = 96
+	frameH            = 64
+	totalFrames       = 62
+	runtimeMotionSets = 10
 )
 
 type variantReport struct {
@@ -30,6 +30,7 @@ type variantReport struct {
 	MotionSource     string   `json:"motion_source"`
 	MotionSetSources []string `json:"motion_set_sources"`
 	FramesPerSet     int      `json:"frames_per_set"`
+	SourceSets       int      `json:"source_sets"`
 	RuntimeSets      int      `json:"runtime_sets"`
 	UniqueSetHashes  int      `json:"unique_set_hashes"`
 	AcceptedSource   bool     `json:"accepted_source"`
@@ -71,8 +72,8 @@ func main() {
 			hasFailure = true
 			continue
 		}
-		if *requireAccepted && !report.AcceptedSource {
-			fmt.Fprintf(os.Stderr, "%s is not an accepted motion source: source status %s\n", variant.ID, variant.SourceStatus)
+		if *requireAccepted && !report.ReleaseReady {
+			fmt.Fprintf(os.Stderr, "%s is not release-ready: source status %s, warnings %v\n", variant.ID, variant.SourceStatus, report.Warnings)
 			hasFailure = true
 		}
 		reports = append(reports, report)
@@ -103,6 +104,8 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 		hashes[sum] = true
 	}
 
+	acceptedSource := variant.SourceStatus == catalog.SourceStatusMotionAccepted
+	uniqueSourceFamily := len(paths) == 1 || len(hashes) == len(paths)
 	report := variantReport{
 		Variant:          variant.ID,
 		Species:          variant.SpeciesID,
@@ -110,25 +113,23 @@ func validateVariant(variant catalog.Variant) (variantReport, error) {
 		MotionSource:     filepath.ToSlash(variant.MotionSourcePath),
 		MotionSetSources: slashPaths(paths),
 		FramesPerSet:     totalFrames,
-		RuntimeSets:      len(paths),
+		SourceSets:       len(paths),
+		RuntimeSets:      runtimeMotionSets,
 		UniqueSetHashes:  len(hashes),
-		AcceptedSource:   variant.SourceStatus == catalog.SourceStatusMotionAccepted,
-		ReleaseReady:     variant.SourceStatus == catalog.SourceStatusMotionAccepted && len(paths) == motionSets,
+		AcceptedSource:   acceptedSource,
+		ReleaseReady:     acceptedSource && uniqueSourceFamily,
 	}
 	if variant.SourceStatus == catalog.SourceStatusMotionDraft {
 		report.Warnings = append(report.Warnings, "motion source is draft and must not be released")
 	}
-	if len(paths) < motionSets {
-		report.Warnings = append(report.Warnings, fmt.Sprintf("motion source has %d source set(s), accepted release requires %d", len(paths), motionSets))
-	}
-	if len(paths) == motionSets && len(hashes) < motionSets {
-		report.Warnings = append(report.Warnings, "one or more motion source sheets are byte-identical")
+	if len(paths) > 1 && len(hashes) < len(paths) {
+		report.Warnings = append(report.Warnings, "one or more optional motion source sheets are byte-identical; keep only canonical set00 or provide a unique complete set00-set09 family")
 	}
 	return report, nil
 }
 
 func motionSourceSheetPaths(set00Path string) ([]string, error) {
-	return motionsource.ResolveSetPaths(set00Path, motionSets)
+	return motionsource.ResolveSetPaths(set00Path, runtimeMotionSets)
 }
 
 func validateSheet(path string) (string, error) {

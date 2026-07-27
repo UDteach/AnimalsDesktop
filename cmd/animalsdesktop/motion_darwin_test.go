@@ -59,6 +59,91 @@ func TestDarwinTickWalksInDirectionWithStableFrame(t *testing.T) {
 	}
 }
 
+func TestDarwinTickKeepsFerretPauseActionAnimated(t *testing.T) {
+	tests := []struct {
+		variantID string
+		action    int
+		start     int
+		count     int
+	}{
+		{variantID: "ferret_sable_panda", action: 0, start: ferretSniffStart, count: ferretSniffFrames},
+		{variantID: "ferret_sable", action: 1, start: ferretGroomStart, count: ferretGroomFrames},
+		{variantID: "ferret_albino", action: 2, start: ferretRestStart, count: ferretRestFrames},
+	}
+
+	for _, test := range tests {
+		t.Run(test.variantID, func(t *testing.T) {
+			variantIndex := -1
+			for i, variant := range darwinVariants {
+				if variant.ID == test.variantID {
+					variantIndex = i
+					break
+				}
+			}
+			if variantIndex < 0 {
+				t.Fatalf("runtime variant %q not found", test.variantID)
+			}
+
+			const startX = 120
+			a := &darwinPetApp{
+				sceneW: 500,
+				mode:   darwinModeRandom,
+				pets: []darwinPet{{
+					x:           startX,
+					dir:         1,
+					speed:       3,
+					variant:     variantIndex,
+					pause:       6,
+					pauseAction: test.action,
+				}},
+			}
+			for step := 0; step < 4; step++ {
+				a.tickPets()
+				if got := a.pets[0].x; got != startX {
+					t.Fatalf("paused pet x after step %d = %d, want %d", step, got, startX)
+				}
+				got := a.pets[0].frame
+				if got < test.start || got >= test.start+test.count {
+					t.Fatalf("paused pet frame after step %d = %d, want range %d-%d", step, got, test.start, test.start+test.count-1)
+				}
+			}
+		})
+	}
+}
+
+func TestDarwinTickKeepsNonFerretPauseIdle(t *testing.T) {
+	variantIndex := -1
+	for i, variant := range darwinVariants {
+		if variant.ID == "hamster_golden_syrian" {
+			variantIndex = i
+			break
+		}
+	}
+	if variantIndex < 0 {
+		t.Fatal("runtime hamster variant not found")
+	}
+
+	a := &darwinPetApp{
+		sceneW: 500,
+		mode:   darwinModeRandom,
+		pets: []darwinPet{{
+			x:           120,
+			dir:         1,
+			speed:       3,
+			variant:     variantIndex,
+			pause:       4,
+			pauseAction: 1,
+		}},
+	}
+	for step := 0; step < 3; step++ {
+		a.tickPets()
+		want := seqFrameFrom(idleFrameSeq, a.tick, 5)
+		if got := a.pets[0].frame; got != want {
+			t.Fatalf("non-ferret paused frame after step %d = %d, want unchanged idle frame %d", step, got, want)
+		}
+	}
+}
+
 func TestDarwinMovePetReflectsAtSceneEdges(t *testing.T) {
 	a := &darwinPetApp{sceneW: 220}
 
@@ -103,6 +188,75 @@ func TestDarwinRandomPauseAvoidsWeakNibbleFrames(t *testing.T) {
 	}
 }
 
+func TestDarwinFerretRandomPauseUsesProfileActions(t *testing.T) {
+	actions := []struct {
+		name   string
+		action int
+		start  int
+		count  int
+	}{
+		{name: "sniff", action: 0, start: ferretSniffStart, count: ferretSniffFrames},
+		{name: "groom", action: 1, start: ferretGroomStart, count: ferretGroomFrames},
+		{name: "rest", action: 2, start: ferretRestStart, count: ferretRestFrames},
+	}
+
+	for _, variantID := range []string{"ferret_sable_panda", "ferret_sable", "ferret_albino"} {
+		t.Run(variantID, func(t *testing.T) {
+			if got := darwinMotionProfileForVariantID(variantID); got != catalog.MotionProfileFerretSlink {
+				t.Fatalf("motion profile = %q, want %q", got, catalog.MotionProfileFerretSlink)
+			}
+			for _, variant := range darwinVariants {
+				if variant.ID == variantID && variant.WheelCapable {
+					t.Fatal("ferret must not be wheel-capable")
+				}
+			}
+			for _, action := range actions {
+				t.Run(action.name, func(t *testing.T) {
+					seen := make(map[int]bool, action.count)
+					for tick := 0; tick < 96; tick++ {
+						got := darwinRandomPauseFrame(variantID, action.action, tick)
+						if got < action.start || got >= action.start+action.count {
+							t.Fatalf("tick %d = frame %d, want %s range %d-%d", tick, got, action.name, action.start, action.start+action.count-1)
+						}
+						seen[got] = true
+					}
+					for frame := action.start; frame < action.start+action.count; frame++ {
+						if !seen[frame] {
+							t.Fatalf("%s frame %d was never selected", action.name, frame)
+						}
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestDarwinNonFerretRandomPauseRemainsGeneric(t *testing.T) {
+	const variantID = "hamster_golden_syrian"
+	if got := darwinMotionProfileForVariantID(variantID); got == catalog.MotionProfileFerretSlink {
+		t.Fatalf("motion profile = %q, must not use ferret pause actions", got)
+	}
+
+	actions := []struct {
+		action int
+		seq    []int
+		delay  int
+	}{
+		{action: 0, seq: nibbleFrameSeq, delay: 3},
+		{action: 1, seq: hopFrameSeq, delay: 2},
+		{action: 2, seq: idleFrameSeq, delay: 5},
+	}
+	for _, action := range actions {
+		for tick := 0; tick < 64; tick++ {
+			got := darwinRandomPauseFrame(variantID, action.action, tick)
+			want := seqFrameFrom(action.seq, tick, action.delay)
+			if got != want {
+				t.Fatalf("action %d tick %d = %d, want unchanged generic frame %d", action.action, tick, got, want)
+			}
+		}
+	}
+}
+
 func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
 	runtimeVariants := catalog.RuntimeVariants()
 	if len(darwinVariants) != len(runtimeVariants) {
@@ -112,6 +266,9 @@ func TestDarwinRuntimeVariantsMirrorCatalog(t *testing.T) {
 		got := darwinVariants[i]
 		if got.ID != want.ID || got.SpriteBase != want.SpriteBase || got.LabelJA != want.LabelJA || got.LabelEN != want.LabelEN {
 			t.Fatalf("darwinVariants[%d] = %+v, want catalog variant %+v", i, got, want)
+		}
+		if got.MotionProfile != catalog.MotionProfileForVariant(want) {
+			t.Fatalf("darwinVariants[%d].MotionProfile = %q, want %q", i, got.MotionProfile, catalog.MotionProfileForVariant(want))
 		}
 		if got.LabelJA == "" || got.LabelEN == "" {
 			t.Fatalf("darwinVariants[%d] has empty labels: %+v", i, got)
@@ -406,6 +563,23 @@ func TestDarwinVariantGroupLabels(t *testing.T) {
 	}
 	if got := darwinVariantGroupLabel(shoebillIndex, darwinLangEnglish); got != "Birds" {
 		t.Fatalf("English shoebill group = %q", got)
+	}
+
+	for _, variantID := range []string{
+		"ferret_sable_panda",
+		"ferret_sable",
+		"ferret_albino",
+	} {
+		index, ok := darwinVariantIndexByID(variantID)
+		if !ok {
+			t.Fatalf("%s missing from runtime variants", variantID)
+		}
+		if got := darwinVariantGroupLabel(index, darwinLangJapanese); got != "小動物" {
+			t.Errorf("Japanese %s group = %q", variantID, got)
+		}
+		if got := darwinVariantGroupLabel(index, darwinLangEnglish); got != "Small animals" {
+			t.Errorf("English %s group = %q", variantID, got)
+		}
 	}
 }
 

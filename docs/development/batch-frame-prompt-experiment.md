@@ -252,6 +252,13 @@ An in-app ChatGPT Pro parser follow-up on 2026-06-23 produced a usable advisory,
 Current recommendation:
 
 - Production remains one-frame-per-PNG.
+- The separate same-species coat-only experiment in
+  `current-asset-production-flow.md` may use fixed four-cell ImageGen output
+  only after a `62/62` base family is approved. It uses high-resolution
+  declared cells, base-geometry matching, bounded sheet-wide tone calibration,
+  and per-cell provenance for direction evidence. Its cells and derivatives
+  remain non-promotable; every accepted production frame still comes from its
+  own ImageGen call.
 - Safest review experiment: `independent` multi-image outputs with manifest order, source hashes, and hybrid audit, because no cell boundary has to be trusted.
 - Conditional review experiment: exact `strip-2x1` only when the source canvas is exactly `192x64`, the manifest declares both cells, and both parsed cells pass all reject checks.
 - Trial-only experiment: exact `grid-2x2` at `192x128`, after `2x1` quality is proven. Do not test `8`, `16`, or `32` frame grids for production acceptance.

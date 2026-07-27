@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"image"
 	"image/color"
 	"image/png"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -149,6 +151,152 @@ func TestAuditMotionWarningsDetectsSizeJump(t *testing.T) {
 		!strings.Contains(warnings, "motion consistency: bbox height jumps") ||
 		!strings.Contains(warnings, "motion consistency: body alpha area jumps") {
 		t.Fatalf("warnings = %q, want size and body-area motion warnings", warnings)
+	}
+}
+
+func TestParseMotionBoundaries(t *testing.T) {
+	t.Run("empty preserves default", func(t *testing.T) {
+		got, err := parseMotionBoundaries("")
+		if err != nil {
+			t.Fatalf("parseMotionBoundaries() error = %v", err)
+		}
+		if got != nil {
+			t.Fatalf("parseMotionBoundaries() = %v, want nil", got)
+		}
+	})
+
+	t.Run("strictly increasing values", func(t *testing.T) {
+		got, err := parseMotionBoundaries("4, 12,20,26,32,40,48,56,61")
+		if err != nil {
+			t.Fatalf("parseMotionBoundaries() error = %v", err)
+		}
+		want := []int{4, 12, 20, 26, 32, 40, 48, 56, 61}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("parseMotionBoundaries() = %v, want %v", got, want)
+		}
+	})
+
+	for _, value := range []string{
+		" ",
+		"4,,12",
+		"four",
+		"+4",
+		"1.5",
+		"-1",
+		"0",
+		"62",
+		"4,4",
+		"12,4",
+	} {
+		t.Run("reject "+value, func(t *testing.T) {
+			if got, err := parseMotionBoundaries(value); err == nil {
+				t.Fatalf("parseMotionBoundaries(%q) = %v, want error", value, got)
+			}
+		})
+	}
+}
+
+func TestAuditMotionBoundariesDefaultCompatibility(t *testing.T) {
+	framesDir := filepath.Join(t.TempDir(), "set00")
+	writeRectFrame(t, filepath.Join(framesDir, "frame-00.png"), 30, 24, 28, 24)
+	writeRectFrame(t, filepath.Join(framesDir, "frame-01.png"), 10, 10, 70, 48)
+
+	legacy, err := audit("", framesDir, "frame-%02d.png", false, false, true)
+	if err != nil {
+		t.Fatalf("audit() error = %v", err)
+	}
+	boundaryAware, err := auditWithMotionBoundaries("", framesDir, "frame-%02d.png", false, false, true, nil)
+	if err != nil {
+		t.Fatalf("auditWithMotionBoundaries() error = %v", err)
+	}
+	if !reflect.DeepEqual(boundaryAware, legacy) {
+		t.Fatalf("empty motion boundaries changed the audit report")
+	}
+	encoded, err := json.Marshal(boundaryAware)
+	if err != nil {
+		t.Fatalf("json.Marshal() error = %v", err)
+	}
+	if strings.Contains(string(encoded), `"motion_boundaries"`) {
+		t.Fatalf("default report unexpectedly contains motion_boundaries: %s", encoded)
+	}
+}
+
+func TestAuditMotionBoundariesSuppressCrossBoundaryAdjacentWarnings(t *testing.T) {
+	framesDir := filepath.Join(t.TempDir(), "set00")
+	writeRectFrame(t, filepath.Join(framesDir, "frame-00.png"), 30, 24, 28, 24)
+	framePath := filepath.Join(framesDir, "frame-01.png")
+	writeRectFrame(t, framePath, 10, 10, 70, 48)
+	addDetachedBlock(t, framePath, 3, 58, 4, 4)
+
+	report, err := auditWithMotionBoundaries("", framesDir, "frame-%02d.png", false, true, true, []int{1})
+	if err != nil {
+		t.Fatalf("auditWithMotionBoundaries() error = %v", err)
+	}
+	warnings := strings.Join(report.Sets[0].Frames[1].Warnings, "\n")
+	if strings.Contains(warnings, "motion consistency:") {
+		t.Fatalf("cross-boundary warnings = %q, want none", warnings)
+	}
+	if !strings.Contains(warnings, "disconnected alpha components") {
+		t.Fatalf("artifact warning missing at motion boundary: %q", warnings)
+	}
+}
+
+func TestAuditMotionBoundariesSuppressIsolatedWarningsAcrossEitherEdge(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		boundary int
+	}{
+		{name: "previous-current edge", boundary: 1},
+		{name: "current-next edge", boundary: 2},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			framesDir := filepath.Join(t.TempDir(), "set00")
+			writeRectFrame(t, filepath.Join(framesDir, "frame-00.png"), 30, 24, 28, 24)
+			writeRectFrame(t, filepath.Join(framesDir, "frame-01.png"), 10, 10, 70, 48)
+			writeRectFrame(t, filepath.Join(framesDir, "frame-02.png"), 30, 24, 28, 24)
+
+			report, err := auditWithMotionBoundaries("", framesDir, "frame-%02d.png", false, false, true, []int{tc.boundary})
+			if err != nil {
+				t.Fatalf("auditWithMotionBoundaries() error = %v", err)
+			}
+			warnings := strings.Join(report.Sets[0].Frames[1].Warnings, "\n")
+			if strings.Contains(warnings, "isolated") {
+				t.Fatalf("isolated warnings across boundary = %q, want none", warnings)
+			}
+			if tc.boundary == 2 && !strings.Contains(warnings, "from previous frame 00 to 01") {
+				t.Fatalf("within-segment adjacent warning missing: %q", warnings)
+			}
+		})
+	}
+}
+
+func TestAuditMotionBoundariesRetainWithinSegmentAndArtifactWarnings(t *testing.T) {
+	framesDir := filepath.Join(t.TempDir(), "set00")
+	writeRectFrame(t, filepath.Join(framesDir, "frame-03.png"), 30, 24, 28, 24)
+	framePath := filepath.Join(framesDir, "frame-04.png")
+	writeRectFrame(t, framePath, 10, 10, 70, 48)
+	addDetachedBlock(t, framePath, 3, 58, 4, 4)
+
+	report, err := auditWithMotionBoundaries("", framesDir, "frame-%02d.png", false, true, true, []int{1})
+	if err != nil {
+		t.Fatalf("auditWithMotionBoundaries() error = %v", err)
+	}
+	warnings := strings.Join(report.Sets[0].Frames[4].Warnings, "\n")
+	if !strings.Contains(warnings, "motion consistency: bbox width jumps from previous frame 03 to 04") {
+		t.Fatalf("within-segment motion warning missing: %q", warnings)
+	}
+	if !strings.Contains(warnings, "disconnected alpha components") {
+		t.Fatalf("artifact warning missing: %q", warnings)
+	}
+	if !reflect.DeepEqual(report.MotionBoundaries, []int{1}) {
+		t.Fatalf("report motion boundaries = %v, want [1]", report.MotionBoundaries)
+	}
+	encoded, err := json.Marshal(report)
+	if err != nil {
+		t.Fatalf("json.Marshal() error = %v", err)
+	}
+	if !strings.Contains(string(encoded), `"motion_boundaries":[1]`) {
+		t.Fatalf("report JSON lacks motion boundary provenance: %s", encoded)
 	}
 }
 

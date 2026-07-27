@@ -1,6 +1,6 @@
 # AnimalsDesktop Motion Contract
 
-Last updated: 2026-06-26
+Last updated: 2026-07-26
 
 This file is the acceptance standard for promoting one animal family from seed/prototype art to accepted AnimalsDesktop motion art. The goal is to keep DeguDesktop compatibility while letting each species move like itself.
 
@@ -17,6 +17,12 @@ Every selectable variant must keep the DeguDesktop sprite-sheet shape:
 - Ears, feet, whiskers, tail, shell, wings, or toes must not be cropped.
 - No text, borders, scenery, shadows, costumes, props, multiple animals, or human-like poses.
 - Source motion art is generated one pose per PNG. Multi-pose sheets, grids, contact sheets, and baked checker-background images are review references only and cannot be promoted as accepted source frames.
+
+The ten runtime slots are a compatibility/storage contract, not a requirement
+for ten independently generated source families. The normal accepted source is
+one canonical 62-frame `set00`; `cmd/importanimals` expands it into all ten
+runtime sheets. An optional independent `set00` through `set09` family is
+allowed only when all ten sources exist and are byte-unique.
 
 The app may still use mirrored drawing for left/right movement. Source frames should be clean right-facing side-view frames unless a profile explicitly documents another direction.
 
@@ -46,7 +52,7 @@ Promote one animal family at a time. A family is complete for a version bump onl
 
 - source-truth PNGs reviewed at 96x64 on light and dark backgrounds;
 - 62 standalone transparent motion-frame PNGs for every accepted variant;
-- generated runtime sheets for all 10 motion sets;
+- one canonical accepted 62-frame source set, expanded by the importer into all 10 runtime sheets;
 - non-empty alpha-bounded frames with stable baseline and no cropped anatomy;
 - a contact sheet or preview proving the full motion set is visually reviewable;
 - catalog entries with species, breed/morph, color, popularity tier, source status, motion profile, and sprite base;
@@ -57,48 +63,28 @@ If only source images exist, the family remains `prototype_only` or seed-stage e
 
 ## Release Gate
 
-After `v0.1.2`, do not tag a new release just for planning, queue, page, or seed-art changes. The next release tag should ship one animal family that has reached DeguDesktop-level asset coverage:
+Do not tag a new release just for planning, queue, page, or seed-art changes. A
+content release should ship at least one animal family that has reached the
+current accepted-source and runtime gate:
 
 - the family is selectable in settings and tray UI;
-- every accepted variant in the family has the full 10 set x 62 frame runtime output;
+- every accepted variant has one reviewed, accepted 62-frame canonical source set;
+- the importer has generated all 10 runtime sheets from that canonical source;
 - frame slots include real pose changes, not only recolor, bob, or duplicated walk frames;
 - the family has species-appropriate motion for idle, walk, scurry/fast travel, forage/feed, action, turn, rest/stand, groom/preen/adjust, and alert/wheel-safe reaction;
 - QA passes locally and in GitHub Actions;
 - `cmd/validatemotion` reports `release_ready: true` for every runtime variant;
 - the GitHub Pages page and `kdevelopk.pages.dev` works page describe the newly completed animal accurately.
 
-This means the next content release should finish a concrete slice such as `chinchilla_standard_gray` or the first accepted chinchilla family set before bumping from `v0.1.2`.
+Older `v0.1.x` preview exceptions that described accepted `set00` animals as
+waiting for nine more independent source sets are historical and superseded by
+this contract. Preview labels may still describe release maturity, packaging,
+or public-testing scope, but they must not imply that canonical one-set animals
+are missing source assets.
 
-### v0.1.3 Preview Exception
-
-`v0.1.3` is a preview-release exception approved for five accepted initial-motion runtime animals plus Mac distribution. It may ship with chinchilla, hamster, macaroni mouse, sugar glider, and rabbit visible in runtime while the full 10-set DeguDesktop-level gate remains open. The release page must label this as a preview and must not claim full animal-family completion.
-
-### v0.1.4 Preview Exception
-
-`v0.1.4` is a preview-release exception approved for adding the accepted gecko
-set00 motion source to the runtime preview. It may ship with chinchilla,
-hamster, macaroni mouse, sugar glider, rabbit, and gecko visible in runtime while
-the full 10-set DeguDesktop-level gate remains open. The release page must label
-this as a preview and must not claim full animal-family completion.
-
-Public coming-soon silhouettes are release-managed: when an animal graduates into
-a release, remove it from the planned silhouette/list and move it into the
-current-animal section. For `v0.1.4`, gecko is removed from the future queue.
-
-After `v0.1.4`, the parent thread may approve small preview version bumps for
-animals that reach accepted `set00` implemented-asset parity, as long as the
-release page and notes keep calling them preview animals and do not claim
-DeguDesktop-level 10-set completion. Full-content releases must still satisfy the
-release gate above.
-
-### v0.1.5 Preview Exception
-
-`v0.1.5` is a preview-release prep exception approved for the local
-sixteen-animal runtime set: chinchilla, hamster, Djungarian hamster, Campbell
-hamster, macaroni mouse, sugar glider, rabbit, Holland Lop, Netherland Dwarf,
-Himalayan rabbit, gecko, guinea pig, fancy rat, albino chipmunk, Richardson's
-ground squirrel, and Yorkshire Terrier. It may ship only as a preview build and
-must not claim DeguDesktop-level 10-set completion.
+Public coming-soon silhouettes are release-managed: when an animal graduates
+into a release, remove it from the planned silhouette/list and move it into the
+current-animal section.
 
 The parent QA pass may use color correction only for isolated color continuity
 defects when the frame's anatomy, pose, alpha, scale, and species read are

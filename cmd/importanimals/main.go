@@ -53,7 +53,8 @@ type seedReport struct {
 	GeneratedSource string     `json:"generated_source,omitempty"`
 	MotionSource    string     `json:"motion_source,omitempty"`
 	MotionFrames    int        `json:"motion_frames,omitempty"`
-	MotionSets      int        `json:"motion_sets,omitempty"`
+	SourceSets      int        `json:"source_sets,omitempty"`
+	RuntimeSets     int        `json:"runtime_sets,omitempty"`
 	SpriteBase      string     `json:"sprite_base"`
 	Shape           string     `json:"shape,omitempty"`
 	TintHex         string     `json:"tint_hex,omitempty"`
@@ -249,15 +250,15 @@ func importVariant(variant catalog.Variant, outDir string, generatedSourceDir st
 
 	motionProfile := catalog.MotionProfileForVariant(variant)
 	if variant.MotionSourcePath != "" {
-		outputs, motionFrames, motionSetsUsed, motionWarnings, err := importMotionSourceSheet(variant, outDir)
+		outputs, motionFrames, sourceSets, err := importMotionSourceSheet(variant, outDir)
 		if err != nil {
 			return seedReport{}, err
 		}
 		report.MotionSource = filepath.ToSlash(variant.MotionSourcePath)
 		report.MotionFrames = motionFrames
-		report.MotionSets = motionSetsUsed
+		report.SourceSets = sourceSets
+		report.RuntimeSets = len(outputs)
 		report.Outputs = outputs
-		report.Warnings = append(report.Warnings, motionWarnings...)
 		return report, nil
 	}
 
@@ -278,10 +279,10 @@ func importVariant(variant catalog.Variant, outDir string, generatedSourceDir st
 	return report, nil
 }
 
-func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, int, int, []string, error) {
+func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, int, int, error) {
 	sourcePaths, err := motionSourceSheetPaths(variant.MotionSourcePath)
 	if err != nil {
-		return nil, 0, 0, nil, err
+		return nil, 0, 0, err
 	}
 	outputs := make([]string, 0, motionSets)
 	for set := 0; set < motionSets; set++ {
@@ -290,19 +291,15 @@ func importMotionSourceSheet(variant catalog.Variant, outDir string) ([]string, 
 			sourcePath = sourcePaths[set]
 		}
 		if _, err := loadMotionSourceSheet(sourcePath); err != nil {
-			return nil, 0, 0, nil, err
+			return nil, 0, 0, err
 		}
 		outPath := filepath.Join(outDir, fmt.Sprintf("%s_set%02d.png", variant.SpriteBase, set))
 		if err := copyFile(sourcePath, outPath); err != nil {
-			return nil, 0, 0, nil, err
+			return nil, 0, 0, err
 		}
 		outputs = append(outputs, filepath.ToSlash(outPath))
 	}
-	if len(sourcePaths) == motionSets {
-		return outputs, totalFrames, motionSets, nil, nil
-	}
-	warnings := []string{"single 62-frame motion source sheet duplicated across 10 runtime sets; replace with accepted set00-set09 motion sources before release"}
-	return outputs, totalFrames, len(sourcePaths), warnings, nil
+	return outputs, totalFrames, len(sourcePaths), nil
 }
 
 func motionSourceSheetPaths(set00Path string) ([]string, error) {

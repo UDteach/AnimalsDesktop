@@ -1,5 +1,5 @@
-// Package motionsource resolves one-sheet preview sources and complete motion
-// source families for the asset importer and release validator.
+// Package motionsource resolves canonical one-sheet sources and optional
+// complete motion-source families for the asset importer and release validator.
 package motionsource
 
 import (
@@ -9,9 +9,10 @@ import (
 	"strings"
 )
 
-// ResolveSetPaths accepts either one standalone/set00 preview source or a
-// complete set00 through setNN family. A partially populated family is an
-// error so import and release validation cannot silently duplicate set00.
+// ResolveSetPaths accepts either one standalone/canonical set00 source or a
+// complete optional set00 through setNN family. A partially populated family
+// is an error so import and validation cannot ambiguously mix canonical and
+// set-specific runtime sources.
 func ResolveSetPaths(set00Path string, setCount int) ([]string, error) {
 	if set00Path == "" {
 		return nil, fmt.Errorf("motion source path is empty")
@@ -50,7 +51,7 @@ func ResolveSetPaths(set00Path string, setCount int) ([]string, error) {
 	}
 	lastSet := fmt.Sprintf("set%02d", setCount-1)
 	return nil, fmt.Errorf(
-		"incomplete motion source family for %s: found %d of %d sheets; provide only set00 for preview fallback or all set00-%s (missing: %s)",
+		"incomplete motion source family for %s: found %d of %d sheets; provide canonical set00 only or all optional set00-%s sources (missing: %s)",
 		set00Path,
 		len(paths),
 		setCount,

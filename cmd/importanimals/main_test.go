@@ -237,11 +237,14 @@ func TestImportVariantUsesMotionSourceSheet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("importVariant() error = %v", err)
 	}
-	if report.MotionFrames != totalFrames || report.MotionSets != 1 || report.MotionSource == "" {
-		t.Fatalf("motion report = frames:%d sets:%d source:%q", report.MotionFrames, report.MotionSets, report.MotionSource)
+	if report.MotionFrames != totalFrames || report.SourceSets != 1 || report.RuntimeSets != motionSets || report.MotionSource == "" {
+		t.Fatalf("motion report = frames:%d source sets:%d runtime sets:%d source:%q", report.MotionFrames, report.SourceSets, report.RuntimeSets, report.MotionSource)
 	}
 	if len(report.Outputs) != motionSets {
 		t.Fatalf("outputs = %d, want %d", len(report.Outputs), motionSets)
+	}
+	if len(report.Warnings) != 0 {
+		t.Fatalf("warnings = %v, want none for canonical set00 runtime expansion", report.Warnings)
 	}
 	sheet, err := openPNG(filepath.Join(outDir, "test_chinchilla_set00.png"))
 	if err != nil {
@@ -302,8 +305,8 @@ func TestImportVariantUsesTenMotionSourceSheets(t *testing.T) {
 	if err != nil {
 		t.Fatalf("importVariant() error = %v", err)
 	}
-	if report.MotionFrames != totalFrames || report.MotionSets != motionSets || report.MotionSource == "" {
-		t.Fatalf("motion report = frames:%d sets:%d source:%q", report.MotionFrames, report.MotionSets, report.MotionSource)
+	if report.MotionFrames != totalFrames || report.SourceSets != motionSets || report.RuntimeSets != motionSets || report.MotionSource == "" {
+		t.Fatalf("motion report = frames:%d source sets:%d runtime sets:%d source:%q", report.MotionFrames, report.SourceSets, report.RuntimeSets, report.MotionSource)
 	}
 	if len(report.Warnings) != 0 {
 		t.Fatalf("warnings = %v, want none for complete set family", report.Warnings)

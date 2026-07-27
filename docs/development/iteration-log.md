@@ -1195,3 +1195,308 @@
   exception; all entries are accepted sources, but they are not the future
   full ten-unique-set content gate. No animal pixels, tags, releases, or
   production Pages state were published in this iteration.
+
+## 2026-07-24
+
+- Added and hardened the `cmd/coatbatch` four-cell coat-only workflow. Each
+  call binds the manifest, prompt, palette swatch, source frames, canonical
+  base frames, and outputs by SHA-256; supports explicit non-promotable filler
+  cells; preserves alpha and chroma pixels during one uniform bounded tone
+  adjustment; and stages output/report sets with ordinary-error rollback.
+- Hardened `cmd/prepareframe` with an optional one-pixel canonical alpha-bbox
+  geometry lock, source/reference/output hashes, collision rejection, and
+  transactional output/report writes. Replaying the retained four-frame Sable
+  pilot kept alpha/chroma unchanged, matched all canonical bboxes, and differed
+  from the earlier calibrated result by at most one RGB level.
+- Added fail-closed silhouette gates to the production coat tools.
+  `cmd/coatbatch` now records and enforces raw per-cell IoU of at least `98.5%`
+  and centroid movement of at most `1.25px`, including filler cells.
+  `cmd/prepareframe -match-alpha-bbox` records and enforces final IoU of at
+  least `98.0%` and centroid movement of at most `0.30px` before writing.
+  The retained real Sable pilot replay passed with raw minimum IoU `98.902%`,
+  raw maximum centroid movement `1.044px`, final minimum IoU `98.195%`, and
+  final maximum centroid movement `0.154px`.
+- Runtime review found that the ferret turn is a standalone Windows one-shot:
+  frames `32-39` play twice each, then direction flips and walk frame `04`
+  resumes. It is not a required `31 -> 32 -> ... -> 40` sequence, and Darwin
+  currently does not select frames `32-47`.
+- Added `cmd/auditframes -motion-boundaries` so production audits can suppress
+  cross-action false positives while retaining within-action motion and
+  artifact warnings. The ferret layout uses
+  `4,12,20,26,32,40,48,56`; loop closures and turn-to-walk exits remain visual
+  runtime-contact gates.
+- Completed and parent-approved the corrected Sable Panda base at `62/62`.
+  Final parent review included complete checker/dark contacts, the rest and
+  alert loops, and the alert transitions `59 -> 60`, `60 -> 61`, and
+  `61 -> 56`. The official action-aware audit reports `valid=62`,
+  `missing=0`, `invalid=0`, `warnings=0`; shared matte passes `62/62`, and the
+  exact-duplicate scan reports no pairs.
+- Restarted the dedicated Sable and Albino tasks for the user-requested
+  four-cell same-species coat-only experiment. Both start with bounded
+  `00-03` and `04-07` calls. Sable uses the already approved `0.573025` tone
+  target and runs through normalization and visual QA; Albino stops after raw
+  measurement so its target tone can be approved from two independent calls.
+  Existing one-frame variant evidence remains preserved. No commit,
+  publication, tag, release, or production Pages change was made.
+- Corrected a protected-checkout fingerprint provenance error. The unchanged
+  25,728 porcelain lines hash to the historical
+  `5682fcb75549f352404a544d34a30efe27bf21a62e3054b3bb1888b952128da4`
+  with PowerShell culture sorting, but to
+  `0d7c471812644c51220002d5707f0def40902d66c389d873919a26ebf508ebc2`
+  with true ordinal sorting. Future gates record both instead of reporting
+  the ordering-method difference as a filesystem drift.
+- Added two named, fail-closed `coatbatch` recovery policies after independent
+  review of the first fresh coat gates. Strict defaults remain raw IoU `98.5%`,
+  centroid movement `1.25px`, and tone gain `0.95-1.05`.
+  `ferret_albino_high_contrast_v1` permits raw IoU `98.0%` only for
+  `ferret_albino`; `ferret_sable_exact_recovery_v1` permits gain down to `0.85`
+  only for the reviewed Sable `04-07` input SHA-256 and target `0.573025`.
+  Unknown IDs and mismatched species, hash, or target fail closed, and no
+  arbitrary numeric override was added. Focused tests and vet passed. Formal
+  replay can qualify the measurement method but cannot make a sheet derivative
+  promotable.
+- Completed the bounded four-cell direction test for the opening Sable and
+  Albino poses. Sable `00-07` passed the diagnostic tone, geometry, matte,
+  continuity, and runtime checks; Albino `00-07` passed the named raw-geometry
+  measurements and established a reference tone ratio. The repository rule
+  still requires one ImageGen call per accepted production frame, so no sheet
+  cell or derived slice is eligible for promotion. Both coat lanes restarted
+  `00-07` as standalone one-frame calls using the approved Panda poses and
+  pose-free coat swatches.
+- Parent-approved the standalone Sable and Albino `00-07` gates after direct
+  checker/light/dark contact review. Sable used eight ImageGen calls for eight
+  winners and passed exact-bbox, minimum IoU `0.992494`, maximum-centroid
+  `0.116912px`, matte `8/8`, artifact, duplicate, identity, and continuity
+  checks. Albino used nine calls for eight winners: frame `02` attempt 01 was
+  rejected for a transparent pinhole and replaced by a fresh call, with no
+  local repair. Its winners passed exact-bbox, minimum IoU `0.989983`,
+  maximum-centroid `0.145234px`, matte `8/8`, artifact, duplicate, identity,
+  and contrast checks. All accepted hashes differ from sheet-derived evidence.
+- Promoted the parent-approved Sable Panda `62/62` base byte-for-byte into
+  `docs/art-source/ferret-sable-panda/motion-source/`, including provenance,
+  canonical/audit/matte/duplicate evidence, parent verdict, review contacts,
+  and assembled source sheet. The promoted source passes action-aware audit
+  (`valid=62`, `warnings=0`), matte `62/62`, assembly, targeted import check,
+  and accepted-source validation. A targeted local import generated the source
+  and ten runtime sheets; nothing was published, tagged, pushed, or released.
+- Parent-approved standalone Sable and Albino frames `08-15` after reviewing
+  the complete `00-15` light/checker/dark contacts and the slink-to-scurry
+  boundary. Sable used eight calls for eight winners and passed minimum IoU
+  `0.993735`, maximum centroid `0.053508px`, audit warnings `0`, matte `16/16`,
+  duplicates `0`, and sheet-hash collisions `0`. Albino used nine calls for
+  eight winners; frame `12` attempt 01 was rejected for a one-pixel transparent
+  pinhole and replaced by a fresh call without repair. It passed minimum IoU
+  `0.984615`, maximum centroid `0.253989px`, audit warnings `0`, matte `16/16`,
+  duplicates `0`, and sheet-hash collisions `0`. Prefix and protected-checkout
+  hashes remained unchanged.
+- Parent-approved standalone Sable and Albino frames `16-23` after reviewing
+  the complete `00-23` contacts, scurry closure `19 -> 12`, action exit
+  `19 -> 20`, and sniff progression `20-23`. Sable used eight calls for eight
+  winners with no retry and passed minimum IoU `0.994427`, maximum centroid
+  `0.081928px`, audit warnings `0`, matte `24/24`, duplicates `0`, and
+  sheet-hash collisions `0`. Albino used ten calls for eight winners; frame
+  `17` attempts 01 and 02 were rejected for the same one-pixel transparent
+  pinhole and attempt 03 was a fresh passing call without repair. It passed
+  minimum IoU `0.986953`, maximum centroid `0.181948px`, audit warnings `0`,
+  matte `24/24`, duplicates `0`, and sheet-hash collisions `0`; independent
+  read-only QA found no blocking defect. Both lanes advanced only to the
+  bounded `24-31` gate, with no promotion or publication.
+- Parent-approved standalone Sable and Albino frames `24-31` after reviewing
+  the complete `00-31` contacts, sniff closure `25 -> 20`, action exit
+  `25 -> 26`, and six-pose groom progression `26-31`. Sable used ten calls
+  for eight winners: frame `26` attempt 01 had five visible limbs and attempt
+  02 failed geometry, so both remained rejected and fresh attempt 03 passed
+  without repair. Sable passed minimum IoU `0.992165`, maximum centroid
+  `0.138059px`, warnings `0`, and zero duplicate/sheet collisions. Albino
+  used eight calls for eight winners with no retry and passed minimum IoU
+  `0.983179`, maximum centroid `0.141627px`, warnings `0`, matte `32/32`,
+  and zero duplicate/sheet collisions; independent read-only QA found no
+  blocker. Both lanes advanced only to the one-shot turn gate `32-39`.
+- Parent-approved standalone Sable and Albino frames `32-39` as one-shot
+  turns after checking Panda intent, right-facing entry, frontal midpoint,
+  left-facing exit, and the runtime transition to mirrored walk frames
+  `04-05`. Sable used nine calls for eight winners; frame `37` attempt 01 was
+  rejected for a transparent pinhole and fresh attempt 02 passed without
+  repair. It passed minimum IoU `0.995413`, maximum centroid `0.056557px`,
+  warnings `0`, and zero duplicate/sheet collisions. Albino used eight calls
+  for eight winners and passed minimum IoU `0.992792`, maximum centroid
+  `0.072064px`, warnings `0`, matte `40/40`, and zero duplicate/sheet
+  collisions; independent read-only QA found no blocker. Both lanes advanced
+  only to the independent right-facing creep gate `40-47`.
+- Parent-approved standalone Albino frames `40-47` after checking the
+  right-facing reset at frame `40`, eight distinct creep support phases,
+  `47 -> 40` and `46 -> 47 -> 40 -> 41` closure, and light/dark readability.
+  Eight calls produced eight winners with minimum IoU `0.982544`, maximum
+  centroid `0.216529px`, warnings `0`, matte `48/48`, and zero
+  duplicate/sheet collisions. Albino advanced only to the rest gate `48-55`.
+  Sable remained in the `40-47` gate because fresh frame `41` candidates
+  repeatedly closed a one-pixel Panda underbelly notch and correctly failed
+  the lower-shelf warning; no local repair or threshold relaxation was used.
+- Parent-approved standalone Sable frames `40-47` after the frame `41`
+  recovery and complete creep-loop review. Eighteen calls produced eight
+  winners: attempts 01 through 10 for frame `41` closed the source's one-pixel
+  underbelly notch and remained rejected, while fresh attempt 11 preserved
+  the exterior-green separation inside ImageGen and passed with no local
+  repair. The complete set passed minimum IoU `0.991843`, maximum centroid
+  `0.102941px`, warnings `0`, zero duplicate/sheet collisions, right-facing
+  motion, and both loop closures. Sable advanced to rest `48-55`. Albino's
+  `48-55` continuation remained paused because the exhausted task and two
+  replacement starts system-errored before output, ImageGen, or file changes.
+- Paused both coat lanes before `48-55` after the dedicated Codex task host
+  began rejecting every continuation and replacement at startup. The failure
+  reproduced with the original Sable task, a same-directory fork, new
+  projectless tasks, a saved-project task, and a read-only one-line health
+  check; all ended before assistant output, tool use, ImageGen, or workspace
+  writes. Failed replacement tasks were archived. The approved `00-47`
+  artifacts remain unchanged, and accepted pixels were not rerouted through
+  the parent task or a SubAgent. While waiting for host recovery, the parent
+  fixed the `56-61` alert reference contract and audited the exact winner
+  mapping needed for later byte-for-byte promotion.
+- Rechecked the paused boundary: neither coat has a `48-55` run directory, so
+  the failed starts wrote zero generation artifacts. The protected original
+  checkout remains exactly `25,728` entries with culture-sort SHA-256
+  `5682fcb75549f352404a544d34a30efe27bf21a62e3054b3bb1888b952128da4`
+  and ordinal-sort SHA-256
+  `0d7c471812644c51220002d5707f0def40902d66c389d873919a26ebf508ebc2`.
+  Focused Go tests passed for `animalsdesktop`, `coatbatch`, `prepareframe`, and
+  `auditframes`; scoped vet and the six shared matte-audit Python tests passed.
+  `internal/catalog` stopped only at the intentional partial-integration gate:
+  the staged `ferret_sable` entry is accepted/runtime-scoped while its final
+  source sheet does not yet exist. That test must pass after the remaining
+  standalone frames are promoted; it is not being weakened or skipped.
+  The Windows GUI binary nevertheless builds successfully from the staged
+  runtime/catalog code (`dist/AnimalsDesktop.exe`, 37,149,184 bytes); final
+  release verification still waits for the two accepted source sheets and
+  regenerated runtime/page assets.
+- Recovered the dedicated Codex ImageGen task host and completed the standalone
+  Sable `48-55` rest gate. Ten built-in calls produced eight winners: frame 52
+  attempt 01 was rejected for a 29px lower shelf/floor alpha run and attempt 02
+  was rejected at IoU `0.961631`; fresh attempt 03 passed without local repair
+  or threshold relaxation. Parent review of all original-size winners,
+  light/checker/dark contacts, Panda intent comparison, `52 -> 53 -> 54`
+  head lift, and `54 -> 55 -> 48 -> 49` closure found no blocker. The accepted
+  range aggregate is
+  `74d0dbad5bd406491508b47bbd73064e18b7fb584de00af3dd3f9756821cb404`;
+  combined `00-55` is
+  `22f927b8c42cedfe0c568356a80680386c1c72bf46838da7f52cc2cc8822ad5c`.
+  The full prefix passes `valid=56`, `warnings=0`, matte `56/56`, duplicate
+  `0`, and sheet collision `0`. Sable advanced only to the final `56-61`
+  alert gate. Albino `48-55` also resumed; a mid-gate task system error was
+  recovered from filesystem authority without repeating completed ImageGen
+  calls.
+- Parent-approved standalone Albino frames `48-55` after the resumed task
+  completed all eight winners and recovered a second system interruption
+  without repeating or adding ImageGen calls. Ten built-in calls produced
+  eight winners: frame `52` attempts 01 and 02 were retained as rejects for a
+  29px lower floor/shelf alpha run, while fresh attempt 03 passed without local
+  repair. Parent review covered original-size winners, light/checker/dark
+  contacts, the natural `52 -> 53 -> 54` head lift, and
+  `54 -> 55 -> 48 -> 49` closure. The prefix passes `valid=56`,
+  `warnings=0`, matte `56/56`, duplicate `0`, and sheet collision `0`, with
+  minimum IoU `0.992281304` and maximum centroid shift `0.126642px`.
+  Albino advanced only to the final `56-61` alert gate; no promotion,
+  integration, or publication was performed.
+- Parent-approved standalone Sable frames `56-61`, completing its independent
+  one-frame source family at `62/62`. Ten built-in calls produced six winners
+  and four fully retained rejects: frame `60` attempts 01 and 02 failed,
+  respectively, a transparent pinhole and geometry; frame `61` attempts 01
+  and 02 failed geometry. Fresh attempt 03 passed for both frames without
+  local pixel repair or threshold relaxation. Parent review covered every
+  original-size winner, the Panda pose-intent comparison, light/checker/dark
+  contacts, `61 -> 56`, and `59 -> 60 -> 61 -> 56 -> 57`. The complete set
+  passes `valid=62`, `warnings=0`, shared matte, exact-duplicate and historical
+  sheet-disjoint gates. Minimum IoU is `0.987133667`, maximum centroid shift
+  is `0.133973px`, and combined `00-61` aggregate is
+  `d24265406e61dc1729305648180b05b4b7c5c43c744d03f56c638ecc647056dc`.
+  Sable is frozen for parent-owned promotion after Albino also reaches 62;
+  the lane performed no promotion, integration, or publication.
+- Parent-approved standalone Albino frames `56-61`, completing all three
+  ferret source families at `62/62`. Seven built-in calls produced six winners;
+  frame `60` attempt 01 was retained as a geometry reject because its head and
+  neck were three pixels lower than the Panda source, and fresh attempt 02
+  passed without local repair. Parent review covered original-size winners,
+  checker/dark contacts, the complete `00-61` set, and
+  `59 -> 60 -> 61 -> 56 -> 57`. The complete set passes `valid=62`,
+  `warnings=0`, shared matte `62/62`, duplicate `0`, and historical
+  sheet-collision `0`. Minimum IoU is `0.988205560` and maximum centroid shift
+  is `0.196277px`; approved prefix, Panda, lane, and protected-checkout hashes
+  are unchanged. Albino is frozen for parent-owned promotion; the generation
+  lane performed no promotion, integration, or publication.
+- Promoted the parent-approved Sable and Albino sets byte-for-byte into compact
+  `motion-source/` packages. Each package now contains 62 standalone accepted
+  `96x64` PNGs, 62-row winner provenance, a `5952x64` assembled sheet,
+  action-aware/matte/canonical/duplicate QA, parent verdict, and 12 final
+  light/checker/dark contacts. All accepted PNGs match their recorded
+  standalone winners; both sets have 62 unique hashes. Compact concatenated-PNG
+  aggregates are
+  `33c2da1526d4bd71c7ce76f1e08ca6213406a590b6059d51849514118a4a69f0`
+  for Sable and
+  `a16586fda8e858be602da4d4e37648488d2b734f7c01b8bda44d3766a6160590`
+  for Albino.
+- Replaced the procedural Sable/Albino placeholders and locally integrated
+  Sable Panda, Sable, and Albino through the catalog, Windows/macOS runtime,
+  generated source/runtime sprites, and development Page. Targeted imports are
+  deterministic. The full 128-seed importer validated and imported, then
+  preserved all 1,412 generated PNGs on its second run with aggregate digest
+  `398ba1549e7ec61b3561fd71e851981854e296a3a3658863e2ba5b3bfbfeed91`.
+  The local Page now lists 60 animals while public v0.2.15 download copy remains
+  at 57.
+- Verified the completed integration with targeted package tests, full
+  `go test -buildvcs=false ./...`, full `go vet -buildvcs=false ./...`,
+  Page release verification, and a Windows GUI build
+  (`dist/AnimalsDesktop.exe`, 37,534,208 bytes,
+  SHA-256
+  `47d02b1eedaac626110e985fcb8cc136080542ee870d025b8163c2ae05c3a4db`).
+  Isolated Playwright QA passed at desktop and `390x844`: all-60 expansion,
+  small-animal 29 filter, three distinct Japanese ferret cards, English roster,
+  all requested icon responses 200, and zero console errors.
+- Moved the exact full three-family generation tree without deleting it from
+  the working copy to
+  `E:/Development/AnimalDesktop-asset-archives/20260724-ferret-three-variants/`.
+  The compact package successfully revalidated all 124 Sable/Albino accepted
+  winners from the archive. The protected original checkout still has exactly
+  25,728 status entries and both fingerprints are unchanged. The only
+  intentional release blocker is motion breadth: each ferret currently has one
+  accepted source set, so local runtime repeats set00 into ten sheets and
+  `release_ready` correctly remains false until ten independent accepted source
+  sets exist.
+- Closed the final adversarial-review blocker without changing accepted art.
+  Replaced Sable Panda's 147-row attempt-history copy with a 62-row winner-only
+  compact provenance index. An independent hash pass verified every accepted
+  frame's prompt, built-in ImageGen source, raw, unique alpha, canonical
+  winner, and accepted PNG. The self-contained canonical report now contains
+  62 accepted paths/hashes, 62 unique frames, the `5952x64` sheet, accepted
+  byte aggregate
+  `fa8fff8d45c6ee27878f2dba31e688bed13fdf5fc1bd8371bc06fd242e590f9a`,
+  and the archived parent-gate aggregate
+  `7947c23e4fcbcf304233cbdb09231584a9e7c479c1ee404a6712816087977ca9`.
+  The original turn rejection/requalification history remains explicit and
+  separate from final parent acceptance.
+- Added regression coverage for `ferret -> small_mammal`, all three ferrets in
+  the Windows small-animal random pool, Japanese/English grouped display
+  labels, and Darwin group labels. Targeted tests, full Go tests, full vet, and
+  `git diff --check` pass on Windows. Independent final re-review cleared the
+  provenance blocker. A macOS runner is still required to execute Darwin tests,
+  and all three variants remain intentionally `release_ready=false` while only
+  set00 is accepted.
+- Corrected the current asset-production flow on 2026-07-26 so source coverage
+  and runtime storage are reported separately. A canonical accepted 62-frame
+  `set00` is the normal complete source for an animal; `cmd/importanimals`
+  expands it into ten runtime sheets without an incompleteness warning.
+  Optional `set00` through `set09` source families remain supported only when
+  all ten sheets exist and are byte-unique. This dated correction supersedes
+  the historical `release_ready=false` conclusions immediately above without
+  rewriting the evidence of what the old validator reported.
+- Verified the corrected contract against the live local catalog: all 60
+  runtime variants report `source_sets=1`, `runtime_sets=10`,
+  `release_ready=true`, and zero warnings. Regenerated the 128-entry aggregate
+  import report; all 61 accepted motion-source entries have the new fields and
+  zero motion warnings. A second full import preserved generated-output
+  aggregate SHA-256
+  `6dd1f55f7431b915e2444e5b88580703f6f4d4c289023cbb4f9f867bdf46fede`.
+- Installed official Go 1.26.5 through WinGet, but Windows Smart App Control
+  rejects its unsigned helper and newly built test executables. The policy was
+  not weakened. Changed-package tests passed as Go WebAssembly under signed
+  Node, every package compiled for Windows/amd64, the Windows GUI build passed,
+  and `git diff --check` passed. Native Windows test execution and `go vet`
+  remain a host-policy verification boundary.

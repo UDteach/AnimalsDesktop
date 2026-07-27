@@ -226,6 +226,7 @@ const (
 	stateDig
 	stateStand
 	stateFaceGroom
+	stateRest
 )
 
 const (
@@ -1076,7 +1077,7 @@ func (a *petApp) tickPet(index int, p *desktopPet) {
 			} else {
 				a.chooseRandomAction(p)
 			}
-		case stateDig, stateStand, stateFaceGroom:
+		case stateDig, stateStand, stateFaceGroom, stateRest:
 			if a.mode == modeRandom {
 				a.chooseRandomAction(p)
 			} else {
@@ -1156,29 +1157,33 @@ func (a *petApp) chooseRandomAction(p *desktopPet) {
 	if foragePropsEnabled && roll < 18 && a.maybeAssignForageTarget(p) {
 		return
 	}
-	switch {
-	case roll < 30:
+	switch randomActionState(a.petMotionProfile(p), roll) {
+	case stateIdle:
 		p.state = stateIdle
 		p.moveSpeed = 0
 		p.stateTicks = 24 + rand.Intn(58)
 		return
-	case roll < 70:
+	case stateWalk:
 		p.state = stateWalk
 		p.moveSpeed = max(1, a.speed-1+rand.Intn(2))
 		p.stateTicks = 34 + rand.Intn(92)
-	case roll < 84:
+	case stateScurry:
 		p.state = stateScurry
 		p.moveSpeed = a.speed + 1 + rand.Intn(2)
 		p.stateTicks = 10 + rand.Intn(18)
-	case roll < 90:
+	case stateNibble:
 		p.state = stateNibble
 		p.moveSpeed = 0
 		p.stateTicks = 26 + rand.Intn(32)
-	case roll < 94:
+	case stateRest:
+		p.state = stateRest
+		p.moveSpeed = 0
+		p.stateTicks = 48 + rand.Intn(72)
+	case stateStand:
 		p.state = stateStand
 		p.moveSpeed = 0
 		p.stateTicks = 24 + rand.Intn(28)
-	case roll < 98:
+	case stateFaceGroom:
 		p.state = stateFaceGroom
 		p.moveSpeed = 0
 		p.stateTicks = 28 + rand.Intn(30)
@@ -1186,6 +1191,45 @@ func (a *petApp) chooseRandomAction(p *desktopPet) {
 		p.state = stateHop
 		p.moveSpeed = max(1, a.speed-1)
 		p.stateTicks = 14 + rand.Intn(16)
+	}
+}
+
+func randomActionState(motionProfile string, roll int) behaviorState {
+	if motionProfile == catalog.MotionProfileFerretSlink {
+		switch {
+		case roll < 30:
+			return stateIdle
+		case roll < 70:
+			return stateWalk
+		case roll < 84:
+			return stateScurry
+		case roll < 90:
+			return stateNibble
+		case roll < 92:
+			return stateRest
+		case roll < 95:
+			return stateStand
+		case roll < 98:
+			return stateFaceGroom
+		default:
+			return stateHop
+		}
+	}
+	switch {
+	case roll < 30:
+		return stateIdle
+	case roll < 70:
+		return stateWalk
+	case roll < 84:
+		return stateScurry
+	case roll < 90:
+		return stateNibble
+	case roll < 94:
+		return stateStand
+	case roll < 98:
+		return stateFaceGroom
+	default:
+		return stateHop
 	}
 }
 
@@ -1289,6 +1333,9 @@ func currentFrame(state behaviorState, frame int) int {
 }
 
 func currentFrameForVariant(state behaviorState, frame int, variant coatVariant) int {
+	if catalog.MotionProfileForVariant(variant) == catalog.MotionProfileFerretSlink {
+		return currentFerretFrame(state, frame)
+	}
 	switch state {
 	case stateIdle:
 		return frameFromSeq(idleFrameSeq, frame, 5)
@@ -1322,6 +1369,31 @@ func currentFrameForVariant(state behaviorState, frame int, variant coatVariant)
 	return idleStart
 }
 
+func currentFerretFrame(state behaviorState, frame int) int {
+	switch state {
+	case stateIdle:
+		return frameFromRange(idleStart, idleFrames, frame, 5)
+	case stateWalk, stateForage, stateCarry:
+		return frameFromRange(walkStart, walkFrames, frame, 2)
+	case stateScurry, stateWheel:
+		return frameFromRange(scurryStart, scurryFrames, frame, 1)
+	case stateNibble, stateEat, stateDig:
+		return frameFromRange(nibbleStart, nibbleFrames, frame, 3)
+	case stateGroom, stateFaceGroom:
+		return frameFromRange(hopStart, hopFrames, frame, 3)
+	case stateTurn:
+		return frameFromRangeClamped(turnStart, turnFrames, frame, 2)
+	case stateHop:
+		return frameFromRange(eatStart, eatFrames+digFrames, frame, 2)
+	case stateRest:
+		return frameFromRange(standStart, standFrames+groomFrames, frame, 4)
+	case stateStand:
+		return frameFromRange(wheelRunStart, wheelRunFrames, frame, 4)
+	default:
+		return idleStart
+	}
+}
+
 func usesStableActionFallback(variant coatVariant) bool {
 	switch variant.ID {
 	case "sugar_glider_gray", "rabbit_chestnut_agouti":
@@ -1353,6 +1425,30 @@ func frameFromSeqClamped(seq []int, frame, divisor int) int {
 		index = len(seq) - 1
 	}
 	return seq[index]
+}
+
+func frameFromRange(start, count, frame, divisor int) int {
+	if count < 1 {
+		return idleStart
+	}
+	if divisor < 1 {
+		divisor = 1
+	}
+	return start + (frame/divisor)%count
+}
+
+func frameFromRangeClamped(start, count, frame, divisor int) int {
+	if count < 1 {
+		return idleStart
+	}
+	if divisor < 1 {
+		divisor = 1
+	}
+	index := frame / divisor
+	if index >= count {
+		index = count - 1
+	}
+	return start + index
 }
 
 func (a *petApp) onTyping() {
@@ -2218,6 +2314,13 @@ func (a *petApp) petVariant(p *desktopPet) int {
 		return 0
 	}
 	return clamp(p.variant, 0, len(variants)-1)
+}
+
+func (a *petApp) petMotionProfile(p *desktopPet) string {
+	if len(variants) == 0 {
+		return ""
+	}
+	return catalog.MotionProfileForVariant(variants[a.petVariant(p)])
 }
 
 func (a *petApp) petWheelCapable(p *desktopPet) bool {

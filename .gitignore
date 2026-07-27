@@ -6,6 +6,14 @@
 __MACOSX/
 __pycache__/
 *.py[cod]
+.gocache/
+.gomodcache/
+.gotmp/
+go-cache/
+go-mod-cache/
+go-tmp/
+**/.cache/
+**/tool-cache/
 *.exe
 *.dll
 *.log
@@ -16,6 +24,8 @@ cmd/animalsdesktop/rsrc_windows_*.syso
 winres/icon.png
 .agents/
 .codex/
+.playwright-cli/
+output/playwright/
 .wrangler/
 .idea/
 .vscode/

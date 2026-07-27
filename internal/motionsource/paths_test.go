@@ -24,7 +24,7 @@ func TestResolveSetPathsRejectsPartialFamily(t *testing.T) {
 	}
 }
 
-func TestResolveSetPathsAllowsSet00OnlyPreviewFallback(t *testing.T) {
+func TestResolveSetPathsAllowsCanonicalSet00Only(t *testing.T) {
 	root := t.TempDir()
 	set00Path := filepath.Join(root, "animal-source-set00.png")
 	writeTestFile(t, set00Path)

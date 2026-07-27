@@ -6,7 +6,7 @@ import unittest
 from contextlib import redirect_stderr
 from pathlib import Path
 
-from verify_page_release import verify_current_icons
+from verify_page_release import english_animal_labels, verify_current_icons
 
 
 class CurrentIconInventoryTests(unittest.TestCase):
@@ -29,6 +29,22 @@ class CurrentIconInventoryTests(unittest.TestCase):
                 verify_current_icons(["mouse_gray", "rabbit_white"], icon_dir)
             self.assertIn("rabbit_white", stderr.getvalue())
             self.assertIn("stale_variant", stderr.getvalue())
+
+
+class EnglishAnimalLabelTests(unittest.TestCase):
+    def test_extracts_labels_in_page_order(self) -> None:
+        html = """
+        <script>
+          const animalTextEn = [
+            "Sable panda ferret", "Sable ferret", "Albino ferret",
+          ];
+        </script>
+        """
+
+        self.assertEqual(
+            english_animal_labels(html),
+            ["Sable panda ferret", "Sable ferret", "Albino ferret"],
+        )
 
 
 if __name__ == "__main__":

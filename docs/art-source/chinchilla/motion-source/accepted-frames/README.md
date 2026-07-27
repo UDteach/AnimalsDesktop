@@ -19,10 +19,14 @@ go run ./cmd/prepareframe -background chroma-green -src path\to\green-candidate.
 
 Do not copy `prepareframe` output into this accepted-frame directory until it has passed visual review on light and dark backgrounds. The command rejects checker/noisy backgrounds instead of trying to clean them.
 
-Expected set folders:
+Required canonical set folder:
 
 - `set00/frame-00.png` through `set00/frame-61.png`
-- continue through `set09/frame-00.png` through `set09/frame-61.png`
+
+Optional independent motion sources may continue through
+`set09/frame-00.png` through `set09/frame-61.png`, but only as a complete,
+byte-unique ten-set family. They are not required for canonical source
+completion.
 
 Current accepted progress:
 
@@ -38,7 +42,7 @@ go run ./cmd/assemblemotion -frames-dir docs\art-source\chinchilla\motion-source
 
 The assembler is a gate, not an art fixer. If it rejects a frame, regenerate or manually curate the source PNG before assembling.
 
-For in-progress tracking across all 10 sets:
+For optional full-family tracking across all 10 source sets:
 
 ```powershell
 go run ./cmd/auditframes -root docs\art-source\chinchilla\motion-source\accepted-frames -report docs\art-source\chinchilla\motion-source\accepted-frames\audit-report.json

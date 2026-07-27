@@ -26,8 +26,8 @@ func TestValidateVariantReportsDraftNotReleaseReady(t *testing.T) {
 	if err != nil {
 		t.Fatalf("validateVariant() error = %v", err)
 	}
-	if report.RuntimeSets != motionSets || report.FramesPerSet != totalFrames {
-		t.Fatalf("report sets/frames = %d/%d, want %d/%d", report.RuntimeSets, report.FramesPerSet, motionSets, totalFrames)
+	if report.SourceSets != runtimeMotionSets || report.RuntimeSets != runtimeMotionSets || report.FramesPerSet != totalFrames {
+		t.Fatalf("report source/runtime sets/frames = %d/%d/%d, want %d/%d/%d", report.SourceSets, report.RuntimeSets, report.FramesPerSet, runtimeMotionSets, runtimeMotionSets, totalFrames)
 	}
 	if report.ReleaseReady {
 		t.Fatalf("draft motion source reported release-ready")
@@ -60,8 +60,35 @@ func TestValidateVariantReportsAcceptedReleaseReady(t *testing.T) {
 	if !report.AcceptedSource {
 		t.Fatalf("accepted motion source reported not accepted")
 	}
-	if report.UniqueSetHashes != motionSets {
-		t.Fatalf("unique set hashes = %d, want %d", report.UniqueSetHashes, motionSets)
+	if report.UniqueSetHashes != runtimeMotionSets {
+		t.Fatalf("unique set hashes = %d, want %d", report.UniqueSetHashes, runtimeMotionSets)
+	}
+}
+
+func TestValidateVariantRejectsDuplicateOptionalSourceFamily(t *testing.T) {
+	root := t.TempDir()
+	set00Path := filepath.Join(root, "animal-set00-source.png")
+	for set := 0; set < runtimeMotionSets; set++ {
+		writePNG(t, filepath.Join(root, "animal-set"+twoDigits(set)+"-source.png"), testMotionSheet())
+	}
+
+	report, err := validateVariant(catalog.Variant{
+		ID:               "chinchilla_standard_gray",
+		SpeciesID:        "chinchilla",
+		SourceStatus:     catalog.SourceStatusMotionAccepted,
+		MotionSourcePath: set00Path,
+	})
+	if err != nil {
+		t.Fatalf("validateVariant() error = %v", err)
+	}
+	if report.ReleaseReady {
+		t.Fatalf("duplicate optional source family reported release-ready")
+	}
+	if report.UniqueSetHashes != 1 {
+		t.Fatalf("unique set hashes = %d, want 1", report.UniqueSetHashes)
+	}
+	if len(report.Warnings) != 1 || !strings.Contains(report.Warnings[0], "byte-identical") {
+		t.Fatalf("warnings = %v, want duplicate-family warning", report.Warnings)
 	}
 }
 
@@ -89,8 +116,8 @@ func TestValidateVariantAllowsSingleDraftSourceSet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("validateVariant() error = %v", err)
 	}
-	if report.RuntimeSets != 1 {
-		t.Fatalf("runtime sets = %d, want single draft source set", report.RuntimeSets)
+	if report.SourceSets != 1 || report.RuntimeSets != runtimeMotionSets {
+		t.Fatalf("source/runtime sets = %d/%d, want 1/%d", report.SourceSets, report.RuntimeSets, runtimeMotionSets)
 	}
 	if report.ReleaseReady {
 		t.Fatalf("single draft source set reported release-ready")
@@ -98,12 +125,12 @@ func TestValidateVariantAllowsSingleDraftSourceSet(t *testing.T) {
 	if report.AcceptedSource {
 		t.Fatalf("single draft source set reported accepted")
 	}
-	if len(report.Warnings) < 2 {
-		t.Fatalf("warnings = %v, want draft and source-set count warnings", report.Warnings)
+	if len(report.Warnings) != 1 || !strings.Contains(report.Warnings[0], "draft") {
+		t.Fatalf("warnings = %v, want only draft warning", report.Warnings)
 	}
 }
 
-func TestValidateVariantAcceptsSingleAcceptedSourceSetButNotReleaseReady(t *testing.T) {
+func TestValidateVariantReportsSingleAcceptedSourceSetReleaseReady(t *testing.T) {
 	root := t.TempDir()
 	set00Path := filepath.Join(root, "animal-set00-source.png")
 	sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
@@ -130,11 +157,14 @@ func TestValidateVariantAcceptsSingleAcceptedSourceSetButNotReleaseReady(t *test
 	if !report.AcceptedSource {
 		t.Fatalf("single accepted source set reported not accepted")
 	}
-	if report.ReleaseReady {
-		t.Fatalf("single accepted source set reported release-ready")
+	if !report.ReleaseReady {
+		t.Fatalf("single accepted source set reported not release-ready")
 	}
-	if len(report.Warnings) == 0 {
-		t.Fatalf("warnings = %v, want source-set count warning", report.Warnings)
+	if report.SourceSets != 1 || report.RuntimeSets != runtimeMotionSets {
+		t.Fatalf("source/runtime sets = %d/%d, want 1/%d", report.SourceSets, report.RuntimeSets, runtimeMotionSets)
+	}
+	if len(report.Warnings) != 0 {
+		t.Fatalf("warnings = %v, want none for canonical accepted set00", report.Warnings)
 	}
 }
 
@@ -197,7 +227,7 @@ func testMotionSheet() *image.RGBA {
 func writeMotionSourceFamily(t *testing.T, root string) string {
 	t.Helper()
 	set00Path := filepath.Join(root, "animal-set00-source.png")
-	for set := 0; set < motionSets; set++ {
+	for set := 0; set < runtimeMotionSets; set++ {
 		sheet := image.NewRGBA(image.Rect(0, 0, frameW*totalFrames, frameH))
 		for frame := 0; frame < totalFrames; frame++ {
 			x0 := frame * frameW
