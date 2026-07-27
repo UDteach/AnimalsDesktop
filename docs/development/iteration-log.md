@@ -1513,3 +1513,35 @@
   line by itself. Updated both Pages workflow copy guards to the new Apple
   Silicon label after the pre-deploy audit caught their stale exact-string
   assertion.
+
+## 2026-07-27
+
+- Extended the existing `animalsdesktop_nonetwork` Windows security-check
+  edition without changing its build tag or ZIP name. Global low-level
+  keyboard and mouse hooks now live in a default-only build-tag file; the
+  no-network build uses no-op input-monitoring stubs. It also normalizes saved
+  keyboard mode to random motion, ignores input reaction messages, stops
+  continuous cursor hover tracking, and omits keyboard reaction, typing-wheel,
+  click-reaction, and name-hover controls. The normal Windows build retains the
+  original hook behavior.
+- Updated the release `SECURITY.txt` source, README, trust notes, and focused
+  tests to describe the combined no-network/no-input-monitoring boundary
+  without claiming a Smart App Control bypass. Static no-network source
+  inspection found zero hook API bindings, `net/http`, `os/exec`,
+  `archive/zip`, GitHub update API URLs, or PowerShell updater commands.
+  The Package Windows PowerShell block parsed successfully and
+  `git diff --check` passed.
+- Smart App Control blocked both installed unsigned Windows Go 1.26.5
+  `go.exe` copies, so WSL 2.7.11, Ubuntu 24.04.4 LTS, and the checksum-verified
+  official Go 1.26.5 Linux amd64 archive were installed. From WSL, the full
+  Linux `go test -buildvcs=false ./...` suite passed, Linux and Windows
+  default/no-network `go vet` passed, both Windows test packages compiled, and
+  both Windows GUI executables built. The no-network executable has SHA-256
+  `1392EE0CC59F58B2A95CD35617870DF7D99E264B7306BC9C7BAFCB3F2EF5A0E9`;
+  dependency inspection found no `net/http`, `os/exec`, or `archive/zip`, and
+  binary comparison found no low-level hook API names or GitHub update URL.
+- Windows execution of both the no-network test executable and final
+  no-network GUI executable was still blocked by Application Control because
+  the generated files are unsigned. The policy was not weakened and no bypass
+  was attempted. No push, tag, release, signing, or production change was
+  performed.

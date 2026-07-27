@@ -188,10 +188,13 @@ jobs:
             )
             $updateLines = if ($NoNetwork) {
               @"
-          - No-network security-check edition.
+          - No-network and no-input-monitoring security-check edition.
           - Automatic startup update checks are disabled.
           - Tray update checks, update downloads, and update installation are disabled.
           - The Go net/http update fetch/download implementation is excluded from this build.
+          - Global low-level keyboard and mouse hooks are excluded from this build.
+          - Keyboard-triggered motion, click reactions, and continuous cursor hover tracking are disabled.
+          - Random motion, rendering, tray settings, and local preferences remain available.
           "@
             } else {
               @"

@@ -205,7 +205,7 @@ transparent frames exist.
 
 The Windows release workflow embeds file metadata, product metadata, a Windows 10+ manifest, and an app icon into `AnimalsDesktop.exe`. It also publishes `SHA256SUMS.txt` next to the release ZIPs and includes `SECURITY.txt` inside each ZIP with the expected EXE hash and false-positive submission notes.
 
-The Windows release workflow also builds `AnimalsDesktop-windows-amd64-no-network.zip` as a security-check edition. That variant disables automatic update checks, tray update checks, update ZIP downloads, and update installation, and excludes the Go `net/http` update fetch/download implementation from the no-network build. It is a reduced-signal fallback for security-product review, not a Smart App Control bypass.
+The Windows release workflow also builds `AnimalsDesktop-windows-amd64-no-network.zip` as a security-check edition. That variant disables automatic and tray update checks, update downloads and installation, global keyboard/mouse hooks, click reactions, and continuous cursor-hover tracking. Its build tag excludes both the Go `net/http` update implementation and the low-level Windows hook implementation. Random motion, rendering, tray settings, and local preferences remain available. It is a reduced-signal fallback for security-product review, not a Smart App Control bypass.
 
 Microsoft's Smart App Control documentation remains the primary source for the
 signing requirement. The GlobalSign April 2026 Japanese case study is useful

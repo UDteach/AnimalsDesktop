@@ -83,11 +83,6 @@ const (
 )
 
 const (
-	whKeyboardLL = 13
-	whMouseLL    = 14
-)
-
-const (
 	idleStart      = 0
 	idleFrames     = 4
 	walkStart      = 4
@@ -334,14 +329,6 @@ type updateState struct {
 	installing atomic.Bool
 }
 
-type mouseHookStruct struct {
-	pt          win.POINT
-	mouseData   uint32
-	flags       uint32
-	time        uint32
-	dwExtraInfo uintptr
-}
-
 type petApp struct {
 	hwnd                   win.HWND
 	hinst                  win.HINSTANCE
@@ -442,9 +429,6 @@ var (
 	procAppendMenuW         = user32.NewProc("AppendMenuW")
 	procGetDlgCtrlID        = user32.NewProc("GetDlgCtrlID")
 	procSetWindowTextW      = user32.NewProc("SetWindowTextW")
-	procSetWindowsHookExW   = user32.NewProc("SetWindowsHookExW")
-	procUnhookWindowsHook   = user32.NewProc("UnhookWindowsHookEx")
-	procCallNextHookExProc  = user32.NewProc("CallNextHookEx")
 	procSetProcessDPIAware  = user32.NewProc("SetProcessDPIAware")
 	procSetProcessDpiCtx    = user32.NewProc("SetProcessDpiAwarenessContext")
 	procUpdateLayeredWin    = user32.NewProc("UpdateLayeredWindow")
@@ -569,8 +553,7 @@ func main() {
 	if networkUpdatesEnabled {
 		app.startUpdateCheck(false)
 	}
-	app.installKeyboardHook()
-	app.installMouseHook()
+	app.installInputMonitoring()
 	win.ShowWindow(app.hwnd, win.SW_SHOWNOACTIVATE)
 	win.SetTimer(app.hwnd, timerID, timerInterval, 0)
 	app.render()
@@ -942,6 +925,9 @@ func normalizeVariantGroupID(groupID string) string {
 }
 
 func normalizeBehaviorMode(mode int) behaviorMode {
+	if !inputMonitoringEnabled {
+		return modeRandom
+	}
 	switch behaviorMode(mode) {
 	case modeKeyboard, modeRandom:
 		return behaviorMode(mode)
@@ -1452,7 +1438,7 @@ func frameFromRangeClamped(start, count, frame, divisor int) int {
 }
 
 func (a *petApp) onTyping() {
-	if a.mode != modeKeyboard {
+	if !inputMonitoringEnabled || a.mode != modeKeyboard {
 		return
 	}
 	wheelStarted := false
@@ -1472,7 +1458,7 @@ func (a *petApp) onTyping() {
 }
 
 func (a *petApp) onMouseClick(screenX, screenY int) {
-	if a.overlayHidden {
+	if !inputMonitoringEnabled || a.overlayHidden {
 		return
 	}
 	index := a.petAtScreenPoint(screenX, screenY)
@@ -1554,6 +1540,11 @@ func scenePointInPet(p desktopPet, sceneX, sceneY int, w int, h int, petX int, p
 }
 
 func (a *petApp) updateHoverName() {
+	if !inputMonitoringEnabled {
+		a.hoverPet = -1
+		a.hideNameWindow()
+		return
+	}
 	if a.overlayHidden {
 		a.hoverPet = -1
 		a.hideNameWindow()
@@ -2764,10 +2755,14 @@ func (a *petApp) createSettingsWindow() {
 		if a.coatMode != coatSelected {
 			a.createButton(hwnd, ctrlVariantCombo, "", 360, 298, 318, 34, 0)
 		}
-		a.createButton(hwnd, ctrlNameLabels, "", 548, 344, 132, 28, 0)
+		if inputMonitoringEnabled {
+			a.createButton(hwnd, ctrlNameLabels, "", 548, 344, 132, 28, 0)
+		}
 		for i := 0; i < a.petCount; i++ {
-			_, nameRect := settingsPetNameRects(i)
-			a.createButton(hwnd, ctrlPetNameBase+int32(i), "", nameRect.Left, nameRect.Top, nameRect.Right-nameRect.Left, nameRect.Bottom-nameRect.Top, 0)
+			if inputMonitoringEnabled {
+				_, nameRect := settingsPetNameRects(i)
+				a.createButton(hwnd, ctrlPetNameBase+int32(i), "", nameRect.Left, nameRect.Top, nameRect.Right-nameRect.Left, nameRect.Bottom-nameRect.Top, 0)
+			}
 			if a.coatMode == coatSelected {
 				_, buttonRect := settingsPetVariantRects(i)
 				a.createButton(hwnd, ctrlPetVariantBase+int32(i), "", buttonRect.Left, buttonRect.Top, buttonRect.Right-buttonRect.Left, buttonRect.Bottom-buttonRect.Top, 0)
@@ -2776,15 +2771,23 @@ func (a *petApp) createSettingsWindow() {
 			a.createButton(hwnd, ctrlPetSizeBase+int32(i), "", sizeRect.Left, sizeRect.Top, sizeRect.Right-sizeRect.Left, sizeRect.Bottom-sizeRect.Top, 0)
 		}
 	} else if a.settingsTab == tabMotion {
-		a.createButton(hwnd, ctrlModeKeyboard, a.txt("modeKeyboard"), 250, 164, 210, 32, win.WS_GROUP)
-		a.createButton(hwnd, ctrlModeRandom, a.txt("modeRandom"), 478, 164, 210, 32, 0)
+		if inputMonitoringEnabled {
+			a.createButton(hwnd, ctrlModeKeyboard, a.txt("modeKeyboard"), 250, 164, 210, 32, win.WS_GROUP)
+			a.createButton(hwnd, ctrlModeRandom, a.txt("modeRandom"), 478, 164, 210, 32, 0)
+		} else {
+			a.createButton(hwnd, ctrlModeRandom, a.txt("modeRandom"), 250, 164, 438, 32, win.WS_GROUP)
+		}
 
 		a.createButton(hwnd, ctrlSpeedSlow, a.txt("speedSlow"), 250, 270, 118, 32, win.WS_GROUP)
 		a.createButton(hwnd, ctrlSpeedNormal, a.txt("speedNormal"), 384, 270, 118, 32, 0)
 		a.createButton(hwnd, ctrlSpeedFast, a.txt("speedFast"), 518, 270, 118, 32, 0)
 
-		a.createButton(hwnd, ctrlTypingWheel, a.txt("typingWheel"), 250, 378, 210, 32, win.WS_GROUP)
-		a.createButton(hwnd, ctrlBidirectional, a.txt("naturalTurns"), 478, 378, 210, 32, 0)
+		if inputMonitoringEnabled {
+			a.createButton(hwnd, ctrlTypingWheel, a.txt("typingWheel"), 250, 378, 210, 32, win.WS_GROUP)
+			a.createButton(hwnd, ctrlBidirectional, a.txt("naturalTurns"), 478, 378, 210, 32, 0)
+		} else {
+			a.createButton(hwnd, ctrlBidirectional, a.txt("naturalTurns"), 250, 378, 438, 32, win.WS_GROUP)
+		}
 	} else {
 		a.createButton(hwnd, ctrlDisplaySingle, a.settingsButtonLabel(ctrlDisplaySingle), 250, 154, 82, 30, win.WS_GROUP)
 		a.createButton(hwnd, ctrlDisplaySpan, a.settingsButtonLabel(ctrlDisplaySpan), 340, 154, 96, 30, 0)
@@ -2898,13 +2901,19 @@ func (a *petApp) paintSettingsWindow(hwnd win.HWND) {
 		if a.coatMode != coatSelected {
 			drawTextLine(hdc, a.animalChoiceLabel(), win.RECT{Left: 250, Top: 302, Right: 352, Bottom: 328}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 		}
-		drawTextLine(hdc, a.petNameSectionLabel(), win.RECT{Left: 250, Top: 344, Right: 520, Bottom: 370}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
-		if a.petCount > 0 {
+		if !inputMonitoringEnabled {
+			drawTextLine(hdc, a.localText(
+				"通信・入力監視なし版では、カーソルの常時追跡と名前のホバー表示を使いません。",
+				"This offline edition does not continuously track the cursor or show names on hover.",
+			), win.RECT{Left: 254, Top: 370, Right: 682, Bottom: 430}, a.settingsSmallFont, rgb(69, 78, 72), win.DT_LEFT|win.DT_WORDBREAK|win.DT_NOPREFIX)
+		} else if a.petCount > 0 {
+			drawTextLine(hdc, a.petNameSectionLabel(), win.RECT{Left: 250, Top: 344, Right: 520, Bottom: 370}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 			for i := 0; i < a.petCount; i++ {
 				numberRect, _ := settingsPetNameRects(i)
 				drawTextLine(hdc, fmt.Sprintf("%d", i+1), numberRect, a.settingsSmallFont, rgb(69, 78, 72), win.DT_CENTER|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 			}
 		} else {
+			drawTextLine(hdc, a.petNameSectionLabel(), win.RECT{Left: 250, Top: 344, Right: 520, Bottom: 370}, a.settingsSmallFont, labelColor, win.DT_LEFT|win.DT_VCENTER|win.DT_SINGLELINE|win.DT_NOPREFIX)
 			drawTextLine(hdc, a.localText("オンにすると、名前の編集とカーソルホバー表示を使えます。", "Turn this on to edit names and show them on hover."), win.RECT{Left: 254, Top: 386, Right: 682, Bottom: 430}, a.settingsSmallFont, rgb(69, 78, 72), win.DT_LEFT|win.DT_WORDBREAK|win.DT_NOPREFIX)
 		}
 	} else if a.settingsTab == tabMotion {
@@ -3309,7 +3318,7 @@ func (a *petApp) settingsSidebarStatus() string {
 		}
 		return "設定保存に失敗"
 	}
-	if a.keyHookFailed || a.mouseHookFailed {
+	if inputMonitoringEnabled && (a.keyHookFailed || a.mouseHookFailed) {
 		if a.lang == langEnglish {
 			return "Input hook warning"
 		}
@@ -3347,6 +3356,12 @@ func (a *petApp) settingsPageTitle() string {
 func (a *petApp) settingsPageLead() string {
 	switch a.settingsTab {
 	case tabMotion:
+		if !inputMonitoringEnabled {
+			return a.localText(
+				"ランダムな動き、速度、向きの変化を調整します。キーボードとマウスは監視しません。",
+				"Tune random motion, speed, and turns. Keyboard and mouse input are not monitored.",
+			)
+		}
 		return a.txt("motionPageLead")
 	case tabDisplay:
 		return a.txt("displayPageLead")
@@ -4108,6 +4123,9 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 		a.resetPosition()
 		a.recreateSettingsWindow()
 	case ctrlModeKeyboard:
+		if !inputMonitoringEnabled {
+			return true
+		}
 		a.handleMenu(menuModeKeyboard)
 	case ctrlModeRandom:
 		a.handleMenu(menuModeRandom)
@@ -4118,6 +4136,9 @@ func (a *petApp) handleSettingsCommand(id int32, notify uint16) bool {
 	case ctrlSpeedFast:
 		a.handleMenu(menuSpeedFast)
 	case ctrlTypingWheel:
+		if !inputMonitoringEnabled {
+			return true
+		}
 		a.handleMenu(menuWheelToggle)
 	case ctrlBidirectional:
 		a.setBidirectional(!a.bidirectional)
@@ -5041,7 +5062,7 @@ func (a *petApp) hasInstallableUpdate() bool {
 
 func (a *petApp) updateCheckMenuLabel() string {
 	if !networkUpdatesEnabled {
-		return a.localText("ネットワーク無効版", "Network disabled edition")
+		return a.localText("通信・入力監視なし版", "Offline / no input monitoring")
 	}
 	if a.update.installing.Load() {
 		return a.localText("アップデート適用中...", "Installing update...")
@@ -5067,8 +5088,8 @@ func (a *petApp) startUpdateCheck(manual bool) {
 	if !networkUpdatesEnabled {
 		if manual {
 			a.showTrayBalloon(
-				a.localText("ネットワーク無効版", "Network disabled edition"),
-				a.localText("このビルドでは自動更新確認とダウンロードを無効化しています。", "This build disables update checks and downloads."),
+				a.localText("通信・入力監視なし版", "Offline / no input monitoring"),
+				a.localText("このビルドでは更新通信とグローバル入力監視を無効化しています。", "This build disables update networking and global input monitoring."),
 			)
 		}
 		return
@@ -5152,8 +5173,8 @@ func (a *petApp) onUpdateFailed(notify bool) {
 func (a *petApp) installLatestUpdate() {
 	if !networkUpdatesEnabled {
 		a.showTrayBalloon(
-			a.localText("ネットワーク無効版", "Network disabled edition"),
-			a.localText("このビルドではアップデートのダウンロードと適用を無効化しています。", "This build disables update downloads and installation."),
+			a.localText("通信・入力監視なし版", "Offline / no input monitoring"),
+			a.localText("このビルドでは更新通信とグローバル入力監視を無効化しています。", "This build disables update networking and global input monitoring."),
 		)
 		return
 	}
@@ -5366,10 +5387,12 @@ func (a *petApp) showTrayMenu() {
 	appendChecked(speedMenu, menuSpeedFast, a.txt("speedFast"), a.speed == 5)
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(speedMenu), syscall.StringToUTF16Ptr(a.txt("speed")))
 
-	modeMenu := win.CreatePopupMenu()
-	appendChecked(modeMenu, menuModeKeyboard, a.txt("modeKeyboard"), a.mode == modeKeyboard)
-	appendChecked(modeMenu, menuModeRandom, a.txt("modeRandom"), a.mode == modeRandom)
-	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(modeMenu), syscall.StringToUTF16Ptr(a.txt("mode")))
+	if inputMonitoringEnabled {
+		modeMenu := win.CreatePopupMenu()
+		appendChecked(modeMenu, menuModeKeyboard, a.txt("modeKeyboard"), a.mode == modeKeyboard)
+		appendChecked(modeMenu, menuModeRandom, a.txt("modeRandom"), a.mode == modeRandom)
+		appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(modeMenu), syscall.StringToUTF16Ptr(a.txt("mode")))
+	}
 
 	countMenu := win.CreatePopupMenu()
 	appendChecked(countMenu, menuCount1, "1", a.petCount == 1)
@@ -5379,7 +5402,9 @@ func (a *petApp) showTrayMenu() {
 	appendChecked(countMenu, menuCount10, "10", a.petCount == 10)
 	appendMenu(menu, win.MF_POPUP|win.MF_STRING, uintptr(countMenu), syscall.StringToUTF16Ptr(a.txt("petCount")))
 
-	appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
+	if inputMonitoringEnabled {
+		appendChecked(menu, menuWheelToggle, a.txt("typingWheel"), a.wheelEnabled)
+	}
 	appendMenu(menu, win.MF_STRING, uintptr(menuHideToggle), syscall.StringToUTF16Ptr(a.temporaryVisibilityLabel()))
 	appendMenu(menu, win.MF_SEPARATOR, 0, nil)
 	languageMenu := win.CreatePopupMenu()
@@ -5441,6 +5466,9 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 	case id == menuInstallUpdate:
 		a.installLatestUpdate()
 	case id == menuModeKeyboard:
+		if !inputMonitoringEnabled {
+			return false
+		}
 		a.mode = modeKeyboard
 		for i := range a.pets {
 			a.pets[i].state = stateIdle
@@ -5474,6 +5502,9 @@ func (a *petApp) handleMenuCommand(id uint16) bool {
 		a.setPetCount(10)
 		a.resetPosition()
 	case id == menuWheelToggle:
+		if !inputMonitoringEnabled {
+			return false
+		}
 		a.wheelEnabled = !a.wheelEnabled
 		for i := range a.pets {
 			if a.pets[i].state == stateWheel {
@@ -5530,12 +5561,7 @@ func (a *petApp) cleanup() {
 		win.DestroyWindow(a.nameHwnd)
 		a.nameHwnd = 0
 	}
-	if a.keyHook != 0 {
-		unhookWindowsHookEx(a.keyHook)
-	}
-	if a.mouseHook != 0 {
-		unhookWindowsHookEx(a.mouseHook)
-	}
+	a.cleanupInputMonitoring()
 	var nid win.NOTIFYICONDATA
 	nid.CbSize = uint32(unsafe.Sizeof(nid))
 	nid.HWnd = a.hwnd
@@ -5566,51 +5592,6 @@ func (a *petApp) cleanup() {
 	}
 }
 
-func (a *petApp) installKeyboardHook() {
-	cb := syscall.NewCallback(func(code int, wParam uintptr, lParam uintptr) uintptr {
-		if code >= 0 && (wParam == win.WM_KEYDOWN || wParam == win.WM_SYSKEYDOWN) {
-			a.postTypingFromHook()
-		}
-		return callNextHookEx(0, code, wParam, lParam)
-	})
-	a.keyHook = setWindowsHookEx(whKeyboardLL, cb, a.hinst, 0)
-	a.keyHookFailed = a.keyHook == 0
-}
-
-func (a *petApp) installMouseHook() {
-	cb := syscall.NewCallback(func(code int, wParam uintptr, lParam uintptr) uintptr {
-		if code >= 0 && wParam == win.WM_LBUTTONDOWN {
-			a.postMouseClickFromHook(lParam)
-		}
-		return callNextHookEx(0, code, wParam, lParam)
-	})
-	a.mouseHook = setWindowsHookEx(whMouseLL, cb, a.hinst, 0)
-	a.mouseHookFailed = a.mouseHook == 0
-}
-
-func (a *petApp) postTypingFromHook() {
-	defer recoverHookCallback()
-	win.PostMessage(a.hwnd, wmTyping, 0, 0)
-}
-
-func (a *petApp) postMouseClickFromHook(lParam uintptr) {
-	defer recoverHookCallback()
-	pt := mouseHookPoint(lParam)
-	win.PostMessage(a.hwnd, wmMouseClick, uintptr(uint32(pt.X)), uintptr(uint32(pt.Y)))
-}
-
-func recoverHookCallback() {
-	_ = recover()
-}
-
-func mouseHookPoint(lParam uintptr) win.POINT {
-	var hook mouseHookStruct
-	if lParam != 0 {
-		procRtlMoveMemory.Call(uintptr(unsafe.Pointer(&hook)), lParam, unsafe.Sizeof(hook))
-	}
-	return hook.pt
-}
-
 func appendMenu(menu win.HMENU, flags uint32, item uintptr, text *uint16) bool {
 	var textPtr uintptr
 	if text != nil {
@@ -5638,21 +5619,6 @@ func getWindowText(hwnd win.HWND) string {
 	buf := make([]uint16, max(1, length+1))
 	win.SendMessage(hwnd, win.WM_GETTEXT, uintptr(len(buf)), uintptr(unsafe.Pointer(&buf[0])))
 	return syscall.UTF16ToString(buf)
-}
-
-func setWindowsHookEx(idHook int, callback uintptr, module win.HINSTANCE, threadID uint32) uintptr {
-	ret, _, _ := procSetWindowsHookExW.Call(uintptr(idHook), callback, uintptr(module), uintptr(threadID))
-	return ret
-}
-
-func unhookWindowsHookEx(hook uintptr) bool {
-	ret, _, _ := procUnhookWindowsHook.Call(hook)
-	return ret != 0
-}
-
-func callNextHookEx(hook uintptr, code int, wParam uintptr, lParam uintptr) uintptr {
-	ret, _, _ := procCallNextHookExProc.Call(hook, uintptr(code), wParam, lParam)
-	return ret
 }
 
 func updateLayeredWindowNative(hwnd win.HWND, dstDC win.HDC, dst *win.POINT, size *win.SIZE, srcDC win.HDC, src *win.POINT, key uint32, blend *win.BLENDFUNCTION, flags uint32) bool {

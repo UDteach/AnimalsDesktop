@@ -272,6 +272,9 @@ func TestFrameFromSeqClampedHoldsFinalFrame(t *testing.T) {
 }
 
 func TestTypingStartsAndExtendsWheelOnlyInKeyboardMode(t *testing.T) {
+	if !inputMonitoringEnabled {
+		t.Skip("security-check build excludes keyboard-triggered motion")
+	}
 	a := &petApp{
 		mode:         modeKeyboard,
 		wheelEnabled: true,
@@ -424,8 +427,12 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if err := json.Unmarshal(data, &saved); err != nil {
 		t.Fatalf("settings json is invalid: %v", err)
 	}
-	if saved.Version != settingsVersion || saved.PetCount != 10 || saved.Mode != int(modeKeyboard) {
-		t.Fatalf("saved settings = %+v, want version %d petCount 10 keyboard mode", saved, settingsVersion)
+	wantMode := modeKeyboard
+	if !inputMonitoringEnabled {
+		wantMode = modeRandom
+	}
+	if saved.Version != settingsVersion || saved.PetCount != 10 || saved.Mode != int(wantMode) {
+		t.Fatalf("saved settings = %+v, want version %d petCount 10 mode %d", saved, settingsVersion, wantMode)
 	}
 	if saved.VariantID != variantIDAt(a.variant) {
 		t.Fatalf("saved VariantID = %q, want %q", saved.VariantID, variantIDAt(a.variant))
@@ -492,8 +499,8 @@ func TestSettingsRoundTripPersistsCoreOptions(t *testing.T) {
 	if err := b.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	if b.variant != 4 || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != a.mode || b.petCount != a.petCount {
-		t.Fatalf("loaded scalar settings = variant:%d coat:%d speed:%d mode:%d count:%d", b.variant, b.coatMode, b.speed, b.mode, b.petCount)
+	if b.variant != 4 || b.coatMode != a.coatMode || b.speed != a.speed || b.mode != wantMode || b.petCount != a.petCount {
+		t.Fatalf("loaded scalar settings = variant:%d coat:%d speed:%d mode:%d count:%d; want mode:%d", b.variant, b.coatMode, b.speed, b.mode, b.petCount, wantMode)
 	}
 	if b.wheelEnabled != a.wheelEnabled || b.bidirectional != a.bidirectional || b.lang != a.lang {
 		t.Fatalf("loaded flags = wheel:%v bidirectional:%v lang:%d", b.wheelEnabled, b.bidirectional, b.lang)
@@ -844,7 +851,11 @@ func TestVersionOneSettingsKeepOptionsButResetOldAnimalSelection(t *testing.T) {
 	if err := a.loadSettings(); err != nil {
 		t.Fatalf("loadSettings() error = %v", err)
 	}
-	if a.speed != 5 || a.mode != modeKeyboard || a.petCount != 4 || a.wheelEnabled || a.bidirectional || a.lang != langEnglish {
+	wantMode := modeKeyboard
+	if !inputMonitoringEnabled {
+		wantMode = modeRandom
+	}
+	if a.speed != 5 || a.mode != wantMode || a.petCount != 4 || a.wheelEnabled || a.bidirectional || a.lang != langEnglish {
 		t.Fatalf("loaded preserved settings = speed:%d mode:%d count:%d wheel:%v bidi:%v lang:%d", a.speed, a.mode, a.petCount, a.wheelEnabled, a.bidirectional, a.lang)
 	}
 	if a.variant != 0 || a.coatMode != coatSelected || a.selectedCoats != defaultSelectedCoats() {
@@ -1521,8 +1532,11 @@ func TestReleaseWorkflowPackageIncludesSecurityManifestAndHashes(t *testing.T) {
 		"AnimalsDesktop-windows-amd64.zip/AnimalsDesktop.exe",
 		"AnimalsDesktop-windows-amd64-no-network.zip/AnimalsDesktop.exe",
 		"AnimalsDesktop-windows-386.zip/AnimalsDesktop.exe",
-		"No-network security-check edition",
+		"No-network and no-input-monitoring security-check edition",
 		"The Go net/http update fetch/download implementation is excluded from this build.",
+		"Global low-level keyboard and mouse hooks are excluded from this build.",
+		"Keyboard-triggered motion, click reactions, and continuous cursor hover tracking are disabled.",
+		"Random motion, rendering, tray settings, and local preferences remain available.",
 		"Microsoft Security Intelligence",
 		"McAfee Dispute Detection & Allowlisting",
 	} {

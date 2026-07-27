@@ -12,8 +12,8 @@ func TestNoNetworkBuildDisablesUpdateMenus(t *testing.T) {
 		t.Fatalf("no-network Windows build should disable update network access")
 	}
 	a := &petApp{lang: langEnglish}
-	if got := a.updateCheckMenuLabel(); !strings.Contains(got, "Network disabled") {
-		t.Fatalf("updateCheckMenuLabel() = %q, want network disabled label", got)
+	if got := a.updateCheckMenuLabel(); !strings.Contains(got, "no input monitoring") {
+		t.Fatalf("updateCheckMenuLabel() = %q, want offline input-monitoring label", got)
 	}
 	if a.hasInstallableUpdate() {
 		t.Fatalf("no-network build should not report installable updates")

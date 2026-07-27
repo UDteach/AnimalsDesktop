@@ -25,6 +25,18 @@ This note covers actions that help Microsoft Defender, SmartScreen, and McAfee o
   - renamed targets that are not `AnimalsDesktop.exe`
 - Regression tests cover the stricter updater path constraints and fixed ZIP extraction path.
 
+## Security-Check Edition Extension - 2026-07-27
+
+The existing `animalsdesktop_nonetwork` build now also excludes the global
+low-level keyboard and mouse hook implementation. Its runtime omits
+keyboard-triggered motion, click reactions, and continuous cursor hover
+tracking, and its UI omits controls for those unavailable behaviors. The
+normal Windows build keeps those opt-in product features.
+
+This reduces privacy-sensitive and reputation-sensitive surface area in the
+security-check artifact. It does not change the signing conclusion below:
+unknown unsigned code can still be blocked by Smart App Control.
+
 ## Still Not Solved Without Certificates
 
 - Unsigned binaries can still receive SmartScreen reputation prompts.

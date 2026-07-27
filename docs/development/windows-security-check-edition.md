@@ -1,6 +1,6 @@
 # Windows Security-Check Edition
 
-Date: 2026-07-02
+Date: 2026-07-27
 
 This note defines the Windows no-network security-check edition of
 AnimalsDesktop. It is intended to reduce avoidable reputation signals and make
@@ -15,6 +15,12 @@ Defender SmartScreen, or antivirus review flags a fresh unsigned build.
 - Update ZIP downloads and update installation are disabled.
 - The Go `net/http` update fetch/download implementation is excluded from the
   no-network build.
+- The low-level Windows keyboard and mouse hook implementation is excluded from
+  the no-network build.
+- Keyboard-triggered motion, click reactions, and continuous cursor hover
+  tracking are disabled.
+- Input-dependent controls are omitted. Random motion, speed, natural turns,
+  rendering, tray settings, animal selection, and local preferences remain.
 - The release ZIP name is stable:
   `AnimalsDesktop-windows-amd64-no-network.zip`.
 - The release `SECURITY.txt` marks the package as
@@ -41,7 +47,8 @@ reputation building are still the stronger path for public releases.
 
 Use this edition as an additional Windows 64-bit download when users report
 security-product friction with the normal build. Keep the normal build
-available because it preserves update checks for users who want them.
+available because it preserves update checks and input reactions for users who
+want them.
 
 For the best long-term result, continue with public-trust Authenticode signing,
 preferably Azure Artifact Signing / Trusted Signing as already wired in the
