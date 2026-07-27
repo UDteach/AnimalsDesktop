@@ -290,6 +290,7 @@ jobs:
             AnimalsDesktop-macos-amd64.zip \
             AnimalsDesktop-macos-arm64.zip \
             AnimalsDesktop-windows-386.zip \
+            AnimalsDesktop-windows-amd64-no-network.zip \
             AnimalsDesktop-windows-amd64.zip
           do
             grep -q "  ${expected}$" dist/SHA256SUMS.txt
