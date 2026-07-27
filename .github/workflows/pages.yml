@@ -42,7 +42,7 @@ jobs:
           grep -q "Animals Desktop" docs/index.html
           python -m unittest discover -s scripts -p "test_*.py"
           python scripts/verify_page_release.py
-          grep -q "Mac版をダウンロード" docs/index.html
+          grep -q "Mac版 Apple Silicon（macOS 12+）をダウンロード" docs/index.html
           grep -q "AnimalsDesktop-macos-arm64.zip" docs/index.html
           grep -q "v0.2.16の詳細" docs/index.html
           grep -q "AnimalsDesktop Asset Review" "docs/$SPRITE_PREVIEW/index.html"

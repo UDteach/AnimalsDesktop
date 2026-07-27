@@ -1500,3 +1500,16 @@
   Node, every package compiled for Windows/amd64, the Windows GUI build passed,
   and `git diff --check` passed. Native Windows test execution and `go vet`
   remain a host-policy verification boundary.
+- Aligned the v0.2.16 Pages download choices with Degu Desktop. The primary
+  buttons now identify Windows x64 and Mac Apple Silicon / macOS 12+, the
+  alternative links identify Windows x86 / 32-bit and Mac Intel, and
+  Japanese/English disclosures explain which Mac build to choose. Extended
+  `scripts/verify_page_release.py` to bind stable download selectors to the
+  five platform ZIPs and check the new public copy. The release verifier,
+  scoped public-copy scan, and `git diff --check` pass. Playwright verified
+  JP/EN labels, both disclosure states, zero console warnings/errors, and no
+  horizontal overflow at desktop, 390px, or 320px; mobile button spacing was
+  tightened so the Windows label no longer leaves one Japanese character on a
+  line by itself. Updated both Pages workflow copy guards to the new Apple
+  Silicon label after the pre-deploy audit caught their stale exact-string
+  assertion.

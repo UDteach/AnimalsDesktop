@@ -56,6 +56,15 @@ def release_tag(asset: str, html: str, label: str) -> str:
     return tags[0]
 
 
+def testid_href(testid: str, html: str) -> str:
+    return one(
+        rf'<a(?=[^>]*data-testid="{re.escape(testid)}")'
+        rf'(?=[^>]*href="([^"]+)")[^>]*>',
+        html,
+        f"{testid} link",
+    )
+
+
 def current_page_variant_ids(html: str) -> list[str]:
     block = one(
         r"const animalCatalog = \[(.*?)\n\s*\];",
@@ -137,6 +146,35 @@ def main() -> None:
     mac_amd64_tag = release_tag(MAC_AMD64_ASSET, html, "macOS amd64 download version tag")
     if windows_tag != EXPECTED_RELEASE:
         fail(f"Windows amd64 download tag {windows_tag} does not match expected {EXPECTED_RELEASE}")
+
+    expected_testid_links = {
+        "download-windows-primary": (
+            f"https://github.com/UDteach/AnimalsDesktop/releases/download/"
+            f"{EXPECTED_RELEASE}/{WINDOWS_AMD64_ASSET}"
+        ),
+        "download-mac-primary": (
+            f"https://github.com/UDteach/AnimalsDesktop/releases/download/"
+            f"{EXPECTED_RELEASE}/{MAC_ARM64_ASSET}"
+        ),
+        "download-windows-no-network": (
+            f"https://github.com/UDteach/AnimalsDesktop/releases/download/"
+            f"{EXPECTED_RELEASE}/{WINDOWS_AMD64_NO_NETWORK_ASSET}"
+        ),
+        "download-windows-x86": (
+            f"https://github.com/UDteach/AnimalsDesktop/releases/download/"
+            f"{EXPECTED_RELEASE}/{WINDOWS_386_ASSET}"
+        ),
+        "download-mac-intel": (
+            f"https://github.com/UDteach/AnimalsDesktop/releases/download/"
+            f"{EXPECTED_RELEASE}/{MAC_AMD64_ASSET}"
+        ),
+    }
+    for testid, expected_href in expected_testid_links.items():
+        actual_href = testid_href(testid, html)
+        if actual_href != expected_href:
+            fail(
+                f"{testid} points to {actual_href}, expected {expected_href}"
+            )
 
     windows_badge = one(
         r"<span[^>]*>\s*Windows版\s*<strong>(v[0-9][^<]*)</strong>\s*</span>",
@@ -250,6 +288,20 @@ def main() -> None:
         "v0.2.16 adds Sable Panda, Sable, and Albino ferrets.",
         "公開版 v0.2.16：60種類",
         "Public v0.2.16: 60 animals",
+        "Windows版 x64をダウンロード",
+        "Mac版 Apple Silicon（macOS 12+）をダウンロード",
+        "Download Windows x64",
+        "Download Mac Apple Silicon (macOS 12+)",
+        "Windows版 x86 / 32-bit",
+        "Mac版 Intel / macOS 12+",
+        '<h3 class="download-alternatives-title">その他のダウンロード</h3>',
+        "Mac版の選び方",
+        "M1以降のApple製チップ",
+        "Windows x86 / 32-bit",
+        "Mac Intel / macOS 12+",
+        '<h3 class="download-alternatives-title">Other downloads</h3>',
+        "Choose a Mac build",
+        "M1 or later Apple chip",
         "フェレット（セーブルパンダ）",
         "フェレット（セーブル）",
         "フェレット（アルビノ）",

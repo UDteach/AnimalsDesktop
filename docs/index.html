@@ -1249,12 +1249,20 @@
           width: 100%;
           min-width: 0;
           min-height: 58px;
-          padding: 0 18px;
-          font-size: 15px;
+          gap: 10px;
+          padding: 0 12px;
+          font-size: 14px;
+          text-align: center;
         }
 
         .hero-copy .button i {
-          font-size: 23px;
+          width: 22px;
+          flex: 0 0 22px;
+          font-size: 22px;
+        }
+
+        .hero-copy .button [data-language-copy="windows"] {
+          white-space: nowrap;
         }
 
         .hero-visual {
@@ -1389,13 +1397,13 @@
           <p class="lead" data-language-copy="lead">60種類の動物から選べます。</p>
           <p class="release-boundary" data-language-copy="releaseBoundary">公開版 v0.2.16：60種類</p>
           <div id="download" class="actions">
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64.zip">
+            <a class="button" data-testid="download-windows-primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64.zip">
               <i class="fa-brands fa-windows" aria-hidden="true"></i>
-              <span data-language-copy="windows">Windows版をダウンロード</span>
+              <span data-language-copy="windows">Windows版 x64をダウンロード</span>
             </a>
-            <a class="button" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-arm64.zip">
+            <a class="button" data-testid="download-mac-primary" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-arm64.zip">
               <i class="fa-brands fa-apple" aria-hidden="true"></i>
-              <span data-language-copy="mac">Mac版をダウンロード</span>
+              <span data-language-copy="mac">Mac版 Apple Silicon（macOS 12+）をダウンロード</span>
             </a>
           </div>
         </div>
@@ -1442,8 +1450,8 @@
             </p>
             <p class="download-note">
               v0.2.16 は、60種類の動物と基本モーションを試せる先行お試し版です。Windows版では固定表示とランダム表示を組み合わせられ、1匹ごとのランダム対象を全体または種類別に選べます。全体ランダムも、うさぎやフェレットなどの種類で絞り込めます。
-              Windows版はトレイの Language メニューから表示言語を切り替えられます。ZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。Mac版も v0.2.16 のZIPを展開して
-              <code>AnimalsDesktop.app</code> を起動してください。
+              Windows版はトレイの Language メニューから表示言語を切り替えられます。Windows 10/11ではZIPを展開して <code>AnimalsDesktop.exe</code> を起動してください。
+              Mac版はApple Silicon版またはIntel版のZIPを展開し、<code>AnimalsDesktop.app</code> を起動してください。
             </p>
             <div class="release-meta" aria-label="Build information">
               <span>先行お試し版 <strong data-release-version>v0.2.16</strong></span>
@@ -1455,13 +1463,21 @@
             </div>
           </div>
           <div class="download-alternatives">
-            <h3 class="download-alternatives-title">その他のダウンロードと検証情報</h3>
+            <h3 class="download-alternatives-title">その他のダウンロード</h3>
             <div class="detail-links">
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 ネットワーク無効</a>
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 32-bit</a>
-              <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac版 Intel macOS 12+</a>
+              <a data-testid="download-windows-no-network" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 x64 / ネットワーク無効</a>
+              <a data-testid="download-windows-x86" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows版 x86 / 32-bit</a>
+              <a data-testid="download-mac-intel" href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac版 Intel / macOS 12+</a>
               <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
             </div>
+            <details class="content-disclosure">
+              <summary>Mac版の選び方</summary>
+              <div class="disclosure-body">
+                <p>
+                  どちらもmacOS 12 Monterey以降に対応しています。M1以降のApple製チップを搭載したMacはApple Silicon版、Intelプロセッサを搭載したMacはIntel版を選んでください。
+                </p>
+              </div>
+            </details>
             <details class="content-disclosure">
               <summary>ネットワーク無効版について</summary>
               <div class="disclosure-body">
@@ -1719,13 +1735,20 @@
       <section class="english" id="english" hidden>
         <h2>About Animals Desktop</h2>
         <p>Animals Desktop is a small desktop pet app for Windows and macOS. It includes sixty animals, including Sable Panda, Sable, and Albino ferrets, that walk near the Windows taskbar or above the Mac Dock. You can change the visible count and each animal's size, then enjoy walking, idle motion, and click reactions.</p>
-        <p>v0.2.16 is an early preview with sixty animals and core motion. On Windows, fixed animals and random slots can be mixed per pet. Random slots can target all animals or one animal type, and global random mode can also be filtered by type. The tray Language menu changes the Windows app language. Extract the ZIP and run <code>AnimalsDesktop.exe</code> on Windows or <code>AnimalsDesktop.app</code> on Mac.</p>
+        <p>v0.2.16 is an early preview with sixty animals and core motion. On Windows, fixed animals and random slots can be mixed per pet. Random slots can target all animals or one animal type, and global random mode can also be filtered by type. The tray Language menu changes the Windows app language. On Windows 10/11, extract the ZIP and run <code>AnimalsDesktop.exe</code>. On Mac, extract the Apple Silicon or Intel ZIP and run <code>AnimalsDesktop.app</code>.</p>
+        <h3 class="download-alternatives-title">Other downloads</h3>
         <div class="detail-links">
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows no-network</a>
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows 32-bit</a>
-          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac Intel macOS 12+</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-amd64-no-network.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows x64 / no-network</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-windows-386.zip"><i class="fa-brands fa-windows" aria-hidden="true"></i> Windows x86 / 32-bit</a>
+          <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/AnimalsDesktop-macos-amd64.zip"><i class="fa-brands fa-apple" aria-hidden="true"></i> Mac Intel / macOS 12+</a>
           <a href="https://github.com/UDteach/AnimalsDesktop/releases/download/v0.2.16/SHA256SUMS.txt"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> SHA256SUMS</a>
         </div>
+        <details class="content-disclosure">
+          <summary>Choose a Mac build</summary>
+          <div class="disclosure-body">
+            <p>Both ZIPs support macOS 12 Monterey or later. Choose Apple Silicon for a Mac with an M1 or later Apple chip, and choose Intel for an Intel-based Mac.</p>
+          </div>
+        </details>
         <details class="content-disclosure">
           <summary>About the no-network edition</summary>
           <div class="disclosure-body">
@@ -1790,15 +1813,15 @@
           ja: {
             lead: "60種類の動物から選べます。",
             releaseBoundary: "公開版 v0.2.16：60種類",
-            windows: "Windows版をダウンロード",
-            mac: "Mac版をダウンロード",
+            windows: "Windows版 x64をダウンロード",
+            mac: "Mac版 Apple Silicon（macOS 12+）をダウンロード",
             hint: "動物をクリック",
           },
           en: {
             lead: "Choose from 60 animals.",
             releaseBoundary: "Public v0.2.16: 60 animals",
-            windows: "Download for Windows",
-            mac: "Download for Mac",
+            windows: "Download Windows x64",
+            mac: "Download Mac Apple Silicon (macOS 12+)",
             hint: "Click an animal",
           },
         };
