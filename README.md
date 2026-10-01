@@ -4,6 +4,8 @@ AnimalsDesktop is a small desktop pet app for Windows and macOS. The
 `v0.2.16` release candidate includes 60 selectable animal sprites that walk
 near the Windows taskbar or along the bottom edge above the Mac Dock.
 
+Creator: [kdevelopk on X](https://x.com/kdevelopk) · [More apps](https://kdevelopk.pages.dev/)
+
 Public page: <https://udteach.github.io/AnimalsDesktop/>
 
 Current app version: `v0.2.16`

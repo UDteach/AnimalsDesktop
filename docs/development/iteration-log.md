@@ -1513,3 +1513,8 @@
   line by itself. Updated both Pages workflow copy guards to the new Apple
   Silicon label after the pre-deploy audit caught their stale exact-string
   assertion.
+
+## 2026-10-01 — Creator links
+
+- Added https://x.com/kdevelopk and https://kdevelopk.pages.dev/ to the current README and public page footer.
+- Based this documentation-only change on latest remote main `426d6684a322`; preserved release versions, downloads, and existing page content.
